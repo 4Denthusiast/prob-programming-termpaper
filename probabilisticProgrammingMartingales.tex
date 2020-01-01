@@ -1,0 +1,72 @@
+\documentclass{article}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{hyperref}
+\usepackage{verbatim}
+\newcommand{\Y}{\textsf{Y}}
+\newcommand{\sample}{\textsf{sample}}
+\DeclareMathOperator{\red}{red}
+\begin{document}
+Following your suggestion, I will be providing a criterion for termination of programs in PPCF\cite{ppcf} based on ranking supermartingales. As it's more convenient for this proof, a sampling-based semantics will be used instead of the original distributional semantics. I assume some roughly applicable equivalence is proven somewhere, but it doesn't seem that hard anyway.
+
+\section{Ranking functions}
+Given a probabilistic program (i.e. a term $M$), in order to construct a supermartingale to prove its a.s. termination, a function to assign values to each reachable program state is necessary. Define a ranking function on $M$ to be a measurable function $f:Rch(M) \to \mathbb{R}$ such that
+\begin{itemize}
+    \item $f(N) > 0$ for all $N$ not in normal form
+    \item $f(N) = 0$ for all $N$ in normal form
+    \item $f(E[\Y N]) \geq 1 + f(E[N(\Y N)])$
+    \item $f(E[\sample]) \geq \int_0^1 f(E[\underline{x}]) \, \mathrm{d}x$
+    \item $f(E[R]) \geq f(E[N])$ for any other redex $R$, where $R \to N$
+\end{itemize}
+
+\section{Sampling semantics}
+Let $ I = [0,1] \subset \mathbb{R} $, and let $S = I^{\mathbb{N}}$, with the $\sigma$-algebra and measure given by the limit of $1 \gets I \gets I^2 \gets \cdots$, where the maps are the projections that ignore the last element. The maps $\pi_h:S \to I, \quad \pi_t:S \to S$ popping the first element are then measurable.
+
+The one-step reduction is given by the function $\red : \Lambda \times S \to \Lambda \times S$ where
+\begin{equation}
+\red(M,s) = \left\{
+    \begin{array}{ll}
+        (E[N],s) & \text{if } M = E[R], R \to N \text{ and } R \neq \sample \\
+        (\pi_h(s),\pi_t(s)) & \text{if } M =  \sample \\
+        (M,s) & \text{if } M \text{ normal form}
+    \end{array} \right .
+\end{equation}
+The limit $\red^\infty$ can then be defined as a partial function as $\lim_{n \to \infty} \red^n(M,s)$ whenever that sequence becomes constant by reaching a normal form.
+
+\begin{comment} I'm not sure whether this section will be needed any more.
+\section{Recursive steps}
+Define a reduction relation on PPCF terms that excludes the $\Y$ combinator (``nonrecursive reduction''), i.e. $E[M] \dashrightarrow E[N] \text{ if } M \to N$ for any redex $M$ not of the form $\Y M'$.
+
+This reduction relation is strongly normalizing because of the simple type system, so for any term $M$ there is some bound $b$ such that nonrecursive reduction of $M$ must terminate in at most $b$ steps. Define $\red_{nr} : \Lambda \times S \to \Lambda \times S$ like $\red(M,s)$, but using nonrecursive reduction instead of reduction, and let $\red_Y(M,s) = \red^{b_M}_{nr}(M,s)$. The sequence $(r_\Lambda(M,s,n), r_S(M,s,n)) = r(M,s,n) = \left(\red_Y \circ \red \right)^n(\red_Y(M,s))$ is then a subsequence of $\left( \red^n(M,s) \right)_n$ consisting of only terms which are either normal form or of the form $E[\Y N]$ for some $N$.
+\end{comment}
+
+\section{Supermartingales}
+Given a term $M$ and a ranking function $f$ for it, define random variables on the probability space $S$ (where $s$ is a random variable) by
+\begin{align*}
+(M_n,s_n) & = \red^n(M,s) \\
+y_0 & = 0 \\
+y_{n+1} & = \text{min} \{ k>y_n | M_k \text{ normal form or of the form } E[\Y N] \} \\
+M'_n & = M_{y_n} \\
+X_n & = f(M'_n)
+\end{align*}
+and define a filtration $\mathcal{F}_n = \sigma(M_k, k \leq n)$ (i.e. all the samples used up to step $n$).
+
+The expectation of $f(M_{n+1})$ given $\mathcal{F}_n$ is trivially less than or equal to $f(M_n)$ in the cases that $M_n \neq E[\sample]$, and in the case of $\sample$,
+\begin{align*}
+& \mathbb{E}[f(M_{n+1}) | \mathcal{F}_n] \\
+= & \mathbb{E}[f(M_{n+1}) | M_n = E[\sample],\, \mathcal{F}_n] \\
+= & \mathbb{E}[f(E[\pi_h(s_n)]) | \mathcal{F}_n] \\
+= & \int_0^1 f(E[\underline x]) \, \mathrm{d} x \qquad & \text{as }s_n\text{ is independent of } \mathcal{F}_n \\
+\leq & f(E[\sample]) \qquad & \text{by assumption on } f \\
+= & f(M_n),
+\end{align*}
+therefore the values of the ranking function $f(M_n)$ are a supermartingale with respect to $\mathcal{F}_n$.
+
+Given $M'_n$, there is some finite bound on the number of reduction steps that can take place from $M'_n$ without a $\Y$-reduction step, because of the type system, therefore $y_{n+1}$ is (conditional on $\mathcal{F}_{y_n+1}$) a bounded stopping time, therefore $\mathbb{E}[f(M_{y_{n+1}}) | \mathcal{F}_{y_n+1}] \leq f(M_{y_n+1})$. If $f(M_{y_n}) > 0$, then $M_{y_n} = E[\Y N]$ for some $E, N$, therefore $M_{y_n+1} = N (\Y N)$ and $f(M_{y_n+1}) \leq f(M_{y_n}) - 1$, therefore if $X_n > 0$, $\mathbb{E}[X_{n+1} | \mathcal{F}_{y_n+1}] \leq X_n - 1$.
+
+The expectation of $X_n$ therefore must tend to 0 as $n \to \infty$, therefore $X_n$ almost surely is less than or equal to 1 eventually, at which point $M'_{n+1}$ must be normal form, therefore $M$ terminates almost surely.
+
+\begin{thebibliography}{9}
+\bibitem{ppcf} Thomas Ehrhard, Michele Pagani, and Christine Tasson. Measurable cones and stable, measurable functions: a model for probabilistic higher-order programming. \emph{PACMPL}, 2(POPL):59:1–59:28, 2018. doi: 10.1145/3158147. URL \href{https://doi.org/10.1145/3158147}{https://doi.org/10.1145/3158147}.
+\end{thebibliography}
+\end{document}
