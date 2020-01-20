@@ -1,16 +1,64 @@
 \documentclass{article}
+
+%% BEGIN {Luke's Macros}
+%%
+\newif\ifdraft
+\drafttrue %% To hide all comments and highlighting, just comment this line out 
+
+\input{Style/comment}
+
+\usepackage[square]{natbib}
+\setcitestyle{aysep={}}
+
+\definecolor{oxblue}{RGB}{0,33,71}
+\definecolor{oxgold}{HTML}{a0630a}
+\usepackage[final,
+bookmarks,
+bookmarksopen,
+colorlinks,
+final,
+linkcolor=oxred,
+citecolor=oxgold,
+pdfstartview=FitH ]{hyperref}
+%%
+%% END {Luke's Macros}
+
 \usepackage{amsmath}
 \usepackage{amsfonts}
-\usepackage{hyperref}
 \usepackage{verbatim}
 \newcommand{\Y}{\textsf{Y}}
 \newcommand{\sample}{\textsf{sample}}
 \DeclareMathOperator{\red}{red}
+
 \begin{document}
-Following your suggestion, I will be providing a criterion for termination of programs in PPCF\cite{ppcf} based on ranking supermartingales. As it's more convenient for this proof, a sampling-based semantics will be used instead of the original distributional semantics. I assume some roughly applicable equivalence is proven somewhere, but it doesn't seem that hard anyway.
+
+\lo{\LaTeX. For references, I recommend using the package {\tt natbib} with {\tt apalike} bibliography style (author-year is more reader-friendly), and placing the references in a separate {\tt .bib} file.
+I simply copy-and-paste the bib data from DBLP e.g.~\url{https://dblp.uni-trier.de/pers/hd/o/Ong:C==H=_Luke}.}
+
+\changed[akr]{[Email 22 Dec: I wrote a proof of termination based on ranking supermartingales (a slight strengthening of what you suggested), which is attached (I haven't made a Git repo yet because I don't know where you want it hosted).
+
+I thought some more about termination in the case of a language with a score function. 
+It isn't even clear what termination means in that case.
+None of the papers I've found include both unbounded scoring and a definition of termination.
+\lo{Can you explain your concern? I don't see any problem. See, e.g., the operational semantics in \citep{MakOP20b}; see also \citep{MakOP20a}.} 
+You said that the assumption of a.s. termination was often used. 
+Do you have any examples where it's used in a context with unbounded scoring, as going with whatever definition that uses is probably most useful?
+\lo{See \citep[Sec.~4, pp.~8 \& 9]{Wagner20} -- I am not sure if this addresses your question.}
+
+The case of bounded scoring seems simpler definitionally at least, but still seems like a bad fit for supermartingales, as the martingale property is local in a way scoring isn't. 
+I still need to think more about to what extent it can be made to make sense, though.]}
+
+Following your suggestion, I will be providing a criterion for termination of programs in PPCF \citep{DBLP:journals/pacmpl/EhrhardPT18} based on ranking supermartingales. 
+As it's more convenient for this proof, a sampling-based semantics \lo{You need to provide reference(s) for sampling-based semantics.} will be used instead of the original distributional semantics. 
+I assume some roughly applicable equivalence is proven somewhere, but it doesn't seem that hard anyway.
+\lo{Why not provide a proof as an appendix?}
 
 \section{Ranking functions}
-Given a probabilistic program (i.e. a term $M$), in order to construct a supermartingale to prove its a.s. termination, a function to assign values to each reachable program state is necessary. Define a ranking function on $M$ to be a measurable function $f:Rch(M) \to \mathbb{R}$ such that
+\lo{You should provide the definition of the PPCF: syntax and typing rules.}
+
+Given a probabilistic program (i.e.~a term $M$), in order to construct a supermartingale to prove its a.s.~termination, 
+\lo{\LaTeX. Place a space character right after ``.'' whenever the occurrence does not end a sentence (e.g.~{\tt a.s.\~{}termination} and {\tt i.e.\~{}a term}) so that \LaTeX\ does not allocate more white space than it should.}
+a function to assign values to each reachable program state is necessary. Define a ranking function on $M$ to be a measurable function $f:Rch(M) \to \mathbb{R}$ such that
 \begin{itemize}
     \item $f(N) > 0$ for all $N$ not in normal form
     \item $f(N) = 0$ for all $N$ in normal form
@@ -20,7 +68,11 @@ Given a probabilistic program (i.e. a term $M$), in order to construct a superma
 \end{itemize}
 
 \section{Sampling semantics}
-Let $ I = [0,1] \subset \mathbb{R} $, and let $S = I^{\mathbb{N}}$, with the $\sigma$-algebra and measure given by the limit of $1 \gets I \gets I^2 \gets \cdots$, where the maps are the projections that ignore the last element. The maps $\pi_h:S \to I, \quad \pi_t:S \to S$ popping the first element are then measurable.
+Let $ I = [0,1] \subset \mathbb{R} $, and let $S = I^{\mathbb{N}}$, with the $\sigma$-algebra and measure given by the limit of $1 \gets I \gets I^2 \gets \cdots$, where the maps are the projections that ignore the last element. 
+The maps $\pi_h:S \to I, \; \pi_t:S \to S$ popping the first element are then measurable.
+
+\lo{Is the induced $\sigma$-algebra the Borel algebra?
+The basis elements of the topology of $S$ have the form $\prod_{i \in I} U_i \times \mathbb{R}^\omega$ where $I$ ranges over finite sets and each $U_i$ is open in $\mathbb{R}$.}
 
 The one-step reduction is given by the function $\red : \Lambda \times S \to \Lambda \times S$ where
 \begin{equation}
@@ -45,28 +97,46 @@ Given a term $M$ and a ranking function $f$ for it, define random variables on t
 \begin{align*}
 (M_n,s_n) & = \red^n(M,s) \\
 y_0 & = 0 \\
-y_{n+1} & = \text{min} \{ k>y_n | M_k \text{ normal form or of the form } E[\Y N] \} \\
+%y_{n+1} & = \text{min} \{ k>y_n | M_k \text{ normal form or of the form } E[\Y N] \} \\
+y_{n+1} & = \min \{ k \mid k>y_n, M_k \text{ normal form or of the form } E[\Y N] \}\\
 M'_n & = M_{y_n} \\
 X_n & = f(M'_n)
 \end{align*}
+\lo{I have made a trivial change to the third clause above.}
 and define a filtration $\mathcal{F}_n = \sigma(M_k, k \leq n)$ (i.e. all the samples used up to step $n$).
+
+\lo{So all the random variables just defined are constant functions. E.g.~$M_n$ is a constant function from $S$ to the measurable space of PPCF terms.}
+
+\lo{\LaTeX. Use {\tt mid} rather than ``{\tt |}'' as separator in set comprehension. Reason: {\tt mid} is a binary operator (and so \LaTeX\ adds white space to both side); ``{\tt |}'' is just a symbol.}
 
 The expectation of $f(M_{n+1})$ given $\mathcal{F}_n$ is trivially less than or equal to $f(M_n)$ in the cases that $M_n \neq E[\sample]$, and in the case of $\sample$,
 \begin{align*}
-& \mathbb{E}[f(M_{n+1}) | \mathcal{F}_n] \\
-= & \mathbb{E}[f(M_{n+1}) | M_n = E[\sample],\, \mathcal{F}_n] \\
-= & \mathbb{E}[f(E[\pi_h(s_n)]) | \mathcal{F}_n] \\
+& \mathbb{E}[f(M_{n+1}) \mid \mathcal{F}_n] \\
+= & \mathbb{E}[f(M_{n+1}) \mid M_n = E[\sample],\, \mathcal{F}_n] \\
+= & \mathbb{E}[f(E[\pi_h(s_n)]) \mid \mathcal{F}_n] \\
 = & \int_0^1 f(E[\underline x]) \, \mathrm{d} x \qquad & \text{as }s_n\text{ is independent of } \mathcal{F}_n \\
 \leq & f(E[\sample]) \qquad & \text{by assumption on } f \\
 = & f(M_n),
 \end{align*}
 therefore the values of the ranking function $f(M_n)$ are a supermartingale with respect to $\mathcal{F}_n$.
 
-Given $M'_n$, there is some finite bound on the number of reduction steps that can take place from $M'_n$ without a $\Y$-reduction step, because of the type system, therefore $y_{n+1}$ is (conditional on $\mathcal{F}_{y_n+1}$) a bounded stopping time, therefore $\mathbb{E}[f(M_{y_{n+1}}) | \mathcal{F}_{y_n+1}] \leq f(M_{y_n+1})$. If $f(M_{y_n}) > 0$, then $M_{y_n} = E[\Y N]$ for some $E, N$, therefore $M_{y_n+1} = N (\Y N)$ and $f(M_{y_n+1}) \leq f(M_{y_n}) - 1$, therefore if $X_n > 0$, $\mathbb{E}[X_{n+1} | \mathcal{F}_{y_n+1}] \leq X_n - 1$.
+Given $M'_n$, there is some finite bound on the number of reduction steps that can take place from $M'_n$ without a $\Y$-reduction step, because of the type system, therefore $y_{n+1}$ is (conditional on $\mathcal{F}_{y_n+1}$) a bounded stopping time, therefore $\mathbb{E}[f(M_{y_{n+1}}) \mid \mathcal{F}_{y_n+1}] \leq f(M_{y_n+1})$. If $f(M_{y_n}) > 0$, then $M_{y_n} = E[\Y N]$ for some $E, N$, therefore $M_{y_n+1} = N (\Y N)$ and $f(M_{y_n+1}) \leq f(M_{y_n}) - 1$, therefore if $X_n > 0$, $\mathbb{E}[X_{n+1} \mid \mathcal{F}_{y_n+1}] \leq X_n - 1$.
 
 The expectation of $X_n$ therefore must tend to 0 as $n \to \infty$, therefore $X_n$ almost surely is less than or equal to 1 eventually, at which point $M'_{n+1}$ must be normal form, therefore $M$ terminates almost surely.
 
+
+\lo{You should frame the result you have just proved, precisely and formally, using a \LaTeX\ {\tt lemma} or {\tt theorem} environment.}
+
+
+\lo{Further directions - suggestions to come.}
+
+\bibliographystyle{apalike}
+\bibliography{references}
+
+\iffalse
 \begin{thebibliography}{9}
 \bibitem{ppcf} Thomas Ehrhard, Michele Pagani, and Christine Tasson. Measurable cones and stable, measurable functions: a model for probabilistic higher-order programming. \emph{PACMPL}, 2(POPL):59:1–59:28, 2018. doi: 10.1145/3158147. URL \href{https://doi.org/10.1145/3158147}{https://doi.org/10.1145/3158147}.
 \end{thebibliography}
+\fi
+
 \end{document}
