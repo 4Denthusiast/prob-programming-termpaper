@@ -72,7 +72,7 @@ Let $ I = [0,1] \subset \mathbb{R} $, and let $S = I^{\mathbb{N}}$, with the $\s
 The maps $\pi_h:S \to I, \; \pi_t:S \to S$ popping the first element are then measurable.
 
 \lo{Is the induced $\sigma$-algebra the Borel algebra?
-The basis elements of the topology of $S$ have the form $\prod_{i \in I} U_i \times \mathbb{R}^\omega$ where $I$ ranges over finite sets and each $U_i$ is open in $\mathbb{R}$.}
+The basis elements of the topology of $S$ have the form $\big(\prod_{i \in I} U_i\big) \times \mathbb{R}^\omega$ where $I$ ranges over finite sets and each $U_i$ is open in $\mathbb{R}$.}
 
 The one-step reduction is given by the function $\red : \Lambda \times S \to \Lambda \times S$ where
 \begin{equation}
@@ -83,14 +83,19 @@ The one-step reduction is given by the function $\red : \Lambda \times S \to \La
         (M,s) & \text{if } M \text{ normal form}
     \end{array} \right .
 \end{equation}
+\lo{Your definition $\red$ is incomplete: it is missing the definition of $R \to N$.}
+
 The limit $\red^\infty$ can then be defined as a partial function as $\lim_{n \to \infty} \red^n(M,s)$ whenever that sequence becomes constant by reaching a normal form.
 
-\begin{comment} I'm not sure whether this section will be needed any more.
-\section{Recursive steps}
+%\begin{comment} 
+\akr{\section{Recursive steps}
+[I'm not sure whether this section will be needed any more.]
+
 Define a reduction relation on PPCF terms that excludes the $\Y$ combinator (``nonrecursive reduction''), i.e. $E[M] \dashrightarrow E[N] \text{ if } M \to N$ for any redex $M$ not of the form $\Y M'$.
 
 This reduction relation is strongly normalizing because of the simple type system, so for any term $M$ there is some bound $b$ such that nonrecursive reduction of $M$ must terminate in at most $b$ steps. Define $\red_{nr} : \Lambda \times S \to \Lambda \times S$ like $\red(M,s)$, but using nonrecursive reduction instead of reduction, and let $\red_Y(M,s) = \red^{b_M}_{nr}(M,s)$. The sequence $(r_\Lambda(M,s,n), r_S(M,s,n)) = r(M,s,n) = \left(\red_Y \circ \red \right)^n(\red_Y(M,s))$ is then a subsequence of $\left( \red^n(M,s) \right)_n$ consisting of only terms which are either normal form or of the form $E[\Y N]$ for some $N$.
-\end{comment}
+}
+%\end{comment}
 
 \section{Supermartingales}
 Given a term $M$ and a ranking function $f$ for it, define random variables on the probability space $S$ (where $s$ is a random variable) by
@@ -128,7 +133,27 @@ The expectation of $X_n$ therefore must tend to 0 as $n \to \infty$, therefore $
 \lo{You should frame the result you have just proved, precisely and formally, using a \LaTeX\ {\tt lemma} or {\tt theorem} environment.}
 
 
-\lo{Further directions - suggestions to come.}
+\lo{\textbf{Further directions}
+
+\smallskip
+
+An obvious next step is to extend the result to the $\mathsf{score}$ construct.
+
+The following are highly topical, and could form the basis of an interesting and novel DPhil thesis.
+\begin{enumerate}
+\item Devise methods for proving (positive) a.s.~termination. 
+
+- For example, develop a type system satisfying the property: if a term is typable then it is (positively) a.s.~terminating.
+See~\cite{DBLP:conf/ppdp/BreuvartL18,DBLP:conf/esop/LagoG17}.
+
+- Another approach is to develop algorithms that synthesise ranking supermartingales, following, for example, \cite{DBLP:journals/pacmpl/AgrawalC018}.
+
+\item Develop principles (e.g.~in the form of ``proof rules'') for reasoning about (positively) a.s.~termination, in the style of \cite{DBLP:journals/pacmpl/McIverMKK18}.
+
+
+\item Design algorithms that synthesise probabilistic invariants (\emph{qua} martingales), \`a la \cite{SchreuderO19}; see also \cite{DBLP:journals/pacmpl/HarkKGK20}.
+
+\end{enumerate}}
 
 \bibliographystyle{apalike}
 \bibliography{references}
