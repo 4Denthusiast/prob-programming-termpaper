@@ -17,7 +17,7 @@ bookmarks,
 bookmarksopen,
 colorlinks,
 final,
-linkcolor=oxred,
+linkcolor=red,
 citecolor=oxgold,
 pdfstartview=FitH ]{hyperref}
 %%
@@ -32,7 +32,28 @@ pdfstartview=FitH ]{hyperref}
 
 \begin{document}
 
-\lo{\LaTeX. For references, I recommend using the package {\tt natbib} with {\tt apalike} bibliography style (author-year is more reader-friendly), and placing the references in a separate {\tt .bib} file.
+\lo{23 Jan:
+
+\paragraph{Some thoughts about extension to $\mathsf{score}$}
+
+- I still think that the operational semantics (reduction semantics) of SPCF (i.e.~with $\mathsf{score}$) is not problematic. However the notion of a.e.~termination is interesting and would benefit from further thought.
+
+- I would propose that you use the language SPCF defined in \citep{MakOP20b}. They use a big-step reduction semantics. I would sugget that, by contrast, you develop a small-step reduction semantics for it (by a mild adaptation of your $\red : \Lambda \times S \to \Lambda \times S$).
+
+- You will find that your example 
+\[
+f \, n = n \oplus_{\frac{1}{2}} (\mathsf{score} \, 3 \, ; \, f \, (n+1))
+\]
+is not definable in SPCF, but a variant (in which the branching probabilities are drawn from the entropy sequence) is. OK, we will need to assume that their $\mathbb{S} := \mathbb{R}^\omega$ is replaced by your $S$.
+
+- Consider the notion of a.e.~termination defined in \citep{MakOP20b}\footnote{\url{https://drive.google.com/open?id=1JzxV0lCkZu4d7szQOzkcKspqqo8u2BP0}} (towards the end of \S 3): a program $s$ is a.e.~terminating if the set of entropy sequences where $s$ does not evaluate to a value has measure zero.
+The intuition is that scoring is about model building, and does not by itself ``affect termination''.
+}
+
+\bigskip
+
+\lo{22 Jan:
+\LaTeX. For references, I recommend using the package {\tt natbib} with {\tt apalike} bibliography style (author-year is more reader-friendly), and placing the references in a separate {\tt .bib} file.
 I simply copy-and-paste the bib data from DBLP e.g.~\url{https://dblp.uni-trier.de/pers/hd/o/Ong:C==H=_Luke}.}
 
 \changed[akr]{[Email 22 Dec: I wrote a proof of termination based on ranking supermartingales (a slight strengthening of what you suggested), which is attached (I haven't made a Git repo yet because I don't know where you want it hosted).
@@ -133,9 +154,8 @@ The expectation of $X_n$ therefore must tend to 0 as $n \to \infty$, therefore $
 \lo{You should frame the result you have just proved, precisely and formally, using a \LaTeX\ {\tt lemma} or {\tt theorem} environment.}
 
 
-\lo{\textbf{Further directions}
-
-\smallskip
+\lo{22 Jan: 
+\paragraph{Further directions}
 
 An obvious next step is to extend the result to the $\mathsf{score}$ construct.
 
