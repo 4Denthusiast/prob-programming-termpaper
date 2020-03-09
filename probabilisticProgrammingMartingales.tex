@@ -25,10 +25,15 @@ pdfstartview=FitH ]{hyperref}
 
 \usepackage{amsmath}
 \usepackage{amsfonts}
+\usepackage{amsthm}
 \usepackage{verbatim}
-\newcommand{\Y}{\textsf{Y}}
-\newcommand{\sample}{\textsf{sample}}
+\newcommand{\tY}{\textsf{Y}}
+\newcommand{\tif}[3]{\textsf{if }#1\textsf{ then }#2\textsf{ else }#3}
+\newcommand{\tsample}{\textsf{sample}}
+\newcommand{\tscore}{\textsf{score}}
 \DeclareMathOperator{\red}{red}
+
+\newtheorem{theorem}{Theorem}
 
 \begin{document}
 
@@ -74,84 +79,104 @@ As it's more convenient for this proof, a sampling-based semantics \lo{You need 
 I assume some roughly applicable equivalence is proven somewhere, but it doesn't seem that hard anyway.
 \lo{Why not provide a proof as an appendix?}
 
-\section{Ranking functions}
-\lo{You should provide the definition of the PPCF: syntax and typing rules.}
+Various theorems about probabilistic programs rely on the assumption that the program terminates almost surely. Proof rules based on relating the program state to supermartingales already exist for first-order imperative programs \citep{DBLP:journals/pacmpl/McIverMKK18}. This paper's contribution is to extend this method to a higher-order setting.
 
-Given a probabilistic program (i.e.~a term $M$), in order to construct a supermartingale to prove its a.s.~termination, 
-\lo{\LaTeX. Place a space character right after ``.'' whenever the occurrence does not end a sentence (e.g.~{\tt a.s.\~{}termination} and {\tt i.e.\~{}a term}) so that \LaTeX\ does not allocate more white space than it should.}
-a function to assign values to each reachable program state is necessary. Define a ranking function on $M$ to be a measurable function $f:Rch(M) \to \mathbb{R}$ such that
-\begin{itemize}
-    \item $f(N) > 0$ for all $N$ not in normal form
-    \item $f(N) = 0$ for all $N$ in normal form
-    \item $f(E[\Y N]) \geq 1 + f(E[N(\Y N)])$
-    \item $f(E[\sample]) \geq \int_0^1 f(E[\underline{x}]) \, \mathrm{d}x$
-    \item $f(E[R]) \geq f(E[N])$ for any other redex $R$, where $R \to N$
-\end{itemize}
+\section{Language definition}
+The language SPCF is a simply-typed lambda calculus with sampling of real numbers from $[0,1]$ and unbounded scoring, following \cite{MakOP20b}. Types and terms are defined as follows, where $r$ is a real, $x$ is a variable, $f : \mathbb{R}^n \to \mathbb{R}$ and $\Gamma$ is an environment
+\begin{align*}
+  & \text{types } A, B ::= \textsf{R}  \mid  A \to B \\
+  & \text{values } v ::= x  \mid  \lambda x.s  \mid  \underline{r} \\
+  & \text{terms } s, t ::= v  \mid  t_1 t_2  \mid  \underline{f}(s_1,\dots ,s_n)  \mid  \tY s  \mid  \tif{s < 0}{t_1}{t_2}  \mid  \tsample  \mid  \tscore(s)
+\end{align*}
+\begin{align*}
+  \frac{}{\Gamma ; x:A \vdash x:A} \qquad
+  \frac{\Gamma ; x:A \vdash s : B}{\Gamma \vdash \lambda x.s : A \to B} \qquad
+  \frac{}{\underline{r} : \textsf{R}} \qquad
+  \frac{\Gamma \vdash s:A \to B \quad \Gamma \vdash t : A}{\Gamma \vdash s t : B} \\ \\
+  \frac{\Gamma \vdash s_1:\textsf{R} \dots \Gamma \vdash s_n:\textsf{R}}{\Gamma \vdash \underline{f}(s_1,\dots,s_n) : \textsf{R}} \ f : \mathbb{R}^n \to \mathbb{R} \qquad
+  \frac{\Gamma \vdash s : A \to A}{\Gamma \vdash \tY s : A} \\ \\
+  \frac{\Gamma \vdash c : \textsf{R} \quad \Gamma \vdash s_1 : A \quad \Gamma \vdash s_2 : A}{\Gamma \vdash \tif{c < 0}{s_1}{s_2} : A} \qquad
+  \frac{}{\Gamma \vdash \tsample : \textsf{R}} \qquad
+  \frac{\Gamma \vdash s : \textsf{R}}{\Gamma \vdash \tscore (s) : \textsf{R}}
+\end{align*}
 
-\section{Sampling semantics}
-Let $ I = [0,1] \subset \mathbb{R} $, and let $S = I^{\mathbb{N}}$, with the $\sigma$-algebra and measure given by the limit of $1 \gets I \gets I^2 \gets \cdots$, where the maps are the projections that ignore the last element. 
+To define the reduction relation, let environments be of the form:
+\begin{align*}
+  E ::= & \, \cdot \mid E t \mid v E \mid \underline{f}(r_1,\dots ,r_{k-1}, E, s_{k+1}, \dots, s_n) \\ & \mid \tY E \mid \tif{E<0}{s_1}{s_2} \mid \tscore (E)
+\end{align*}
+then a term reduces if it is formed by substituting a redex in an environment i.e.
+\begin{align*}
+  E[(\lambda x.s) t] & \to E[s[t/x]] \\
+  E[\underline f (\underline r_1, \dots , \underline r_n)] & \to E[\underline{f(r_1,\dots,r_n)}] \\
+  E[\tY v] & \to E[v (\tY v)] \\
+  E[\tif{\underline r < 0}{s_1}{s_2}] & \to E[s_1] \text{ where }r < 0 \\
+  E[\tif{\underline r < 0}{s_1}{s_2}] & \to E[s_2] \text{ where }r \geq 0 \\
+  E[\tsample] & \to E[\underline r] \text{ where } r \in [0,1] \\
+  E[\tscore(\underline r)] & \to E[\underline r]
+\end{align*}
+
+\subsection{Sampling semantics}
+This version of the reduction relation allows $\tsample$ to reduce to any number in $[0,1]$. To more precisely specify the probabilities, an additional argument is needed to determine the outcome of random samples. Let $ I = [0,1] \subset \mathbb{R} $, and let $S = I^{\mathbb{N}}$, with the Borel $\sigma$-algebra and the measure given by the limit of $1 \gets I \gets I^2 \gets \cdots$, where the maps are the projections that ignore the last element. 
 The maps $\pi_h:S \to I, \; \pi_t:S \to S$ popping the first element are then measurable.
-
-\lo{Is the induced $\sigma$-algebra the Borel algebra?
-The basis elements of the topology of $S$ have the form $\big(\prod_{i \in I} U_i\big) \times \mathbb{R}^\omega$ where $I$ ranges over finite sets and each $U_i$ is open in $\mathbb{R}$.}
 
 The one-step reduction is given by the function $\red : \Lambda \times S \to \Lambda \times S$ where
 \begin{equation}
 \red(M,s) = \left\{
     \begin{array}{ll}
-        (E[N],s) & \text{if } M = E[R], R \to N \text{ and } R \neq \sample \\
-        (\pi_h(s),\pi_t(s)) & \text{if } M =  \sample \\
+        (E[N],s) & \text{if } M = E[R], R \to N \text{ and } R \neq \tsample \\
+        (E[\underline{\pi_h(s)}],\pi_t(s)) & \text{if } M = E[\tsample] \\
         (M,s) & \text{if } M \text{ normal form}
     \end{array} \right .
 \end{equation}
-\lo{Your definition $\red$ is incomplete: it is missing the definition of $R \to N$.}
 
-The limit $\red^\infty$ can then be defined as a partial function as $\lim_{n \to \infty} \red^n(M,s)$ whenever that sequence becomes constant by reaching a normal form.
+The limit $\red^\infty$ can then be defined as a partial function as $\lim_{n \to \infty} \red^n(M,s)$ whenever that sequence becomes constant by reaching a normal form. A term $M$ terminates for a sample sequence $s$ if the limit $\red^\infty(M,s)$ is defined, and it terminates almost surely if $\mu(\{s \mid M \text{ terminates at } s\}) = 1$.
 
-%\begin{comment} 
-\akr{\section{Recursive steps}
-[I'm not sure whether this section will be needed any more.]
+\paragraph{}
+This definition of almost sure termination is equivalent to that given in \citep{MakOP20b}, although the program semantics is stated in a slightly different way. In particular, the argument to $\tscore$ is not relevant to termination (except for the possibility that its argument's evaluation wouldn't terminate).
 
-Define a reduction relation on PPCF terms that excludes the $\Y$ combinator (``nonrecursive reduction''), i.e. $E[M] \dashrightarrow E[N] \text{ if } M \to N$ for any redex $M$ not of the form $\Y M'$.
-
-This reduction relation is strongly normalizing because of the simple type system, so for any term $M$ there is some bound $b$ such that nonrecursive reduction of $M$ must terminate in at most $b$ steps. Define $\red_{nr} : \Lambda \times S \to \Lambda \times S$ like $\red(M,s)$, but using nonrecursive reduction instead of reduction, and let $\red_Y(M,s) = \red^{b_M}_{nr}(M,s)$. The sequence $(r_\Lambda(M,s,n), r_S(M,s,n)) = r(M,s,n) = \left(\red_Y \circ \red \right)^n(\red_Y(M,s))$ is then a subsequence of $\left( \red^n(M,s) \right)_n$ consisting of only terms which are either normal form or of the form $E[\Y N]$ for some $N$.
-}
-%\end{comment}
+\section{Ranking functions}
+Given a probabilistic program (i.e.~a term $M$), in order to construct a supermartingale to prove its a.s.~termination, a function to assign values to each reachable program state is necessary. Define a ranking function on $M$ to be a measurable function $f:Rch(M) \to \mathbb{R}$ such that
+\begin{itemize}
+    \item $f(N) > 0$ for all $N$ not in normal form
+    \item $f(N) = 0$ for all $N$ in normal form
+    \item $f(E[\tY N]) \geq 1 + f(E[N(\tY N)])$
+    \item $f(E[\tsample]) \geq \int_0^1 f(E[\underline{x}]) \, \mathrm{d}x$
+    \item $f(E[R]) \geq f(E[N])$ for any other redex $R$, where $R \to N$
+\end{itemize}
 
 \section{Supermartingales}
+
+\begin{theorem}
+  If an SPCF term has a ranking function, it terminates almost surely.
+\end{theorem}
+\begin{proof}
 Given a term $M$ and a ranking function $f$ for it, define random variables on the probability space $S$ (where $s$ is a random variable) by
 \begin{align*}
 (M_n,s_n) & = \red^n(M,s) \\
 y_0 & = 0 \\
-%y_{n+1} & = \text{min} \{ k>y_n | M_k \text{ normal form or of the form } E[\Y N] \} \\
-y_{n+1} & = \min \{ k \mid k>y_n, M_k \text{ normal form or of the form } E[\Y N] \}\\
+y_{n+1} & = \min \{ k \mid k>y_n, M_k \text{ normal form or of the form } E[\tY N] \}\\
 M'_n & = M_{y_n} \\
 X_n & = f(M'_n)
 \end{align*}
-\lo{I have made a trivial change to the third clause above.}
 and define a filtration $\mathcal{F}_n = \sigma(M_k, k \leq n)$ (i.e. all the samples used up to step $n$).
 
-\lo{So all the random variables just defined are constant functions. E.g.~$M_n$ is a constant function from $S$ to the measurable space of PPCF terms.}
+\lo{So all the random variables just defined are constant functions. E.g.~$M_n$ is a constant function from $S$ to the measurable space of PPCF terms. \akr{I think we discussed this and it was resolved.}}
 
-\lo{\LaTeX. Use {\tt mid} rather than ``{\tt |}'' as separator in set comprehension. Reason: {\tt mid} is a binary operator (and so \LaTeX\ adds white space to both side); ``{\tt |}'' is just a symbol.}
-
-The expectation of $f(M_{n+1})$ given $\mathcal{F}_n$ is trivially less than or equal to $f(M_n)$ in the cases that $M_n \neq E[\sample]$, and in the case of $\sample$,
+The expectation of $f(M_{n+1})$ given $\mathcal{F}_n$ is trivially less than or equal to $f(M_n)$ in the cases that $M_n \neq E[\tsample]$, and in the case of $\tsample$,
 \begin{align*}
 & \mathbb{E}[f(M_{n+1}) \mid \mathcal{F}_n] \\
-= & \mathbb{E}[f(M_{n+1}) \mid M_n = E[\sample],\, \mathcal{F}_n] \\
+= & \mathbb{E}[f(M_{n+1}) \mid M_n = E[\tsample],\, \mathcal{F}_n] \\
 = & \mathbb{E}[f(E[\pi_h(s_n)]) \mid \mathcal{F}_n] \\
 = & \int_0^1 f(E[\underline x]) \, \mathrm{d} x \qquad & \text{as }s_n\text{ is independent of } \mathcal{F}_n \\
-\leq & f(E[\sample]) \qquad & \text{by assumption on } f \\
+\leq & f(E[\tsample]) \qquad & \text{by assumption on } f \\
 = & f(M_n),
 \end{align*}
 therefore the values of the ranking function $f(M_n)$ are a supermartingale with respect to $\mathcal{F}_n$.
 
-Given $M'_n$, there is some finite bound on the number of reduction steps that can take place from $M'_n$ without a $\Y$-reduction step, because of the type system, therefore $y_{n+1}$ is (conditional on $\mathcal{F}_{y_n+1}$) a bounded stopping time, therefore $\mathbb{E}[f(M_{y_{n+1}}) \mid \mathcal{F}_{y_n+1}] \leq f(M_{y_n+1})$. If $f(M_{y_n}) > 0$, then $M_{y_n} = E[\Y N]$ for some $E, N$, therefore $M_{y_n+1} = N (\Y N)$ and $f(M_{y_n+1}) \leq f(M_{y_n}) - 1$, therefore if $X_n > 0$, $\mathbb{E}[X_{n+1} \mid \mathcal{F}_{y_n+1}] \leq X_n - 1$.
+Given $M'_n$, there is some finite bound on the number of reduction steps that can take place from $M'_n$ without a $\tY$-reduction step, because of the type system, therefore $y_{n+1}$ is (conditional on $\mathcal{F}_{y_n+1}$) a bounded stopping time, therefore $\mathbb{E}[f(M_{y_{n+1}}) \mid \mathcal{F}_{y_n+1}] \leq f(M_{y_n+1})$. If $f(M_{y_n}) > 0$, then $M_{y_n} = E[\tY N]$ for some $E, N$, therefore $M_{y_n+1} = N (\tY N)$ and $f(M_{y_n+1}) \leq f(M_{y_n}) - 1$, therefore if $X_n > 0$, $\mathbb{E}[X_{n+1} \mid \mathcal{F}_{y_n+1}] \leq X_n - 1$.
 
-The expectation of $X_n$ therefore must tend to 0 as $n \to \infty$, therefore $X_n$ almost surely is less than or equal to 1 eventually, at which point $M'_{n+1}$ must be normal form, therefore $M$ terminates almost surely.
-
-
-\lo{You should frame the result you have just proved, precisely and formally, using a \LaTeX\ {\tt lemma} or {\tt theorem} environment.}
+Overall, this implies that $\mathbb{E}[X_{n+1}] - \mathbb{E}[X_{n}] \leq -\mathbb P[X_n > 0]$ therefore as $\mathbb{E}[X_n]$ is bounded below, $\mathbb P[X_n > 0]$ must tend to 0 as $n \to \infty$. $X_n = 0 \Rightarrow X_{n+1} = 0$ therefore $\mathbb P[X_n > 0 \text{ for infinitely many values of n}] = \mathbb P[\forall n: X_n > 0] \leq \inf_n \mathbb P[X_n > 0] = 0$, therefore $M$ terminates almost surely.
+\end{proof}
 
 
 \lo{22 Jan: 
