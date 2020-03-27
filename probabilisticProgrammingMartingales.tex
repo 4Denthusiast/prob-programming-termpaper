@@ -134,6 +134,30 @@ The limit $\red^\infty$ can then be defined as a partial function as $\lim_{n \t
 \paragraph{}
 This definition of almost sure termination is equivalent to that given in \citep{MakOP20b}, although the program semantics is stated in a slightly different way. In particular, the argument to $\tscore$ is not relevant to termination (except for the possibility that its argument's evaluation wouldn't terminate).
 
+\subsection{Alternative Semantics}
+\akr{This version of the semantics is much more convenient for allowing multiple different reduction orders. I don't currently have a proof of the equivalence of this with the more usual semantics. I expect that that would be somewhat complicated, but not terribly difficult. I don't know whether a semantics like this has already been defined elsewhere. I just thought I'd write it out so you can see it and in case I use it later. If I do end up actually using it I'll write it up nicer, but hopefully this is at least enough for you to understand what I mean.}
+
+Given a term $M$, let $L(M)$ be the set of occurrences in $M$ of variables, $\tsample$ and $\tY$, and let $F(M)$ be the free magma on $L(M)$. \akr{Only the elements with no \tsample{}s except in the rightmost position are used. I'm not sure whether making this explicit in the definition of $F(M)$ makes things more or less clear.} Let $I = [0,1]$ and $S = I^{F(M)}$, with the Borel $\sigma$-algebra and the product measure.
+
+For any reduction \akr{including reductions not included in the definition above, i.e.~out of order reductions} $M \to N$, define a corresponding map $F(M \to N) : F(N) \to F(M)$ induced (as a magma morphism) by the obvious injection along with the replacements
+\begin{align*}
+F(E[(\lambda x. F[x_i])G[y]] \to E[F(G[y]/x)[G[y_i]]]) (x_i \cdot y) & = y_i\\
+F(E[\tY_i F[y]] \to E[F[y_0] (\tY F[y])]) (y_0) & = \tY_i \cdot y
+\end{align*}
+where $y$ can be any of the things in $L(N)$.
+
+The one-step reduction is given by the function $\red : \Lambda \times S \to \Lambda \times S$ where
+\begin{equation}
+\red(M,s) = \left\{
+    \begin{array}{ll}
+        (E[N],s \circ F(E[R] \to E[N])) & \text{if } M = E[R], R \to N \text{ and } R \neq \tsample \\
+        (E[\underline{s(\tsample_i)}],s\mid_{F(E[\underline{s(\tsample_i)}])}) & \text{if } M = E[\tsample_i] \\
+        (M,s) & \text{if } M \text{ normal form}
+    \end{array} \right .
+\end{equation}
+
+Essentially the entropy value here contains a pre-selected random value for each possible \tsample-reduction, in a way independent of reduction order, taking into account the possible duplication of \tsample{}s in $\beta$- and \tY-reduction steps.
+
 \section{Ranking functions}
 Given a probabilistic program (i.e.~a term $M$), in order to construct a supermartingale to prove its a.s.~termination, a function to assign values to each reachable program state is necessary. Define a ranking function on $M$ to be a measurable function $f:Rch(M) \to \mathbb{R}$ such that
 \begin{itemize}
