@@ -135,14 +135,16 @@ The limit $\red^\infty$ can then be defined as a partial function as $\lim_{n \t
 This definition of almost sure termination is equivalent to that given in \citep{MakOP20b}, although the program semantics is stated in a slightly different way. In particular, the argument to $\tscore$ is not relevant to termination (except for the possibility that its argument's evaluation wouldn't terminate).
 
 \subsection{Alternative Semantics}
-\akr{This version of the semantics is much more convenient for allowing multiple different reduction orders. I don't currently have a proof of the equivalence of this with the more usual semantics. I expect that that would be somewhat complicated, but not terribly difficult. I don't know whether a semantics like this has already been defined elsewhere. I just thought I'd write it out so you can see it and in case I use it later. If I do end up actually using it I'll write it up nicer, but hopefully this is at least enough for you to understand what I mean.}
+\akr{This version of the semantics is much more convenient for allowing multiple different reduction orders. I don't currently have a proof of the equivalence of this with the more usual semantics. I expect that that would be somewhat complicated, but not terribly difficult. I don't know whether a semantics like this has already been defined elsewhere. I just thought I'd write it out so you can see it and in case I use it later. If I do end up actually using it I'll write it up nicer, but hopefully this is at least enough for you to understand what I mean.
+
+Having thought a bit more about this, I realise it may not be quite right. I'll see if I can fix it later.}
 
 Given a term $M$, let $L(M)$ be the set of occurrences in $M$ of variables, $\tsample$ and $\tY$, and let $F(M)$ be the free magma on $L(M)$. \akr{Only the elements with no \tsample{}s except in the rightmost position are used. I'm not sure whether making this explicit in the definition of $F(M)$ makes things more or less clear.} Let $I = [0,1]$ and $S = I^{F(M)}$, with the Borel $\sigma$-algebra and the product measure.
 
 For any reduction \akr{including reductions not included in the definition above, i.e.~out of order reductions} $M \to N$, define a corresponding map $F(M \to N) : F(N) \to F(M)$ induced (as a magma morphism) by the obvious injection along with the replacements
 \begin{align*}
-F(E[(\lambda x. F[x_i])G[y]] \to E[F(G[y]/x)[G[y_i]]]) (x_i \cdot y) & = y_i\\
-F(E[\tY_i F[y]] \to E[F[y_0] (\tY F[y])]) (y_0) & = \tY_i \cdot y
+F(E[(\lambda x. F[x_i])G[y]] \to E[F(G[y]/x)[G[y_i]]]) y_i & = (x_i \cdot y)\\
+F(E[\tY_i F[y]] \to E[F[y] (\tY F[y_0])]) (y_0) & = \tY_i \cdot y
 \end{align*}
 where $y$ can be any of the things in $L(N)$.
 
