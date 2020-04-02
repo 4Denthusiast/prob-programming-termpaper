@@ -201,8 +201,6 @@ Given a probabilistic program (i.e.~a term $M$), in order to construct a superma
 Any term for which a ranking function exists is called ``rankable''.
 
 
-\lo{Ongoing}
-
 \section{Supermartingales}
 
 \begin{theorem} \label{rankable implies ast}
@@ -234,7 +232,7 @@ Given $M'_n$, there is some finite bound on the number of reduction steps that c
 
 Overall, this implies that $\mathbb{E}[X_{n+1}] - \mathbb{E}[X_{n}] \leq -\mathbb P[M_{y_n} \text{not n.f.}]$ therefore as $\mathbb{E}[X_n]$ is bounded below, $\mathbb P[M_{y_n} \text{not n.f.}]$ must tend to 0 as $n \to \infty$. $M_{y_n} \text{n.f.} \Rightarrow M_{y_{n+1}} \text{n.f.}$ therefore 
 \begin{align*}
-\mathbb P[M_{y_n} \text{not n.f.~for infinitely many values of n}]  
+\mathbb P[M_{y_n} \text{not n.f.~for infinitely many values of $n$}]  
 & = \mathbb P[\forall n: M_{y_n} \text{not n.f.}] \\
 & \leq \inf_n \mathbb P[M_{y_n} \text{not n.f.}] \\
 & = 0
