@@ -37,52 +37,16 @@ pdfstartview=FitH ]{hyperref}
 
 \begin{document}
 
-\lo{23 Jan:
 
-\paragraph{Some thoughts about extension to $\mathsf{score}$}
-
-- I still think that the operational semantics (reduction semantics) of SPCF (i.e.~with $\mathsf{score}$) is not problematic. However the notion of a.e.~termination is interesting and would benefit from further thought.
-
-- I would propose that you use the language SPCF defined in \citep{MakOP20b}. They use a big-step reduction semantics. I would sugget that, by contrast, you develop a small-step reduction semantics for it (by a mild adaptation of your $\red : \Lambda \times S \to \Lambda \times S$).
-
-- You will find that your example 
-\[
-f \, n = n \oplus_{\frac{1}{2}} (\mathsf{score} \, 3 \, ; \, f \, (n+1))
-\]
-is not definable in SPCF, but a variant (in which the branching probabilities are drawn from the entropy sequence) is. OK, we will need to assume that their $\mathbb{S} := \mathbb{R}^\omega$ is replaced by your $S$.
-
-- Consider the notion of a.e.~termination defined in \citep{MakOP20b}\footnote{\url{https://drive.google.com/open?id=1JzxV0lCkZu4d7szQOzkcKspqqo8u2BP0}} (towards the end of \S 3): a program $s$ is a.e.~terminating if the set of entropy sequences where $s$ does not evaluate to a value has measure zero.
-The intuition is that scoring is about model building, and does not by itself ``affect termination''.
-}
-
-\bigskip
-
-\lo{22 Jan:
-\LaTeX. For references, I recommend using the package {\tt natbib} with {\tt apalike} bibliography style (author-year is more reader-friendly), and placing the references in a separate {\tt .bib} file.
-I simply copy-and-paste the bib data from DBLP e.g.~\url{https://dblp.uni-trier.de/pers/hd/o/Ong:C==H=_Luke}.}
-
-\changed[akr]{[Email 22 Dec: I wrote a proof of termination based on ranking supermartingales (a slight strengthening of what you suggested), which is attached (I haven't made a Git repo yet because I don't know where you want it hosted).
-
-I thought some more about termination in the case of a language with a score function. 
-It isn't even clear what termination means in that case.
-None of the papers I've found include both unbounded scoring and a definition of termination.
-\lo{Can you explain your concern? I don't see any problem. See, e.g., the operational semantics in \citep{MakOP20b}; see also \citep{MakOP20a}.} 
-You said that the assumption of a.s.~termination was often used. 
-Do you have any examples where it's used in a context with unbounded scoring, as going with whatever definition that uses is probably most useful?
-\lo{See \citep[Sec.~4, pp.~8 \& 9]{Wagner20} -- I am not sure if this addresses your question.}
-
-The case of bounded scoring seems simpler definitionally at least, but still seems like a bad fit for supermartingales, as the martingale property is local in a way scoring isn't. 
-I still need to think more about to what extent it can be made to make sense, though.]}
-
-Following your suggestion, I will be providing a criterion for termination of programs in PPCF \citep{DBLP:journals/pacmpl/EhrhardPT18} based on ranking supermartingales. 
+\akr{Following your suggestion, I will be providing a criterion for termination of programs in PPCF \citep{DBLP:journals/pacmpl/EhrhardPT18} based on ranking supermartingales. 
 As it's more convenient for this proof, a sampling-based semantics \lo{You need to provide reference(s) for sampling-based semantics.} will be used instead of the original distributional semantics. 
-I assume some roughly applicable equivalence is proven somewhere, but it doesn't seem that hard anyway.
+I assume some roughly applicable equivalence is proven somewhere, but it doesn't seem that hard anyway.}
 \lo{Why not provide a proof as an appendix?}
 
 Various theorems about probabilistic programs rely on the assumption that the program terminates almost surely. Proof rules based on relating the program state to supermartingales already exist for first-order imperative programs \citep{DBLP:journals/pacmpl/McIverMKK18}. This paper's contribution is to extend this method to a higher-order setting.
 
 \section{Language definition}
-The language SPCF is a simply-typed lambda calculus with sampling of real numbers from $[0,1]$ and unbounded scoring, following \cite{MakOP20b}. Types and terms are defined as follows, where $r$ is a real, $x$ is a variable, $f : \mathbb{R}^n \to \mathbb{R}$ and $\Gamma$ is an environment
+The language SPCF is a simply-typed lambda calculus with sampling of real numbers from $[0,1]$ and unbounded scoring, following \cite{MakOP20b}. Types and terms are defined as follows, where $r$ is a real, $x$ is a variable, $f : \mathbb{R}^n \to \mathbb{R}$ is any measurable function and $\Gamma$ is an environment
 \begin{align*}
   & \text{types } A, B ::= \textsf{R}  \mid  A \to B \\
   & \text{values } v ::= x  \mid  \lambda x.s  \mid  \underline{r} \\
@@ -94,45 +58,33 @@ The language SPCF is a simply-typed lambda calculus with sampling of real number
   \frac{}{\underline{r} : \textsf{R}} \qquad
   \frac{\Gamma \vdash s:A \to B \quad \Gamma \vdash t : A}{\Gamma \vdash s t : B} \\ \\
   \frac{\Gamma \vdash s_1:\textsf{R} \dots \Gamma \vdash s_n:\textsf{R}}{\Gamma \vdash \underline{f}(s_1,\dots,s_n) : \textsf{R}} \ f : \mathbb{R}^n \to \mathbb{R} \qquad
-  \frac{\Gamma \vdash s : A \to A}{\Gamma \vdash \tY s : A} \\ \\
+  \frac{\Gamma \vdash s : (A \to B) \to (A \to B)}{\Gamma \vdash \tY s : (A \to B)} \\ \\
   \frac{\Gamma \vdash c : \textsf{R} \quad \Gamma \vdash s_1 : A \quad \Gamma \vdash s_2 : A}{\Gamma \vdash \tif{c < 0}{s_1}{s_2} : A} \qquad
   \frac{}{\Gamma \vdash \tsample : \textsf{R}} \qquad
   \frac{\Gamma \vdash s : \textsf{R}}{\Gamma \vdash \tscore (s) : \textsf{R}}
 \end{align*}
 
-\lo{What are the primitive functions $f$? All measurable functions?}
-
-To define the reduction relation, let environments \lo{They are called \emph{evaluation contexts}. Environments mean something else.} be of the form:
+To define the reduction relation, let evaluation contexts be of the form:
 \begin{align*}
   E ::= & \, \cdot \mid E t \mid v E \mid \underline{f}(r_1,\dots ,r_{k-1}, E, s_{k+1}, \dots, s_n) \\ & \mid \tY E \mid \tif{E<0}{s_1}{s_2} \mid \tscore (E)
 \end{align*}
-then a term reduces if it is formed by substituting a redex in an environment i.e.
+then a term reduces if it is formed by substituting a redex in a context i.e.
 \begin{align*}
-  E[(\lambda x.s) t] & \to E[s[t/x]] \\
+  E[(\lambda x.s) v] & \to E[s[v/x]] \\
   E[\underline f (\underline r_1, \dots , \underline r_n)] & \to E[\underline{f(r_1,\dots,r_n)}] \\
-  E[\tY v] & \to E[v (\tY v)] \\
+  E[\tY \lambda x. s] & \to E[\lambda z. s[(\tY \lambda x. s)/x] z] \text{ where $z$ is not free in $s$}\\
   E[\tif{\underline r < 0}{s_1}{s_2}] & \to E[s_1] \text{ where }r < 0 \\
   E[\tif{\underline r < 0}{s_1}{s_2}] & \to E[s_2] \text{ where }r \geq 0 \\
   E[\tsample] & \to E[\underline r] \text{ where } r \in [0,1] \\
   E[\tscore(\underline r)] & \to E[\underline r]
 \end{align*}
 
-\lo{- I assume this is a CBV language (judging from the (evaluation context) clause $v \, E$). So the first rule should be
-\[E[(\lambda x.s) v] \to E[s[v/x]]\]
 
-- In a CBV language, the $\tY$-combinator should only be applied to terms of type $(A \to B) \to (A \to B)$. 
-Your rule $E[\tY v] \to E[v (\tY v)]$ will diverge ($E[v (v (v \cdots ))]$).
-The redex rule for the Y-combinator should be
-\[
-\tY (\lambda y.s) \to \lambda z.s[\tY{(\lambda y.s)}/y]\,z \quad \hbox{($z$ is fresh)}
-\]
-
-}
 \subsection{Sampling semantics}
-This version of the reduction relation allows $\tsample$ to reduce to any number in $[0,1]$. To more precisely specify the probabilities, an additional argument is needed to determine the outcome of random samples. Let $ I = [0,1] \subset \mathbb{R} $, and let $S = I^{\mathbb{N}}$, with the Borel $\sigma$-algebra and the measure, \changed[lo]{denoted $\mu$}, given by the limit of $1 \gets I \gets I^2 \gets \cdots$, where the maps are the projections that ignore the last element. 
+This version of the reduction relation allows $\tsample$ to reduce to any number in $[0,1]$. To more precisely specify the probabilities, an additional argument is needed to determine the outcome of random samples. Let $ I = [0,1] \subset \mathbb{R} $, and let $S = I^{\mathbb{N}}$, with the Borel $\sigma$-algebra and the probability measure, denoted $\mu$, given by the limit of $1 \gets I \gets I^2 \gets \cdots$, where the maps are the projections that ignore the last element. Equivalently, a basis of measurable sets is $\prod_{i=0}^\infty X_i$ where $X_i$ are all Borel and all but finitely many are $I$, and $\mu (\prod_{i=0}^\infty X_i) = \prod_{i=0}^\infty \mu_{leb}(X_i)$.
 The maps $\pi_h:S \to I, \; \pi_t:S \to S$ popping the first element are then measurable.
-\lo{What does a measurable subset of $S$ look like? Give a ``concrete'' description.}
-\lo{Clarify the measure $\mu$: give a ``formula'' for computing $\mu(A)$, for $A \in \Sigma_S$. Is $\mu$ a probability measure?}
+
+The $\sigma$-algebra and measure on $\Lambda$ are defined by considering it as a disjoint union of equivalence classes under replacing all the real constants by a placeholder, where the measure on each class is that of $\mathbb{R}^n$, where $n$ is the number of real constants.
 
 The one-step reduction is given by the function $\red : \Lambda \times S \to \Lambda \times S$ where
 \begin{equation}
@@ -144,13 +96,11 @@ The one-step reduction is given by the function $\red : \Lambda \times S \to \La
     \end{array} \right .
 \end{equation}
 
-The limit $\red^\infty$ can then be defined as a partial function as $\lim_{n \to \infty} \red^n(M,s)$ whenever that sequence becomes constant by reaching a normal form. \lo{Define $\red^n(M,s)$.} 
-A term $M$ terminates for a sample sequence $s$ if the limit $\red^\infty(M,s)$ is defined, and it terminates almost surely if $\mu(\{s \mid M \text{ terminates at } s\}) = 1$.
-\lo{Why is $\{s \mid M \text{ terminates at } s\}$ a measurable subset of $S$?}
-\lo{Why is your definition of a.s.~termination reasonable? 
-For example, is it the case that for all $M$, $\mu(\{s \mid M \text{ terminates at } s\}) \leq 1$?}
+The result after $n$ steps is then simply $\red^n(M,s) = \overbrace{\red(...\red(}^n M,s)...)$, and the limit $\red^\infty$ can then be defined as a partial function as $\lim_{n \to \infty} \red^n(M,s)$ whenever that sequence becomes constant by reaching a normal form. A term $M$ terminates for a sample sequence $s$ if the limit $\red^\infty(M,s)$ is defined.
 
-\lo{Important: Give examples (and non-examples) of a.s.~terminating terms (such as the one you wrote on my whiteboard).}
+The reduction function is measurable, and the set of normal forms is measurable, therefore the set of $s$ such that $M$ terminates at $s$ within $n$ steps is measurable for any $n$, therefore $\{s \mid M \text{ terminates at } s \}$ is measurable. A term $M$ is said to terminate almost surely if $\mu(\{s \mid M \text{ terminates at } s\}) = 1$.
+
+For example, the term $(\tY \lambda f, n: \tif{\tsample - 0.5 < 0}{n}{f (n+1)} ) \underline{0}$, which generates a geometric distribution, terminates on the set $S \setminus [0.5,1]^\mathbb N$, which has measure 1, therefore it terminates almost surely, whereas $\tif{\tsample - 0.5 < 0}{\underline 0}{(\tY \lambda x. x) \underline 0}$, which terminates on the set $\pi_h^{-1}[[0,0.5]]$, has probability 0.5 of failing to terminate.
 
 \paragraph{}
 This definition of almost sure termination is equivalent to that given in \citep{MakOP20b}, although the program semantics is stated in a slightly different way. In particular, the argument to $\tscore$ is not relevant to termination (except for the possibility that its argument's evaluation wouldn't terminate).
@@ -183,17 +133,15 @@ The one-step reduction is given by the function $\red : \Lambda \times S \to \La
 Essentially the entropy value here contains a pre-selected random value for each possible \tsample-reduction, in a way independent of reduction order, taking into account the possible duplication of \tsample{}s in $\beta$- and \tY-reduction steps.
 
 \section{Ranking functions}
-Given a probabilistic program (i.e.~a term $M$), in order to construct a supermartingale to prove its a.s.~termination, a function to assign values to each reachable program state is necessary. Define a \emph{ranking function on $M$} to be a measurable function $f:\mathit{Rch}(M) \to \mathbb{R}$ such that
+Given a probabilistic program (i.e.~a term $M$), in order to construct a supermartingale to prove its a.s.~termination, a function to assign values to each reachable program state is necessary. Let $Rch(M) = \{x \in \Lambda \mid \exists (y_i) : M \to y_0 \to \dots \to y_n \to x\}$, with the $\sigma$-algebra induced as a subset of $\Lambda$, then define a \emph{ranking function on $M$} to be a measurable function $f:\mathit{Rch}(M) \to \mathbb{R}$ such that
 \begin{itemize}
     \item $f(N) \geq 0$ for all $N$
-    \item $f(E[\tY N]) \geq 1 + f(E[N(\tY N)])$ \lo{Modify this in view of the revised \tY-redex rule.}
+    \item $f(E[\tY \lambda x. N] \geq 1+ f(E[\lambda z. N[(\tY \lambda x. N)/x] z]) \text{ where $z$ is not free in $N$}$
     \item $f(E[\tsample]) \geq \int_0^1 f(E[\underline{x}]) \, \mathrm{d}x$ 
 
     \lo{I assume you mean $\int_{I} \mathsf{Leb} (\mathrm{d} x) \, f(E[\underline{x}])$.} 
     
-    \lo{For the integral to be well-defined, we need $x \mapsto E[\underline x]$ to be a measurable function $\mathbb{R} \to \mathit{Rch}(M)$.} 
-
-    \lo{Define the measurable space $\mathit{Rch}(M)$, and the measurable space of SPCF terms.}
+    \akr{Is the meaning of the integral unclear in the context? I'm not sure whether $Rch(M)$ is a measurable subset of $\Lambda$, so it might not have a natural measure, but I'm pretty sure this doesn't actually matter, and the $\sigma$-algebra at least is well-defined. $Rch(M)$ could fail to be measurable if there are measurable functions $\mathbb R^n \to \mathbb R$ with non-measurable ranges. I don't know whether these exist. They do for the Lebesgue $\sigma$-algebra, but I'm using the Borel ones.}
 
     \item $f(E[R]) \geq f(E[N])$ for any other redex $R$, where $R \to N$.
 \end{itemize}
@@ -245,9 +193,9 @@ therefore $M$ terminates almost surely.
 \section{Constructing Ranking Functions}
 Although rankability implies almost sure termination, the converse does not hold in general. For example,
 \begin{equation}
-\tif{-\tsample < 0}{\underline{0}}{\tY \lambda x. x}
+\tif{-\tsample < 0}{\underline{0}}{(\tY \lambda x. x)x}
 \end{equation}
-terminates in 3 steps with probability 1, but isn't rankable because $\tY \lambda x. x$ is reachable, although that has probability 0. Not only is this counterexample a.s.t, it's positively almost surely terminating i.e.~the expected time to termination is finite.
+terminates in 3 steps with probability 1, but isn't rankable because $(\tY \lambda x. x)x$ is reachable, although that has probability 0. Not only is this counterexample a.s.t, it's positively almost surely terminating i.e.~the expected time to termination is finite.
 
 A ranking function can be constructed under the stronger assumptions that, for every $N$ reachable from $M$, the expected number of $\tY$-reduction steps from $N$ to a normal form is finite. In particular, the expected number of $\tY$-reduction steps from each reachable term is a ranking function.
 
