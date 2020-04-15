@@ -86,7 +86,7 @@ The maps $\pi_h:S \to I, \; \pi_t:S \to S$ popping the first element are then me
 
 The $\sigma$-algebra and measure on $\Lambda$ are defined by considering it as a disjoint union of equivalence classes under replacing all the real constants by a placeholder, where the measure on each class is that of $\mathbb{R}^n$, where $n$ is the number of real constants.
 
-The one-step reduction, \changed[lo]{$\to$}, is given by the function $\red : \Lambda \times S \to \Lambda \times S$ where
+The one-step reduction is given by the function $\red : \Lambda \times S \to \Lambda \times S$ where
 \begin{equation}
 \red(M,s) = \left\{
     \begin{array}{ll}
@@ -95,6 +95,7 @@ The one-step reduction, \changed[lo]{$\to$}, is given by the function $\red : \L
         (M,s) & \text{if } M \text{ normal form}
     \end{array} \right .
 \end{equation}
+\lo{Replace (globally) ``normal form'' by ``value''.}
 
 The result after $n$ steps is then simply $\red^n(M,s) = \overbrace{\red(...\red(}^n M,s)...)$, and the limit $\red^\infty$ can then be defined as a partial function as $\lim_{n \to \infty} \red^n(M,s)$ whenever that sequence becomes constant by reaching a normal form. A term $M$ terminates for a sample sequence $s$ if the limit $\red^\infty(M,s)$ is defined.
 
@@ -106,8 +107,9 @@ For example, the term $(\tY \lambda f, n: \tif{\tsample - 0.5 < 0}{n}{f (n+1)} )
 This definition of almost sure termination is equivalent to that given in \citep{MakOP20b}, although the program semantics is stated in a slightly different way. In particular, the argument to $\tscore$ is not relevant to termination (except for the possibility that its argument's evaluation wouldn't terminate).
 
 \lo{Your operational semantics does not maintain a record of the current weight of the reduction.
-Note that a.s.~termination does depend on $\tscore$: see \cite[\S 4.3]{DBLP:journals/corr/abs-2004-03924}\footnote{\url{https://arxiv.org/abs/2004.03924}}.
-I think it important to take the behaviour of $\tscore$ into account, perhaps as a future task.}
+A.s.~termination does depend on $\tscore$: see \cite[\S 4.3]{DBLP:journals/corr/abs-2004-03924}\footnote{\url{https://arxiv.org/abs/2004.03924}}.
+I think it important to take the behaviour of $\tscore$ into account;
+you should do it as a future task.}
 
 \subsection{Alternative Semantics}
 \akr{This version of the semantics is much more convenient for allowing multiple different reduction orders. I don't currently have a proof of the equivalence of this with the more usual semantics. I expect that that would be somewhat complicated, but not terribly difficult. I don't know whether a semantics like this has already been defined elsewhere. I just thought I'd write it out so you can see it and in case I use it later. If I do end up actually using it I'll write it up nicer, but hopefully this is at least enough for you to understand what I mean.
@@ -134,8 +136,6 @@ The one-step reduction is given by the function $\red : \Lambda \times S \to \La
     \end{array} \right .
 \end{equation}
 
-\lo{By ``normal form'' in the side condition above, you mean value? (Normal form can be confusing.)}
-
 Essentially the entropy value here contains a pre-selected random value for each possible \tsample-reduction, in a way independent of reduction order, taking into account the possible duplication of \tsample{}s in $\beta$- and \tY-reduction steps.
 
 \section{Ranking functions}
@@ -154,13 +154,13 @@ Given a probabilistic program (i.e.~a term $M$), in order to construct a superma
     \lo{It it -- I was being pedantic. What you write is a Riemann integral, but it coincides with Lebesgue in this case.}
 
     \akr{I'm not sure whether $Rch(M)$ is a measurable subset of $\Lambda$, so it might not have a natural measure, but I'm pretty sure this doesn't actually matter, and the $\sigma$-algebra at least is well-defined. $Rch(M)$ could fail to be measurable if there are measurable functions $\mathbb R^n \to \mathbb R$ with non-measurable ranges. I don't know whether these exist. They do for the Lebesgue $\sigma$-algebra, but I'm using the Borel ones.}
-    \lo{For the integral to be well-defined, we need $x \mapsto E[\underline x]$ to be a measurable function $\mathbb{R} \to \mathit{Rch}(M)$ (I am sure it is, assuming an appropriate definition of SPCF terms as a measurable space.).} 
+    \lo{It is worth inserting the preceding (including the example of a measurable function with non-measurable range) as a remark (or as a ``commenting.sty'' note).}
+    \lo{For the integral to be well-defined, we need $x \mapsto E[\underline x]$ to be a measurable function $\mathbb{R} \to \mathit{Rch}(M)$.} 
 
     \item $f(E[R]) \geq f(E[N])$ for any other redex $R$, where $R \to N$.
 \end{itemize}
 
 Any term for which a ranking function exists is called ``rankable''.
-
 
 \section{Supermartingales}
 
@@ -189,9 +189,10 @@ The expectation of $f(M_{n+1})$ given $\mathcal{F}_n$ is trivially less than or 
 \end{align*}
 therefore the values of the ranking function $f(M_n)$ are a supermartingale with respect to $\mathcal{F}_n$.
 
-Given $M'_n$, there is some finite bound on the number of reduction steps that can take place from $M'_n$ without a $\tY$-reduction step, because of the type system \lo{Why?}, therefore $y_{n+1}$ is (conditional on $\mathcal{F}_{y_n+1}$) a bounded stopping time, therefore $\mathbb{E}[f(M_{y_{n+1}}) \mid \mathcal{F}_{y_n+1}] \leq f(M_{y_n+1})$. If $M_{y_n}$ isn't already in normal form, then $M_{y_n} = E[\tY N]$ for some $E, N$, therefore $M_{y_n+1} = N (\tY N)$ and $f(M_{y_n+1}) \leq f(M_{y_n}) - 1$, therefore if $M_{y_n}$ isn't normal form, $\mathbb{E}[X_{n+1} \mid \mathcal{F}_{y_n+1}] \leq X_n - 1$.
+Given $M'_n$, there is some finite bound on the number of reduction steps that can take place from $M'_n$ without a $\tY$-reduction step, because of the type system, therefore $y_{n+1}$ is (conditional on $\mathcal{F}_{y_n+1}$) a bounded stopping time, therefore $\mathbb{E}[f(M_{y_{n+1}}) \mid \mathcal{F}_{y_n+1}] \leq f(M_{y_n+1})$. 
+If $M_{y_n}$ isn't already in normal form, then \changed[lo]{$M_{y_n} = E[\tY \lambda x.N]$ for some $E, N$, therefore $M_{y_n+1} = E[\lambda z. N[(\tY \lambda x. N)/x] z]$} and $f(M_{y_n+1}) \leq f(M_{y_n}) - 1$, therefore if $M_{y_n}$ isn't normal form, $\mathbb{E}[X_{n+1} \mid \mathcal{F}_{y_n+1}] \leq X_n - 1$.
 
-Overall, this implies \lo{Why?} that $\mathbb{E}[X_{n+1}] - \mathbb{E}[X_{n}] \leq -\mathbb P[M_{y_n} \text{not n.f.}]$ therefore as $\mathbb{E}[X_n]$ is bounded below, $\mathbb P[M_{y_n} \text{not n.f.}]$ must tend to 0 as $n \to \infty$. $M_{y_n} \text{n.f.} \Rightarrow M_{y_{n+1}} \text{n.f.}$ therefore 
+Overall, this implies \lo{This implication is still not clear to me.} that $\mathbb{E}[X_{n+1}] - \mathbb{E}[X_{n}] \leq -\mathbb P[M_{y_n} \text{not n.f.}]$ therefore as $\mathbb{E}[X_n]$ is bounded below, $\mathbb P[M_{y_n} \text{not n.f.}]$ must tend to 0 as $n \to \infty$. $M_{y_n} \text{n.f.} \Rightarrow M_{y_{n+1}} \text{n.f.}$ therefore 
 \begin{align*}
 \mathbb P[M_{y_n} \text{not n.f.~for infinitely many values of $n$}]  
 & = \mathbb P[\forall n: M_{y_n} \text{not n.f.}] \\
