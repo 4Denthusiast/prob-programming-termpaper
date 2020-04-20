@@ -26,12 +26,14 @@ pdfstartview=FitH ]{hyperref}
 \usepackage{amsmath}
 \usepackage{amsfonts}
 \usepackage{amsthm}
+\usepackage{amssymb}
 \usepackage{verbatim}
 \newcommand{\tY}{\textsf{Y}}
 \newcommand{\tif}[3]{\textsf{if }#1\textsf{ then }#2\textsf{ else }#3}
 \newcommand{\tsample}{\textsf{sample}}
 \newcommand{\tscore}{\textsf{score}}
 \DeclareMathOperator{\red}{red}
+\DeclareMathOperator{\next}{next}
 
 \newtheorem{theorem}{Theorem}
 
@@ -229,18 +231,47 @@ Even in the case of reasonable simple terms, explicitly constructing a ranking f
 which generates a geometric distribution.
     Despite its simplicity, its $Rch$ contains all the terms
 \begin{itemize}
-    \item $(\tY \lambda f, n: \tif{\tsample - 0.5 < 0}{n}{f (n+1)}) \underline{i}$
+    \item $(\tY \lambda f, n: \tif{\tsample - 0.5 < 0}{n}{f (n+1)}) \underline{0}$
+    \item $(\lambda z.(\lambda f, n: \tif{\tsample - 0.5 < 0}{n}{f (n+1)}) (\tY \lambda f, n: \tif{\tsample - 0.5 < 0}{n}{f (n+1)}) z) \underline{i}$
     \item $(\lambda f, n: \tif{\tsample - 0.5 < 0}{n}{f (n+1)}) (\tY \lambda f, n: \tif{\tsample - 0.5 < 0}{n}{f (n+1)}) \underline{i}$
     \item $(\lambda n: \tif{\tsample - 0.5 < 0}{n}{(\tY \lambda f, m: \tif{\tsample - 0.5 < 0}{n}{f (m+1)}) (m+1)}) \underline{i}$
     \item $\tif{\tsample - 0.5 < 0}{\underline{i}}{(\tY \lambda f, m: \tif{\tsample - 0.5 < 0}{m}{f (m+1)}) (\underline{i}+1)}$
     \item $\tif{\underline r - 0.5 < 0}{\underline{i}}{(\tY \lambda f, m: \tif{\tsample - 0.5 < 0}{m}{f (m+1)}) (\underline{i}+1)}$
     \item $\tif{\underline{r-0.5} < 0}{\underline{i}}{(\tY \lambda f, m: \tif{\tsample - 0.5 < 0}{m}{f (m+1)}) (\underline{i}+1)}$
     \item $\underline{i}$
-    \item $(\tY \lambda f, m: \tif{\tsample - 0.5 < 0}{m}{f (m+1)}) (\underline{i}+1)$.
+    \item $(\tY \lambda f, m: \tif{\tsample - 0.5 < 0}{m}{f (m+1)}) (\underline{i}+1)$
+    \item $(\lambda z.(\lambda f, n: \tif{\tsample - 0.5 < 0}{n}{f (n+1)}) (\tY \lambda f, n: \tif{\tsample - 0.5 < 0}{n}{f (n+1)}) z) (\underline{i} + 1)$.
 \end{itemize}
 \akr{TODO: make this into a diagram with arrows.}
 Even in this simple case, defining a ranking function explicitly is awkward because of the number of cases, although in most cases, because the value need only be greater than or equal to that of the next term in sequence, it suffices to take the ranking function as taking only 3 distinct values.
 
+The definition of rankability is also inconvenient for syntactic sugar. It could be useful, for example, to define $M \oplus_p N = \tif{\tsample - p < 0} M N$, where $M \oplus_p N$ reduces to $M$ or $N$, depending on the first value of $s$, with probability $p$ resp.~$(1-p)$. Technically though, it reduces first to $\tif{\underline r - p < 0} M N$ for $r \in I$, so those terms all need values of the ranking function too.
+
+\paragraph{}
+In both of these cases, there are only some values of the rankng function that are semantically important. Define a \emph{partial ranking function} on a closed term $M$ to be a partial function $f : Rch(M) \nrightarrow \mathbb R$ such that
+\begin{itemize}
+    \item $f(N) \geq 0$ for all $N$ where $f$ is defined.
+    \item $f$ is defined at $M$.
+    \item For any $N$ in the domain of definition of $f$, evaluation of $N$ will almost certainly eventually reach some $O$ which is either a value or in the domain of definition of $f$, and $f(N) \geq \mathbb E[f(O) + \text{ the number of $\tY$-reduction steps from $N$ to $O$}]$ (where $f(O)$ is taken to be 0 if $O$ is a value outside of the domain of $f$).
+\end{itemize}
+A partial ranking function that is total is just a ranking function. Providing a partial ranking function is essentially part way between providing a ranking function and directly proving almost sure termination.
+
+\begin{theorem} \label{partial implies rankable}
+Every partial ranking function is a restriction of a ranking function.
+\end{theorem}
+\begin{proof}
+Take a closed term $M$ and partial ranking function $f$ on $M$. Define $f_1 : Rch(M) \nrightarrow \mathbb R$ by
+\begin{align*}
+    f_1(N) & = f(N) \text{ whenever $f(N)$ is defined,} \\
+    f_1(V) & = 0 \text{ for values $V$ not in the domain of $f$.}
+\end{align*}
+
+Define $(\next(N,s),\_) = \red^n(N,s)$ for the least $n \geq 0$ such that it's in the domain of $f_1$, and $g(N,s) = \left | \{m < n \mid \red^M(N,s) \text{ is of the form } (E[\tY N'],s') \} \right |$, then define $f_2(N) = \int_S f_1(\next(N,s)) + g(N,s) \, \mu(\mathrm d s)$. The (total) function $f_2$ agrees with $f$ on $f$'s domain, and it is a ranking function on $M$ (in fact, the least ranking function of which $f$ is a restriction).
+\end{proof}
+
+As a corollary, any term which admits a partial ranking function terminates almost surely.
+
+\akr{TODO: Show how this makes it easier to deal with the examples given.}
 
 \lo{22 Jan: 
 \paragraph{Further directions}
