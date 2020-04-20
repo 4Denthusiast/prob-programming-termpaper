@@ -46,11 +46,11 @@ I assume some roughly applicable equivalence is proven somewhere, but it doesn't
 Various theorems about probabilistic programs rely on the assumption that the program terminates almost surely. Proof rules based on relating the program state to supermartingales already exist for first-order imperative programs \citep{DBLP:journals/pacmpl/McIverMKK18}. This paper's contribution is to extend this method to a higher-order setting.
 
 \section{Language definition}
-The language SPCF is a simply-typed lambda calculus with sampling of real numbers from $[0,1]$ and unbounded scoring, following \cite{MakOP20b}. Types and terms are defined as follows, where $r$ is a real, $x$ is a variable, $f : \mathbb{R}^n \to \mathbb{R}$ is any measurable function and $\Gamma$ is an environment
+The language SPCF is a simply-typed lambda calculus with sampling of real numbers from $[0,1]$ and unbounded scoring, following \cite{MakOP20b}. Types and terms are defined as follows, where $r$ is a real, $x$ is a variable, $f : \mathbb{R}^n \to \mathbb{R}$ is any measurable function and $\Gamma$ is an environment:
 \begin{align*}
   & \text{types } A, B ::= \textsf{R}  \mid  A \to B \\
-  & \text{values } v ::= x  \mid  \lambda x.s  \mid  \underline{r} \\
-  & \text{terms } s, t ::= v  \mid  t_1 t_2  \mid  \underline{f}(s_1,\dots ,s_n)  \mid  \tY s  \mid  \tif{s < 0}{t_1}{t_2}  \mid  \tsample  \mid  \tscore(s)
+  & \text{values } v ::= \lambda x.s  \mid  \underline{r} \\
+  & \text{terms } s, t ::= v  \mid  x  \mid  t_1 t_2  \mid  \underline{f}(s_1,\dots ,s_n)  \mid  \tY s  \mid  \tif{s < 0}{t_1}{t_2}  \mid  \tsample  \mid  \tscore(s)
 \end{align*}
 \begin{align*}
   \frac{}{\Gamma ; x:A \vdash x:A} \qquad
@@ -64,6 +64,9 @@ The language SPCF is a simply-typed lambda calculus with sampling of real number
   \frac{\Gamma \vdash s : \textsf{R}}{\Gamma \vdash \tscore (s) : \textsf{R}}
 \end{align*}
 
+The set of all terms is denoted $\Lambda$, and the set of closed terms is denoted $\Lambda^0$.
+
+\paragraph{}
 To define the reduction relation, let evaluation contexts be of the form:
 \begin{align*}
   E ::= & \, \cdot \mid E t \mid v E \mid \underline{f}(r_1,\dots ,r_{k-1}, E, s_{k+1}, \dots, s_n) \\ & \mid \tY E \mid \tif{E<0}{s_1}{s_2} \mid \tscore (E)
@@ -76,8 +79,10 @@ then a term reduces if it is formed by substituting a redex in a context i.e.
   E[\tif{\underline r < 0}{s_1}{s_2}] & \to E[s_1] \text{ where }r < 0 \\
   E[\tif{\underline r < 0}{s_1}{s_2}] & \to E[s_2] \text{ where }r \geq 0 \\
   E[\tsample] & \to E[\underline r] \text{ where } r \in [0,1] \\
-  E[\tscore(\underline r)] & \to E[\underline r]
+  E[\tscore(\underline r)] & \to E[\underline r].
 \end{align*}
+
+Every closed well-typed term either is a value or reduces to another term.
 
 
 \subsection{Sampling semantics}
@@ -86,22 +91,24 @@ The maps $\pi_h:S \to I, \; \pi_t:S \to S$ popping the first element are then me
 
 The $\sigma$-algebra and measure on $\Lambda$ are defined by considering it as a disjoint union of equivalence classes under replacing all the real constants by a placeholder, where the measure on each class is that of $\mathbb{R}^n$, where $n$ is the number of real constants.
 
-The one-step reduction is given by the function $\red : \Lambda \times S \to \Lambda \times S$ where
+The one-step reduction is given by the function $\red : \Lambda^0 \times S \to \Lambda^0 \times S$ where
 \begin{equation}
 \red(M,s) = \left\{
     \begin{array}{ll}
         (E[N],s) & \text{if } M = E[R], R \to N \text{ and } R \neq \tsample \\
         (E[\underline{\pi_h(s)}],\pi_t(s)) & \text{if } M = E[\tsample] \\
-        (M,s) & \text{if } M \text{ normal form}
+        (M,s) & \text{if } M \text{ is a value}
     \end{array} \right .
 \end{equation}
-\lo{Replace (globally) ``normal form'' by ``value''.}
 
-The result after $n$ steps is then simply $\red^n(M,s) = \overbrace{\red(...\red(}^n M,s)...)$, and the limit $\red^\infty$ can then be defined as a partial function as $\lim_{n \to \infty} \red^n(M,s)$ whenever that sequence becomes constant by reaching a normal form. A term $M$ terminates for a sample sequence $s$ if the limit $\red^\infty(M,s)$ is defined.
+The result after $n$ steps is then simply $\red^n(M,s) = \overbrace{\red(...\red(}^n M,s)...)$, and the limit $\red^\infty$ can then be defined as a partial function as $\lim_{n \to \infty} \red^n(M,s)$ whenever that sequence becomes constant by reaching a value. A term $M$ terminates for a sample sequence $s$ if the limit $\red^\infty(M,s)$ is defined.
 
-The reduction function is measurable, and the set of normal forms is measurable, therefore the set of $s$ such that $M$ terminates at $s$ within $n$ steps is measurable for any $n$, therefore $\{s \mid M \text{ terminates at } s \}$ is measurable. A term $M$ is said to terminate almost surely if $\mu(\{s \mid M \text{ terminates at } s\}) = 1$.
+The reduction function is measurable, and the set of values is measurable, therefore the set of $s$ such that $M$ terminates at $s$ within $n$ steps is measurable for any $n$, therefore $\{s \mid M \text{ terminates at } s \}$ is measurable. A term $M$ is said to terminate almost surely if $\mu(\{s \mid M \text{ terminates at } s\}) = 1$.
 
 For example, the term $(\tY \lambda f, n: \tif{\tsample - 0.5 < 0}{n}{f (n+1)} ) \, \underline{0}$, which generates a geometric distribution, terminates on the set $S \setminus [0.5,1]^\mathbb N$, which has measure 1, therefore it terminates almost surely, whereas $\tif{\tsample - 0.5 < 0}{\underline 0}{(\tY \lambda x. x) \underline 0}$, which terminates on the set $\pi_h^{-1}[[0,0.5]]$, has probability 0.5 of failing to terminate.
+
+\paragraph{}
+Note that the requirement that $M$ be closed is not important for the proofs of the theorems, but is simply required to ensure that $M$ reaches a value, rather than a general normal form like $xy$.
 
 \paragraph{}
 This definition of almost sure termination is equivalent to that given in \citep{MakOP20b}, although the program semantics is stated in a slightly different way. In particular, the argument to $\tscore$ is not relevant to termination (except for the possibility that its argument's evaluation wouldn't terminate).
@@ -126,53 +133,44 @@ F(E[\tY_i F[y]] \to E[F[y] (\tY F[y_0])]) (y_0) & = \tY_i \cdot y
 \end{align*}
 where $y$ can be any of the things in $L(N)$.
 
-The one-step reduction is given by the function $\red : \Lambda \times S \to \Lambda \times S$ where
+The one-step reduction is given by the function $\red : \Lambda^0 \times S \to \Lambda^0 \times S$ where
 \begin{equation}
 \red(M,s) = \left\{
     \begin{array}{ll}
         (E[N],s \circ F(E[R] \to E[N])) & \text{if } M = E[R], R \to N \text{ and } R \neq \tsample \\
         (E[\underline{s(\tsample_i)}],s\mid_{F(E[\underline{s(\tsample_i)}])}) & \text{if } M = E[\tsample_i] \\
-        (M,s) & \text{if } M \text{ normal form}
+        (M,s) & \text{if } M \text{ is a value}
     \end{array} \right .
 \end{equation}
 
 Essentially the entropy value here contains a pre-selected random value for each possible \tsample-reduction, in a way independent of reduction order, taking into account the possible duplication of \tsample{}s in $\beta$- and \tY-reduction steps.
 
 \section{Ranking functions}
-Given a probabilistic program (i.e.~a term $M$), in order to construct a supermartingale to prove its a.s.~termination, a function to assign values to each reachable program state is necessary. Let $Rch(M) = \{x \in \Lambda \mid \exists (y_i) : M \to y_0 \to \dots \to y_n \to x\}$, with the $\sigma$-algebra induced as a subset of $\Lambda$, then define a \emph{ranking function on $M$} to be a measurable function $f:\mathit{Rch}(M) \to \mathbb{R}$ such that
+Given a probabilistic program (i.e.~a closed term $M$), in order to construct a supermartingale to prove its a.s.~termination, a function to assign values to each reachable program state is necessary. Let $Rch(M) = \{x \in \Lambda \mid \exists (y_i) : M \to y_0 \to \dots \to y_n \to x\}$, with the $\sigma$-algebra induced as a subset of $\Lambda$, then define a \emph{ranking function on $M$} to be a measurable function $f:\mathit{Rch}(M) \to \mathbb{R}$ such that
 \begin{itemize}
     \item $f(N) \geq 0$ for all $N$
     \item $f(E[\tY \lambda x. N] \geq 1+ f(E[\lambda z. N[(\tY \lambda x. N)/x] z]) \text{ where $z$ is not free in $N$}$
-    \item $f(E[\tsample]) \geq \int_0^1 f(E[\underline{x}]) \, \mathrm{d}x$ 
-
-    \lo{I agree that it does not actually matter whether $\mathit{Rch}(M)$ is a measurable subset of $\Lambda$ (the set of SPCF terms).}
-
-    \lo{It is straightforward to see that $E[\cdot] : x \mapsto E[\underline x]$ is a measurable function $\mathbb{R} \to \mathit{Rch}(M)$, using the ``skeletal term'' $\sigma$-algebra on $\mathit{Rch}(M)$, and so, $x \mapsto f(E[\underline{x}])$ is measurable.}
-
-    \lo{I assume you mean $\int_{I} \mathsf{Leb} (\mathrm{d} x) \, f(E[\underline{x}])$.} 
-    \akr{Is the meaning of the integral unclear in the context?} 
-    \lo{It it -- I was being pedantic. What you write is a Riemann integral, but it coincides with Lebesgue in this case.}
-
+    \item $f(E[\tsample]) \geq \int_I f(E[\underline{x}]) \, \mu_{leb}(\mathrm{d}x)$
     \akr{I'm not sure whether $Rch(M)$ is a measurable subset of $\Lambda$, so it might not have a natural measure, but I'm pretty sure this doesn't actually matter, and the $\sigma$-algebra at least is well-defined. $Rch(M)$ could fail to be measurable if there are measurable functions $\mathbb R^n \to \mathbb R$ with non-measurable ranges. I don't know whether these exist. They do for the Lebesgue $\sigma$-algebra, but I'm using the Borel ones.}
     \lo{It is worth inserting the preceding (including the example of a measurable function with non-measurable range) as a remark (or as a ``commenting.sty'' note).}
-    \lo{For the integral to be well-defined, we need $x \mapsto E[\underline x]$ to be a measurable function $\mathbb{R} \to \mathit{Rch}(M)$.} 
+    \akr{I'd like to include such a remark, but the only reference I've been able to find for the fact that these functions exist is a Stack Exchange question\footnote{\url{https://math.stackexchange.com/questions/1717282/construction-of-a-borel-measurable-function-mapping-borel-set-to-non-borel-set?rq=1}} which implies that the construction is difficult but doesn't actually say what it is (so I probably won't be able to find it on my own).}
 
     \item $f(E[R]) \geq f(E[N])$ for any other redex $R$, where $R \to N$.
 \end{itemize}
 
-Any term for which a ranking function exists is called ``rankable''.
+Any closed term for which a ranking function exists is called ``rankable''.
 
 \section{Supermartingales}
 
 \begin{theorem} \label{rankable implies ast}
-  If an SPCF term is rankable, it terminates almost surely.
+  If a closed SPCF term is rankable, it terminates almost surely.
 \end{theorem}
 \begin{proof}
-Given a term $M$ and a ranking function $f$ for it, define random variables on the probability space $S$ (where $s$ is a random variable) by
+Given a closed term $M$ and a ranking function $f$ for it, define random variables on the probability space $S$ (where $s$ is a random variable) by
 \begin{align*}
 (M_n,s_n) & = \red^n(M,s) \\
 y_0 & = 0 \\
-y_{n+1} & = \min \{ k \mid k>y_n, M_k \text{ normal form or of the form } E[\tY N] \}\\
+y_{n+1} & = \min \{ k \mid k>y_n, M_k \text{ a value or of the form } E[\tY N] \}\\
 M'_n & = M_{y_n} \\
 X_n & = f(M'_n)
 \end{align*}
@@ -190,7 +188,7 @@ The expectation of $f(M_{n+1})$ given $\mathcal{F}_n$ is trivially less than or 
 therefore the values of the ranking function $f(M_n)$ are a supermartingale with respect to $\mathcal{F}_n$.
 
 Given $M'_n$, there is some finite bound on the number of reduction steps that can take place from $M'_n$ without a $\tY$-reduction step, because of the type system, therefore $y_{n+1}$ is (conditional on $\mathcal{F}_{y_n+1}$) a bounded stopping time, therefore $\mathbb{E}[f(M_{y_{n+1}}) \mid \mathcal{F}_{y_n+1}] \leq f(M_{y_n+1})$. 
-If $M_{y_n}$ isn't already in normal form, then \changed[lo]{$M_{y_n} = E[\tY \lambda x.N]$ for some $E, N$, therefore $M_{y_n+1} = E[\lambda z. N[(\tY \lambda x. N)/x] z]$} and $f(M_{y_n+1}) \leq f(M_{y_n}) - 1$, therefore if $M_{y_n}$ isn't normal form, $\mathbb{E}[X_{n+1} \mid \mathcal{F}_{y_n+1}] \leq X_n - 1$.
+If $M_{y_n}$ isn't already a value, then \changed[lo]{$M_{y_n} = E[\tY \lambda x.N]$ for some $E, N$, therefore $M_{y_n+1} = E[\lambda z. N[(\tY \lambda x. N)/x] z]$} and $f(M_{y_n+1}) \leq f(M_{y_n}) - 1$, therefore if $M_{y_n}$ isn't a value, $\mathbb{E}[X_{n+1} \mid \mathcal{F}_{y_n+1}] \leq X_n - 1$.
 
 Overall, this implies \lo{This implication is still not clear to me.} that $\mathbb{E}[X_{n+1}] - \mathbb{E}[X_{n}] \leq -\mathbb P[M_{y_n} \text{not n.f.}]$ therefore as $\mathbb{E}[X_n]$ is bounded below, $\mathbb P[M_{y_n} \text{not n.f.}]$ must tend to 0 as $n \to \infty$. $M_{y_n} \text{n.f.} \Rightarrow M_{y_{n+1}} \text{n.f.}$ therefore 
 \begin{align*}
@@ -205,18 +203,18 @@ therefore $M$ terminates almost surely.
 \section{Constructing Ranking Functions}
 Although rankability implies almost sure termination, the converse does not hold in general. For example,
 \begin{equation}
-\tif{-\tsample < 0}{\underline{0}}{(\tY \lambda x. x)x}
+\tif{-\tsample < 0}{\underline{0}}{(\tY \lambda x. x)\underline 0}
 \end{equation}
-terminates in 3 steps with probability 1, but isn't rankable because $(\tY \lambda x. x)x$ is reachable, although that has probability 0. Not only is this counterexample a.s.t, it's positively almost surely terminating i.e.~the expected time to termination is finite.
+terminates in 3 steps with probability 1, but isn't rankable because $(\tY \lambda x. x) \underline 0$ is reachable, although that has probability 0. Not only is this counterexample a.s.t, it's positively almost surely terminating i.e.~the expected time to termination is finite.
 
-A ranking function can be constructed under the stronger assumptions that, for every $N$ reachable from $M$, the expected number of $\tY$-reduction steps from $N$ to a normal form is finite. In particular, the expected number of $\tY$-reduction steps from each reachable term is a ranking function.
+A ranking function can be constructed under the stronger assumptions that, for every $N$ reachable from $M$, the expected number of $\tY$-reduction steps from $N$ to a value is finite. In particular, the expected number of $\tY$-reduction steps from each reachable term is a ranking function.
 
 \akr{I don't know whether you'll see this before I actually write the other bit, but I'm planning on giving a more practical way of constructing ranking functions later using a similar technique, which is why this theorem seems relevant.}
 \begin{theorem} \label{minimal}
-Given a term $M$, the function $f:Rch(M) \to \mathbb R$ given by $f(N) = \mathbb E [\text{the number of }\tY\text{-reduction steps from }N\text{ to a normal form}]$, if it exists, is the least of all possible ranking functions of $M$.
+Given a closed term $M$, the function $f:Rch(M) \to \mathbb R$ given by $f(N) = \mathbb E [\text{the number of }\tY\text{-reduction steps from }N\text{ to a value}]$, if it exists, is the least of all possible ranking functions of $M$.
 \end{theorem}
 \begin{proof}
-Let $f$ be the candidate least ranking function defined above, and suppose $g$ is another ranking function such that $f(N) > g(N)$ for some $N \in Rch(M)$. The difference $g - f$ is then a supermartingale (with the same setup as in the proof of Theorem \ref{rankable implies ast}. The restrictions of $f$ and $g$ to $Rch(N)$ have the same properties assumed of $f$ and $g$, so assume w.l.o.g.~that $N=M$.
+Let $f$ be the candidate least ranking function defined above, and suppose $g$ is another ranking function such that $f(N) > g(N)$ for some $N \in Rch(M)$. The difference $g - f$ is then a supermartingale (with the same setup as in the proof of Theorem \ref{rankable implies ast}). The restrictions of $f$ and $g$ to $Rch(N)$ have the same properties assumed of $f$ and $g$, so assume w.l.o.g.~that $N=M$.
 
 \akr{TODO: finish this proof. It shouldn't be complicated.}
 \end{proof}
@@ -232,7 +230,7 @@ which generates a geometric distribution.
     Despite its simplicity, its $Rch$ contains all the terms
 \begin{itemize}
     \item $(\tY \lambda f, n: \tif{\tsample - 0.5 < 0}{n}{f (n+1)}) \underline{i}$
-    \item $(\lambda f, n: \tif{\tsample - 0.5 < 0}{n}{f (n+1)}) (\tY \lambda f, n: tif{\tsample - 0.5 < 0}{n}{f (n+1)}) \underline{i}$
+    \item $(\lambda f, n: \tif{\tsample - 0.5 < 0}{n}{f (n+1)}) (\tY \lambda f, n: \tif{\tsample - 0.5 < 0}{n}{f (n+1)}) \underline{i}$
     \item $(\lambda n: \tif{\tsample - 0.5 < 0}{n}{(\tY \lambda f, m: \tif{\tsample - 0.5 < 0}{n}{f (m+1)}) (m+1)}) \underline{i}$
     \item $\tif{\tsample - 0.5 < 0}{\underline{i}}{(\tY \lambda f, m: \tif{\tsample - 0.5 < 0}{m}{f (m+1)}) (\underline{i}+1)}$
     \item $\tif{\underline r - 0.5 < 0}{\underline{i}}{(\tY \lambda f, m: \tif{\tsample - 0.5 < 0}{m}{f (m+1)}) (\underline{i}+1)}$
