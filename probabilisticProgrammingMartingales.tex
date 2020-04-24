@@ -178,6 +178,8 @@ X_n & = f(M'_n)
 \end{align*}
 and define a filtration $\mathcal{F}_n = \sigma(M_k, k \leq n)$ (i.e. all the samples used up to step $n$).
 
+\akr{This is quite a pedantic point but technically the proof wouldn't be correct without it.} In the following proof, conditional expectations (conditioning on $\mathcal F_n$) will be used. Conditional expectations are in general only defined up to a null set, but in this case there is a natural measure on each element of $\mathcal F_n$ (as they're always isomorphic to $S$), and this is the version of the conditional expectation that will be used.
+
 The expectation of $f(M_{n+1})$ given $\mathcal{F}_n$ is trivially less than or equal to $f(M_n)$ in the cases that $M_n \neq E[\tsample]$, and in the case of $\tsample$,
 \begin{align*}
 & \mathbb{E}[f(M_{n+1}) \mid \mathcal{F}_n] \\
@@ -189,14 +191,14 @@ The expectation of $f(M_{n+1})$ given $\mathcal{F}_n$ is trivially less than or 
 \end{align*}
 therefore the values of the ranking function $f(M_n)$ are a supermartingale with respect to $\mathcal{F}_n$.
 
-Given $M'_n$, there is some finite bound on the number of reduction steps that can take place from $M'_n$ without a $\tY$-reduction step, because of the type system, therefore $y_{n+1}$ is (conditional on $\mathcal{F}_{y_n+1}$) a bounded stopping time, therefore $\mathbb{E}[f(M_{y_{n+1}}) \mid \mathcal{F}_{y_n+1}] \leq f(M_{y_n+1})$. 
-If $M_{y_n}$ isn't already a value, then \changed[lo]{$M_{y_n} = E[\tY \lambda x.N]$ for some $E, N$, therefore $M_{y_n+1} = E[\lambda z. N[(\tY \lambda x. N)/x] z]$} and $f(M_{y_n+1}) \leq f(M_{y_n}) - 1$, therefore if $M_{y_n}$ isn't a value, $\mathbb{E}[X_{n+1} \mid \mathcal{F}_{y_n+1}] \leq X_n - 1$.
+Given $M'_n$, the reduction relation $\to$, \emph{excluding} $\tY$-reduction steps, is strongly normalising because of the type system, therefore there is some finite bound on the number of reduction steps that can take place from $M'_n$ without a $\tY$-reduction step, therefore $y_{n+1}$ is (conditional on $\mathcal{F}_{y_n+1}$) a bounded stopping time, therefore $\mathbb{E}[f(M_{y_{n+1}}) \mid \mathcal{F}_{y_n+1}] \leq f(M_{y_n+1})$. 
+For $n>0$, if $M_{y_n}$ isn't already a value, then $M_{y_n} = E[\tY \lambda x.N]$ for some $E, N$, therefore $M_{y_n+1} = E[\lambda z. N[(\tY \lambda x. N)/x] z]$ and $f(M_{y_n+1}) \leq f(M_{y_n}) - 1$, therefore if $M_{y_n}$ isn't a value, $\mathbb{E}[X_{n+1} \mid \mathcal{F}_{y_n+1}] \leq X_n - 1$.
 
-Overall, this implies \lo{This implication is still not clear to me.} that $\mathbb{E}[X_{n+1}] - \mathbb{E}[X_{n}] \leq -\mathbb P[M_{y_n} \text{not n.f.}]$ therefore as $\mathbb{E}[X_n]$ is bounded below, $\mathbb P[M_{y_n} \text{not n.f.}]$ must tend to 0 as $n \to \infty$. $M_{y_n} \text{n.f.} \Rightarrow M_{y_{n+1}} \text{n.f.}$ therefore 
+In the other case that $X_n$ is a value, $X_{n+1} = X_n$, and $X_n = \mathbb E[X_n \mid \mathcal F_{y_n+1}]$ therefore in either case $\mathbb E[X_{n+1} \mid \mathcal F_{y_n+1}] - E[X_n \mid \mathcal F_{y_n+1}] \leq \mathbb -P[M_{y_n} \text{ not a value} \mid \mathcal F_{y_n+1}]$ (as the probability is 0 or 1). Marginalising over $\mathcal F_{y_n+1}$, this implies that $\mathbb{E}[X_{n+1}] - \mathbb{E}[X_{n}] \leq -\mathbb P[M_{y_n} \text{ not a value}]$ therefore as $\mathbb{E}[X_n]$ is bounded below, $\mathbb P[M_{y_n} \text{ not a value}]$ must tend to 0 as $n \to \infty$. $M_{y_n} \text{a value} \Rightarrow M_{y_{n+1}} \text{a value}$ therefore 
 \begin{align*}
-\mathbb P[M_{y_n} \text{not n.f.~for infinitely many values of $n$}]  
-& = \mathbb P[\forall n: M_{y_n} \text{not n.f.}] \\
-& \leq \inf_n \mathbb P[M_{y_n} \text{not n.f.}] \\
+\mathbb P[M_{y_n} \text{ not a value for infinitely many values of $n$}]  
+& = \mathbb P[\forall n: M_{y_n} \text{ not a value}] \\
+& \leq \inf_n \mathbb P[M_{y_n} \text{ not a value}] \\
 & = 0
 \end{align*} 
 therefore $M$ terminates almost surely.
@@ -209,9 +211,8 @@ Although rankability implies almost sure termination, the converse does not hold
 \end{equation}
 terminates in 3 steps with probability 1, but isn't rankable because $(\tY \lambda x. x) \underline 0$ is reachable, although that has probability 0. Not only is this counterexample a.s.t, it's positively almost surely terminating i.e.~the expected time to termination is finite.
 
-A ranking function can be constructed under the stronger assumptions that, for every $N$ reachable from $M$, the expected number of $\tY$-reduction steps from $N$ to a value is finite. In particular, the expected number of $\tY$-reduction steps from each reachable term is a ranking function.
+A ranking function can be constructed under the stronger assumptions that, for every $N$ reachable from $M$, the expected number of $\tY$-reduction steps from $N$ to a value is finite. In particular, the expected number of $\tY$-reduction steps from each reachable term is a ranking function. Note that a finite number of expected $\tY$-reduction steps does not necessarily imply a finite number of expected total reduction steps, for example $(\tY \lambda f n. \tif{\tsample - 0.5 < 0}{n \underline 0}{f (\lambda x. n (n x))}) (\lambda x. x+1)$ terminates with only 2 $\tY$-reductions on average, but applies the increment function $2^n$ times with probability $2^{-1-n}$ for $n \geq 0$, which diverges.
 
-\akr{I don't know whether you'll see this before I actually write the other bit, but I'm planning on giving a more practical way of constructing ranking functions later using a similar technique, which is why this theorem seems relevant.}
 \begin{theorem} \label{minimal}
 Given a closed term $M$, the function $f:Rch(M) \to \mathbb R$ given by $f(N) = \mathbb E [\text{the number of }\tY\text{-reduction steps from }N\text{ to a value}]$, if it exists, is the least of all possible ranking functions of $M$.
 \end{theorem}
@@ -237,7 +238,7 @@ which generates a geometric distribution.
     \item $(\lambda n: \tif{\tsample - 0.5 < 0}{n}{(\tY \lambda f, m: \tif{\tsample - 0.5 < 0}{n}{f (m+1)}) (m+1)}) \underline{i}$
     \item $\tif{\tsample - 0.5 < 0}{\underline{i}}{(\tY \lambda f, m: \tif{\tsample - 0.5 < 0}{m}{f (m+1)}) (\underline{i}+1)}$
     \item $\tif{\underline r - 0.5 < 0}{\underline{i}}{(\tY \lambda f, m: \tif{\tsample - 0.5 < 0}{m}{f (m+1)}) (\underline{i}+1)}$
-    \item $\tif{\underline{r-0.5} < 0}{\underline{i}}{(\tY \lambda f, m: \tif{\tsample - 0.5 < 0}{m}{f (m+1)}) (\underline{i}+1)}$
+    \item $\tif{\underline{r - 0.5} < 0}{\underline{i}}{(\tY \lambda f, m: \tif{\tsample - 0.5 < 0}{m}{f (m+1)}) (\underline{i}+1)}$
     \item $\underline{i}$
     \item $(\tY \lambda f, m: \tif{\tsample - 0.5 < 0}{m}{f (m+1)}) (\underline{i}+1)$
     \item $(\lambda z.(\lambda f, n: \tif{\tsample - 0.5 < 0}{n}{f (n+1)}) (\tY \lambda f, n: \tif{\tsample - 0.5 < 0}{n}{f (n+1)}) z) (\underline{i} + 1)$.
@@ -252,7 +253,7 @@ In both of these cases, there are only some values of the rankng function that a
 \begin{itemize}
     \item $f(N) \geq 0$ for all $N$ where $f$ is defined.
     \item $f$ is defined at $M$.
-    \item For any $N$ in the domain of definition of $f$, evaluation of $N$ will almost certainly eventually reach some $O$ which is either a value or in the domain of definition of $f$, and $f(N) \geq \mathbb E[f(O) + \text{ the number of $\tY$-reduction steps from $N$ to $O$}]$ (where $f(O)$ is taken to be 0 if $O$ is a value outside of the domain of $f$).
+    \item For any $N$ in the domain of definition of $f$, evaluation of $N$ will eventually \akr{It would be nicer for this to be only almost certain, to make this more neatly in-between rankability and ast, but that doesn't actually work because of terms reachable with 0 probability. Of course, astness doesn't imply rankability, so any definition of partial ranking function that includes all Y-past terms wouldn't always extend to a total ranking function.} reach some $O$ which is either a value or in the domain of definition of $f$, and $f(N) \geq \mathbb E[f(O) + \text{ the number of $\tY$-reduction steps from $N$ to $O$}]$ (where $f(O)$ is taken to be 0 if $O$ is a value outside of the domain of $f$).
 \end{itemize}
 A partial ranking function that is total is just a ranking function. Providing a partial ranking function is essentially part way between providing a ranking function and directly proving almost sure termination.
 
@@ -266,12 +267,33 @@ Take a closed term $M$ and partial ranking function $f$ on $M$. Define $f_1 : Rc
     f_1(V) & = 0 \text{ for values $V$ not in the domain of $f$.}
 \end{align*}
 
-Define $(\next(N,s),\_) = \red^n(N,s)$ for the least $n \geq 0$ such that it's in the domain of $f_1$, and $g(N,s) = \left | \{m < n \mid \red^M(N,s) \text{ is of the form } (E[\tY N'],s') \} \right |$, then define $f_2(N) = \int_S f_1(\next(N,s)) + g(N,s) \, \mu(\mathrm d s)$. The (total) function $f_2$ agrees with $f$ on $f$'s domain, and it is a ranking function on $M$ (in fact, the least ranking function of which $f$ is a restriction).
+Define $(\next(N,s),\_) = \red^n(N,s)$ for the least $n \geq 0$ such that it's in the domain of $f_1$, and $g(N,s) = \left | \{m < n \mid \red^M(N,s) \text{ is of the form } (E[\tY N'],s') \} \right |$. $\next$ is well-defined (i.e.~$n$ is finite) for all $N \in Rch(M)$ by induction on the path from $M$ to $N$, by the third condition on partial ranking functions. Define $f_2(N) = \int_S f_1(\next(N,s)) + g(N,s) \, \mu(\mathrm d s)$. The (total) function $f_2$ agrees with $f$ on $f$'s domain, and it is a ranking function on $M$ (in fact, the least ranking function of which $f$ is a restriction).
 \end{proof}
 
 As a corollary, any term which admits a partial ranking function terminates almost surely.
 
-\akr{TODO: Show how this makes it easier to deal with the examples given.}
+\subsection{Examples}
+Let $M \oplus_p N = \tif{\tsample - p < 0} M N$, for $p \in (0,1]$, then there are the pseudo-reduction relations
+\begin{align*}
+E[M \oplus_p N] \to^3 & E[M] & \\
+E[M \oplus_p N] \to^3 & E[N] & \\
+\red^3(E[M \oplus_p N], s) = & \left\{
+    \begin{array}{ll}
+        (E[M],\pi_t(s)) & \text{if } \pi_h(s) < p \\
+        (E[N],\pi_t(s)) & \text{if } \pi_h(s) \geq p. \\
+    \end{array} \right .
+\end{align*}
+A partial ranking function could be defined with respect to this shortcut reduction simply by replacing $\to$ and $\red$ in the definition of a partial ranking function by a version that goes straight from $N \oplus_p O$ to $N$ or $O$. Such a pseudo-partial ranking function would then be a partial function from a subset of $Rch(M)$, so it could also be considered as a partial function from all of $Rch(M)$, and it would in fact also be an actual partial ranking function. It is therefore possible to prove rankability directly using the shortcutted reductions.
+
+A similar procedure would work for other forms of syntactic sugar. If a closed term $N$ eventually reduces to one of a set of other terms $\{N_i \mid i \in I\}$ with certain probabilities, a partial ranking function defined with respect to a reduction sequence that skips straight from $N$ to $N_i$ is also a valid partial ranking function for the original reduction function, and therefore its existence implies almost sure termination. There is a caveat, however, that $\tY$-reduction steps skipped over in the shortcut still need to be counted for the expected number of $\tY$-reduction steps.
+
+\paragraph{}
+With this abbreviation, the geometric distribution example from earlier can be written as $(\tY f, n. n \oplus_{0.5} f(n+1)) \underline 0$. It is then easy to see that the following is a partial ranking function:
+\begin{align*}
+(\tY f, n. n \oplus_{0.5} f(n+1)) N \mapsto 2 \\
+\underline i \oplus_{0.5} (\tY f, n. n \oplus_{0.5} f(n+1)) (\underline i + 1) \mapsto 1 \\
+\underline i \mapsto 0
+\end{align*}
 
 \lo{22 Jan: 
 \paragraph{Further directions}
