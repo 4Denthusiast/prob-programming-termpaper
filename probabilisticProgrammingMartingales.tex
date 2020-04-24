@@ -217,9 +217,11 @@ A ranking function can be constructed under the stronger assumptions that, for e
 Given a closed term $M$, the function $f:Rch(M) \to \mathbb R$ given by $f(N) = \mathbb E [\text{the number of }\tY\text{-reduction steps from }N\text{ to a value}]$, if it exists, is the least of all possible ranking functions of $M$.
 \end{theorem}
 \begin{proof}
-Let $f$ be the candidate least ranking function defined above, and suppose $g$ is another ranking function such that $f(N) > g(N)$ for some $N \in Rch(M)$. The difference $g - f$ is then a supermartingale (with the same setup as in the proof of Theorem \ref{rankable implies ast}). The restrictions of $f$ and $g$ to $Rch(N)$ have the same properties assumed of $f$ and $g$, so assume w.l.o.g.~that $N=M$.
+Let $f$ be the candidate least ranking function defined above, and suppose $g$ is another ranking function such that $f(N) > g(N)$ for some $N \in Rch(M)$. The restrictions of $f$ and $g$ to $Rch(N)$ have the same properties assumed of $f$ and $g$, so assume w.l.o.g.~that $N=M$. The difference $g - f$ is then a supermartingale (with the same setup as in the proof of Theorem \ref{rankable implies ast}) therefore $\forall n.\ \mathbb E[g(M_n)] \leq \mathbb E[f(M_n)] + g(M)-f(M)$.
 
-\akr{TODO: finish this proof. It shouldn't be complicated.}
+$\mathbb E[f(M_n)] = \sum_{k=n}^\infty \mathbb P[M_n = E[\tY N] \text{ for some }E, N] \to 0 \text{ as } n \to \infty$ therefore as $g(M) - f(M) < 0$, eventually $\mathbb E[g(M_n)] < 0$, which is impossible, therefore $g \geq f$ as required.
+
+In order for $f$ to be the least ranking function of $M$, it also has to actually be a ranking function itself. Each of the conditions on a ranking function is easily verified from the definition of $f$.
 \end{proof}
 
 \paragraph{}
