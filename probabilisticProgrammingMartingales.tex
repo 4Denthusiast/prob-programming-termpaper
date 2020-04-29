@@ -161,7 +161,7 @@ Essentially the entropy value here contains a pre-selected random value for each
 Given a probabilistic program (i.e.~a closed term $M$), in order to construct a supermartingale to prove its a.s.~termination, a function to assign values to each reachable program state is necessary. Let $Rch(M) = \{x \in \Lambda \mid \exists (y_i) : M \to y_0 \to \dots \to y_n \to x\}$, with the $\sigma$-algebra induced as a subset of $\Lambda$, then define a \emph{ranking function on $M$} to be a measurable function $f:\mathit{Rch}(M) \to \mathbb{R}$ such that
 \begin{itemize}
     \item $f(N) \geq 0$ for all $N$
-    \item $f(E[\tY \lambda x. N] \geq 1+ f(E[\lambda z. N[(\tY \lambda x. N)/x] z]) \text{ where $z$ is not free in $N$}$
+    \item $f(E[\tY \lambda x. N]) \geq 1+ f(E[\lambda z. N[(\tY \lambda x. N)/x] z]) \text{ where $z$ is not free in $N$}$
     \item $f(E[\tsample]) \geq \int_I f(E[\underline{x}]) \, \mu_{leb}(\mathrm{d}x)$
     \akr{I'm not sure whether $Rch(M)$ is a measurable subset of $\Lambda$, so it might not have a natural measure, but I'm pretty sure this doesn't actually matter, and the $\sigma$-algebra at least is well-defined. $Rch(M)$ could fail to be measurable if there are measurable functions $\mathbb R^n \to \mathbb R$ with non-measurable ranges. I don't know whether these exist. They do for the Lebesgue $\sigma$-algebra, but I'm using the Borel ones.}
     \lo{It is worth inserting the preceding (including the example of a measurable function with non-measurable range) as a remark (or as a ``commenting.sty'' note).}
@@ -262,6 +262,7 @@ The definition of rankability is also inconvenient for syntactic sugar. It could
 
 \paragraph{}
 In both of these cases, there are only some values of the rankng function that are semantically important. Define a \emph{partial ranking function} on a closed term $M$ to be a partial function $f : Rch(M) \nrightarrow \mathbb R$ such that
+\lo{NOTATION. Common notation for partial function $\rightharpoonup$}
 \begin{itemize}
     \item $f(N) \geq 0$ for all $N$ where $f$ is defined.
     \item $f$ is defined at $M$.
