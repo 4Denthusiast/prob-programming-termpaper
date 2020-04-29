@@ -71,7 +71,7 @@ The set of all terms is denoted $\Lambda$, and the set of closed terms is denote
 \paragraph{}
 To define the reduction relation, let evaluation contexts be of the form:
 \begin{align*}
-  E ::= & \, \cdot \mid E t \mid v E \mid \underline{f}(r_1,\dots ,r_{k-1}, E, s_{k+1}, \dots, s_n) \\ & \mid \tY E \mid \tif{E<0}{s_1}{s_2} \mid \tscore (E)
+  E ::= & \, [\,] \mid E t \mid v E \mid \underline{f}(r_1,\dots ,r_{k-1}, E, s_{k+1}, \dots, s_n) \\ & \mid \tY E \mid \tif{E<0}{s_1}{s_2} \mid \tscore (E)
 \end{align*}
 then a term reduces if it is formed by substituting a redex in a context i.e.
 \begin{align*}
@@ -83,6 +83,7 @@ then a term reduces if it is formed by substituting a redex in a context i.e.
   E[\tsample] & \to E[\underline r] \text{ where } r \in [0,1] \\
   E[\tscore(\underline r)] & \to E[\underline r].
 \end{align*}
+\lo{The $\tscore$ rule should have a side condition: if $r > 0$.}
 
 Every closed well-typed term either is a value or reduces to another term.
 
@@ -102,15 +103,24 @@ The one-step reduction is given by the function $\red : \Lambda^0 \times S \to \
         (M,s) & \text{if } M \text{ is a value}
     \end{array} \right .
 \end{equation}
+\lo{Both $\to$ and $\red$ are called reduction relation.}
 
 The result after $n$ steps is then simply $\red^n(M,s) = \overbrace{\red(...\red(}^n M,s)...)$, and the limit $\red^\infty$ can then be defined as a partial function as $\lim_{n \to \infty} \red^n(M,s)$ whenever that sequence becomes constant by reaching a value. A term $M$ terminates for a sample sequence $s$ if the limit $\red^\infty(M,s)$ is defined.
 
 The reduction function is measurable, and the set of values is measurable, therefore the set of $s$ such that $M$ terminates at $s$ within $n$ steps is measurable for any $n$, therefore $\{s \mid M \text{ terminates at } s \}$ is measurable. A term $M$ is said to terminate almost surely if $\mu(\{s \mid M \text{ terminates at } s\}) = 1$.
 
-For example, the term $(\tY \lambda f, n: \tif{\tsample - 0.5 < 0}{n}{f (n+1)} ) \, \underline{0}$, which generates a geometric distribution, terminates on the set $S \setminus [0.5,1]^\mathbb N$, which has measure 1, therefore it terminates almost surely, whereas $\tif{\tsample - 0.5 < 0}{\underline 0}{(\tY \lambda x. x) \underline 0}$, which terminates on the set $\pi_h^{-1}[[0,0.5]]$, has probability 0.5 of failing to terminate.
+For example, the term 
+\[
+(\tY \lambda f, n: \tif{\tsample - 0.5 < 0}{n}{f (n+1)} ) \, \underline{0},
+\] 
+which generates a geometric distribution, terminates on the set $S \setminus [0.5,1]^\mathbb N$, which has measure 1, therefore it terminates almost surely, whereas 
+\[
+\tif{\tsample - 0.5 < 0}{\underline 0}{(\tY \lambda x. x) \underline 0},
+\] 
+which terminates on the set $\pi_h^{-1}[[0,0.5]]$, has probability 0.5 of failing to terminate.
 
 \paragraph{}
-Note that the requirement that $M$ be closed is not important for the proofs of the theorems, but is simply required to ensure that $M$ reaches a value, rather than a general normal form like $xy$.
+Note that the requirement that $M$ be closed is not important for the proofs of the theorems, but is simply required to ensure that $M$ reaches a value, rather than a general normal form like $x \, y$.
 
 \paragraph{}
 This definition of almost sure termination is equivalent to that given in \citep{MakOP20b}, although the program semantics is stated in a slightly different way. In particular, the argument to $\tscore$ is not relevant to termination (except for the possibility that its argument's evaluation wouldn't terminate).
