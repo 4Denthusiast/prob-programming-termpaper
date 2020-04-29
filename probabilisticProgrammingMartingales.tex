@@ -191,6 +191,11 @@ and define a filtration $\mathcal{F}_n = \sigma(M_k, k \leq n)$ (i.e. all the sa
 \akr{This is quite a pedantic point but technically the proof wouldn't be correct without it.} In the following proof, conditional expectations (conditioning on $\mathcal F_n$) will be used. Conditional expectations are in general only defined up to a null set, but in this case there is a natural measure on each element of $\mathcal F_n$ (as they're always isomorphic to $S$), and this is the version of the conditional expectation that will be used.
 
 The expectation of $f(M_{n+1})$ given $\mathcal{F}_n$ is trivially less than or equal to $f(M_n)$ in the cases that $M_n \neq E[\tsample]$, and in the case of $\tsample$,
+\lo{This case analysis is problematic. The r.v.~$M_n$ is a measurable function of type $S \to \Lambda^0$ defined by $M_n(s) :=  N$ where $\red^n(M, s) = (N, s_n)$. 
+In general, it does not make sense to say ``$M_n = E[\tsample]$'' without referencing a trace (i.e.~an element of of $S$).
+Take $M = \tif{\tsample - 0.5 < 0}{\tsample}{1}$.
+Then $M_3([0.1, \cdots]) = \tsample$ but $M_3([0.6, \cdots]) = 1$.
+The case analysis should take place ``inside the conditional expectation''.}
 \begin{align*}
 & \mathbb{E}[f(M_{n+1}) \mid \mathcal{F}_n] \\
 = & \mathbb{E}[f(M_{n+1}) \mid M_n = E[\tsample],\, \mathcal{F}_n] \\
@@ -199,6 +204,8 @@ The expectation of $f(M_{n+1})$ given $\mathcal{F}_n$ is trivially less than or 
 \leq & f(E[\tsample]) \qquad & \text{by assumption on } f \\
 = & f(M_n),
 \end{align*}
+\lo{Problem: Some of the above terms (conditional expectation and $f(M_n)$) are random variables (i.e.~functions) but the integral is a real number.}
+
 therefore the values of the ranking function $f(M_n)$ are a supermartingale with respect to $\mathcal{F}_n$.
 
 Given $M'_n$, the reduction relation $\to$, \emph{excluding} $\tY$-reduction steps, is strongly normalising because of the type system, therefore there is some finite bound on the number of reduction steps that can take place from $M'_n$ without a $\tY$-reduction step, therefore $y_{n+1}$ is (conditional on $\mathcal{F}_{y_n+1}$) a bounded stopping time, therefore $\mathbb{E}[f(M_{y_{n+1}}) \mid \mathcal{F}_{y_n+1}] \leq f(M_{y_n+1})$. 
