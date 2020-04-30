@@ -20,10 +20,44 @@ final,
 linkcolor=red,
 citecolor=oxgold,
 pdfstartview=FitH ]{hyperref}
+
+\usepackage{amsmath} % cleveref must be loaded afer amsmath
+\usepackage{cleveref}
+\Crefname{theorem}{Theorem}{Theorems}
+\Crefname{corollary}{Corollary}{Corollary}
+\crefname{proposition}{Proposition}{Propositions}
+\Crefname{claim}{Claim}{Claims}
+\Crefname{definition}{Definition}{Definitions}
+\Crefname{fact}{Fact}{Facts}
+\Crefname{conj}{Conjecture}{Conjectures}
+\Crefname{example}{Example}{Examples}
+\Crefname{remark}{Remark}{Remarks}
+\Crefname{convention}{Convention}{Conventions}
+\Crefname{lemma}{Lemma}{Lemmas}
+\Crefname{assumption}{Assumption}{Assumptions}
+\Crefname{section}{Section}{Sections}
+\Crefname{appendix}{Appendix}{Appendices}
+\Crefname{figure}{Figure}{Figures}
+%\Crefname{equation}{Eq.}{Equations}
+
+% \addtotheorempostheadhook[theorem]{\crefalias{thmlisti}{theorem}}
+% \addtotheorempostheadhook[lemma]{\crefalias{thmlisti}{lemma}}
+% \addtotheorempostheadhook[proposition]{\crefalias{thmlisti}{proposition}}
+% \addtotheorempostheadhook[corollary]{\crefalias{thmlisti}{corollary}}
+% \addtotheorempostheadhook[claim]{\crefalias{thmlisti}{claim}}
+% \addtotheorempostheadhook[fact]{\crefalias{thmlisti}{fact}}
+% \addtotheorempostheadhook[example]{\crefalias{thmlisti}{example}}
+% \addtotheorempostheadhook[definition]{\crefalias{thmlisti}{definition}}
+% \addtotheorempostheadhook[remark]{\crefalias{thmlisti}{remark}}
+% \addtotheorempostheadhook[assumption]{\crefalias{thmlisti}{assumption}}
+
+\newcommand{\Real}{\mathbb{R}}
+\newcommand\expect[1]{\mathbb{E}[#1]}
+\newcommand\set[1]{\{#1\}}
+
 %%
 %% END {Luke's Macros}
 
-\usepackage{amsmath}
 \usepackage{amsfonts}
 \usepackage{amsthm}
 \usepackage{amssymb}
@@ -36,6 +70,8 @@ pdfstartview=FitH ]{hyperref}
 \DeclareMathOperator{\next}{next}
 
 \newtheorem{theorem}{Theorem}
+\newtheorem{lemma}{Lemma}
+\newtheorem{definition}{Definition}
 
 \begin{document}
 
@@ -93,6 +129,12 @@ This version of the reduction relation allows $\tsample$ to reduce to any number
 The maps $\pi_h:S \to I, \; \pi_t:S \to S$ popping the first element are then measurable.
 
 The $\sigma$-algebra and measure on $\Lambda$ are defined by considering it as a disjoint union of equivalence classes under replacing all the real constants by a placeholder, where the measure on each class is that of $\mathbb{R}^n$, where $n$ is the number of real constants.
+\changed[lo]{Precisely, following \cite{DBLP:conf/icfp/BorgstromLGS16},
+we view $\Lambda$ as $\bigcup_{m\in\omega} \big(\mathsf{Sk}_m \times \Real^m \big)$,
+where $\mathsf{Sk}_m$ is the set of SPCF terms with exactly $m$ place-holders (a.k.a.~\emph{skeleton terms}) for numerals.
+Thus identified, we give $\Lambda$ the countable disjoint union topology of the product topology of the discrete topology on $\mathsf{Sk}_m$ and the standard topology on $\Real^m$.
+Note that the connected components of $\Lambda$ have the form $\{M\} \times \Real^m$, with $M$ ranging over $\mathsf{Sk}_m$, and $m$ over $\omega$. 
+We fix the Borel algebra of this topology to be the $\sigma$-algebra on $\Lambda$.}
 
 The one-step reduction is given by the function $\red : \Lambda^0 \times S \to \Lambda^0 \times S$ where
 \begin{equation}
@@ -158,7 +200,12 @@ The one-step reduction is given by the function $\red : \Lambda^0 \times S \to \
 Essentially the entropy value here contains a pre-selected random value for each possible \tsample-reduction, in a way independent of reduction order, taking into account the possible duplication of \tsample{}s in $\beta$- and \tY-reduction steps.
 
 \section{Ranking functions}
-Given a probabilistic program (i.e.~a closed term $M$), in order to construct a supermartingale to prove its a.s.~termination, a function to assign values to each reachable program state is necessary. Let $Rch(M) = \{x \in \Lambda \mid \exists (y_i) : M \to y_0 \to \dots \to y_n \to x\}$, with the $\sigma$-algebra induced as a subset of $\Lambda$, then define a \emph{ranking function on $M$} to be a measurable function $f:\mathit{Rch}(M) \to \mathbb{R}$ such that
+Given a probabilistic program (i.e.~a closed term $M$), in order to construct a supermartingale to prove its a.s.~termination, a function to assign values to each reachable program state is necessary. 
+
+Let $Rch(M) := \{x \in \Lambda \mid \exists (y_i) : M \to y_0 \to \dots \to y_n \to x\}$, with the $\sigma$-algebra induced as a subset of $\Lambda$. 
+
+\begin{definition}\rm
+A \emph{ranking function on $M$} is a measurable function $f:\mathit{Rch}(M) \to \mathbb{R}$ such that
 \begin{itemize}
     \item $f(N) \geq 0$ for all $N$
     \item $f(E[\tY \lambda x. N]) \geq 1+ f(E[\lambda z. N[(\tY \lambda x. N)/x] z]) \text{ where $z$ is not free in $N$}$
@@ -167,17 +214,24 @@ Given a probabilistic program (i.e.~a closed term $M$), in order to construct a 
     \lo{It is worth inserting the preceding (including the example of a measurable function with non-measurable range) as a remark (or as a ``commenting.sty'' note).}
     \akr{I'd like to include such a remark, but the only reference I've been able to find for the fact that these functions exist is a Stack Exchange question\footnote{\url{https://math.stackexchange.com/questions/1717282/construction-of-a-borel-measurable-function-mapping-borel-set-to-non-borel-set?rq=1}} which implies that the construction is difficult but doesn't actually say what it is (so I probably won't be able to find it on my own).}
 
-    \item $f(E[R]) \geq f(E[N])$ for any other redex $R$, where $R \to N$.
+    \item $f(E[R]) \geq f(E[R'])$ for any other redex $R$, where \changed[lo]{$R \to R'$}. \lo{Metavariables: $M$ and $N$ for terms and programs; $R$ / $R'$ for redex / contractum.}
 \end{itemize}
-
 Any closed term for which a ranking function exists is called ``rankable''.
+\end{definition}
 
 \section{Supermartingales}
 
+\lo{A brief explanatory note on supermartingales by way of motivation is needed here.}
+
+\lo{Supermartingales is a fitting title of this section.
+However the details of the supermartingle construction are suppressed in the proof.
+I propose that you reformulate the theorem as follows.}
+
 \begin{theorem} \label{rankable implies ast}
-  If a closed SPCF term is rankable, it terminates almost surely.
+\changed[lo]{If a closed SPCF term is rankable by $f$, then $(f(M_n))_{n \in \omega}$ is a supermartingale adapted to the filtration $(\mathcal{F}_n)_{n \in \omega}$ where $\mathcal{F}_n = \sigma(M_1, \cdots, M_n)$.}
 \end{theorem}
-\begin{proof}
+
+%\begin{proof}
 Given a closed term $M$ and a ranking function $f$ for it, define random variables on the probability space $S$ (where $s$ is a random variable) by
 \begin{align*}
 (M_n,s_n) & = \red^n(M,s) \\
@@ -188,7 +242,9 @@ X_n & = f(M'_n)
 \end{align*}
 and define a filtration $\mathcal{F}_n = \sigma(M_k, k \leq n)$ (i.e. all the samples used up to step $n$).
 
-\akr{This is quite a pedantic point but technically the proof wouldn't be correct without it.} In the following proof, conditional expectations (conditioning on $\mathcal F_n$) will be used. Conditional expectations are in general only defined up to a null set, but in this case there is a natural measure on each element of $\mathcal F_n$ (as they're always isomorphic to $S$), and this is the version of the conditional expectation that will be used.
+\akr{This is quite a pedantic point but technically the proof wouldn't be correct without it.} In the following proof, conditional expectations (conditioning on $\mathcal F_n$) will be used. Conditional expectations are in general only defined up to a null set, but in this case there is a natural measure on each element of $\mathcal F_n$ (as they're always isomorphic to $S$), and this is the version of the conditional expectation that will be used. \lo{I find this a little cryptic. 
+Perhaps I am missing something, but the definition of conditional expectation $\expect{f(M_{n+1}) \mid \mathcal{F}_n}$ is standard.
+The stochastic process $(M_n)_{n \in \omega}$ is trivially adapted to the natural filtration $(\mathcal{F}_n)_{n \in \omega}$.}
 
 The expectation of $f(M_{n+1})$ given $\mathcal{F}_n$ is trivially less than or equal to $f(M_n)$ in the cases that $M_n \neq E[\tsample]$, and in the case of $\tsample$,
 \lo{This case analysis is problematic. The r.v.~$M_n$ is a measurable function of type $S \to \Lambda^0$ defined by $M_n(s) :=  N$ where $\red^n(M, s) = (N, s_n)$. 
@@ -205,8 +261,87 @@ The case analysis should take place ``inside the conditional expectation''.}
 = & f(M_n),
 \end{align*}
 \lo{Problem: Some of the above terms (conditional expectation and $f(M_n)$) are random variables (i.e.~functions) but the integral is a real number.}
-
 therefore the values of the ranking function $f(M_n)$ are a supermartingale with respect to $\mathcal{F}_n$.
+
+\lo{Take $M \in \Lambda^0$ (closed SPCF terms).
+Define, for each $n \in \omega$, the random variable $M_n : S \to \Lambda^0$ by $M_n(s) := \pi_0 (\red^n(M, s))$.
+
+Given $M \in \Lambda^0$, say that $M$ is \emph{type-1} (respectively 2, 3 and 4) if $M$ has the shape $E[\tY \lambda x. N]$ (respectively $E[\tsample]$, $E[R]$ where $R$ is any other redex, and of a value).
+By abuse of language, we refer to the three respective types of redexes as type-$1$, 2 and 3.
+
+Henceforth fix $M \in \Lambda^0$.
+For $i \in \{1, 2, 3\}$ and $n \in \omega$, define function $f_{i, n+1}(M) : S \to \Real$ by
+\[
+f_{i, n+1}(M)(s) :=
+\begin{cases}
+f(M_{n+1}(s)) & \textrm{if $M_n(s)$ is type-$i$}\\
+0 & \textrm{o/w}
+\end{cases}
+\]
+
+\begin{lemma}
+\label{lem:inde}
+For each $i$ and $n$, $f_{i, n+1}(M)$ is %not just $\mathcal{F}_{n+1}$-measurable but also 
+$\mathcal{F}_{n}$-measurable.
+\end{lemma}
+
+\begin{proof} First fix notation
+\begin{align*}
+\sigma(M_{n+1}) &= \sigma\big(\set{M_{n+1}^{-1}(U_{\beta_k})
+\mid \beta_k\in \mathsf{Sk}_k, U_{\beta_k} \in \mathcal{B}(\Real^k), k \geq 0}\big)\\
+\sigma(M_{n}) &= \sigma\big(\set{M_{n}^{-1}(U_{\alpha_j})
+\mid \alpha_j\in \mathsf{Sk}_j, U_{\alpha_j} \in \mathcal{B}(\Real^j), j \geq 0}\big);
+\end{align*}
+and for $\beta_k \in \mathsf{Sk}_i$, we write $\beta_k[\dagger]$ to mean the instantiation of $\beta_k$ by a $k$-vector of numerals $\dagger$; $\alpha_j[\dagger']$ has the same meaning.
+Now for each $\beta_k[\dagger] = E[R']$ where $R'$ is the contractum of a type-$i$ redex $R$, there exist $\alpha_j \in \mathsf{Sk}_j$ and $j$-vector $\dagger'$ such that $\alpha_j[\dagger'] = E[R]$ of type $i$.
+Moreover, for each $U_{\beta_k}$, there exists $U_{\alpha_j}$ such that $M_{n+1}^{-1}(U_{\beta_k}) = M_{n}^{-1}(U_{\alpha_j}) \in \sigma(M_n)$.
+\end{proof}
+
+Next we clearly have 
+\(
+f(M_{n+1}) = %\sum_{i=1}^3 f_{i, n+1}(M).
+f_{1, n+1}(M) + f_{2, n+1}(M) + f_{3, n+1}(M),
+\)
+$\mu$-almost-surely.
+(Unless otherwise stated, all equations and inequations between random variables are assumed to hold only $\mu$-a.s.)
+Therefore 
+\begin{align}
+& \expect{f(M_{n+1}) \mid \mathcal{F}_n}
+\nonumber \\ 
+& = \expect{f_{1, n+1}(M) + f_{2, n+1}(M) + f_{3, n+1}(M)  \mid \mathcal{F}_n} 
+\nonumber \\
+& = \expect{f_{1, n+1}(M) \mid \mathcal{F}_n} + \expect{f_{2, n+1}(M) \mid \mathcal{F}_n} + \expect{f_{3, n+1}(M) \mid \mathcal{F}_n} 
+\label{eqn:linear cond ex} \\
+& = f_{1, n+1}(M) + f_{2, n+1}(M) + f_{3, n+1}(M)
+\label{eqn:inde cond exp} \\
+%& = f_{1, n+1}(M) + \int_I f() + f_{3, n+1}(M) \label{eqn:inde cond exp} \\
+& \leq f(M_{n})[T_1] + f(M_{n})[T_2] + f(M_{n})[T_3]
+\label{eqn:ts} \\
+& = f(M_n). 
+\label{eqn:partition} 
+\end{align}
+\Cref{eqn:linear cond ex} follows from the linearity of conditional expectation. 
+\Cref{eqn:inde cond exp} is justified because $f_{i, n+1}(M)$ is $\mathcal{F}_n$-measurable (\Cref{lem:inde}).
+Inequation~(\ref{eqn:ts}) follows from $f_{i, n+1}(M) \leq f(M_n)[T_i]$ for each $i$. 
+Here we use the notation: given function $g : A \to \Real$ and $U \subseteq A$, $g[U] : A \to \Real$ denotes the function
+\[
+g[U](x) :=
+\begin{cases}
+g(x) & \textrm{$x \in U$}\\
+0 & \textrm{o/w}
+\end{cases}
+\]
+and write $T_i = \{s \in S \mid \textrm{$M_n(s)$ is type-$i$}\}$.
+To see $f_{2, n+1}(M) \leq f(M_n)[T_2]$,
+take $s \in T_2$. 
+Then $f_{2, n+1}(M)(s) = f(E[\underline{a}])$ and $M_n = E[\tsample]$, for some $a \in [0, 1]$ and evaluation context $E$.
+Hence 
+\[
+f_{2, n+1}(M)(s) \leq \int_I f(E[\underline{r}]) \, \mu_{leb}(\textrm{d} r)
+\leq f(E[\tsample]) = f(M_n)[T_2](s).
+\]
+Finally, \Cref{eqn:partition} holds because $\{T_1, T_2, T_3, T_4\}$ is a partition of $S$.
+}
 
 Given $M'_n$, the reduction relation $\to$, \emph{excluding} $\tY$-reduction steps, is strongly normalising because of the type system, therefore there is some finite bound on the number of reduction steps that can take place from $M'_n$ without a $\tY$-reduction step, therefore $y_{n+1}$ is (conditional on $\mathcal{F}_{y_n+1}$) a bounded stopping time, therefore $\mathbb{E}[f(M_{y_{n+1}}) \mid \mathcal{F}_{y_n+1}] \leq f(M_{y_n+1})$. 
 For $n>0$, if $M_{y_n}$ isn't already a value, then $M_{y_n} = E[\tY \lambda x.N]$ for some $E, N$, therefore $M_{y_n+1} = E[\lambda z. N[(\tY \lambda x. N)/x] z]$ and $f(M_{y_n+1}) \leq f(M_{y_n}) - 1$, therefore if $M_{y_n}$ isn't a value, $\mathbb{E}[X_{n+1} \mid \mathcal{F}_{y_n+1}] \leq X_n - 1$.
@@ -219,7 +354,7 @@ In the other case that $X_n$ is a value, $X_{n+1} = X_n$, and $X_n = \mathbb E[X
 & = 0
 \end{align*} 
 therefore $M$ terminates almost surely.
-\end{proof}
+%\end{proof}
 
 \section{Constructing Ranking Functions}
 Although rankability implies almost sure termination, the converse does not hold in general. For example,
