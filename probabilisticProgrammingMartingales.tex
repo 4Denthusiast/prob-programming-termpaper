@@ -54,6 +54,7 @@ pdfstartview=FitH ]{hyperref}
 \newcommand{\Real}{\mathbb{R}}
 \newcommand\expect[1]{\mathbb{E}[#1]}
 \newcommand\set[1]{\{#1\}}
+\newcommand\dif{\mathrm{d}}
 
 %%
 %% END {Luke's Macros}
@@ -232,6 +233,9 @@ I propose that you reformulate the theorem as follows.}
 \end{theorem}
 
 %\begin{proof}
+
+\lo{We also need to show $f(M_n)$ is integrable.}
+
 Given a closed term $M$ and a ranking function $f$ for it, define random variables on the probability space $S$ (where $s$ is a random variable) by
 \begin{align*}
 (M_n,s_n) & = \red^n(M,s) \\
@@ -332,14 +336,13 @@ g(x) & \textrm{$x \in U$}\\
 \end{cases}
 \]
 and write $T_i = \{s \in S \mid \textrm{$M_n(s)$ is type-$i$}\}$.
-To see $f_{2, n+1}(M) \leq f(M_n)[T_2]$,
-take $s \in T_2$. 
-Then $f_{2, n+1}(M)(s) = f(E[\underline{a}])$ and $M_n = E[\tsample]$, for some $a \in [0, 1]$ and evaluation context $E$.
-Hence 
-\[
-f_{2, n+1}(M)(s) \leq \int_I f(E[\underline{r}]) \, \mu_{leb}(\textrm{d} r)
-\leq f(E[\tsample]) = f(M_n)[T_2](s).
-\]
+[** To show $\expect{f(M_{n+1}) \mid \mathcal{F}_n} \leq f(M_n)$ a.s., it suffices to show
+\(\int_A \expect{f(M_{n+1}) \mid \mathcal{F}_n} \dif \mu \leq \int_A f(M_n) \dif \mu \), for all $A \in \mathcal{F}_n$. **]
+% To see $f_{2, n+1}(M) \leq f(M_n)[T_2]$, take $s \in T_2$. Then $f_{2, n+1}(M)(s) = f(E[\underline{a}])$ and $M_n = E[\tsample]$, for some $a \in [0, 1]$ and evaluation context $E$. Hence 
+% \[
+% f_{2, n+1}(M)(s) \leq \int_I f(E[\underline{r}]) \, \mu_{leb}(\textrm{d} r)
+% \leq f(E[\tsample]) = f(M_n)[T_2](s).
+% \]
 Finally, \Cref{eqn:partition} holds because $\{T_1, T_2, T_3, T_4\}$ is a partition of $S$.
 }
 
