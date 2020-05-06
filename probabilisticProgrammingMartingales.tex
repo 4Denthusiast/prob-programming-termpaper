@@ -36,6 +36,7 @@ pdfstartview=FitH ]{hyperref}
 \DeclareMathOperator{\next}{next}
 
 \newtheorem{theorem}{Theorem}
+\newtheorem{lemma}{Lemma}
 
 \begin{document}
 
@@ -126,6 +127,96 @@ you should do it as a future task.}
 Having thought a bit more about this, I realise it may not be quite right. I'll see if I can fix it later.}
 \lo{I'll read this after you fix it ;-)}
 
+When proving almost sure termination in this way /akr{I guess I should move this section somewhere later.}, it is necessary to consider which terms a given term may reduce to. Sometimes however, the reduction that the programmer has in mind may not be strictly the call-by-value order defined so far, or considering an alternative reduction order may be simpler or more intuitive.
+
+Non-probabilistis lambda calculi generally have the Church-Rosser property, that if a term $A$ reduces to both $B_1$ and $B_2$, there is some $C$ with reduction sequences $B_1 \to^* C$ and $B_2 \to^* C$, so the reduction order mostly doesn't matter. In the probabilistic case, this may not be true, because $\beta$-reduction can duplicate $\tsample$s, so the outputs of the copies of the sample may be identical or independent, depending on whether the sample is taken before or after $\beta$-reduction. There are, however, some restricted variations on the reduction order that do not have this problem.
+
+\paragraph{}
+Even with this restriction, a sampling semantics in the style of the one already defined would not be entirely Church-Rosser, as, for example, $red^3(\tsample - \tsample, (1,0,\dots))$ would be either $1$ or $-1$ depending on the order of evaluation of the $\tsample$s, as that determines which sample from the pre-selected sequence is used for each one. To fix this, rather than pre-selecting samples according to the order they'll be drawn in, select them according to the position in the term where they'll be used instead.
+
+A position \akr{I'm not really sure how to phrase the citation, but this is adapded from \cite{Kennaway96infinitarylambda}.} is a finite sequence of steps into a term, defined inductively as
+\begin{align*}
+P ::= \cdot \mid \lambda ; P \mid @_1 ; P \mid @_2 ; P \mid \underline f_i ; P \mid \tY ; P \mid \textsf{if}_1 ; P \mid \textsf{if}_2 ; P \mid \textsf{if}_3 ; P \mid \tscore ; P.
+\end{align*}
+The subterm at a position is defined as
+\begin{align*}
+M \mid \cdot & = M \\
+\lambda x. M \mid \lambda ; P & = M \mid P \\
+M_1 M_2 \mid @_i ; P & = M_i \mid P \quad \text{for } i = 1,2 \\
+\underline f(M_1,\dots,M_n) \mid \underline f_i ; P & = M_i \mid P \quad \text{for }i \leq n \\
+\tY M \mid \tY ; P & = M \mid P \\
+\tif{M_1 < 0}{M_2}{M_3} \mid \textsf{if}_i ; P & = M_i \mid P \quad \text{for } i = 1,2,3 \\
+\tscore(M) \mid \tscore ; P & = M \mid P
+\end{align*}
+so that every subterm is located at a unique position, but not every position corresponds to a subterm (e.g. $xy \mid \lambda ; \cdot$ is undefined). A position such that $M\mid P$ does exist is said to occur in $M$. Substitution at a given position, $M[N/P]$, is defined similarly.
+
+Two subterms $N_1$ and $N_2$ of a term $M$, corresponding to positions $P_1$ and $P_2$, can overlap in a few different ways. If $P_1$ is an initial segment of $P_2$, then $N_2$ is also a subterm of $N_1$, which is written as $P_1 \leq P_2$. If neither $P_1 \leq P_2$ nor $P_1 \geq P_2$, the positions are said to be disjoint. This is mostly relevant in that in any substitution at some position, the subterms at all other positions are unaffected.
+
+With this notation, a more general reduction relation can be defined. \akr{It would almost work to have one of the neater versions of $\tY$-reduction here.}
+\begin{align*}
+  \text{if } M \mid P = (\lambda x.s) v,\ & M \to M[s[v/x]/P] \\
+  \text{if } M \mid P = \underline f (\underline r_1, \dots , \underline r_n),\ & M \to M[\underline{f(r_1,\dots,r_n)}/P] \\
+  \text{if } M \mid P = \tY \lambda x. s,\ & M \to M[\lambda z. s[(\tY \lambda x. s)/x] z/P] \text{ where $z$ is not free in $s$}\\
+  \text{if } M \mid P = \tif{\underline r < 0}{s_1}{s_2},\ & M \to M[s_1/P] \text{ where }r < 0 \\
+  \text{if } M \mid P = \tif{\underline r < 0}{s_1}{s_2},\ & M \to M[s_2/P] \text{ where }r \geq 0 \\
+  \text{if } M \mid P = \tsample & \text{ and $\lambda$ does not occur after $@_2$ or $\tY$ in $P$},\\ & M \to M[\underline r/P] \text{ where } r \in [0,1] \\
+  \text{if } M \mid P = \tscore(\underline r),\ & M \to M[\underline r/P].
+\end{align*}
+
+\paragraph{}
+Labelling the pre-chosen samples by the positions in the term would also not work because in some cases, a $\tsample$ will be duplicated before being reduced, for example, in $(\lambda x. \underline x 0 \underline + x \underline 0) (\lambda y. \tsample)$, both of the $\tsample$ redexes that eventually occur originate at $@_2 ; \lambda$. It is therefore necessary to consider possible positions that may occur in other terms reachable from the original term. This is itself inadequate because some of the positions in different reachable terms need to be considered the same.
+
+Given a closed term $M$, let $L_0(M)$ be the set of pairs, the first element of which is a reduction sequence starting at $M$, and the second of which is a position in the final term of the reduction sequence. Reduction sequences are used rather than reachable terms because if the same term is reached twice, different samples may be needed, but they will be discussed as though they were terms, by abuse of notation. The relation $\sim$ is defined as the union of the symmetric relations $\sim_p$ and $\sim_c$ where
+\begin{enumerate}
+    \item If $N$ reduces to $O$ with the redex at position $P$, and $Q$ is a position in $N$ where $Q \not \geq P$, then $(N,Q) \sim_p (O,Q)$.
+    \item If $N$ $\beta$-reduces to $O$ at position $P$, $Q$ is a position in $N | P;@_1;\lambda$ and $N \mid P;@_1;\lambda;Q$ is not the variable involved in the reduction, $(N,P;@_1;\lambda;Q) \sim_p (O, P;Q)$
+    \item If $N$ $\textsf{if}$-reduces to $O$ at position $P$, with the first resp. second branch being taken, and $P;\textsf{if}_i;Q$ occurs in $N$ (where $i = 2$ resp. $3$), $(N,P;\textsf{if}_i;Q) \sim_p (O,P;Q)$
+    \item If $N \mid P = (\lambda x. A) B$, $A \mid Q = x$, $B \mid R = C$ is a redex reducing to $C'$ and $S$ exists in $C'$, then letting $O_1$ be $N$ reduced first at $P$ then at $P;Q;R$ and letting $O_2$ be $N$ reduced first at $P;@_2;R$ then at $P$, $(O_1,P;Q;R;S) \sim_c (O_2,P;Q;R;S)$
+    \item If $N \mid P = (\tY \lambda x. A)$, $A \mid Q = C$ is a redex reducing to $C'$, $R$ exists in $C'$ and $C' \mid R \neq x$, then letting $O_1$ be $N$ reduced first at $P$ then $P;\lambda;@_1;Q$ and $O_2$ reduced at $P;\tY;lambda;Q$ then $P$, $(O_1, P;\lambda;@_1;Q;R) \sim_c (O_2, P;\lambda;@_1;Q;R)$
+    \item If $N \mid P = (\tY \lambda x. A)$, $A \mid Q = C$ is a redex reducing to $C'$, $R$ exists in $C'$ and $A \mid S = x$, then letting $O_1$ be $N$ reduced first at $P$ then $P;\lambda;@_1;S;\tY;\lambda;Q$ and $O_2$ reduced at $P;\tY;\lambda;Q$ then $P$, $(O_1, P;\lambda;@_1;S;\tY;\lambda;Q;R) \sim_c (O_2, P;\lambda;@_1;S;\tY;\lambda;Q;R)$
+\end{enumerate}
+
+The reflexive transitive closure $\sim^*$ of this relation is used to define the set of potential positions $L(M) = L_0(M) / \sim^*$, and each equivalence class can be considered as the same position as it may occur across multiple reachable terms. If $(N,P) \sim^* (O,Q)$, then $N \mid P$ and $O \mid Q$ both have the same shape (i.e.~they're either both variables, both applications, both $\tsample$s ect.), therefore it's well-defined to talk of the set of potential positions where there is a $\tsample$, $L_s(M)$. The new sample space is then defined as $I^{L_s(M)}$, with the Borel $\sigma$-algebra and product measure.
+
+\paragraph{}
+Before defining the new version of the reduction relation $\red$, a few lemmas about the properties of $\sim$ are necessary for it to be well-defined.
+\begin{lemma}
+If $(N,P) \sim^* (N,P')$, then $P = P'$.
+\end{lemma}
+\begin{proof}
+Suppose contrariwise that $(N,P) \sim^* (N,P')$ where $P \neq P'$. Pick a path $(N,P) \sim (N_1,P_1) \sim \dots \sim (N_n,P_n) \sim (N,P')$ and assume without loss of generality that the sequence is the shortest for any such counterexample, then $\forall i:N_i \neq N$.
+
+The set of paths through $Rch(M)$ (which we're implicitly identifying with $Rch(M)$ itself) has a tree structure which restricts the possibilities for $N_i$. The only terms that $~$ relates directly are parents and children, for $\sim_p$, and first cousins for $\sim_c$. For any term $O$ that's the result of a reduction $O' \to O$ with the redex at position $P$, the positions in $O$ can be classified as old positions (those that correspond uniquely to structure carried over from $O'$, and which are related to positions in $O'$ by $\sim_p$), and new positions (those that either may have been duplicated in the reduction from $O'$, or aren't directly carried over). New positions are never related to positions in $O'$ by $\sim_p$, and old positions are never related to anything by $\sim_c$. Furthermore, if $(O_1,Q_1) \sim (O_2,Q_2), (O_2,Q_2')$, then $Q_2 = Q_2'$, by an exhaustive check of the cases of the positions relative to the positions of the redexes, therefore taking this together with the minimality of the counterexample, none of the $N_i$ are equal to each-other.
+
+Now simply take cases for how the sequence $N_i$ moves around the tree structure of $Rch(M)$. If it starts by going to a cousin of $N$, it is then on a new position within whatever term it reached therefore it can only proceed to the child of the new node or another cousin (as new positions are not related to anywhere in the parent term), at which point it would have the same problem, so it must eventually descend the tree. Having done so, it is unable to turn back (as all the $N_i$ are disjoint) or take any sideways steps (as it must not be on an old position), therefore it can never return to $N$, which is a contradiction, therefore $N_1$ is not a cousin of $N$. Symmetrically, neither is $N_n$. Similarly, if either $N_1$ or $N_n$ is a child of $N$, the sequence is stuck descending the tree and can't return to $N$. Both $N_1$ and $N_n$ are therefore the parent of $N$, therefore $n = 1$, but in that case $P = P'$, which is a contradiction, therefore the assumed couterexample could not exist.
+\end{proof}
+
+At each reduction step $M \to N$, the sample space must be restricted to $I^{L_s(N)}$, which requires a map $L_s(N) \to L_s(M)$. The injection $L_0(N) \to L_0(M)$ is trivial to define by appending $M \to N$ to each path, but in order for this to extend to the quotient, the following lemma is needed.
+\begin{lemma}
+If $M \to N$, the relation $\sim_N^*$ defined on $L_0(N)$ is equal to the restriction of $\sim_M^*$ from $L_0(M)$ to $L_0(N)$.
+\end{lemma}
+\begin{proof}
+If $(O_1,P_1) \sim_N (O_2,P_2)$, they're related by $\sim_M$ for exactly the same reason. Conversely, consider $(O_1,P_1) \sim_M (O_2,P_2)$ where both $O_1$ and $O_2$ are reachable from $N$ (i.e.~ considering them as paths, they start with the reduction $M \to N$). If they're related by $\sim_{p,M}$, they're related by $\sim_N$ for the same reason. In the case of $\sim_c$, the same proof can only be used for $\sim_N$ if the initial term in these cases ($N'$ here, because of the naming overlap) is reachable from $N$. Given that $O_1$ and $O_2$ are actually reduction sequences, $N'$ is their longest common prefix and they're both reachable from $N$, $N'$ must also be reachable from $N$ therefore $(O_1,P_1) \sim_N (O_2,P_2)$.
+
+The only case left to check is that $(O_1,P_1) \sim_M (O_1',P_1') \sim_M^* (O_2',P_2') \sim_M (O_2,P_2)$, where $O_1$ and $O_2$ are reachable from $N$ but $O_1'$ and $O_2'$. If the first relation in this sequence is $\sim_{p,M}$, then $O_1 = N$ and $O_1' = M$. Similarly for the last relation, 
+\end{proof}
+Unlike in the purely call-by-value case, the version of the reduction relation that takes into account samples is still a general relation rather than a function in this case, and the entropy value does not change, so it is denoted ``$\to_s$'' instead of ``$\red$'', and it relates $Rch(M)$ to itself.
+\begin{align*}
+& N \to_s O \text{ if $N \to O$ and the redex is not $\tsample$.} \\
+& N \to_s N[\underline{s(N,P)}/P] \text{ if $N \mid P = \tsample$ and $\lambda$ does not occur after $@_2$ of $\tY$ in $P$}
+\end{align*}
+
+\akr{Obsolete but keeping for now just in case:
+Given a closed term $M$, let $L_v(M), L_Y(M)$ and $L_s(M)$ be the sets of positions such that $M \mid P$ is a variable, $\tY N$ for some N, and $\tsample$, respectively. Although $L_s(M)$ is all the positions where sampling could occur immediately in M, in order to define values for all the samples that could possibly be taken in the course of the reduction of $M$, it is necessary to consider possible rearrangements that may occur later. The set of potential positions $F_x(M)$ (where $x$ stands for $v, Y$ or $s$) is defined inductively by
+\begin{align*}
+\frac{a \in L_x(M)}{a \in F_x(M)} \qquad
+\frac{a \in F_v(M), b \in F_x(M)}{(ab) \in F_x(M)} \qquad
+\frac{a \in F_Y(M)}{(Y_\eta a) \in F_v(M)} \qquad \\
+\frac{a \in F_Y(M), b \in F_x(M)}{(Y_oab) \in F_x(M)} \qquad
+\frac{}{((ab)(ac)) = (a(bc))} \qquad
+\frac{}{((Y_oab)(Y_oac)) = (Y_oa(bc))} \qquad
+\end{align*}
+
 Given a term $M$, let $L(M)$ be the set of occurrences in $M$ of variables, $\tsample$ and $\tY$, and let $F(M)$ be the free magma on $L(M)$. \akr{Only the elements with no \tsample{}s except in the rightmost position are used. I'm not sure whether making this explicit in the definition of $F(M)$ makes things more or less clear.} Let $I = [0,1]$ and $S = I^{F(M)}$, with the Borel $\sigma$-algebra and the product measure.
 
 For any reduction \akr{including reductions not included in the definition above, i.e.~out of order reductions} $M \to N$, define a corresponding map $F(M \to N) : F(N) \to F(M)$ induced (as a magma morphism) by the obvious injection along with the replacements
@@ -145,7 +236,7 @@ The one-step reduction is given by the function $\red : \Lambda^0 \times S \to \
     \end{array} \right .
 \end{equation}
 
-Essentially the entropy value here contains a pre-selected random value for each possible \tsample-reduction, in a way independent of reduction order, taking into account the possible duplication of \tsample{}s in $\beta$- and \tY-reduction steps.
+Essentially the entropy value here contains a pre-selected random value for each possible \tsample-reduction, in a way independent of reduction order, taking into account the possible duplication of \tsample{}s in $\beta$- and \tY-reduction steps.}
 
 \section{Ranking functions}
 Given a probabilistic program (i.e.~a closed term $M$), in order to construct a supermartingale to prove its a.s.~termination, a function to assign values to each reachable program state is necessary. Let $Rch(M) = \{x \in \Lambda \mid \exists (y_i) : M \to y_0 \to \dots \to y_n \to x\}$, with the $\sigma$-algebra induced as a subset of $\Lambda$, then define a \emph{ranking function on $M$} to be a measurable function $f:\mathit{Rch}(M) \to \mathbb{R}$ such that
