@@ -332,7 +332,7 @@ M = (\tY \lambda f n. \tif{\tsample - 0.5 < 0}{n \underline 0}{f (\lambda x. n (
 terminates with only 2 $\tY$-reductions on average i.e.~$\expect{T_M^\tY} = 2$, but applies the increment function $2^n$ times with probability $2^{-1-n}$ for $n \geq 0$, which diverges i.e.~$\expect{T_M} = \infty$.
 \end{example}
 
-\begin{theorem} \label{minimal}
+\begin{theorem} \label{thm:minimal}
 Given a closed term $M$, the function $f:Rch(M) \to \mathbb R$ given by $f(N) = \mathbb E [\text{the number of }\tY\text{-reduction steps from }N\text{ to a value}]$, if it exists, is the least of all possible ranking functions of $M$.
 \end{theorem}
 \begin{proof}
@@ -344,7 +344,7 @@ In order for $f$ to be the least ranking function of $M$, it also has to actuall
 \end{proof}
 
 \paragraph{}
-Even in the case of reasonable simple terms, explicitly constructing a ranking function would be a lot of work, and Theorem \ref{minimal} makes even stronger assumptions than almost sure termination, so it isn't useful for proving it. Take, for example, the term
+Even in the case of reasonable simple terms, explicitly constructing a ranking function would be a lot of work, and \Cref{thm:minimal} makes even stronger assumptions than almost sure termination, so it isn't useful for proving it. Take, for example, the term
 \begin{align*}
 &(\tY \lambda f, n: \\
 &\quad \tif{\tsample - 0.5 < 0}{n}{f (n+1)} \\
