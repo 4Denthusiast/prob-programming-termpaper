@@ -56,7 +56,7 @@ M_n(s) &:= \pi_0 (\red^n(M, s))\\
 \ndraw{n}{s} &:= l \textrm{ where $\pi_1 (\red^n(M, s)) = \underbrace{\pi_t( \cdots (\pi_t}_l(s))$}
 \end{align*}
 and the filtration $\mathcal{F}_n = \sigma(M_1, \cdots, M_n)$.
-The $\calF_n$-measurability of $M_n$ (and hence $\#\mathrm{draw}_n$) follow from \citep{DBLP:conf/icfp/BorgstromLGS16};
+The $\calF_n$-measurability of $M_n$ (and hence of $\#\mathrm{draw}_n$) follows from \citep{DBLP:conf/icfp/BorgstromLGS16};
 $\#\mathrm{draw}_n$ is a stopping time (bounded by $n$).
 Take $s \in A \in \calF_n$ with $\ndraw{n}{s} = l$.
 For any $s'\in S$, if $s_{\leq l} = s_{\leq l}'$ then $s' \in A$.
@@ -156,7 +156,7 @@ and (\ref{eqn:partition}) holds because $\{\mathbf{T}_1, \mathbf{T}_2, \mathbf{T
 \begin{lemma}
 For all $i \in \set{1, 2, 3, 4}$ and $A \in \calF_n$
 \[
-\int_A \mu(\dif s) \, f_{n+1}(M)[s \in \mathbf{T}_i] \leq \int_A \mu(\dif s) \, f(M_n)[s \in \mathbf{T}_i].
+\int_A \mu(\dif s) \, f_{n+1}(M)[s \in \mathbf{T}_i] \leq \int_A \mu(\dif s) \, f(M_n)[s \in \mathbf{T}_i]
 \] 
 where $[s \in \mathbf{T}_i]$ is the Iverson bracket.
 \end{lemma}
@@ -201,7 +201,7 @@ Then, it follows from the definition of $f$ that
 \[
 \int_I \Leb(\dif r) \, f(E_i[\underline{\sigma_i(u)}][\underline{r}])) \leq f(E_i[\underline{\sigma_i(u)}][\tsample])).
 \]
-Integrating both sides, we get
+Take $A \in \calF_n$, and integrating both sides, we get
 \begin{align*}
 & \int_{(A \cap U_i)_{\leq l}} \Leb_l(\dif u) \, \int_I \textrm{Leb}(\dif r) \, f(E_i[\underline{\sigma_i(u)}][\underline{r}])) \\
 \leq & \int_{(A \cap U_i)_{\leq l}} \Leb_l(\dif u) \, f(E_i[\underline{\sigma_i(u)}][\tsample]))
@@ -213,7 +213,7 @@ Since $\Leb_{l+1}$ is the (unique) product measure satisfying $\Leb_{l+1}(V \tim
 & \leq 
 \int_{(A \cap U_i)_{\leq l+1}} \Leb_{l+1}(\dif u') \, f(E_i[\underline{\sigma_i(u')}][\tsample]))
 \end{align*}
-and so we have
+and so 
 \begin{equation}
 \int_{A \cap U_i} \mu(\dif s) \, f(E_i[\underline{\sigma_i(s)}][\underline{\rho(s)}])) \\
 \leq 
@@ -250,7 +250,7 @@ f_{2, n+1}(M)(s) \leq \int_I f(E[\underline{r}]) \, \mu_{leb}(\textrm{d} r)
 This concludes the proof of \Cref{thm:rankable gives supermartingale}. \hfill \qed
 
 \medskip
-As before fix a $M \in \Lambda^0$.
+As before, fix a $M \in \Lambda^0$.
 Define random variables on $(S, \calF, \mu)$:
 \begin{align*}
 T_0(s) & := 0 \\
