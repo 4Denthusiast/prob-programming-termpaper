@@ -14,12 +14,12 @@ For $\epsilon > 0$, it is a \emph{$\epsilon$-ranking supermartingale} if, in add
 Intuitively $Y_n$ is the rank of the program after $n$ steps of computation.
 (Assume that the rank of a term is 0 iff it is a value.) In a $\epsilon$-ranking supermartingale, each computation step causes a strict decrease in rank, provided the term being reduced is not a value.
 
-Let $S$ and $T$ be stopping times adapted to $(\calF_n)_{n \in \omega}$.
+Let $T$ and $T'$ be stopping times adapted to $(\calF_n)_{n \in \omega}$.
 Recall the $\sigma$-algebra (consisting of measurable subsets ``priori to $T$'')
 \[
 \calF_T := \set{A \in \calF \mid \forall i \in \omega \, . \, A \cap \set{T \leq i} \in \calF_i}
 \]
-and if $S \leq T$, then $\calF_S \subseteq \calF_{T}$.
+and if $T \leq T'$, then $\calF_{T} \subseteq \calF_{T'}$.
 
 The following is an iterated version of Doob's well-known Optional Sampling Theorem (see, e.g., \cite[\S 6.7]{AshDD00}).
 \begin{theorem}[Optional Sampling]
@@ -41,10 +41,10 @@ Then $T < \infty$ almost surely, and $\expect{T} \leq \dfrac{\expect{Y_0}}{\epsi
 \begin{proof}[Proof Sketch]
 First establish by induction on $n$: 
 \[
-\forall n \in \omega \, . \, \expect{Y_n} \leq \expect{Y_0} - \epsilon \cdot \big(\sum_{i=0}^{n-1} \mathbb{P}[Y_i > 0]\big).
+\forall n \in \omega \, . \, \expect{Y_n} \leq \expect{Y_0} - \epsilon \cdot \Big(\sum_{i=0}^{n-1} \mathbb{P}[Y_i > 0]\Big).
 \]
-It follows that $(\sum_{i=0}^{\infty} \mathbb{P}[Y_i > 0]\big)$ converges; hence $\lim_{n \to \infty} \mathbb{P}[Y_n > 0] = 0$ and so $\mathbb{P}[T < \infty] = 1$.
-Then observe: if $T < \infty$ a.s., then $\expect{T} = \sum^\infty_{i=1} \mathbb{P}(T \geq i)$.
+It follows that $\sum_{i=0}^{\infty} \mathbb{P}[Y_i > 0]$ converges; hence $\lim_{n \to \infty} \mathbb{P}[Y_n > 0] = 0$ and so $\mathbb{P}[T < \infty] = 1$.
+Then it suffices to prove: if $T < \infty$ a.s., then $\expect{T} = \sum^\infty_{i=1} \mathbb{P}[T \geq i]$.
 \end{proof}
 
 \medskip
@@ -79,6 +79,17 @@ It follows that ${\set{s_{\leq l}} \cdot I^\omega} \subseteq A$.
 \)
 }
 %Take $M \in \Lambda^0$ (closed SPCF terms). Define, for each $n \in \omega$, the random variable $M_n : S \to \Lambda^0$ by $M_n(s) := \pi_0 (\red^n(M, s))$.
+
+First each $f(M_n)$ is integrable. Since $0 \leq f(N) \leq f(M)$ for all $N \in \mathit{Rch}(M)$, we have
+\[
+\int_{S} \mu(\dif s) \, |f(M_n)(s)| 
+=
+\int_{S} \mu(\dif s) \, f(M_n)(s)
+\leq
+\int_{S} \mu(\dif s) \, f(M)
+=
+f(M)
+\]
 
 We say that a given SPCF term is \emph{type-1} (respectively 2, 3 and 4) if it has the shape $E[\tY (\lambda x. N)]$ (respectively $E[\tsample]$, $E[R]$ where $R$ is any other redex, and of a value).
 Define $\mathbf{T}_i := 
@@ -301,5 +312,5 @@ Therefore, by \Cref{thm:rank-PAST}, $T^{\tY}_M < \infty$ a.s.~and $\expect{T^{\t
 Statement 2 follows immediately from \Cref{thm:rank-PAST}.
 \end{proof}
 
-Thus the method of ranking function is sound for proving (positive) a.s.~termination of SPCF programs.
+Thus the method of (strict) ranking function is sound for proving (positive) a.s.~termination of SPCF programs.
 It is in fact also complete in a sense: if $\expect{T^\tY_N} < \infty$ for all $N \in \mathit{Rch}(M)$ then $M$ is rankable (\Cref{thm:minimal}).

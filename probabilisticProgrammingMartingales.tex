@@ -316,7 +316,7 @@ therefore $M$ terminates almost surely.
 \section{Constructing Ranking Functions}
 Although rankability implies almost-sure termination, the converse does not hold in general. For example,
 \begin{equation}
-\tif{-\tsample < 0}{\underline{0}}{(\tY \lambda x. x)\underline 0}
+\tif{{-}\tsample < 0}{\underline{0}}{(\tY \lambda x. x) \; \underline 0}
 \end{equation}
 terminates in 3 steps with probability 1, but isn't rankable because $(\tY \lambda x. x) \underline 0$ is reachable, although that has probability 0. 
 Not only is this counterexample a.s.t, it's positively almost surely terminating i.e.~the expected time to termination is finite.
@@ -327,7 +327,7 @@ A ranking function can be constructed under the stronger assumptions that, for e
 \label{ex:tY finite does not imply t finite}
 The term
 \[
-M = (\tY \lambda f n. \tif{\tsample - 0.5 < 0}{n \underline 0}{f (\lambda x. n (n x))}) (\lambda x. x+1)
+M = \big(\tY \lambda f n. \tif{\tsample - 0.5 < 0}{n \, \underline 0}{f (\lambda x. n (n x))}\big) (\lambda x. x+1)
 \] 
 terminates with only 2 $\tY$-reductions on average i.e.~$\expect{T_M^\tY} = 2$, but applies the increment function $2^n$ times with probability $2^{-1-n}$ for $n \geq 0$, which diverges i.e.~$\expect{T_M} = \infty$.
 \end{example}
@@ -336,14 +336,16 @@ terminates with only 2 $\tY$-reductions on average i.e.~$\expect{T_M^\tY} = 2$, 
 Given a closed term $M$, the function $f:Rch(M) \to \mathbb R$ given by $f(N) = \mathbb E [\text{the number of }\tY\text{-reduction steps from }N\text{ to a value}]$, if it exists, is the least of all possible ranking functions of $M$.
 \end{theorem}
 \begin{proof}
-Let $f$ be the candidate least ranking function defined above, and suppose $g$ is another ranking function such that $f(N) > g(N)$ for some $N \in Rch(M)$. The restrictions of $f$ and $g$ to $Rch(N)$ have the same properties assumed of $f$ and $g$, so assume w.l.o.g.~that $N=M$. The difference $g - f$ is then a supermartingale (with the same setup as in the proof of Theorem \ref{rankable implies ast}) therefore $\forall n.\ \mathbb E[g(M_n)] \leq \mathbb E[f(M_n)] + g(M)-f(M)$.
+Let $f$ be the candidate least ranking function defined above, and suppose $g$ is another ranking function such that $f(N) > g(N)$ for some $N \in Rch(M)$. The restrictions of $f$ and $g$ to $Rch(N)$ have the same properties assumed of $f$ and $g$, so assume w.l.o.g.~that $N=M$. The difference $g - f$ is then a supermartingale (with the same setup as in the proof of \Cref{thm:rankable gives supermartingale}
+%Theorem \ref{rankable implies ast}) 
+therefore $\forall n.\ \mathbb E[g(M_n)] \leq \mathbb E[f(M_n)] + g(M)-f(M)$.
 
 $\mathbb E[f(M_n)] = \sum_{k=n}^\infty \mathbb P[M_n = E[\tY N] \text{ for some }E, N] \to 0 \text{ as } n \to \infty$ therefore as $g(M) - f(M) < 0$, eventually $\mathbb E[g(M_n)] < 0$, which is impossible, therefore $g \geq f$ as required.
 
 In order for $f$ to be the least ranking function of $M$, it also has to actually be a ranking function itself. Each of the conditions on a ranking function is easily verified from the definition of $f$.
 \end{proof}
 
-\paragraph{}
+\subsection{Partial ranking functions}
 Even in the case of reasonable simple terms, explicitly constructing a ranking function would be a lot of work, and \Cref{thm:minimal} makes even stronger assumptions than almost sure termination, so it isn't useful for proving it. Take, for example, the term
 \begin{align*}
 &(\tY \lambda f, n: \\
@@ -370,8 +372,11 @@ Even in this simple case, defining a ranking function explicitly is awkward beca
 The definition of rankability is also inconvenient for syntactic sugar. It could be useful, for example, to define $M \oplus_p N = \tif{\tsample - p < 0} M N$, where $M \oplus_p N$ reduces to $M$ or $N$, depending on the first value of $s$, with probability $p$ resp.~$(1-p)$. Technically though, it reduces first to $\tif{\underline r - p < 0} M N$ for $r \in I$, so those terms all need values of the ranking function too.
 
 \paragraph{}
-In both of these cases, there are only some values of the rankng function that are semantically important. Define a \emph{partial ranking function} on a closed term $M$ to be a partial function $f : Rch(M) \nrightarrow \mathbb R$ such that
-\lo{NOTATION. Common notation for partial function $\rightharpoonup$}
+In both of these cases, there are only some values of the rankng function that are semantically important. Define a \emph{partial ranking function} on a closed term $M$ to be a partial function 
+$f : Rch(M) \rightharpoonup \mathbb R$ 
+%$f : Rch(M) \nrightarrow \mathbb R$ 
+such that
+%\lo{NOTATION. Common notation for partial function $\rightharpoonup$}
 \begin{itemize}
     \item $f(N) \geq 0$ for all $N$ where $f$ is defined.
     \item $f$ is defined at $M$.
@@ -383,7 +388,7 @@ A partial ranking function that is total is just a ranking function. Providing a
 Every partial ranking function is a restriction of a ranking function.
 \end{theorem}
 \begin{proof}
-Take a closed term $M$ and partial ranking function $f$ on $M$. Define $f_1 : Rch(M) \nrightarrow \mathbb R$ by
+Take a closed term $M$ and partial ranking function $f$ on $M$. Define $f_1 : Rch(M) \rightharpoonup \mathbb R$ by
 \begin{align*}
     f_1(N) & = f(N) \text{ whenever $f(N)$ is defined,} \\
     f_1(V) & = 0 \text{ for values $V$ not in the domain of $f$.}
