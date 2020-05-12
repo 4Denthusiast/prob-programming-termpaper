@@ -60,6 +60,7 @@ pdfstartview=FitH ]{hyperref}
 \newcommand\Leb{\mathrm{Leb}}
 \newcommand\ndraw[2]{\#\mathrm{draw}_{#1}(#2)}
 
+%\usepackage[bbgreekl]{mathbbol} %for \bblambda
 %%
 %% END {Luke's Macros}
 
@@ -74,11 +75,19 @@ pdfstartview=FitH ]{hyperref}
 \DeclareMathOperator{\red}{red}
 \DeclareMathOperator{\next}{next}
 
+
+\usepackage{amsthm}
+\theoremstyle{definition}
+\newtheorem{definition}{Definition}
+\newtheorem{example}{Example}
+
+\theoremstyle{lemma}
+\newtheorem{lemma}{Lemma}
 \newtheorem{theorem}{Theorem}
 \newtheorem{corollary}{Corollary}
-\newtheorem{lemma}{Lemma}
-\newtheorem{definition}{Definition}
 
+\theoremstyle{remark}
+\newtheorem*{remark}{Remark}
 \begin{document}
 
 
@@ -125,14 +134,16 @@ then a term reduces if it is formed by substituting a redex in a context i.e.
   E[\tsample] & \to E[\underline r] \text{ where } r \in [0,1] \\
   E[\tscore(\underline r)] & \to E[\underline r].
 \end{align*}
+\changed[lo]{We write $\to^\ast$ for the reflexive, transitive closure of $\to$.}
 \lo{The $\tscore$ rule should have a side condition: if $r > 0$.}
 
 Every closed well-typed term either is a value or reduces to another term.
 
 
 \subsection{Sampling semantics}
-This version of the reduction relation allows $\tsample$ to reduce to any number in $[0,1]$. To more precisely specify the probabilities, an additional argument is needed to determine the outcome of random samples. Let $ I = [0,1] \subset \mathbb{R} $, and let $S = I^{\mathbb{N}}$, with the Borel $\sigma$-algebra and the probability measure, denoted $\mu$, given by the limit of $1 \gets I \gets I^2 \gets \cdots$, where the maps are the projections that ignore the last element. Equivalently, a basis of measurable sets is $\prod_{i=0}^\infty X_i$ where $X_i$ are all Borel and all but finitely many are $I$, and $\mu (\prod_{i=0}^\infty X_i) = \prod_{i=0}^\infty \mu_{leb}(X_i)$.
+This version of the reduction relation allows $\tsample$ to reduce to any number in $[0,1]$. To more precisely specify the probabilities, an additional argument is needed to determine the outcome of random samples. Let $ I = [0,1] \subset \mathbb{R} $, and let $S = I^{\mathbb{N}}$, with the \changed[lo]{Borel $\sigma$-algebra $\calF$} and the probability measure, denoted $\mu$, given by the limit of $1 \gets I \gets I^2 \gets \cdots$, where the maps are the projections that ignore the last element. Equivalently, a basis of measurable sets is $\prod_{i=0}^\infty X_i$ where $X_i$ are all Borel and all but finitely many are $I$, and $\mu (\prod_{i=0}^\infty X_i) = \prod_{i=0}^\infty \Leb(X_i)$.
 The maps $\pi_h:S \to I, \; \pi_t:S \to S$ popping the first element are then measurable.
+\changed[lo]{Following \cite{DBLP:conf/esop/CulpepperC17}, we call the probability space $(S, \calF, \mu)$ the \emph{entropy space}.}
 
 The $\sigma$-algebra and measure on $\Lambda$ are defined by considering it as a disjoint union of equivalence classes under replacing all the real constants by a placeholder, where the measure on each class is that of $\mathbb{R}^n$, where $n$ is the number of real constants.
 \changed[lo]{Precisely, following \cite{DBLP:conf/icfp/BorgstromLGS16},
@@ -156,6 +167,17 @@ The one-step reduction is given by the function $\red : \Lambda^0 \times S \to \
 The result after $n$ steps is then simply $\red^n(M,s) = \overbrace{\red(...\red(}^n M,s)...)$, and the limit $\red^\infty$ can then be defined as a partial function as $\lim_{n \to \infty} \red^n(M,s)$ whenever that sequence becomes constant by reaching a value. A term $M$ terminates for a sample sequence $s$ if the limit $\red^\infty(M,s)$ is defined.
 
 The reduction function is measurable, and the set of values is measurable, therefore the set of $s$ such that $M$ terminates at $s$ within $n$ steps is measurable for any $n$, therefore $\{s \mid M \text{ terminates at } s \}$ is measurable. A term $M$ is said to terminate almost surely if $\mu(\{s \mid M \text{ terminates at } s\}) = 1$.
+
+\lo{Alternatively, define the \emph{runtime of $M$} to be the random variable 
+\[
+T_M(s) := 
+\begin{cases}
+\min \set{n \mid \pi_0(\red^n(M, s)) \textrm{ is a value}} & \hbox{if $\red^\infty(M,s)$ is defined}\\
+\infty & \hbox{otherwise}
+\end{cases}
+\]
+Equivalently, we say that $M$ is \emph{almost-surely terminating} (AST) if $T_M < \infty$ a.s.; 
+and $M$ is \emph{positively almost-surely terminating} (PAST) if $\expect{T_M} < \infty$.}
 
 For example, the term 
 \[
@@ -271,21 +293,24 @@ Unlike in the purely call-by-value case, the version of the reduction relation t
 \section{Ranking functions}
 Given a probabilistic program (i.e.~a closed term $M$), in order to construct a supermartingale to prove its a.s.~termination, a function to assign values to each reachable program state is necessary. 
 
-Let $Rch(M) := \{x \in \Lambda \mid \exists (y_i) : M \to y_0 \to \dots \to y_n \to x\}$, with the $\sigma$-algebra induced as a subset of $\Lambda$. 
+Let %$Rch(M) := \{x \in \Lambda \mid \exists (y_i) : M \to y_0 \to \dots \to y_n \to x\}$, 
+\changed[lo]{$Rch(M) := \{N \in \Lambda \mid M \to^\ast N\}$},
+with the $\sigma$-algebra induced as a subset of $\Lambda$. 
 
 \begin{definition}\rm
-A \emph{ranking function on $M$} is a measurable function $f:\mathit{Rch}(M) \to \mathbb{R}$ such that
-\begin{itemize}
-    \item $f(N) \geq 0$ for all $N$
+A \emph{ranking function on $M$} is a measurable function $f:\mathit{Rch}(M) \to \mathbb{R}$ such that $f(N) \geq 0$ for all $N$, and
+\begin{enumerate}
     \item $f(E[\tY \lambda x. N]) \geq 1+ f(E[\lambda z. N[(\tY \lambda x. N)/x] z]) \text{ where $z$ is not free in $N$}$
-    \item $f(E[\tsample]) \geq \int_I f(E[\underline{x}]) \, \mu_{leb}(\mathrm{d}x)$
+    \item $f(E[\tsample]) \geq \int_I f(E[\underline{x}]) \, \Leb(\mathrm{d}x)$
     \akr{I'm not sure whether $Rch(M)$ is a measurable subset of $\Lambda$, so it might not have a natural measure, but I'm pretty sure this doesn't actually matter, and the $\sigma$-algebra at least is well-defined. $Rch(M)$ could fail to be measurable if there are measurable functions $\mathbb R^n \to \mathbb R$ with non-measurable ranges. I don't know whether these exist. They do for the Lebesgue $\sigma$-algebra, but I'm using the Borel ones.}
     \lo{It is worth inserting the preceding (including the example of a measurable function with non-measurable range) as a remark (or as a ``commenting.sty'' note).}
     \akr{I'd like to include such a remark, but the only reference I've been able to find for the fact that these functions exist is a Stack Exchange question\footnote{\url{https://math.stackexchange.com/questions/1717282/construction-of-a-borel-measurable-function-mapping-borel-set-to-non-borel-set?rq=1}} which implies that the construction is difficult but doesn't actually say what it is (so I probably won't be able to find it on my own).}
 
     \item $f(E[R]) \geq f(E[R'])$ for any other redex $R$, where \changed[lo]{$R \to R'$}. \lo{Metavariables: $M$ and $N$ for terms and programs; $R$ / $R'$ for redex / contractum.}
-\end{itemize}
-Any closed term for which a ranking function exists is called ``rankable''.
+\end{enumerate}
+We say that the ranking function $f$ is \emph{strict} if there exists $\epsilon > 0$ such that $f(N) = 0$ iff $N$ is a value, and for all $E$ and $R \to R'$, $f(E[R']) \leq f(E[R]) - \epsilon$.
+
+Any closed term for which a ranking (respectively, strict ranking) function exists is called \emph{rankable} (respectively, \emph{strictly rankable}).
 \end{definition}
 
 \section{Supermartingales}
@@ -352,28 +377,39 @@ therefore $M$ terminates almost surely.
 \input{ranking-supermartingales}
 
 \section{Constructing Ranking Functions}
-Although rankability implies almost sure termination, the converse does not hold in general. For example,
+Although rankability implies almost-sure termination, the converse does not hold in general. For example,
 \begin{equation}
-\tif{-\tsample < 0}{\underline{0}}{(\tY \lambda x. x)\underline 0}
+\tif{{-}\tsample < 0}{\underline{0}}{(\tY \lambda x. x) \; \underline 0}
 \end{equation}
 terminates in 3 steps with probability 1, but isn't rankable because $(\tY \lambda x. x) \underline 0$ is reachable, although that has probability 0. 
 Not only is this counterexample a.s.t, it's positively almost surely terminating i.e.~the expected time to termination is finite.
 
-A ranking function can be constructed under the stronger assumptions that, for every $N$ reachable from $M$, the expected number of $\tY$-reduction steps from $N$ to a value is finite. In particular, the expected number of $\tY$-reduction steps from each reachable term is a ranking function. Note that a finite number of expected $\tY$-reduction steps does not necessarily imply a finite number of expected total reduction steps, for example $(\tY \lambda f n. \tif{\tsample - 0.5 < 0}{n \underline 0}{f (\lambda x. n (n x))}) (\lambda x. x+1)$ terminates with only 2 $\tY$-reductions on average, but applies the increment function $2^n$ times with probability $2^{-1-n}$ for $n \geq 0$, which diverges.
+A ranking function can be constructed under the stronger assumptions that, for every $N$ reachable from $M$, the expected number of $\tY$-reduction steps from $N$ to a value is finite. In particular, the expected number of $\tY$-reduction steps from each reachable term is a ranking function. Note that a finite number of expected $\tY$-reduction steps does not necessarily imply a finite number of expected total reduction steps.
 
-\begin{theorem} \label{minimal}
+\begin{example}
+\label{ex:tY finite does not imply t finite}
+The term
+\[
+M = \big(\tY \lambda f n. \tif{\tsample - 0.5 < 0}{n \, \underline 0}{f (\lambda x. n (n x))}\big) (\lambda x. x+1)
+\] 
+terminates with only 2 $\tY$-reductions on average i.e.~$\expect{T_M^\tY} = 2$, but applies the increment function $2^n$ times with probability $2^{-1-n}$ for $n \geq 0$, which diverges i.e.~$\expect{T_M} = \infty$.
+\end{example}
+
+\begin{theorem} \label{thm:minimal}
 Given a closed term $M$, the function $f:Rch(M) \to \mathbb R$ given by $f(N) = \mathbb E [\text{the number of }\tY\text{-reduction steps from }N\text{ to a value}]$, if it exists, is the least of all possible ranking functions of $M$.
 \end{theorem}
 \begin{proof}
-Let $f$ be the candidate least ranking function defined above, and suppose $g$ is another ranking function such that $f(N) > g(N)$ for some $N \in Rch(M)$. The restrictions of $f$ and $g$ to $Rch(N)$ have the same properties assumed of $f$ and $g$, so assume w.l.o.g.~that $N=M$. The difference $g - f$ is then a supermartingale (with the same setup as in the proof of Theorem \ref{rankable implies ast}) therefore $\forall n.\ \mathbb E[g(M_n)] \leq \mathbb E[f(M_n)] + g(M)-f(M)$.
+Let $f$ be the candidate least ranking function defined above, and suppose $g$ is another ranking function such that $f(N) > g(N)$ for some $N \in Rch(M)$. The restrictions of $f$ and $g$ to $Rch(N)$ have the same properties assumed of $f$ and $g$, so assume w.l.o.g.~that $N=M$. The difference $g - f$ is then a supermartingale (with the same setup as in the proof of \Cref{thm:rankable gives supermartingale}
+%Theorem \ref{rankable implies ast}) 
+therefore $\forall n.\ \mathbb E[g(M_n)] \leq \mathbb E[f(M_n)] + g(M)-f(M)$.
 
 $\mathbb E[f(M_n)] = \sum_{k=n}^\infty \mathbb P[M_n = E[\tY N] \text{ for some }E, N] \to 0 \text{ as } n \to \infty$ therefore as $g(M) - f(M) < 0$, eventually $\mathbb E[g(M_n)] < 0$, which is impossible, therefore $g \geq f$ as required.
 
 In order for $f$ to be the least ranking function of $M$, it also has to actually be a ranking function itself. Each of the conditions on a ranking function is easily verified from the definition of $f$.
 \end{proof}
 
-\paragraph{}
-Even in the case of reasonable simple terms, explicitly constructing a ranking function would be a lot of work, and Theorem \ref{minimal} makes even stronger assumptions than almost sure termination, so it isn't useful for proving it. Take, for example, the term
+\subsection{Partial ranking functions}
+Even in the case of reasonable simple terms, explicitly constructing a ranking function would be a lot of work, and \Cref{thm:minimal} makes even stronger assumptions than almost sure termination, so it isn't useful for proving it. Take, for example, the term
 \begin{align*}
 &(\tY \lambda f, n: \\
 &\quad \tif{\tsample - 0.5 < 0}{n}{f (n+1)} \\
@@ -399,8 +435,11 @@ Even in this simple case, defining a ranking function explicitly is awkward beca
 The definition of rankability is also inconvenient for syntactic sugar. It could be useful, for example, to define $M \oplus_p N = \tif{\tsample - p < 0} M N$, where $M \oplus_p N$ reduces to $M$ or $N$, depending on the first value of $s$, with probability $p$ resp.~$(1-p)$. Technically though, it reduces first to $\tif{\underline r - p < 0} M N$ for $r \in I$, so those terms all need values of the ranking function too.
 
 \paragraph{}
-In both of these cases, there are only some values of the rankng function that are semantically important. Define a \emph{partial ranking function} on a closed term $M$ to be a partial function $f : Rch(M) \nrightarrow \mathbb R$ such that
-\lo{NOTATION. Common notation for partial function $\rightharpoonup$}
+In both of these cases, there are only some values of the rankng function that are semantically important. Define a \emph{partial ranking function} on a closed term $M$ to be a partial function 
+$f : Rch(M) \rightharpoonup \mathbb R$ 
+%$f : Rch(M) \nrightarrow \mathbb R$ 
+such that
+%\lo{NOTATION. Common notation for partial function $\rightharpoonup$}
 \begin{itemize}
     \item $f(N) \geq 0$ for all $N$ where $f$ is defined.
     \item $f$ is defined at $M$.
@@ -412,7 +451,7 @@ A partial ranking function that is total is just a ranking function. Providing a
 Every partial ranking function is a restriction of a ranking function.
 \end{theorem}
 \begin{proof}
-Take a closed term $M$ and partial ranking function $f$ on $M$. Define $f_1 : Rch(M) \nrightarrow \mathbb R$ by
+Take a closed term $M$ and partial ranking function $f$ on $M$. Define $f_1 : Rch(M) \rightharpoonup \mathbb R$ by
 \begin{align*}
     f_1(N) & = f(N) \text{ whenever $f(N)$ is defined,} \\
     f_1(V) & = 0 \text{ for values $V$ not in the domain of $f$.}
