@@ -117,7 +117,7 @@ The language SPCF is a simply-typed lambda calculus with sampling of real number
   \frac{}{\Gamma ; x:A \vdash x:A} \qquad
   \frac{\Gamma ; x:A \vdash s : B}{\Gamma \vdash \lambda x.s : A \to B} \qquad
   \frac{}{\underline{r} : \textsf{R}} \qquad
-  \frac{\Gamma \vdash s:A \to B \quad \Gamma \vdash t : A}{\Gamma \vdash s t : B} \\ \\
+  \frac{\Gamma \vdash s:A \to B \quad \Gamma \vdash t : A}{\Gamma \vdash s \, t : B} \\ \\
   \frac{\Gamma \vdash s_1:\textsf{R} \dots \Gamma \vdash s_n:\textsf{R}}{\Gamma \vdash \underline{f}(s_1,\dots,s_n) : \textsf{R}} \ f : \mathbb{R}^n \to \mathbb{R} \qquad
   \frac{\Gamma \vdash s : (A \to B) \to (A \to B)}{\Gamma \vdash \tY s : (A \to B)} \\ \\
   \frac{\Gamma \vdash c : \textsf{R} \quad \Gamma \vdash s_1 : A \quad \Gamma \vdash s_2 : A}{\Gamma \vdash \tif{c < 0}{s_1}{s_2} : A} \qquad
@@ -237,11 +237,11 @@ M_1 M_2 \mid @_i ; P & = M_i \mid P \quad \text{for } i = 1,2 \\
 \end{align*}
 so that every subterm is located at a unique position, but not every position corresponds to a subterm (e.g. $x \, y \mid \lambda ; \cdot$ is undefined). A position such that $M\mid P$ does exist is said to occur in $M$. Substitution at a given position, $M[N/P]$, is defined similarly.
 
-Two subterms $N_1$ and $N_2$ of a term $M$, corresponding to positions $P_1$ and $P_2$, can overlap in a few different ways. If $P_1$ is an initial segment \lo{(i.e.~prefix)?} of $P_2$, then $N_2$ is also a subterm of $N_1$, which is written as $P_1 \leq P_2$. If neither $P_1 \leq P_2$ nor $P_1 \geq P_2$, the positions are said to be disjoint. This is mostly relevant in that in any substitution at some position, the subterms at all other positions are unaffected.
+Two subterms $N_1$ and $N_2$ of a term $M$, corresponding to positions $P_1$ and $P_2$, can overlap in a few different ways. If $P_1$ is an initial segment (i.e.~prefix) of $P_2$, then $N_2$ is also a subterm of $N_1$, which is written as $P_1 \leq P_2$. If neither $P_1 \leq P_2$ nor $P_1 \geq P_2$, the positions are said to be disjoint. This is mostly relevant in that in any substitution at some position, the subterms at all other positions are unaffected.
 
 With this notation, a more general reduction relation $\to$ can be defined. \akr{It would almost work to have one of the neater versions of $\tY$-reduction here.}
-\lo{On first reading, I struggled to parse the following clauses.}
-\changed[lo]{The binary relation $\to$ is defined by the following rules, each is conditional on a redex occuring at position $P$ in the term $M$ in question.}
+%\lo{On first reading, I struggled to parse the following clauses.}
+\changed[lo]{The binary relation $\to$ is defined by the following rules, each is conditional on a redex occuring at position $P$ in the term $M$.}
 \begin{align*}
   \text{if } M \mid P = (\lambda x.s) v,\ & M \to M[s[v/x]/P] \\
   \text{if } M \mid P = \underline f (\underline r_1, \dots , \underline r_n),\ & M \to M[\underline{f(r_1,\dots,r_n)}/P] \\
@@ -256,21 +256,21 @@ With this notation, a more general reduction relation $\to$ can be defined. \akr
 \paragraph{}
 Labelling the pre-chosen samples by the positions in the term would also not work because in some cases, a $\tsample$ will be duplicated before being reduced, for example, in $(\lambda x. {\underline x \, 0} \, \mathbin{\underline{+}} \, {x \, \underline 0}) (\lambda y. \tsample)$, both of the $\tsample$ redexes that eventually occur originate at $@_2 ; \lambda$. It is therefore necessary to consider possible positions that may occur in other terms reachable from the original term. This is itself inadequate because some of the positions in different reachable terms need to be considered the same.
 
-Given a closed term $M$, let $L_0(M)$ be the set of pairs, the first element of which is a reduction sequence starting at $M$, and the second of which is a position in the final term of the reduction sequence. Reduction sequences are used rather than reachable terms because if the same term is reached twice, different samples may be needed, but they will be discussed as though they were terms, by abuse of notation. \lo{Readers would benefit greatly from some examples of an $L_0(M)$-pair, and relations $\sim_p$ and $\sim_c$, here, before the formal definitions. Explain the underlying intuition.} The relation $\sim$ is defined as the union of the symmetric relations $\sim_p$ and $\sim_c$ where
+Given a closed term $M$, let $L_0(M)$ be the set of pairs, the first element of which is a reduction sequence starting at $M$, and the second of which is a position in the final term of the reduction sequence. Reduction sequences are used rather than reachable terms because if the same term is reached twice, different samples may be needed, but they will be discussed as though they were terms, by abuse of notation. \lo{Readers would benefit greatly from some examples of an $L_0(M)$-pair, and the relations $\sim_p$ and $\sim_c$, here, before the formal definitions. Explain the underlying intuition.} The relation $\sim$ is defined as the union of the symmetric relations $\sim_p$ \changed[lo]{($p$ for parent-child relationship)} and $\sim_c$ \changed[lo]{($c$ for cousin relationship)} where
+\lo{As defined, $\sim_p$ is not a symmetric relation.}
 \begin{enumerate}
     \item If $N$ reduces to $O$ with the redex at position $P$\lo{Do you mean: $M \to^\ast N \to O = N[\dotDelta / P]$ for some redex contraction $\Delta \to \dotDelta$}, and $Q$ is a position in $N$ 
     where $Q \not \geq P$, then $(N,Q) \sim_p (O,Q)$.
-    \lo{This implies that $Q$ is a position in $O$, but $O \mid Q$ is not guaranteed to exist. E.g.~$N = (\lambda x.x) 1$ and $O = 1$. Now $N \mid Q$ exists, where $Q = @_1 ; \lambda$, but $O \mid Q$ does not exist.}
-    \lo{Ah! I overlooked the condition $Q \not\geq P =
-    {\cdot}$.}
+    %\lo{This implies that $Q$ is a position in $O$, but $O \mid Q$ is not guaranteed to exist. E.g.~$N = (\lambda x.x) 1$ and $O = 1$. Now $N \mid Q$ exists, where $Q = @_1 ; \lambda$, but $O \mid Q$ does not exist.} \lo{Ah! I overlooked the condition $Q \not\geq P = {\cdot}$.}
     
-
-    \lo{I find this confusing. Can you express it formally?}
-
     \item If $N$ $\beta$-reduces to $O$ at position $P$, $Q$ is a position in $N \mid P;@_1;\lambda$ and $N \mid P;@_1;\lambda;Q$ is not the variable involved in the reduction, $(N,P;@_1;\lambda;Q) \sim_p (O, P;Q)$
+    
     \item If $N$ $\textsf{if}$-reduces to $O$ at position $P$, with the first resp. second branch being taken, and $P;\textsf{if}_i;Q$ occurs in $N$ (where $i = 2$ resp. $3$), $(N,P;\textsf{if}_i;Q) \sim_p (O,P;Q)$
+    
     \item If $N \mid P = (\lambda x. A) B$, $A \mid Q = x$, $B \mid R = C$ is a redex reducing to $C'$ and $S$ exists in $C'$, then letting $O_1$ be $N$ reduced first at $P$ then at $P;Q;R$ and letting $O_2$ be $N$ reduced first at $P;@_2;R$ then at $P$, $(O_1,P;Q;R;S) \sim_c (O_2,P;Q;R;S)$
+    
     \item If $N \mid P = (\tY \lambda x. A)$, $A \mid Q = C$ is a redex reducing to $C'$, $R$ exists in $C'$ and $C' \mid R \neq x$, then letting $O_1$ be $N$ reduced first at $P$ then $P;\lambda;@_1;Q$ and $O_2$ reduced at $P;\tY;\lambda;Q$ then \changed[lo]{at} $P$, $(O_1, P;\lambda;@_1;Q;R) \sim_c (O_2, P;\lambda;@_1;Q;R)$
+    
     \item If $N \mid P = (\tY \lambda x. A)$, $A \mid Q = C$ is a redex reducing to $C'$, $R$ exists in $C'$ and $A \mid S = x$, then letting $O_1$ be $N$ reduced first at $P$ then $P;\lambda;@_1;S;\tY;\lambda;Q$ and $O_2$ reduced at $P;\tY;\lambda;Q$ then \changed[lo]{at} $P$, 
     \[
     (O_1, P;\lambda;@_1;S;\tY;\lambda;Q;R) \sim_c (O_2, P;\lambda;@_1;S;\tY;\lambda;Q;R)
@@ -283,7 +283,7 @@ Given a closed term $M$, let $L_0(M)$ be the set of pairs, the first element of 
 \end{figure}
 
 \begin{example}
-See \Cref{fig:adk-diagram} for examples of $\sim_p$- and $\sim_c$-rules.
+See \Cref{fig:adk-diagram} for a graphical depiction of $\sim_p$- and $\sim_c$-rules.
 \end{example}
 
 The reflexive transitive closure $\sim^*$ of this relation is used to define the set of potential positions $L(M) = L_0(M) / \sim^*$, and each equivalence class can be considered as the same position as it may occur across multiple reachable terms. If $(N,P) \sim^* (O,Q)$, then $N \mid P$ and $O \mid Q$ both have the same shape (i.e.~they're either both variables, both applications, both $\tsample$s ect.), therefore it's well-defined to talk of the set of potential positions where there is a $\tsample$, $L_s(M)$. The new sample space is then defined as $I^{L_s(M)}$, with the Borel $\sigma$-algebra and product measure.
@@ -298,7 +298,7 @@ For any other term $N$ and position $Q$ in it, take the parent $N'$ and the posi
 Considering now $\sim_c$, let $N'' \to N' \to N$, where the outermost of the two reductions takes place at $P$. Cases 5 and 6 can be distinguished from case 4 by whether $P;\tY$ exists in $N''$, and cases 5 and 6 can be distinguished by whether $N'' | R = x$ for some $R < P;\tY;\lambda;S$ where $x$ is the variable bound at $N'' | P;\tY$ and $Q = P;\lambda;@_1;S$. In all of the cases 4, 5 and 6, whether $Q$ is $O_1$ or $O_2$ can be distinguished by which of the reductions $N'' \to N'$, $N' \to N$ takes place at $P$. In all 6 cases, the term and position $(N,Q)$ is related to can be reconstructed from $Q$ and the positions of the reductions $N'' \to N' \to N$, therefore each $(N,Q)$ pair is related to at most one other by $\sim_c$.
 
 In summary, all equivalence classes under $\sim^*$ are of the shapes \akr{This would be far easier to show with a few pictures. I just don't yet know how to make them in Latex and I'm prioritising getting the text done.}
-\lo{I can suggest possible \LaTeX\ packages for drawing. Can you draw them and upload a scan?}
+\lo{PGF/TikZ is the standard \LaTeX\ package for generating vector graphics. The manual \url{https://ctan.org/pkg/pgf?lang=en} is a 1318-page tome! There are numerous tutorials / guides on the Internet. E.g.~\url{https://www.overleaf.com/learn/latex/TikZ_package}}
 
 \paragraph{}
 
@@ -449,7 +449,7 @@ Even in the case of reasonable simple terms, explicitly constructing a ranking f
 \end{align*}
 which generates a geometric distribution.
     Despite its simplicity, its $Rch$ contains all the terms
-\begin{itemize}
+\begin{enumerate}
     \item $(\tY \lambda f, n: \tif{\tsample - 0.5 < 0}{n}{f (n+1)}) \underline{0}$
     \item $(\lambda z.(\lambda f, n: \tif{\tsample - 0.5 < 0}{n}{f (n+1)}) (\tY \lambda f, n: \tif{\tsample - 0.5 < 0}{n}{f (n+1)}) z) \underline{i}$
     \item $(\lambda f, n: \tif{\tsample - 0.5 < 0}{n}{f (n+1)}) (\tY \lambda f, n: \tif{\tsample - 0.5 < 0}{n}{f (n+1)}) \underline{i}$
@@ -460,8 +460,46 @@ which generates a geometric distribution.
     \item $\underline{i}$
     \item $(\tY \lambda f, m: \tif{\tsample - 0.5 < 0}{m}{f (m+1)}) (\underline{i}+1)$
     \item $(\lambda z.(\lambda f, n: \tif{\tsample - 0.5 < 0}{n}{f (n+1)}) (\tY \lambda f, n: \tif{\tsample - 0.5 < 0}{n}{f (n+1)}) z) (\underline{i} + 1)$.
-\end{itemize}
+\end{enumerate}
 \akr{TODO: make this into a diagram with arrows.}
+
+\newpage
+
+\lo{Here is a more readable version.}
+
+Writing $\Theta = \lambda f, n : \tif{\tsample - 0.5 < 0}{n}{f (n+1)}$, we have
+\begin{enumerate}
+    \item $(\tY \, \Theta) \; \underline{0}$
+
+    \item $\big(\lambda z.\Theta \; (\tY \, \Theta) \; z \big) \; \underline{i}$
+    
+    \item $\Theta \; (\tY \, \Theta) \; \underline{i}$
+    
+    \item \changed[akr]{$(\lambda n: \tif{\tsample - 0.5 < 0}{n}{(\tY \lambda f, m: \tif{\tsample - 0.5 < 0}{n}{f (m+1)}) (m+1)}) \; \underline{i}$}
+
+    \lo{I think the preceding should be: $(\lambda n: \tif{\tsample - 0.5 < 0}{n}{(\tY \lambda f, m: \tif{\tsample - 0.5 < 0}{m}{f (m+1)}) (n+1)}) \; \underline{i}$, and so, more succinctly:
+    \[
+    \big(
+    \lambda n: 
+    \tif{\tsample - 0.5 < 0}{n}{(\tY \, \Theta) \; (n+1)} 
+    \big) 
+    \; \underline{i}
+    \]}
+
+    \item $\tif{\tsample - 0.5 < 0}{\underline{i}}{
+    (\tY \, \Theta) \, (\underline{i}+1)}$
+    
+    \item $\tif{\underline r - 0.5 < 0}{\underline{i}}{(\tY \, \Theta) (\underline{i}+1)}$
+    
+    \item $\tif{\underline{r - 0.5} < 0}{\underline{i}}{(\tY \, \Theta) (\underline{i}+1)}$
+    
+    \item $\underline{i}$
+    
+    \item $(\tY \, \Theta) \; (\underline{i}+1)$
+    
+    \item $\big(\lambda z. \Theta \; (\tY \, \Theta) \;  z\big) \; (\underline{i} + 1)$.
+\end{enumerate}
+
 Even in this simple case, defining a ranking function explicitly is awkward because of the number of cases, although in most cases, because the value need only be greater than or equal to that of the next term in sequence, it suffices to take the ranking function as taking only 3 distinct values.
 
 The definition of rankability is also inconvenient for syntactic sugar. It could be useful, for example, to define $M \oplus_p N = \tif{\tsample - p < 0} M N$, where $M \oplus_p N$ reduces to $M$ or $N$, depending on the first value of $s$, with probability $p$ resp.~$(1-p)$. Technically though, it reduces first to $\tif{\underline r - p < 0} M N$ for $r \in I$, so those terms all need values of the ranking function too.

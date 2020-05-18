@@ -95,7 +95,7 @@ f(M)
 the inequality above follows from \Cref{lem:key rankable}.
 }
 
-We say that a given SPCF term is \emph{type-1} (respectively 2, 3 and 4) if it has the shape $E[\tY (\lambda x. N)]$ (respectively $E[\tsample]$, $E[R]$ where $R$ is any other redex, and of a value).
+We say that a given SPCF term is \emph{type-1} (respectively 2, 3 and 4) if it has the shape $E[\tY \lambda x. N]$ (respectively $E[\tsample]$, $E[R]$ where $R$ is any other redex, and of a value).
 Define $\mathbf{T}_i := 
 \set{s \mid M_n(s) \hbox{ is type-$i$}}$.
 It is straightforward to see that each $\mathbf{T}_i \in \calF_n$, and $\set{\mathbf{T}_1, \mathbf{T}_2, \mathbf{T}_3, \mathbf{T}_4}$ is a partition of $S$.
@@ -281,7 +281,7 @@ As before, fix a $M \in \Lambda^0$.
 Define random variables on $(S, \calF, \mu)$:
 \begin{align*}
 T_0(s) & := 0 \\
-T_{n+1}(s) & := \min \{ k \mid k>T_n(s), M_k(s) \textrm{ a value or of form } E[\tY (\lambda x. N)] \}\\
+T_{n+1}(s) & := \min \{ k \mid k>T_n(s), M_k(s) \textrm{ a value or of form } E[\tY \lambda x. N] \}\\
 X_n(s) & := f(M_n(s)) \\
 Y_n(s) & := X_{T_n}(s) \\
 T(s) &:= \min \set{n \mid Y_n(s) = 0}
