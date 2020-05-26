@@ -251,6 +251,7 @@ With this notation, a more general reduction relation $\to$ can be defined. \akr
   \text{if } M \mid P = \tsample & \text{ and $\lambda$ does not occur after $@_2$ or $\tY$ in $P$},\\ & M \to M[\underline r/P] \text{ where } r \in [0,1] \\
   \text{if } M \mid P = \tscore(\underline r),\ & M \to M[\underline r/P].
 \end{align*}
+In each of these cases, $M \mid P$ is the redex, and reduction takes place at $P$.
 \lo{The definition above is clear. But as a general rule, it is good to illustrate definitions -- especially if they are genuinely new -- with an example or two.}
 
 \paragraph{}
@@ -259,27 +260,32 @@ Labelling the pre-chosen samples by the positions in the term would also not wor
 Given a closed term $M$, let $L_0(M)$ be the set of pairs, the first element of which is a reduction sequence starting at $M$, and the second of which is a position in the final term of the reduction sequence. Reduction sequences are used rather than reachable terms because if the same term is reached twice, different samples may be needed, but they will be discussed as though they were terms, by abuse of notation. \lo{Readers would benefit greatly from some examples of an $L_0(M)$-pair, and the relations $\sim_p$ and $\sim_c$, here, before the formal definitions. Explain the underlying intuition.} The relation $\sim$ is defined as the union of the symmetric relations $\sim_p$ \changed[lo]{($p$ for parent-child relationship)} and $\sim_c$ \changed[lo]{($c$ for cousin relationship)} where
 \lo{As defined, $\sim_p$ is not a symmetric relation.}
 \begin{enumerate}
-    \item If $N$ reduces to $O$ with the redex at position $P$\lo{Do you mean: $M \to^\ast N \to O = N[\dotDelta / P]$ for some redex contraction $\Delta \to \dotDelta$}, and $Q$ is a position in $N$ 
-    where $Q \not \geq P$, then $(N,Q) \sim_p (O,Q)$.
-    %\lo{This implies that $Q$ is a position in $O$, but $O \mid Q$ is not guaranteed to exist. E.g.~$N = (\lambda x.x) 1$ and $O = 1$. Now $N \mid Q$ exists, where $Q = @_1 ; \lambda$, but $O \mid Q$ does not exist.} \lo{Ah! I overlooked the condition $Q \not\geq P = {\cdot}$.}
+    \item If $N$ reduces to $O$ with the redex at position $P$\lo{Do you mean: $M \to^\ast N \to O = N[\dotDelta / P]$ for some redex contraction $\Delta \to \dotDelta$}, and $Q$ is a position in $N$ disjoint from $P$, then $(N,Q) \sim_p (O,Q)$.
     
     \item If $N$ $\beta$-reduces to $O$ at position $P$, $Q$ is a position in $N \mid P;@_1;\lambda$ and $N \mid P;@_1;\lambda;Q$ is not the variable involved in the reduction, $(N,P;@_1;\lambda;Q) \sim_p (O, P;Q)$
     
     \item If $N$ $\textsf{if}$-reduces to $O$ at position $P$, with the first resp. second branch being taken, and $P;\textsf{if}_i;Q$ occurs in $N$ (where $i = 2$ resp. $3$), $(N,P;\textsf{if}_i;Q) \sim_p (O,P;Q)$
     
-    \item If $N \mid P = (\lambda x. A) B$, $A \mid Q = x$, $B \mid R = C$ is a redex reducing to $C'$ and $S$ exists in $C'$, then letting $O_1$ be $N$ reduced first at $P$ then at $P;Q;R$ and letting $O_2$ be $N$ reduced first at $P;@_2;R$ then at $P$, $(O_1,P;Q;R;S) \sim_c (O_2,P;Q;R;S)$
-    
-    \item If $N \mid P = (\tY \lambda x. A)$, $A \mid Q = C$ is a redex reducing to $C'$, $R$ exists in $C'$ and $C' \mid R \neq x$, then letting $O_1$ be $N$ reduced first at $P$ then $P;\lambda;@_1;Q$ and $O_2$ reduced at $P;\tY;\lambda;Q$ then \changed[lo]{at} $P$, $(O_1, P;\lambda;@_1;Q;R) \sim_c (O_2, P;\lambda;@_1;Q;R)$
-    
-    \item If $N \mid P = (\tY \lambda x. A)$, $A \mid Q = C$ is a redex reducing to $C'$, $R$ exists in $C'$ and $A \mid S = x$, then letting $O_1$ be $N$ reduced first at $P$ then $P;\lambda;@_1;S;\tY;\lambda;Q$ and $O_2$ reduced at $P;\tY;\lambda;Q$ then \changed[lo]{at} $P$, 
-    \[
-    (O_1, P;\lambda;@_1;S;\tY;\lambda;Q;R) \sim_c (O_2, P;\lambda;@_1;S;\tY;\lambda;Q;R)
-    \]
+    \item If $N$, $O_1$ and $O_2$ match any of the following cases:
+    \begin{enumerate}
+        \item $N$ contains redexes at positions $P_1$ resp.~$P_2$, $O_1$ is $N$ reduced first at $P_1$
+        
+        \item $N \mid P = \tif{\underline r < 0}{N_1}{N_2}$, where $r < 0$ (or, respectively, $r \geq 0$), $(N_2 \text{ resp. } N_1) \mid Q$ is a redex, and $O_1$ is $N$ reduced at $P$ and $O_2$ is $N$ reduced first at $P;(\textsf{if}_3 \text{ resp. } \textsf{if}_2);Q$ then at $P$
+        
+        \item $N \mid P = \tif{\underline r < 0}{N_1}{N_2}$, where $r < 0$ (or, respectively, $r \geq 0$), $(N_1 \text{ resp. } N_2) \mid Q$ is a redex, and $O_1$ is $N$ reduced first at $P$ then at $P;Q$ and $O_2$ is $N$ reduced first at $P;(\textsf{if}_2 \text{ resp. } \textsf{if}_3);Q$ then at $P$
+        
+        \item $N \mid P = (\lambda x. A) B$, there is a redex in $A$ at position $Q$, $O_1$ is $N$ reduced first at $P$ then at $P;Q$, and $O_2$ is $N$ reduced first at $P;@_1;\lambda;Q$ then at $P$
+        
+        \item $N \mid P = (\lambda x. A) B$, $B \mid Q$ is a redex, $(R_i)_i$ is a list of all the positions in $A$ where $A \mid R = x$, $O_1$ is $N$ reduced first at $P ; @_2 ; Q$ then at $P$, and $O_2$ is $N$ reduced first at $P$ then at $P;R_i;Q$ for each $i$ in order.
+        
+        \item $N \mid P = \tY (\lambda x. A)$, $A$ reduced at $Q$ is $A'$, $(R_i)_i$ is a list of all the positions where $A' \mid R  = x$, $O_1$ is $N$ reduced first at $P;\tY;\lambda;Q$ then at $P$, and $O_2$ is $N$ reduced first at $P$ then at $P;\lambda;@_1;Q$ then at $P;\lambda;@_1;R_i;Y;\lambda;Q$ for each $i$ in order.
+    \end{enumerate}
+    and $O_1$ and $O_2$ are equal as terms, but with different reduction sequences (which merely requires that in cases a, c and d, if the redexes of unspecified type are $\tsample$, corresponding $\tsample$s reduce to the same numbers), $O_1'$ and $O_2'$ are the results of applying some reduction sequence to each of $O_1$ and $O_2$ (the same reductions in each case, which is always possible because they're equal terms), and $S$ is a position in $O_1'$ (or equivalently $O_2'$), then $(O_1',S) \sim_c (O_2',S)$.
 \end{enumerate}
 
 \begin{figure}
 \includegraphics[height=0.9\textheight]{akr-diagram.pdf}
-\caption{\label{fig:adk-diagram} Some examples of $\sim_p$- and $\sim_c$-rules}
+\caption{\label{fig:adk-diagram} Some examples of the old version of the $\sim_p$- and $\sim_c$-rules}
 \end{figure}
 
 \begin{example}
