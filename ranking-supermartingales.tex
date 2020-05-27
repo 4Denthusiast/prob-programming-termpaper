@@ -11,8 +11,8 @@ For $\epsilon > 0$, it is a \emph{$\epsilon$-ranking supermartingale} if, in add
 \citep{DBLP:conf/popl/FioritiH15,DBLP:conf/popl/ChatterjeeFNH16}
 \end{definition}
 
-Intuitively $Y_n$ is the rank of the program after $n$ steps of computation.
-(Assume that the rank of a term is 0 iff it is a value.) In a $\epsilon$-ranking supermartingale, each computation step causes a strict decrease in rank, provided the term being reduced is not a value.
+Intuitively $Y_n$ gives the rank of the program after $n$ steps of computation.
+(Assume that the rank of a term is 0 iff it is a value.) In a $\epsilon$-ranking supermartingale, each computation step causes a strict decrease in rank of at least $\epsilon$, provided the term in question is not a value.
 
 Let $T$ and $T'$ be stopping times adapted to $(\calF_n)_{n \in \omega}$.
 Recall the $\sigma$-algebra (consisting of measurable subsets ``priori to $T$'')
@@ -33,7 +33,7 @@ Let $(X_n)_{n\in \omega}$ be a supermartingale, and $(T_n)_{n \in \omega}$ a seq
 
 \begin{theorem}[{\citep[Lemma 5.5]{DBLP:conf/popl/FioritiH15}, \citep[Prop 1]{DBLP:conf/popl/ChatterjeeFNH16}}]
 \label{thm:rank-PAST}
-Let $(Y_n)_{n \in \omega}$ be a $\epsilon$-ranking supermartingale, and set $T(s) := \min \set{n \mid Y_n(s) = 0}$. 
+Let $(Y_n)_{n \in \omega}$ be a $\epsilon$-ranking supermartingale, and define the r.v.~$T$ by $T(s) := \min \set{n \mid Y_n(s) = 0}$. 
 
 Then $T < \infty$ almost surely, and $\expect{T} \leq \dfrac{\expect{Y_0}}{\epsilon}$.
 \end{theorem}
@@ -80,6 +80,7 @@ It follows that ${\set{s_{\leq l}} \cdot I^\omega} \subseteq A$.
 }
 %Take $M \in \Lambda^0$ (closed SPCF terms). Define, for each $n \in \omega$, the random variable $M_n : S \to \Lambda^0$ by $M_n(s) := \pi_0 (\red^n(M, s))$.
 
+\iffalse
 \lo{We need to show that each $f(M_n)$ is integrable. LO claimed earlier that $0 \leq f(N) \leq f(M)$ for all $N \in \mathit{Rch}(M)$.
 This is of false: take $f$ with $v \, \tsample \mapsto 1$ and $v \, \underline{r} \mapsto 2\, r$ for some value $v$. 
 However, it is true that
@@ -94,6 +95,7 @@ f(M)
 \]
 the inequality above follows from \Cref{lem:key rankable}.
 }
+\fi
 
 We say that a given SPCF term is \emph{type-1} (respectively 2, 3 and 4) if it has the shape $E[\tY \lambda x. N]$ (respectively $E[\tsample]$, $E[R]$ where $R$ is any other redex, and of a value).
 Define $\mathbf{T}_i := 
@@ -266,6 +268,17 @@ Finally, integrating both sides of (\ref{eqn:f 2 n+1}), we have
 
 \end{proof}
 
+As an immediate corollary of \Cref{lem:key rankable}, each $f(M_n)$ is integrable:
+\[
+\int_{S} \mu(\dif s) \, |f(M_n)(s)| 
+=
+\int_{S} \mu(\dif s) \, f(M_n)(s)
+\leq
+\int_{S} \mu(\dif s) \, f(M_0)(s)
+=
+f(M).
+\]
+
 \iffalse
 [** To see $f_{2, n+1}(M) \leq f(M_n)[T_2]$, take $s \in T_2$. Then $f_{2, n+1}(M)(s) = f(E[\underline{a}])$ and $M_n = E[\tsample]$, for some $a \in [0, 1]$ and evaluation context $E$. Hence 
 \[
@@ -299,13 +312,13 @@ Note that
 \end{enumerate}
 %Note that by definition $T_M^{\tY} \leq T_M$.
 
-\begin{corollary}
+\begin{theorem}[Soundness]
 \begin{enumerate}
 \item If a closed SPCF term $M$ is rankable, then $T^{\tY}_M < \infty$ a.s.~(equivalently $M$ is AST), and $\expect{T^{\tY}_M} < \infty$. 
 
 \item If a closed SPCF term $M$ is strictly rankable, then $\expect{T_M} < \infty$ i.e.~$M$ is PAST.
 \end{enumerate}
-\end{corollary}
+\end{theorem}
 
 \begin{proof}
 For 1, observe that $T_0, T_1, T_2, \cdots$ are an increasing sequence of stopping times adapted to $(\calF_n)_{n \in \omega}$, and each $T_i$ is bounded.
