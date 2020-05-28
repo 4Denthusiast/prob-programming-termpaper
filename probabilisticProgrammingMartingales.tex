@@ -685,7 +685,7 @@ where $R \to R’$ is the $\tY$-redex rule.
 We assume $\tY f^{A \to B} \, x^A \, . \, \theta^B$ is a value.}
 
 \begin{definition}
-We say that a supermartingale $(Y_n)_{n \in \omega}$ and a stopping time $T$ \akr{Separating the stopping time from $Y_n = 0$ allows for a neater definition of the ranking function of a term} adapted to filtration $(\calF_n)_{n \in \omega}$ are \emph{antitone strict} if $Y_n \geq 0$, and there exists an antitone measurable function $\epsilon : \nnReal \to \pReal$ satisfying
+We say that a supermartingale $(Y_n)_{n \in \omega}$ and a stopping time $T$ \akr{Separating the stopping time from $Y_n = 0$ allows for a neater definition of the ranking function of a term} \lo{Nice!} adapted to filtration $(\calF_n)_{n \in \omega}$ are \emph{antitone strict} if $Y_n \geq 0$, and there exists an antitone measurable function $\epsilon : \nnReal \to \pReal$ satisfying
 \[
 \expect{Y_{n+1} \mid \calF_n} \leq Y_n - \epsilon (Y_n) \cdot 1_{\set{T > n}}
 \]
@@ -698,43 +698,53 @@ Then $T < \infty$ almost surely.
 \akr{It's not actually true that $\expect{T} \leq \dfrac{\expect{Y_0}}{\epsilon_0}$ where $\epsilon_0 := \epsilon(\expect{Y_0})$. This is fortunate because it means that a rankability theorem based on antitone strict supermartingales actually has a chance of being stronger than the existing one (which was pretty much complete for $\tY$-PAST terms already). In fact, for any almost surely finite stopping time, there is a corresponding antitone strict supermartingale. This seems promising for the method being conditionally complete (for terms where all reachable terms are AST).}
 \end{theorem}
 
+\lo{Given a (super)martingale $(Y_n)_{n \in \omega}$ and an a.s.~finite stopping time $T$ (meaning: for some $n \in \omega$, $T \leq n$ a.s.) both adapted to the same filtration, there exist supermartingale $(Y_n')_{n \in \omega}$ and antitone function $\epsilon$ such that $(Y_n')_{n \in \omega}$ is an antitone strict supermartingale w.r.t.~$(\epsilon, T)$.}
+
 \begin{proof}
 First, as $(Y_n)$ is a supermartingale, $\expect{Y_n} \leq \expect{Y_0}$, therefore
+
 \begin{calculation}
 \expect{Y_n \mid T > n}
   \step[=]{}
-\frac{\mathbb P[T > n] \expect{Y_n \mid T > n} + \mathbb P[T \leq n] \expect{Y_n \mid T \leq n} - \mathbb P[T \leq n] \expect{Y_n \mid T \leq n}}{\mathbb P[T > n]}
+\dfrac{\mathbb P[T > n] \expect{Y_n \mid T > n} + \mathbb P[T \leq n] \expect{Y_n \mid T \leq n} - \mathbb P[T \leq n] \expect{Y_n \mid T \leq n}}{\mathbb P[T > n]}
   \step[=]{}
-\frac{\expect{Y_n} - \mathbb P[T \leq n] \expect{Y_n \mid T \leq n}}{\mathbb P[T > n]}
+\dfrac{\expect{Y_n} - \mathbb P[T \leq n] \expect{Y_n \mid T \leq n}}{\mathbb P[T > n]}
   \step[\leq]{$Y_n \geq 0$ always}
-\frac{\expect{Y_n}}{\mathbb P[T > n]}
+\dfrac{\expect{Y_n}}{\mathbb P[T > n]}
   \step[\leq]{$(Y_n)_n$ is a supermartingale}
-\frac{\expect{Y_0}}{\mathbb P[T > n]}
+\dfrac{\expect{Y_0}}{\mathbb P[T > n]}
 \end{calculation}
 
-\emph{Claim}: for all $0 < x \leq 1$, let $B_x = \left \lceil \frac{\expect{Y_0}+1}{x \epsilon(\expect{Y_0} x^{-1})} \right \rceil$, then
+\emph{Claim}: for all $0 < x \leq 1$, let $B_x = \left \lceil \dfrac{\expect{Y_0}+1}{x \; \epsilon(\expect{Y_0} \, x^{-1})} \right \rceil$, then
 \(
 \mathbb P[T > B_x] \leq x.
 \)
 As the convex hull of $\epsilon$ (the greatest convex function less than or equal to it) satisfies all the conditions assumed of $\epsilon$, in addition to being convex, assume wlog that $\epsilon$ is convex.
 Suppose for a contradiction that $\mathbb P[T > B_x] > x$, then for every $n \leq B_x$
+\lo{Change of justification of the second equality below: event, not discrete r.v. 
+Recall: expectation conditioning on r.v.~(resp.~event) is a r.v.~(resp.~number).}
 \begin{calculation}
 \expect{Y_n-Y_{n+1}}
   \step[=]{definition and linearity of conditional expectation}
 \expect{Y_n - \expect{Y_{n+1} \mid \calF_n}}
   \step[\geq]{antitone strict assumption}
 \expect{\epsilon(Y_n) \cdot 1_{\set{T > n}}}
-  \step[=]{definition of conditional expectation for a discrete variable}
+%  \step[=]{definition of conditional expectation for a discrete variable}
+\step[=]{definition of expectation conditioning on an \emph{event}}
 \mathbb P[T > n]\ \expect{\epsilon(Y_n) \mid T > n}
   \step[\geq]{Jensen's inequality}
 \mathbb P[T > n]\ \epsilon(\expect{Y_n \mid T > n})
   \step[\geq]{proved earlier}
-\mathbb P[T > n]\ \epsilon(\frac{\expect{Y_0}}{\mathbb P[T > n]})
+\mathbb P[T > n]\ \epsilon\Big(\dfrac{\expect{Y_0}}{\mathbb P[T > n]}\Big)
   \step[>]{assumption, $\mathbb P[T > n] \geq \mathbb P[T > B_x] > x$}
-x\ \epsilon(\expect{Y_0} x^{-1})
+x \; \epsilon\big(\expect{Y_0} \, x^{-1}\big).
 \end{calculation}
-therefore, by a telescoping sum, $\expect{Y_{B_x}} = \expect{Y_{B_x}-Y_0+Y_0} \leq \expect{Y_0 - B_x x \epsilon(\expect{Y_0} x^{-1})} \leq -1 < 0$, which is a contradiction, therefore the claim must be true, therefore $P[T > n]$ tends to 0 as $n$ tends to infinity, therefore $T < \infty$ almost surely.
-
+Therefore, by a telescoping sum
+\[
+\expect{Y_{B_x}} = \expect{Y_{B_x}-Y_0+Y_0} \leq \expect{Y_0} - B_x \; x \; \epsilon(\expect{Y_0} \, x^{-1}) \leq -1 < 0 
+\]
+%\lo{$\expect{Y_0 - B_x \; x \; \epsilon(\expect{Y_0} \, x^{-1})}$}
+which is a contradiction, therefore the claim must be true, therefore $P[T > n]$ tends to 0 as $n$ tends to infinity, therefore $T < \infty$ almost surely.
 \end{proof}
 
 \paragraph{Results to prove:}
