@@ -550,7 +550,7 @@ Even in this simple case, defining a ranking function explicitly is awkward beca
 The definition of rankability is also inconvenient for syntactic sugar. It could be useful, for example, to define $M \oplus_p N = \tif{\tsample - p < 0} M N$, where $M \oplus_p N$ reduces to $M$ or $N$, depending on the first value of $s$, with probability $p$ resp.~$(1-p)$. Technically though, it reduces first to $\tif{\underline r - p < 0} M N$ for $r \in I$, so those terms all need values of the ranking function too.
 
 \paragraph{}
-In both of these cases, there are only some values of the rankng function that are semantically important. Define a \emph{partial ranking function} on a closed term $M$ to be a partial function 
+In both of these cases, there are only some values of the ranking function that are semantically important. Define a \emph{partial ranking function} on a closed term $M$ to be a partial function 
 $f : Rch(M) \rightharpoonup \mathbb R$ 
 %$f : Rch(M) \nrightarrow \mathbb R$ 
 such that
@@ -631,7 +631,7 @@ In this case, $H(0 \oplus_{0.5} \Xi 1) \leq 1$, but that term reduces to either 
   OK. I see it now.
 }
 
-\section{Antitone-convex ranking functions}
+\section{Antitone ranking functions}
 
 \begin{example}
 \label{ex:ac-ranking}
@@ -640,7 +640,7 @@ In this case, $H(0 \oplus_{0.5} \Xi 1) \leq 1$, but that term reduces to either 
 \[
 M_1 = 
 \big(\tY \, f \, n \, . \, 
-\tif{n = 0}{0}{f \, (n - 1) \oplus_{1/2} f \, (n + 1)}\big) \, 1
+\tif{n = 0}{0}{f \, (n - 1) \oplus_{1/2} f \, (n + 1)}\big) \, 10
 \]
 
 \item 1D biased (away from 0) random walk
@@ -757,26 +757,101 @@ which is a contradiction, therefore the claim must be true, therefore $P[T > n]$
 \paragraph{\Cref{ex:ac-ranking} revisited}
 
 Programs $M_1$ and $M_3$ are AST.
-To prove the existence of antitone-convex ranking functions, we appeal \lo{(hopefully)} to a partial ranking function theorem for antitone-convex ranking functions.
-
+To construct antitone ranking functions, we appeal \lo{(hopefully)} to a partial ranking function theorem for antitone ranking functions.
+\iffalse
 \lo{NOTE. Suppose a function $f : E \to \Real$ from a convex subset $E \subseteq \Real^n$ has continuous second-order partial derivatives. Then it is convex iff its Hessian is positive semidefinite.}
-
+\fi
+\iffalse
 For $M_1$, consider the function $g_1(n) := \frac{2^n - 1}{2^{n-1}}$.
-Note that $(g_1 (n))_{n \geq 0}$ satisfies the recurrence relation
-\[
-z_0 = 0, \qquad
-z_n > 1/2 \cdot z_{n-1} - 1/2 \cdot z_{n+1} \quad (n \geq 1)
-\]
-and set the antitone and convex function $\epsilon_1$ to be 
-\[
-x \mapsto \big(g_1(x) - 1/2 \cdot g_1(x-1) - 1/2 \cdot g_1(x+1)\big) = \frac{1}{2^{x+1}}.
-\]
+\fi
 
-For $M_3$, we use the function $g_3(n) := \frac{3^n - 1}{3^{n-1}}$, and set $\epsilon_3$ to be 
+For $M_1$, define the function $g_1 : \nnReal \to [0, 2)$ by $g_1(x) = 2 - \frac{1}{2^{x-1}}$.
+Note that $(g_1 (n))_{n \in \omega}$ satisfies the recurrence relation
 \[
-x \mapsto \big(g_3(x) - 2/3 \cdot g_3(x-1) - 1/3 \cdot g_3(x+2) \big) = 
+\left\{
+\begin{array}{rll}
+z_0 &=& 0\\
+n \geq 1, \quad z_n &>& \dfrac{1}{2} \, \big( z_{n-1} + z_{n+1}\big).
+\end{array}
+\right.
+\]
+Set the antitone function $\epsilon_1 (y) :=  \frac{2-y}{4}$.
+Then
+\begin{equation}
+\epsilon_1(g_1(x)) = g_1(x) - \dfrac{1}{2} \, \big(g_1(x-1) + g_1(x+1)\big) = \dfrac{1}{2^{x+1}}
+\label{eqn:epsilon g M1}
+\end{equation}
+(Since $g_1$ is bijective, with inverse $g_1^{-1}(y) = 1 - \log (2-y)$, we can obtain $\epsilon_1(y)$ from \Cref{eqn:epsilon g M1}.) 
+%We have $1/2 \cdot \big(g_1(x-1) + g_1(x+1)\big) = 2 - \frac{5}{2^{x+1}}$.
+
+Using shorthand 
+$\Theta_1 = \tY \, f \, n \, . \, 
+\tif{n = 0}{0}{f \, (n - 1) \oplus_{1/2} f \, (n + 1)}$, 
+we can define a partial antitone ranking function $f_1 : \mathit{Rch}(M_1) \to \nnReal$ with antitone function $\epsilon_1$ defined as follows:
+\begin{align*}
+{\Theta_1} \, n 
+&\mapsto 
+g_1(n)
+\\
+\tif{n = 0}{0}{\Theta_1 \, (n - 1) \oplus_{1/2} \Theta_1 \, (n + 1)}
+&\mapsto
+\dfrac{1}{2} \, \big(g_1(n-1) + g_1(n+1)\big)
+\\
+0 &\mapsto 0
+\end{align*}
+
+For $M_3$, we use the function $g_3(x) := 3 - \frac{1}{3^{x-1}}$ and the antitone function $\epsilon_3(y) := \frac{84-28y}{27}$. 
+Then
+\[
+\epsilon_3(g_3(x)) = g_3(x) - \dfrac{1}{3}\big(2 \cdot g_3(x-1) + \cdot g_3(x+2) \big) = 
 \frac{28}{3^{x+2}}.
 \]
+Following $M_1$ above, we can define a partial antitone ranking function $f_3 : \mathit{Rch}(M_3) \to \nnReal$ with $\epsilon_3$ as the antitone function.
+
+\begin{example}[Continuous random walk]\label{ex:raven complex}
+In SPCF we can construct a function whose argument changes by a random amount at each recursive call:
+\[
+\underbrace{\big
+(\tY \, f \, x . \tif{x \leq 0}{0}{f(x - \tsample))} \big)}_{\Theta} \, 10
+\]
+We can construct a partial antitone ranking function $f$ as follows:
+\begin{align*}
+\Theta \, l 
+&\mapsto 
+l
+\\
+\tif{l \leq 0}{0}{\Theta \, (l - \tsample)}
+&\mapsto
+l - 1/2
+\\
+0 &\mapsto 0
+\end{align*}
+with the constant antitone function $\epsilon(y) = 1/2$.
+
+For a more complex example, consider the following ``continuous random walk''
+\[
+\underbrace{\big
+(\tY \, f \, x . \tif{x \leq 0}{0}{f(x - \tsample) \oplus_{1/2} f(x - \tsample)} \big)}_{\Xi} \, 10
+\]
+Let $g(x) := \sqrt{2} - \frac{1}{2^{x-\frac{1}{2}}}$ and let $\epsilon$ be the function specified by
+\[
+\epsilon(g(x)) = g(x) - \dfrac{1}{2}\Big(g(x - \dfrac{1}{2}) + \cdot g(x + \dfrac{1}{2}) \Big) = 
+\dfrac{3 - 2\sqrt{2}}{2^{x+1}}.
+\]
+We define a partial antitone ranking function as follows:
+\begin{align*}
+\Xi \, l 
+&\mapsto 
+g(l)
+\\
+\tif{l \leq 0}{0}{\Xi \, (l - \tsample) \oplus_{1/2} \Xi \, (l + \tsample)}
+&\mapsto
+\frac{1}{2}\big(g(l - \frac{1}{2}) + \cdot g(l + \frac{1}{2}) \big)
+\\
+r \leq 0, \quad r &\mapsto 0
+\end{align*}
+\end{example}
+
 
 \subparagraph{Questions.} 
 \begin{enumerate}
