@@ -1,0 +1,95 @@
+% !TEX root=./probabilisticProgrammingMartingales.tex
+
+\newcommand\transform[1]{{\ulcorner{#1}\urcorner}}
+
+\section{$\tY$ stopping times are finite}
+
+As before, fix a $M \in \Lambda^0$.
+Recall the random variables on $(S, \calF, \mu)$:
+\begin{align*}
+T_0(s) & := 0 \\
+T_{n+1}(s) & := \min \{ k \mid k>T_n(s), M_k(s) \textrm{ a value or of form } E[\tY \lambda x. N] \}
+\end{align*}
+
+\begin{lemma}
+$T_0, T_1, T_2, \cdots$ are an increasing sequence of stopping times adapted to $(\calF_n)_{n \in \omega}$, and each $T_i$ is bounded.
+\end{lemma}
+
+We first show that $T_1$ is bounded i.e.~$T_1 \leq n$, for some $n \in \omega$.
+
+A first proof idea is to construct a reduction argument to the strong normalisation of the simply-typed lambda-calculus.
+ There is a classical transform of conditionals into the pure lambda-calculus.
+However, each evaluation of $\tsample$ (almost surely) returns a different number, which complicates such a transform.
+
+Given a closed SPCF term $M$, we transform it to a term $\transform{M}$ of the nondeterministic simply-typed lambda-calculus as follows.
+(We may assume that the nondeterministic calculus is generated from a base type $\iota$ with a $\iota$-type constant symbol $r$, and a function symbol $\bot : A$  for each function type $A$.)
+\iffalse
+\begin{enumerate}
+\item replace every $\tsample$ by $r$ 
+
+\item replace each base-type subterm $f \, M_1 \cdots M_n$ by $(\lambda x_1 \cdots x_n . r) \, \transform{M_1} \cdots \transform{M_n}$ where $f$ is a primitive function
+
+\item replace every subterm $\tif{B}{M_1}{M_2}$ by
+$(\lambda x . \transform{M_1} + \transform{M_2}) \, \transform{B}$, for a fresh $x$
+
+\item replace every $\tY \, f \, x . N$ by $\lambda x . \transform{N}[\bot / f]$
+
+\item replace every $\tscore (N)$ by $\transform{N}$ (we set aside the requirement that $\tscore$ is undefined on negative numbers)
+\end{enumerate}
+\lo{The above rules can be defined formally.}
+\fi
+\begin{align*}
+\transform{\tsample} &:= r\\
+\transform{y} &:= y \\
+\transform{\lambda y . N} &:= \lambda y . \transform{N}\\
+\transform{M_1 \, M_2} &:= \transform{M_1} \, \transform{M_2} \\
+n \geq 0, \; \transform{f \, M_1 \cdots M_n} &:= (\lambda z_1 \cdots z_n . r) \, \transform{M_1} \cdots \transform{M_n} \\
+\transform{\tif{B}{M_1}{M_2}} &:= \big(\lambda z . (\transform{M_1} + \transform{M_2})\big) \, \transform{B} \\
+\transform{\tY \, f \, y . N} &:= \lambda y . \transform{N}[\bot / f]\\
+\transform{\tscore (N)} &:= \transform{N}
+\end{align*}
+In the above, variables $z, z_1, \cdots, z_n$ are assumed to be fresh; $f$ ranges over primitive functions and numerals.
+In transforming $\tscore (N)$, we set aside the requirement that $\tscore$ is undefined on negative numbers.
+
+The idea is that $\transform{M}$ captures the initial, non-recursive operational behaviour of $M$, so that $\transform{M}$ simulates the reduction of $M$ until the latter reaches a value, or a term of the form $E[\tY \lambda x. N]$.
+
+It is straightforward to see that for every trace $s \in S$, there is a reduction sequence of $\transform{M}$ that simulates (an initial subsequene of) the reduction of $M$ under $s$;
+and the simulation can be made lockstep.
+
+Finally thanks to the following
+\begin{theorem}[de Groote]
+\label{thm:de groote}
+The simply-typed non-deterministic lambda-calculus is strongly normalising. \qed
+\end{theorem}
+we have:
+
+\begin{enumerate}
+\item Every $\transform{M}$-reduction terminates on reaching $r$, or a term of the shape $E[\bot N_1 \cdots N_n]$.
+
+\item Further there is a finite bound (say $l$) on the length of such $\transform{M}$-reduction sequences; and $l$ bounds the stopping time $T_1$.
+\end{enumerate}
+
+\lo{Note: \cite{DBLP:conf/lfcs/Groote94} considered a call-by-name version of a simply-typed nondeterministic lambda-calculus, and proved it strongly normalising, using a reducibility argument \`a la Tait.
+One should check that it extends to the call-by-value calculus.
+}
+
+\iffalse
+@inproceedings{DBLP:conf/lfcs/Groote94,
+  author    = {Philippe de Groote},
+  editor    = {Anil Nerode and
+               Yuri V. Matiyasevich},
+  title     = {Strong Normalization in a Non-Deterministic Typed Lambda-Calculus},
+  booktitle = {Logical Foundations of Computer Science, Third International Symposium,
+               LFCS'94, St. Petersburg, Russia, July 11-14, 1994, Proceedings},
+  series    = {Lecture Notes in Computer Science},
+  volume    = {813},
+  pages     = {142--152},
+  publisher = {Springer},
+  year      = {1994},
+  url       = {https://doi.org/10.1007/3-540-58140-5\_15},
+  doi       = {10.1007/3-540-58140-5\_15},
+  timestamp = {Tue, 14 May 2019 10:00:54 +0200},
+  biburl    = {https://dblp.org/rec/conf/lfcs/Groote94.bib},
+  bibsource = {dblp computer science bibliography, https://dblp.org}
+}
+\fi

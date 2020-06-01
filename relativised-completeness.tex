@@ -1,0 +1,29 @@
+% !TEX root = ./probabilisticProgrammingMartingales.tex
+
+\section{Relativised completeness}
+\label{sec:Relativised completeness}
+
+If every term reachable from a closed SPCF program is AST then the program is also AST, but not conversely 
+(because a diverging term may be reachable with probability 0 from an AST term).
+
+We aim to prove the following conjecture:
+
+\begin{quote}
+\emph{Given a closed SPCF term $M$, if every term reachable from $M$ is AST then $M$ admits an antitone ranking function.}
+\end{quote}
+
+\begin{enumerate}
+
+\item Given a (super)martingale $(Y_n)_{n \in \omega}$ and an a.s.~finite stopping time $T$ (meaning: for some $n \in \omega$, $T \leq n$ a.s.) both adapted to the same filtration, there exist supermartingale $(Y_n')_{n \in \omega}$ and antitone function $\epsilon$ such that $(Y_n')_{n \in \omega}$ is an antitone strict supermartingale w.r.t.~$(\epsilon, T)$.
+\lo{Is this what you had in mind?}
+
+\item Let $(Y_n')_{n \in \omega}$ be an antitone strict supermartingale w.r.t.~$(\epsilon, T)$. 
+Then $M$ admits an antitone ranking function.
+\end{enumerate}
+
+For 2, note that for every $N \in \mathit{Rch}(M)$, there exists $n \geq 0$ and $s \in S$ such that $\red^n(M, s) = (N, -)$.
+Define a function $f : \mathit{Rch}(M) \to \nnReal$ by $f(N) := Y_n'(s)$.
+
+\lo{Ongoing.}
+
+

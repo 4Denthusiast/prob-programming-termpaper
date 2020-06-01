@@ -574,7 +574,9 @@ Take a closed term $M$ and partial ranking function $f$ on $M$. Define $f_1 : Rc
 
 Define $(\nnext(N,s),\_) = \red^n(N,s)$ for the least $n \geq 0$ such that it's in the domain of $f_1$, and $g(N,s) = \left | \{m < n \mid \red^m(N,s) \text{ is of the form } (E[\tY N'],s') \} \right |$. 
 The function $\nnext$ is well-defined (i.e.~$n$ is finite) for all $N \in Rch(M)$ by induction on the path from $M$ to $N$, by the third condition on partial ranking functions. Define $f_2(N) = \int_S f_1(\nnext(N,s)) + g(N,s) \, \mu(\mathrm d s)$. The (total) function $f_2$ agrees with $f$ on $f$'s domain, and it is a ranking function on $M$ (in fact, the least ranking function of which $f$ is a restriction).
+\lo{TODO. The preceding sentence deserves a proof.}
 \end{proof}
+
 
 As a corollary, any term which admits a partial ranking function terminates almost surely.
 
@@ -696,9 +698,8 @@ We say that a supermartingale $(Y_n)_{n \in \omega}$ and a stopping time $T$ \ak
 Let $(Y_n)_{n \in \omega}$ be an antitone strict supermartingale via function $\epsilon : \nnReal \to \pReal$, and stopping time $T$. 
 Then $T < \infty$ almost surely.
 \akr{It's not actually true that $\expect{T} \leq \dfrac{\expect{Y_0}}{\epsilon_0}$ where $\epsilon_0 := \epsilon(\expect{Y_0})$. This is fortunate because it means that a rankability theorem based on antitone strict supermartingales actually has a chance of being stronger than the existing one (which was pretty much complete for $\tY$-PAST terms already). In fact, for any almost surely finite stopping time, there is a corresponding antitone strict supermartingale. This seems promising for the method being conditionally complete (for terms where all reachable terms are AST).}
+\lo{See \Cref{sec:Relativised completeness}.}
 \end{theorem}
-
-\lo{Given a (super)martingale $(Y_n)_{n \in \omega}$ and an a.s.~finite stopping time $T$ (meaning: for some $n \in \omega$, $T \leq n$ a.s.) both adapted to the same filtration, there exist supermartingale $(Y_n')_{n \in \omega}$ and antitone function $\epsilon$ such that $(Y_n')_{n \in \omega}$ is an antitone strict supermartingale w.r.t.~$(\epsilon, T)$.}
 
 \begin{proof}
 First, as $(Y_n)$ is a supermartingale, $\expect{Y_n} \leq \expect{Y_0}$, therefore
@@ -749,9 +750,9 @@ which is a contradiction, therefore the claim must be true, therefore $P[T > n]$
 
 \paragraph{Results to prove:}
 \begin{enumerate}
-\item (AST Soundness) If a closed SPCF term $M$ is antitone-convex rankable, then $T^{\tY}_M < \infty$ a.s.~(equivalently $M$ is AST), and $\expect{T^{\tY}_M} < \infty$. 
+\item (AST Soundness) If a closed SPCF term $M$ is antitone-convex rankable, then $T^{\tY}_M < \infty$ a.s.~(equivalently $M$ is AST), and $\expect{T^{\tY}_M} < \infty$. \lo{This should be fine.}
 
-\item A partial ranking function theorem for antitone-convex ranking functions.
+\item A partial ranking function theorem for antitone-convex ranking functions. \lo{TODO}
 \end{enumerate}
 
 \paragraph{\Cref{ex:ac-ranking} revisited}
@@ -852,14 +853,9 @@ r \leq 0, \quad r &\mapsto 0
 \end{align*}
 \end{example}
 
+\input{y-stopping-time}
 
-\subparagraph{Questions.} 
-\begin{enumerate}
-\item Can we remove the convexity assumption?
-\item Complete method for AST?
-
-%\lo{Example~\ref{ex:0 probability reachable} seems somewhat artificial: its validity depends on $I$ being the closed interval. There is no reason why we can't define $I$ to be the open interval $(0, 1)$, in which case, $Rch(M)$ would consist of all terms that are reachable from $M$ with non-zero probability.}
-\end{enumerate}
+\input{relativised-completeness}
 
 \bibliographystyle{apalike}
 \bibliography{references}
