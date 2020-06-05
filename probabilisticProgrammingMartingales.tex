@@ -550,11 +550,7 @@ Even in this simple case, defining a ranking function explicitly is awkward beca
 The definition of rankability is also inconvenient for syntactic sugar. It could be useful, for example, to define $M \oplus_p N = \tif{\tsample - p < 0} M N$, where $M \oplus_p N$ reduces to $M$ or $N$, depending on the first value of $s$, with probability $p$ resp.~$(1-p)$. Technically though, it reduces first to $\tif{\underline r - p < 0} M N$ for $r \in I$, so those terms all need values of the ranking function too.
 
 \paragraph{}
-In both of these cases, there are only some values of the ranking function that are semantically important. Define a \emph{partial ranking function} on a closed term $M$ to be a partial function 
-$f : Rch(M) \rightharpoonup \mathbb R$ 
-%$f : Rch(M) \nrightarrow \mathbb R$ 
-such that
-%\lo{NOTATION. Common notation for partial function $\rightharpoonup$}
+In both of these cases, there are only some values of the ranking function that are semantically important. Define a \emph{partial ranking function} on a closed term $M$ to be a partial function $f : Rch(M) \rightharpoonup \mathbb R$ such that
 \begin{itemize}
     \item $f(N) \geq 0$ for all $N$ where $f$ is defined.
     \item $f$ is defined at $M$.
@@ -750,7 +746,7 @@ which is a contradiction, therefore the claim must be true, therefore $P[T > n]$
 
 \paragraph{Results to prove:}
 \begin{enumerate}
-\item (AST Soundness) If a closed SPCF term $M$ is antitone-convex rankable, then $T^{\tY}_M < \infty$ a.s.~(equivalently $M$ is AST), and $\expect{T^{\tY}_M} < \infty$. \lo{This should be fine.}
+\item (AST Soundness) If a closed SPCF term $M$ is antitone rankable, then $T^{\tY}_M < \infty$ a.s.~(equivalently $M$ is AST). \lo{This should be fine.}
 
 \item A partial ranking function theorem for antitone-convex ranking functions. \lo{TODO}
 \end{enumerate}
@@ -832,7 +828,7 @@ with the constant antitone function $\epsilon(y) = 1/2$.
 For a more complex example, consider the following ``continuous random walk''
 \[
 \underbrace{\big
-(\tY \, f \, x . \tif{x \leq 0}{0}{f(x - \tsample) \oplus_{1/2} f(x - \tsample)} \big)}_{\Xi} \, 10
+(\tY \, f \, x . \tif{x \leq 0}{0}{f(x - \tsample) \oplus_{1/2} f(x + \tsample)} \big)}_{\Xi} \, 10
 \]
 Let $g(x) := \sqrt{2} - \frac{1}{2^{x-\frac{1}{2}}}$ and let $\epsilon$ be the function specified by
 \[
@@ -851,6 +847,36 @@ g(l)
 \\
 r \leq 0, \quad r &\mapsto 0
 \end{align*}
+\end{example}
+
+\begin{example}[Fair-in-the-limit random walk]
+\label{ex:Fair-in-the-limit random walk}\citep[\S 5.3]{DBLP:journals/pacmpl/McIverMKK18}
+\[
+\underbrace{\big
+(\tY \, f \, x . 
+\tif{x \leq 0}{0}{f(x - 1) \oplus_{\frac{n}{2n+1}} f(x + 1)} \big)}_{\Xi} 
+\, 10
+\]
+To construct an antitone ranking function, we solve the recurrence relation:
+\[
+\left\{
+\begin{array}{rll}
+z_0 &=& 0\\
+n \geq 1, \quad z_n &>& \dfrac{n}{2n + 1} \, z_{n-1} + \dfrac{n+1}{2n + 1} \, z_{n+1}.
+\end{array}
+\right.
+\]
+It turns out the solution to Example $M_1$, $z_n = \frac{2^n - 1}{2^{n-1}}$, is nearly a solution in that
+
+For $M_1$, define the function $g_1 : \nnReal \to [0, 2)$ by $g_1(x) = 2 - \frac{1}{2^{x-1}}$.
+Note that $(g_1 (n))_{n \in \omega}$ satisfies the recurrence relation
+Set the antitone function $\epsilon_1 (y) :=  \frac{2-y}{4}$.
+Then
+\begin{equation}
+\epsilon_1(g_1(x)) = g_1(x) - \dfrac{1}{2} \, \big(g_1(x-1) + g_1(x+1)\big) = \dfrac{1}{2^{x+1}}
+\label{eqn:epsilon g M1}
+\end{equation}
+
 \end{example}
 
 \input{y-stopping-time}
