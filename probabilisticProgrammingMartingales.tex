@@ -854,7 +854,7 @@ r \leq 0, \quad r &\mapsto 0
 \[
 \underbrace{\big
 (\tY \, f \, x . 
-\tif{x \leq 0}{0}{f(x - 1) \oplus_{\frac{n}{2n+1}} f(x + 1)} \big)}_{\Xi} 
+\tif{x \leq 0}{0}{f(x - 1) \oplus_{\frac{x}{2x+1}} f(x + 1)} \big)}_{\Xi} 
 \, 10
 \]
 To construct an antitone ranking function, we solve the recurrence relation:
@@ -866,17 +866,29 @@ n \geq 1, \quad z_n &>& \dfrac{n}{2n + 1} \, z_{n-1} + \dfrac{n+1}{2n + 1} \, z_
 \end{array}
 \right.
 \]
-It turns out the solution to Example $M_1$, $z_n = \frac{2^n - 1}{2^{n-1}}$, is nearly a solution in that
+It turns out the solution to Example $M_1$, $z_n = \frac{2^n - 1}{2^{n-1}}$, is nearly a solution (for $n = 1$, we have equality instead). 
 
-For $M_1$, define the function $g_1 : \nnReal \to [0, 2)$ by $g_1(x) = 2 - \frac{1}{2^{x-1}}$.
-Note that $(g_1 (n))_{n \in \omega}$ satisfies the recurrence relation
-Set the antitone function $\epsilon_1 (y) :=  \frac{2-y}{4}$.
-Then
+Let $g(x) = \frac{2^n - 1}{2^{n-1}}$.
+Then 
 \begin{equation}
-\epsilon_1(g_1(x)) = g_1(x) - \dfrac{1}{2} \, \big(g_1(x-1) + g_1(x+1)\big) = \dfrac{1}{2^{x+1}}
-\label{eqn:epsilon g M1}
+\epsilon(g(x)) = 
+g(x) - \dfrac{x}{2x + 1} \, g(x-1) - \dfrac{x+1}{2x + 1} \, g(x+1) 
+= \dfrac{x-1}{2^{x} \, (2x + 1)}
+\label{eqn:in the limit}
 \end{equation}
 
+\lo{ongoing}
+
+\end{example}
+
+\begin{example}[Escaping spline]
+\label{ex:escaping spline}\citep[\S 5.4]{DBLP:journals/pacmpl/McIverMKK18}
+\[
+\underbrace{\big
+(\tY \, f \, x . 
+\tif{x \leq 0}{0}{0 \oplus_{\frac{1}{x+1}} f(x + 1)} \big)}_{\Xi} 
+\, 10
+\]
 \end{example}
 
 \input{y-stopping-time}

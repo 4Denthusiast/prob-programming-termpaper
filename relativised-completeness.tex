@@ -15,7 +15,6 @@ We aim to prove the following conjecture:
 \begin{enumerate}
 
 \item Given an a.s.~finite stopping time $T$ (meaning: $T < \infty$ a.s.) adapted to a filtration, there exist supermartingale $(Y_n)_{n \in \omega}$ adapted to the same filtration and antitone function $\epsilon$ such that $(Y_n)_{n \in \omega}$ is an antitone strict supermartingale w.r.t.~$(\epsilon, T)$.
-\lo{Is this what you had in mind?}
 
 \item Let $(Y_n')_{n \in \omega}$ be an antitone strict supermartingale w.r.t.~$(\epsilon, T)$. 
 Then $M$ admits an antitone ranking function.
@@ -27,23 +26,32 @@ Define a function $f : \mathit{Rch}(M) \to \nnReal$ by $f(N) := Y_n'(s)$.
 For 1, consider the following:
 \begin{proof}
 If $T$ is bounded by $b$ a.s.~(for $n$ constant), the statement is trivially true by taking $\epsilon$ to be constantly 1, and $Y_n = b - n$.
-Otherwise, let $(T_n)_{n \in \omega}$ be defined recursively such that $T_0 = 0$, $T_{n+1} > T_n$ and $\mathbb P[T < T_{n+1}] \leq \frac 1 4 \mathbb P[T < T_n]$. We will then define a supermartingale $(Y_n)_{n \in \omega}$ and nonrandom sequence $(Y'_n)_{n \in \omega}$ such that $Y_n = 0$ iff $T < n$, $Y_n = Y'_n$ iff $T \geq n$, and $Y'_n \geq 2^k$ for $n \geq T_k$.
+Otherwise, let $(T_n)_{n \in \omega}$ be defined recursively such that $T_0 = 0$, $T_{n+1} > T_n$ and $\mathbb P[T < T_{n+1}] \leq \frac 1 4 \mathbb P[T < T_n]$. \lo{Since $T$ is a stopping time, we can assume that $T_n \in \mathbb N$. 
+Problem with $T_1$: we require $T_1 > 0$ which may contradict the requirement $\mathbb P[T < T_{1}] \leq \frac 1 4 \mathbb P[T < 0] = 0$ for certain $T$, such as those that satisfy $\mathbb P[T < 1] > 0$.
+We could define $T_1$ as the least number satisfying $\mathbb P[T < T_1] \geq \frac{1}{4}$.}
+We will then define a supermartingale $(Y_n)_{n \in \omega}$ and nonrandom sequence $(Y'_n)_{n \in \omega}$ such that $Y_n = 0$ iff $T < n$ \changed[lo]{a.s.}, $Y_n = Y'_n$ iff $T \geq n$ \changed[lo]{a.s.}, and $Y'_n \geq 2^k$ for $n \geq T_k$.
 
-$\epsilon$ is defined piecewise and recursively in such a way as to force all the necessary constraints to hold:
+\lo{$(T_n)_{n \in \omega}$ and $(Y'_n)_{n \in \omega}$ are $\omega$-sequences of numbers. 
+There is a convention that random variables are denoted by uppercase letters. 
+I suggest we write them as $(t_n)_{n \in \omega}$ and $(y'_n)_{n \in \omega}$ respectively:
+in this way, we emphasise that they are sequences of nunbers, and avoid any possible confusion with r.v.}
+
+The antitone function \lo{It is good practice not to begin a sentence with a maths expression / symbol.} $\epsilon$ is defined piecewise and recursively in such a way as to force all the necessary constraints to hold:
 \begin{align*}
     \text{for }x \in [0,1),\ &\epsilon(x) = 1 \\
     \text{for }x \in [2^k,2^{k+1}),\ &\epsilon(x) = \max \left (\epsilon(2^{k-1}), \frac{2^k}{T_{k+1}-T_k} \right ).
 \end{align*}
 This ensures that
 \begin{itemize}
-\item $\epsilon$ is weakly decreasing.
+\item $\epsilon$ is weakly decreasing. 
 \item $\epsilon$ is bounded below by 0.
-\item For $x \geq 2^k$, $\epsilon(x) \leq \frac{2^k}{T_{k+1}-T_k}$.
+\item For $x \geq 2^k$, $\epsilon(x) \leq \frac{2^k}{T_{k+1}-T_k}$. 
+\lo{This would imply $\frac{2^k}{T_{k+1}-T_k} \geq \epsilon(2^{k-1})$. Why?}
 \end{itemize}
 
 $Y'_n$ is then defined recursively by
 \begin{align*}
-    Y'_0 = 2,
+    Y'_0 = 2, \quad
     Y'_{n+1} = (Y'_n - \epsilon(Y'_n)) \frac{\mathbb P[T > n]}{\mathbb P[T > n+1]}.
 \end{align*}
 
