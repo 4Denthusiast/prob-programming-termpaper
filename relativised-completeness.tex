@@ -14,14 +14,20 @@ We aim to prove the following conjecture:
 
 \begin{enumerate}
 
-\item Given an a.s.~finite stopping time $T$ (meaning: $T < \infty$ a.s.) adapted to a filtration, there exist supermartingale $(Y_n)_{n \in \omega}$ adapted to the same filtration and antitone function $\epsilon$ such that $(Y_n)_{n \in \omega}$ is an antitone strict supermartingale w.r.t.~$(\epsilon, T)$.
+\item[(1)] Given an a.s.~finite stopping time $T$ (meaning: $T < \infty$ a.s.) adapted to a filtration, there exist supermartingale $(Y_n)_{n \in \omega}$ adapted to the same filtration and antitone function $\epsilon$ such that $(Y_n)_{n \in \omega}$ is an antitone strict supermartingale w.r.t.~$(\epsilon, T)$.
 
-\item Let $(Y_n')_{n \in \omega}$ be an antitone strict supermartingale w.r.t.~$(\epsilon, T)$. 
+\item[(2)] Let $(Y_n)_{n \in \omega}$ be an antitone strict supermartingale w.r.t.~$(\epsilon, T)$. 
 Then $M$ admits an antitone ranking function.
 \end{enumerate}
 
-For 2, note that for every $N \in \mathit{Rch}(M)$, there exists $n \geq 0$ and $s \in S$ such that $\red^n(M, s) = (N, -)$.
+\lo{Is (1) too general for the conjecture?
+Claim (1) assumes an arbitrary a.s.~finite stopping time $T$. This seems too general for the conjecture, which assumes a ``strongly'' AST $M \in \Lambda^0$.
+Regardless of the validity of (1), in order to prove the conjecture, I think we would need a more specific version of (1) that assumes a stopping time about terminating runs of $M$ --- such as the stopping time of definition (\ref{eq:y stopping time}) which only counts $\tY$-reduction steps --- so that the antitone-strict supermartingale that is constructed has the necessary structure to yield a ranking function for $M$.}
+
+\iffalse
+For (2), note that for every $N \in \mathit{Rch}(M)$, there exists $n \geq 0$ and $s \in S$ such that $\red^n(M, s) = (N, -)$.
 Define a function $f : \mathit{Rch}(M) \to \nnReal$ by $f(N) := Y_n'(s)$.
+\fi
 
 For 1, consider the following:
 \begin{proof}
