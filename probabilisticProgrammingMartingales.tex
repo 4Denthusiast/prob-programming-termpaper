@@ -315,6 +315,18 @@ See \Cref{fig:adk-diagram} for a graphical depiction of $\sim_p$- and $\sim_c$-r
 The reflexive transitive closure $\sim^*$ of this relation is used to define the set of potential positions $L(M) = L_0(M) / \sim^*$, and each equivalence class can be considered as the same position as it may occur across multiple reachable terms. If $(N,P) \sim^* (O,Q)$, then $N \mid P$ and $O \mid Q$ both have the same shape (i.e.~they're either both variables, both applications, both $\tsample$s ect.), therefore it's well-defined to talk of the set of potential positions where there is a $\tsample$, $L_s(M)$. The new sample space is then defined as $I^{L_s(M)}$, with the Borel $\sigma$-algebra and product measure.
 
 \paragraph{}
+The proofs that follow are based on a previous version of $\sim$. I intend to update them after making more progress on the antitone-strict supermartingale completeness result, but for now, here's a summary of the lemmas and theorems I intend to prove about it:
+\begin{itemize}
+    \item If $M \to N$, the relation $\sim_N^*$ defined on $Rch(N)$ is equal to the restriction of $\sim_M^*$ to $Rch(N)$
+    \item Given the definition below of $\Rightarrow$, which is still applicable to this version of $\sim$, and which is the equivalent of $\red$ in this version of the semantics, $\Rightarrow$ is Church-Rosser.
+    \item If $M \to N$ at $P$, no position in any term in $Rch(N)$ is related to $(M,P)$ by $\sim_M^*$, and therefore each sample is used at most once in any reduction sequence.
+    \item The subprobability distribution of values obtained by reducing a term in the usual call-by-value semantics is equal to that obtained by any reduction strategy on $\Rightarrow$ (i.e.~a sub-relation of $\Rightarrow$ that is a function) (with some allowance made for the fact that some values are not normal forms of $\Rightarrow$, so the reduction strategy might overshoot the value that $\red^\infty$ reaches. I'm not quite sure what form this will take.)
+    \item Similarly, the probability of termination is equal in $\red^\infty$ and any reduction strategy on $\Rightarrow$, so almost sure termination can be equivalently defined based on $\Rightarrow$.
+    \item For any closed term $N$, if there is any reduction strategy for $N$ and ranking function corresponding to that reduction strategy, $N$ is AST.
+    \item Corresponding sparse and antitone-strict ranking function theorems.
+\end{itemize}
+
+\paragraph{}
 Before defining the new version of the reduction relation $\red$, a few lemmas about the properties of $\sim$ are necessary for it to be well-defined. Considering the set of paths through $Rch(M)$ (which we're implicitly identifying with $Rch(M)$ itself) as a tree rooted at (the trivial path at) $M$, $\sim_p$ only relates positions in child and parent terms, and $\sim_c$ only relates first cousins. Furthermore, by a case analysis on the forms of positions, the possible paths $N_1 \sim N_2 \sim \dots \sim N_n$ can be strongly restricted.
 
 In any case, a position can be related to at most one position in each child term. Letting $P$ be the position of the redex and $Q$ the original term, this is by rule 1 if $P$ and $Q$ are disjoint, rule 2 if $P;@_1 \leq Q$ and rule 3 if $P;if_i \leq Q$. As $M$ itself has no cousins or parents, this is the only way positions in $M$ are related to others.
