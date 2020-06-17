@@ -1,0 +1,56 @@
+% !TEX root = ./probabilisticProgrammingMartingales.tex
+\newcommand\tvdist[1]{{|\!|}#1{|\!|}_{\textsc{tv}}}
+
+
+\akr{I have some incomplete thoughts in the direction of proving completeness (both in the general case and for terms). For each non-null event measurable with respect to some step in the filtration (or reachable term in the case of proving termination of terms), there is a weakly decreasing function $\mathbb{N} \to \nnReal$ with limit 0 representing the conditional probability of having not yet terminated after $n$ more steps. 
+These functions can be linearly combined and have a partial order, and form a sort of generalised supermartingale. It is then necessary to map these to real numbers, which can be done by taking the limit with respect to some ultrafilter on the natural numbers of the ratios between them, and picking some arbitrary starting point (e.g.~setting the value for the initial term to 1). The problem with this is that some terms could get assigned the value 0, so maybe it's necessary to take equivalence classes of terms whose values have ratios in the open interval $(0,\infty)$ or something.}
+
+\begin{lemma}
+If $M$ is strongly AST (i.e.~every reachable term from $N$ is AST) then for each $N \in \mathit{Rch}(M)$, there is a non-increasing function $\rho_N : \mathbb{N} \to \nnReal$ such that $\lim_{n \to \infty} \rho_N(n) = 0$.
+\end{lemma}
+
+Take $N \in \mathit{Rch}(M)$.
+Assume $N$ is not a value.
+Define $\rho_N : \mathbb{N} \to \nnReal$ by setting
+\[
+\rho_N(n) := \mu(\{s \mid \pi_0(\red^n(N, s)) \textrm{~non-value}\})
+\]
+I.e.~$\rho_N(n)$ is the probability that $N$ is not yet terminated after $n$ more reduction steps.
+\lo{E.g.~writing $I^{m+1} := I^m \, I$ where $I^1 := I$, we have $\rho_{I^m}(n) = 1$ if $n < m - 1$, and 0 otherwise.}
+Let $|\rho_N| := \sum_{n \in \omega} \rho_N(n)$.
+
+\begin{conjecture}
+$|\rho_N|$ is finite.
+\end{conjecture} 
+
+Define $\widehat{\rho}_N (n):= \frac{\rho_N(n)}{|\rho_N|}$.
+Assuming the conjecture, $\widehat{\rho}_N$ is a probability mass function (or subprobability mass function if we set $\widehat{\rho_N}$ to be 0 in case $N$ is a value). 
+
+\lo{Define r.v.~$Z_n(s) := \widehat{\rho}_N$ where $\red^n(M, s) = (N, {-})$. 
+Then $(Z_n)_{n \in \omega}$ is a (generalised) supermartingale.
+I am not sure if we need this.}
+
+We want to map functions $\widehat{\rho}_N$ where $N$ ranges over $\mathit{Rch}(M)$ to real numbers.
+
+The \emph{total variational distance} between probability measures $\mu, \nu$ on the same measurable space $(\Omega, \calF)$, $\tvdist{\mu - \nu} := \sup_{A \in \calF} |\mu(A) - \nu(A)|$.
+The definition is presented as the supremum over all measurable subsets of the state space $\Omega$, which is not a convenient way to calculate the distance.
+Fortunately there are two useful alternative characterisations:
+\begin{enumerate}
+\item as a simple sum over the state space: $\tvdist{\mu - \nu} = \frac{1}{2} \, \sum_{x \in \Omega} |\mu(x) - \nu(x)|$
+\item via \emph{coupling}, a different probabilistic interpretation, i.e., $\tvdist{\mu - \nu}$ measures how close to identical we can force two random variables to be, such that one realises $\mu$ and the other realises $\nu$
+\[
+\tvdist{\mu - \nu} = \inf \{\mathbb{P}(X \not= Y) \mid \hbox{$(X, Y)$ is a coupling of $\mu$ and $\nu$}\}
+\]
+\end{enumerate}
+
+\lo{NOTE. \emph{Coupling} is a powerful method and proof technique in probability theory based on the simple idea of comparing random variables with each other. 
+It has been applied to prove limit theorems, derive inequalities, and obtain approximations, useful in a host of situations, ranging across random walks, Markov chains, percolation, interacting particle systems, and diffusions.
+A easily accessible reference is \citep{denHollander12}; see also \citep [Ch.~4 \& 5]{LevinP17}.}
+
+A candidate for ranking function: for $N \in \mathit{Rch}(M)$, $r(N) := 1 - \tvdist{\widehat{\rho}_M - \widehat{\rho}_N}$. 
+Thus, intuitively, the ``further'' $N$ is from $M$, the closer the value $r(N)$ is to 0.
+
+\lo{Problem: We want to show that if $\red(N, s) = (N', -)$ by contracting a $\tY$-redex, then $r(N) > r(N')$.
+However we have $|\rho_{N'}| < |\rho_{N}|$ and $\rho_{N'}(n) \leq \rho_{N}(n)$.}
+
+\lo{When proving that a candidate function is a ranking function, try making use of the sparse ranking function theorem.}
