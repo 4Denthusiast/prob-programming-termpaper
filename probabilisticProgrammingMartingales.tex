@@ -289,7 +289,7 @@ Given a closed term $M$, let $L_0(M)$ be the set of pairs, the first element of 
     
     \item If $N$, $O_1$ and $O_2$ match any of the following cases:
     \begin{enumerate}
-        \item $N$ contains redexes at positions $P_1$ resp.~$P_2$, $O_1$ is $N$ reduced first at $P_1$
+        \item $N$ contains redexes at disjoint positions $P_1$ and $P_2$, $O_1$ is $N$ reduced first at $P_1$ then $P_2$ and $O_2$ is $N$ reduced first at $P_2$ then at $P_1$.
         
         \item $N \mid P = \tif{\underline r < 0}{N_1}{N_2}$, where $r < 0$ (or, respectively, $r \geq 0$), $(N_2 \text{ resp. } N_1) \mid Q$ is a redex, and $O_1$ is $N$ reduced at $P$ and $O_2$ is $N$ reduced first at $P;(\textsf{if}_3 \text{ resp. } \textsf{if}_2);Q$ then at $P$
         
@@ -297,9 +297,9 @@ Given a closed term $M$, let $L_0(M)$ be the set of pairs, the first element of 
         
         \item $N \mid P = (\lambda x. A) B$, there is a redex in $A$ at position $Q$, $O_1$ is $N$ reduced first at $P$ then at $P;Q$, and $O_2$ is $N$ reduced first at $P;@_1;\lambda;Q$ then at $P$
         
-        \item $N \mid P = (\lambda x. A) B$, $B \mid Q$ is a redex, $(R_i)_i$ is a list of all the positions in $A$ where $A \mid R = x$, $O_1$ is $N$ reduced first at $P ; @_2 ; Q$ then at $P$, and $O_2$ is $N$ reduced first at $P$ then at $P;R_i;Q$ for each $i$ in order.
+        \item $N \mid P = (\lambda x. A) B$, $B \mid Q$ is a redex, $(R_i)_i$ is a list of all the positions in $A$ where $A \mid R = x$, ordered from left to right, $O_1$ is $N$ reduced first at $P ; @_2 ; Q$ then at $P$, and $O_2$ is $N$ reduced first at $P$ then at $P;R_i;Q$ for each $i$ in order.
         
-        \item $N \mid P = \tY (\lambda x. A)$, $A$ reduced at $Q$ is $A'$, $(R_i)_i$ is a list of all the positions where $A' \mid R  = x$, $O_1$ is $N$ reduced first at $P;\tY;\lambda;Q$ then at $P$, and $O_2$ is $N$ reduced first at $P$ then at $P;\lambda;@_1;Q$ then at $P;\lambda;@_1;R_i;Y;\lambda;Q$ for each $i$ in order.
+        \item $N \mid P = \tY (\lambda x. A)$, $A$ reduced at $Q$ is $A'$, $(R_i)_i$ is a list of all the positions where $A' \mid R  = x$, ordered from left to right, $O_1$ is $N$ reduced first at $P;\tY;\lambda;Q$ then at $P$, and $O_2$ is $N$ reduced first at $P$ then at $P;\lambda;@_1;Q$ then at $P;\lambda;@_1;R_i;Y;\lambda;Q$ for each $i$ in order.
     \end{enumerate}
     and $O_1$ and $O_2$ are equal as terms, but with different reduction sequences (which merely requires that in cases a, c and d, if the redexes of unspecified type are $\tsample$, corresponding $\tsample$s reduce to the same numbers), $O_1'$ and $O_2'$ are the results of applying some reduction sequence to each of $O_1$ and $O_2$ (the same reductions in each case, which is always possible because they're equal terms), and $S$ is a position in $O_1'$ (or equivalently $O_2'$), then $(O_1',S) \sim_c (O_2',S)$.
 \end{enumerate}
@@ -326,6 +326,37 @@ The proofs that follow are based on a previous version of $\sim$. I intend to up
     \item For any closed term $N$, if there is any reduction strategy for $N$ and ranking function corresponding to that reduction strategy, $N$ is AST.
     \item Corresponding sparse and antitone-strict ranking function theorems.
 \end{itemize}
+
+\paragraph{}
+Before defining the new version of the reduction relation $\red$, a few lemmas about the properties of $\sim$ are necessary for it to be well-defined.
+
+\begin{lemma}
+If $(N_1,P_1) \sim^* (N_2,P_2)$, there is some term $O$, position $Q$ in $O$, and descendants $O_1$ and $O_2$ of $O$ such that $(N_1,P_1) \sim_c^* (O_1,P_1) \sim_p^* (O,Q) \sim_p^* (O_2,P_2) \sim_c^* (N_2,P_2)$.
+\end{lemma}
+\begin{proof}
+The proof will proceed by successively modifying the sequence of $\sim$-steps from $(N_1,P_1)$ to $(N_2,P_2)$ to more restricted forms. If we call the length of a reduction sequence from M (here being identified with its final term) its level, where longer reduction sequences are lower levels, then the relation $(N_1,P_1) \sim^* (N_2,P_2)$ implies that there exists some sequence of $\sim_p$ steps to higher or lower levels, and $\sim_c$ steps horizontally, in some arbitrary order. The first step of the simplification is to find a form where all the $\sim_p$ steps up happen before all the $\sim_p$ steps down. This proceeds by induction on the level of the innermost incorrectly-ordered pair of $\sim_p$ steps.
+
+Suppose there is, in the $\sim$-sequence, some pair of steps $(A_1,R_1) \sim_p (A'_1, R'_1)$ and $(A'_2,R'_2) \sim_p (A_2, R_2)$, occurring in this order, where $A_1 \to A'_1$ and $A_2 \to A'_2$, and furthermore the levels of $A'_1$ and $A'_2$ are the lowest of any such pair (and therefore equal, call it $n$), and there is no such $A'_2$ closer to $A'_1$ in the sequence. There cannot be any more $\sim_p$ steps between $A'_1$ and $A'_2$, therefore $(A'_1, R'_1) \sim_c^* (A'_2, R'_2)$. We aim to show that there is some sequence of $\sim$ steps from $(A_1,R_1)$ to $(A_2,R_2)$, none of whose intermediate terms pass to level $n$ or below, by analysis of the possible sequences of $\sim_c$ steps.
+
+If $A'_1 = A'_2$, as each is descended from a unique parent term, it must also be the case that $A_1 = A_2$ and $R_1 = R_2$, therefore $(A_1,R_1) \sim^* (A_2,R_2)$ with no $\sim_p$ steps to level $n$ trivially.
+
+Otherwise, consider the first $\sim_c$ step between $(A'_1, R'_1)$ and $(A'_2, R'_2)$, $(A'_1, R'_1) \sim_c (D, R'_1)$. If the reduction sequence $O_1 \to O'_1$ involved in the definition of $\sim_c$ in this case is not trivial (i.e.~it has at least one step), then it includes as its final step the reduction $A_1 \to A'_1$ therefore there is some equivalent $A''_1$ of $A_1$ descended from $O_2$ instead, and $(A_1, R_1) \sim_c (A''_1, R_1) \sim_p (D,R'_1)$. There is then a similar but strictly shorter sequence of $\sim$-steps from $(A''_1, R_1)$ to $(A_2, R_2)$, so assuming there is a solution for that one inductively, it can be composed with $(A_1, R_1) \sim_c (A''_1, R_1)$ to form a suitable sequence from $(A_1,R_1)$ to $(A_2,R_2)$.
+
+In the other case, that $O_1 = O'_1$, the reduction step from $A_1$ to $A'_1$ is the last step in the reduction sequence of $N$ to either $O_1$ or $O_2$ in one of the cases 4.a to 4.f defining $\sim_c$, which restricts the cases that are possible according to the form of the reduction $A_1 \to A'_1$. If $A'_1 = O_1$ resp.~$O_2$, by following the reductions $N \to A_1$ backwards then those $N \to O_2$ resp.~$O_1$ forwards, a path by which $(A_1,R_1) \sim_p^* (O_2,R'_1)$ can be constructed except in certain cases listed below, which will be dealth with separately, then as before the required relation between $(A_1,R_1)$ and $(A_2,R_2)$ can be constructed by induction. The cases where this doesn't work are:
+\akr{There are so many variables in scope here it's hard to avoid name clashes. I'll need to re-name some things later to make them more unique, but for now I'll just awkwardly avoid using some of them.}
+\begin{itemize}
+    \item Case a, when $A'_1 = O_1$ and $(O_2,R'_1)$ does not have a parent due to that position being newly generated by the last reduction, or vice-versa (swapping $O_1$ and $O_2$)
+    \item Case c, when $A'_1 = O_2$ and $R'_1 \geq P;Q$, being a position generated by the reduction $B \to B'$
+    \item Case d, when $A'_1 = O_2$ and $R'_1 \geq P;Q$, being a position generates by the reduction $R \to R'$
+    \item Case e, when $A'_1 = O_1$ and $R'_1 \geq P;R_i;Q$, where $i$ is not the last in the list, being a position generated by the reduction $B \to B'$.
+    \item Case e, when $A'_1 = O_1$ and $P;R_i;Q \geq R'_1 \geq P$, where $i$ is not the last in the list
+    \item Case f, when $A'_1 = O_1$ and $R'_1 \geq P$.
+\end{itemize}
+What all of these cases have in common is that in the branch other than the one leading to $A'_1$ (i.e.~ $N \to^* D$), $(D, R'_1)$ is newly generated by the latest reduction and is not related to anything above by $\sim_p$. It is therefore impossible for $D$ to be equal to $A'_2$. This property (that the relevant location has no parent) is preserved by any $\sim_c$ step that has its $O_1$ and $O_2$ at a strictly higher level than its $O'_1$ and $O'_2$, so consider the next $\sim_c$ step that does occur at level $n$.
+
+\akr{I want to then say that the mentioned $\sim_c$ must be the first one in reverse, because it has to be one of the cases mentioned above where the position is new, and none of the cases overlap with each other, but that doesn't quite work as planned because the intermediate $\sim_c$s at a level 1 higher could interfere with the non-overlappingness.}
+\end{proof}
+
 
 \paragraph{}
 Before defining the new version of the reduction relation $\red$, a few lemmas about the properties of $\sim$ are necessary for it to be well-defined. Considering the set of paths through $Rch(M)$ (which we're implicitly identifying with $Rch(M)$ itself) as a tree rooted at (the trivial path at) $M$, $\sim_p$ only relates positions in child and parent terms, and $\sim_c$ only relates first cousins. Furthermore, by a case analysis on the forms of positions, the possible paths $N_1 \sim N_2 \sim \dots \sim N_n$ can be strongly restricted.
