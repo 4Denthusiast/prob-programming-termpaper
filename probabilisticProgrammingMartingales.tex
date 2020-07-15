@@ -281,7 +281,7 @@ Labelling the pre-chosen samples by the positions in the term would also not wor
 Given a closed term $M$, let $L_0(M)$ be the set of pairs, the first element of which is a reduction sequence starting at $M$, and the second of which is a position in the final term of the reduction sequence. Reduction sequences are used rather than reachable terms because if the same term is reached twice, different samples may be needed, but they will be discussed as though they were terms, by abuse of notation. \lo{Readers would benefit greatly from some examples of an $L_0(M)$-pair, and the relations $\sim_p$ and $\sim_c$, here, before the formal definitions. Explain the underlying intuition.} The relation $\sim$ is defined as the union of the symmetric relations $\sim_p$ \changed[lo]{($p$ for parent-child relationship)} and $\sim_c$ \changed[lo]{($c$ for cousin relationship)} where
 \lo{As defined, $\sim_p$ is not a symmetric relation.}
 \begin{enumerate}
-    \item If $N$ reduces to $O$ with the redex at position $P$\lo{Do you mean: $M \to^\ast N \to O = N[\dotDelta / P]$ for some redex contraction $\Delta \to \dotDelta$}, and $Q$ is a position in $N$ disjoint from $P$, then $(N,Q) \sim_p (O,Q)$.
+    \item If $N$ reduces to $O$ with the redex at position $P$ \changed[lo]{(i.e.~$M \to^\ast N \to O = N[\dotDelta / P]$ with $O \mid P = \Delta$ for some redex contraction $\Delta \to \dotDelta$)}, and $Q$ is a position in $N$ disjoint from $P$, then $(N,Q) \sim_p (O,Q)$.
     
     \item If $N$ $\beta$-reduces to $O$ at position $P$, $Q$ is a position in $N \mid P;@_1;\lambda$ and $N \mid P;@_1;\lambda;Q$ is not the variable involved in the reduction, $(N,P;@_1;\lambda;Q) \sim_p (O, P;Q)$
     
