@@ -316,7 +316,7 @@ See \Cref{fig:adk-diagram} for a graphical depiction of $\sim_p$- and $\sim_c$-r
 The reflexive transitive closure $\sim^*$ of this relation is used to define the set of potential positions $L(M) = L_0(M) / \sim^*$, and each equivalence class can be considered as the same position as it may occur across multiple reachable terms. If $(N,P) \sim^* (O,Q)$, then $N \mid P$ and $O \mid Q$ both have the same shape (i.e.~they're either both variables, both applications, both $\tsample$s etc.), therefore it's well-defined to talk of the set of potential positions where there is a $\tsample$, $L_s(M)$. The new sample space is then defined as $I^{L_s(M)}$, with the Borel $\sigma$-algebra and product measure.
 
 \paragraph{}
-The proofs that follow are based on a previous version of $\sim$. I intend to update them after making more progress on the antitone-strict supermartingale completeness result, but for now, here's a summary of the lemmas and theorems I intend to prove about it:
+For now, here's a summary of the lemmas and theorems I intend to prove about this alternative semantics:
 \begin{itemize}
     \item If $M \to N$, the relation $\sim_N^*$ defined on $Rch(N)$ is equal to the restriction of $\sim_M^*$ to $Rch(N)$ \lo{Define $\sim_N^*$.}
     \item Given the definition below of $\Rightarrow$, which is still applicable to this version of $\sim$, and which is the equivalent of $\red$ in this version of the semantics, $\Rightarrow$ is Church-Rosser.
@@ -358,37 +358,42 @@ What all of these cases have in common is that in the branch other than the one 
 \end{proof}
 
 
-\paragraph{}
-Before defining the new version of the reduction relation $\red$, a few lemmas about the properties of $\sim$ are necessary for it to be well-defined. Considering the set of paths through $Rch(M)$ (which we're implicitly identifying with $Rch(M)$ itself) as a tree rooted at (the trivial path at) $M$, $\sim_p$ only relates positions in child and parent terms, and $\sim_c$ only relates first cousins. Furthermore, by a case analysis on the forms of positions, the possible paths $N_1 \sim N_2 \sim \dots \sim N_n$ can be strongly restricted.
+\akr{As this proof is takng a long time to sort out, I'm just going to assume for now some of the results, and proceed from there. The results I'm assuming are that if $M \to N$, the $\sim$ relation on $Rch(N)$ is equal to the restriction of the $\sim$ relation on $Rch(M)$, restricted to $Rch(N)$.}
 
-In any case, a position can be related to at most one position in each child term. Letting $P$ be the position of the redex and $Q$ the original term, this is by rule 1 if $P$ and $Q$ are disjoint, rule 2 if $P;@_1 \leq Q$ and rule 3 if $P;if_i \leq Q$. As $M$ itself has no cousins or parents, this is the only way positions in $M$ are related to others.
-
-For any other term $N$ and position $Q$ in it, take the parent $N'$ and the position $P$ of the reduction $N' \to N$. The positions that $(N,Q)$ are related to other than those in the children of $N$ are as follows. If $Q \not \geq P$, only case 1 applies. If $Q \geq P$ and $(N,Q) \sim_p (N',Q')$ by cases 2 or 3, $Q'$ is also $\geq P$ therefore if $(N,Q)$ is also related to something by $\sim_c$, $(N',Q')$ is not related to anything in its parent. Furthermore, letting $Q = P;R$, $Q' = P;@_1;\lambda;R$ or $P;\textsf{if}_i;R$ depending on what sort of reduction $N' \to N$ was ($\beta$, $\textsf{if}$-true or $\textsf{if}$-false respectively) therefore in any case, $(N,Q)$ is related to at most one position in $N'$.
-
-Considering now $\sim_c$, let $N'' \to N' \to N$, where the outermost of the two reductions takes place at $P$. Cases 5 and 6 can be distinguished from case 4 by whether $P;\tY$ exists in $N''$, and cases 5 and 6 can be distinguished by whether $N'' | R = x$ for some $R < P;\tY;\lambda;S$ where $x$ is the variable bound at $N'' | P;\tY$ and $Q = P;\lambda;@_1;S$. In all of the cases 4, 5 and 6, whether $Q$ is $O_1$ or $O_2$ can be distinguished by which of the reductions $N'' \to N'$, $N' \to N$ takes place at $P$. In all 6 cases, the term and position $(N,Q)$ is related to can be reconstructed from $Q$ and the positions of the reductions $N'' \to N' \to N$, therefore each $(N,Q)$ pair is related to at most one other by $\sim_c$.
-
-In summary, all equivalence classes under $\sim^*$ are of the shapes \akr{This would be far easier to show with a few pictures. I just don't yet know how to make them in Latex and I'm prioritising getting the text done.}
-\lo{PGF/TikZ is the standard \LaTeX\ package for generating vector graphics. The manual \url{https://ctan.org/pkg/pgf?lang=en} is a 1318-page tome! There are numerous tutorials / guides on the Internet. E.g.~\url{https://www.overleaf.com/learn/latex/TikZ_package}}
-
-\paragraph{}
-
-At each reduction step $M \to N$, the sample space must be restricted to $I^{L_s(N)}$, which requires a map $L_s(N) \to L_s(M)$. The injection $L_0(N) \to L_0(M)$ is trivial to define by appending $M \to N$ to each path, but in order for this to extend to the quotient, the following lemma is needed.
 \begin{lemma}
-If $M \to N$, the relation $\sim_N^*$ defined on $L_0(N)$ is equal to the restriction of $\sim_M^*$ from $L_0(M)$ to $L_0(N)$.
+The relation $\sim$ is defined on $L_0(M)$ with reference to a particular starting term $M$, so different versions, $\sim_M$ and $\sim_N$, can be defined starting at different terms. If $M \to N$, then $\sim^*_N$ is equal to the restriction of $\sim^*_M$ to $L_0(N)$.
 \end{lemma}
 \begin{proof}
-For any equivalence class under $\sim_M^*$ that includes some descendant of $N$, consider the most recent common ancestor of the terms in the equivalence class $O$. If $O \in Rch(N)$, so is that whole equivalence class therefore $\sim_M^*$ and $\sim_N^*$ match there. If $O \not \in Rch(N)$ but some of its descendants are, it must be the case that $O = M$. If $M$ itself has a position in the class, it it a line of $\sim_p$s, and the intersection of it with $Rch(N)$ is an equivalence class of $\sim_N^*$. Otherwise, there are two children $O_1, O_2$ of $M$ such that the equivalence class lies in $Rch(O_1) \cup Rch(O_2)$ and at least one of $O_1$ and $O_2$ is $N$. In either case, the restriction of the equivalence class to $Rch(N)$ is an equivalence class of $\sim_N^*$ therefore, in total, the restriction of $\sim_M^*$ to $Rch(N)$ is a subset of $\sim_N^*$.
-
-The converse, that $\sim_N^*$ is a subset of $\sim_M^*$ follows directly from the fact that all of the rules in the definition of $\sim$ apply at least as much in $Rch(M)$ as in $Rch(N)$ therefore $\sim_N$ is a subset of $\sim_M$.
 \end{proof}
-The injection $L_s(N) \to L_s(M)$ thus defined is denoted $i(N \to M)$.
 
-Unlike in the purely call-by-value case, the version of the reduction relation that takes into account samples is still a general relation rather than a function in this case, so it is denoted ``$\Rightarrow$'' instead of ``$\red$'', and it relates $\biguplus_{M \in \Lambda_0} I^{L_s(M)}$ to itself.
+At each reduction step $M \to N$, the sample space must be restricted from $I^{L_s(M)}$ to $I^{L_s(N)}$. The injection $L_0(N) \to L_0(M)$ is trivial to define by appending $M \to N$ to each path, and using the previous lemma, this induces a corresponding injection on the quotient, $L(N) \to L(M)$. The corresponding map $L_s(N) \to L_s(M)$ is then denoted $i(M \to N)$.
+
+Unlike in the purely call-by-value case, the version of the reduction relation that takes into account samples is still a general relation rather than a function, so it is denoted ``$\Rightarrow$'' instead of ``$\red$'', and it relates $\biguplus_{M \in \Lambda_0} I^{L_s(M)}$ to itself.
 \begin{align*}
 & (M,s) \Rightarrow (N,s \circ i(M \to N)) \text{ if either} \\
 & \qquad \text{$M \to N$ and the redex is not $\tsample$, or} \\
 & \qquad \text{$M \mid P = \tsample$, $N = M[\underline{s(M,P)}/P]$ and $\lambda$ does not occur after $@_2$ of $\tY$ in $P$}
 \end{align*}
+
+\paragraph{}
+\begin{lemma}
+The relation $\Rightarrow$ is Church-Rosser.
+\end{lemma}
+\begin{proof}
+Suppose that $(M,s) \Rightarrow (M_1,s_1)$ and also $(M,s) \Rightarrow (M_2,s_2)$, then it is required to prove that there is some $(M',s')$ such that both $(M_1,s_1) \Rightarrow^* (M',s')$ and $(M_2,s_2) \Rightarrow^* (M',s')$. Let the positions of the redexes in $M \to M_1$ and $M \to M_2$ be $P_1$ and $P_2$ respectively.
+
+First consider the case that $P_1$ and $P_2$ are disjoint. Let $M_1 = M[X_1/P_1]$ and similarly for $X_2$, then let $M' = M[X_1/P_1][X_2/P_2]$. As the positions are disjoint, the substitutions commute and both $M_1$ and $M_2$ reduce (with $\to$) to $M'$. Let $s' = s \circ i(M \to M_1) \circ(M_1 \to M')$. The injection $i(M \to M_1) \circ i(M_1 \to M')$ consists of appending $M \to M_1 \to M'$ to each reduction sequence, but by case 4.a of $\sim$, this is equivalent to appending $M \to M_2 \to M'$, which is $i(M \to M_2) \circ i(M_2 \to M')$. In the case that the reduction $M \to M_2$ isn't a $\tsample$-reduction, this is enough to establish that $(M_1, s_1) \Rightarrow (M', s')$, and vice-versa. If it is $\tsample$ though, in order for it to be the case that $(M_1, s_1) \Rightarrow (M', s')$, it is additionally necessary that $X_2$, the result of the reduction at $P_2$, be $s_1(M_1, P_2)$, which follows from the fact that $(M, P_2) \sim (M_1, P_2)$ by case 1. The case that the reduction $M \to M_1$ is a $\tsample$-reduction is similar.
+
+The case that $P_1 = P_2$ is trivial, because there is at most one possible $\Rightarrow$ reduction at any given position, therefore $(M_1, s_1) = (M_2, s_2)$ already.
+
+The remaining case is that $P_1 < P_2$ or $P_1 > P_2$. Assume without loss of generality that $P_1 < P_2$. For each possible case of what type of redex $M | P_1$ is, and $P_2$'s position within it, there is a corresponding case of $\sim_c$, and similarly to the case where $P_1$ and $P_2$ are disjoint, the term $O_1 = O_2$ from the definition of $\sim_c$ is a suitable value of $M'$. The term $M | P_1$ can't be $\tsample$, because it has strict subterms, but the case that $M | P_2 = \tsample$ is still somewhat more complicated. $P_2$ can't be within $P_1 ; @_2$ or $P_1 ; Y$ (cases e and f of $\sim_c$) because those are not valid positions to reduce a $\tsample$, and the case that $P_2$ is within the branch of an if statement that is deleted by the reduction at $P_1$ (case b) doesn't actually present a problem because there is no corresponding reduction to $M \to M_2$ in the other branch, which leaves cases c and d, that $P_2$ is in the $\tif$ branch that isn't deleted, and that $P_2 < P_1 ; @_1 ; \lambda$.  The values that the $\tsample$s take in these cases match because $(M,P) \sim_p (M_1, P;Q)$ by cases 3 and 2 of $\sim_p$ respectively.
+\end{proof}
+
+\begin{lemma}
+If $M \to N$, with the redex at position $P$, then no position in any term reachable from $N$ is related by $\sim$ to $(M,P)$.
+\end{lemma}
+\begin{proof}
+\end{proof}
 
 
 
