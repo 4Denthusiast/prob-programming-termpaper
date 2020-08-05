@@ -80,7 +80,8 @@ pdfstartview=FitH ]{hyperref}
 \usepackage{amssymb}
 \usepackage{verbatim}
 \newcommand{\tY}{\textsf{Y}}
-\newcommand{\tif}[3]{\textsf{if }#1\textsf{ then }#2\textsf{ else }#3}
+%\newcommand{\tif}[3]{\textsf{if }#1\textsf{ then }#2\textsf{ else }#3}
+\newcommand{\tif}[3]{\textsf{if}\,(#1, #2, #3)} % space-saving concrete syntax
 \newcommand{\tsample}{\textsf{sample}}
 \newcommand{\tscore}{\textsf{score}}
 \DeclareMathOperator{\red}{red}
@@ -256,13 +257,21 @@ M_1 M_2 \mid @_i ; P & = M_i \mid P \quad \text{for } i = 1,2 \\
 \tif{M_1 < 0}{M_2}{M_3} \mid \textsf{if}_i ; P & = M_i \mid P \quad \text{for } i = 1,2,3 \\
 \tscore(M) \mid \tscore ; P & = M \mid P
 \end{align*}
-so that every subterm is located at a unique position, but not every position corresponds to a subterm (e.g. $x \, y \mid \lambda ; \cdot$ is undefined). A position such that $M\mid P$ does exist is said to occur in $M$. Substitution at a given position, $M[N/P]$, is defined similarly.
+so that every subterm is located at a unique position, but not every position corresponds to a subterm (e.g. $x \, y \mid \lambda ; \cdot$ is undefined). 
+A position such that $M\mid P$ does exist is said to occur in $M$. 
+\changed[lo]{Substitution of $N$ at position $P$ in $M$, written $M[N/P]$, is defined similarly.
+Take, for example, $M = \lambda x \, y. y \, (\tif{x < 0}{y \, (\underline f (x))}{\underline 3})$ and $P =\lambda ; \lambda ; @_2 ; \textsf{if}_2 ; @_2$, then 
+\[
+M[\tsample / P] = \lambda x \, y. y \, (\tif{x < 0}{y \, \tsample}{\underline 3}).
+\]}
 
-Two subterms $N_1$ and $N_2$ of a term $M$, corresponding to positions $P_1$ and $P_2$, can overlap in a few different ways. If $P_1$ is an initial segment (i.e.~prefix) of $P_2$ (written as $P_1 \leq P_2$), then $N_2$ is also a subterm of $N_1$. If neither $P_1 \leq P_2$ nor $P_1 \geq P_2$, the positions are said to be disjoint. This is mostly relevant in that in any substitution at some position, the subterms at all other positions are unaffected.
+Two subterms $N_1$ and $N_2$ of a term $M$, corresponding to positions $P_1$ and $P_2$, can overlap in a few different ways. 
+If $P_1$ is an initial segment (i.e.~prefix) of $P_2$ (written as $P_1 \leq P_2$), then $N_2$ is also a subterm of $N_1$. If neither $P_1 \leq P_2$ nor $P_1 \geq P_2$, the positions are said to be disjoint. 
+This is mostly relevant in that in any substitution at some position, the subterms at all other positions are unaffected. \lo{The preceding sentence is unclear. Typo? Mostly $\mapsto$ most?}
 
 With this notation, a more general reduction relation $\to$ can be defined. \akr{It would almost work to have one of the neater versions of $\tY$-reduction here.}
 %\lo{On first reading, I struggled to parse the following clauses.}
-\changed[lo]{The binary relation $\to$ is defined by the following rules, each is conditional on a redex occuring at position $P$ in the term $M$.}
+\changed[lo]{The binary relation $\to$ is defined by the following rules, each is conditional on a redex occurring at position $P$ in the term $M$.}
 \begin{align*}
   \text{if } M \mid P = (\lambda x.s) v,\ & M \to M[s[v/x]/P] \\
   \text{if } M \mid P = \underline f (\underline r_1, \dots , \underline r_n),\ & M \to M[\underline{f(r_1,\dots,r_n)}/P] \\
@@ -273,7 +282,7 @@ With this notation, a more general reduction relation $\to$ can be defined. \akr
   \text{if } M \mid P = \tscore(\underline r),\ & M \to M[\underline r/P].
 \end{align*}
 In each of these cases, $M \mid P$ is the redex, and reduction takes place at $P$.
-\lo{The definition above is clear. But as a general rule, it is good to illustrate definitions -- especially if they are genuinely new -- with an example or two.}
+%\lo{The definition above is clear. But as a general rule, it is good to illustrate definitions -- especially if they are genuinely new -- with an example or two.}
 
 \paragraph{}
 Labelling the pre-chosen samples by the positions in the term would also not work because in some cases, a $\tsample$ will be duplicated before being reduced, for example, in $(\lambda x. {\underline x \, 0} \, \mathbin{\underline{+}} \, {x \, \underline 0}) (\lambda y. \tsample)$, both of the $\tsample$ redexes that eventually occur originate at $@_2 ; \lambda$. It is therefore necessary to consider possible positions that may occur in other terms reachable from the original term. This is itself inadequate because some of the positions in different reachable terms need to be considered the same.
@@ -372,7 +381,7 @@ Unlike in the purely call-by-value case, the version of the reduction relation t
 \begin{align*}
 & (M,s) \Rightarrow (N,s \circ i(M \to N)) \text{ if either} \\
 & \qquad \text{$M \to N$ and the redex is not $\tsample$, or} \\
-& \qquad \text{$M \mid P = \tsample$, $N = M[\underline{s(M,P)}/P]$ and $\lambda$ does not occur after $@_2$ of $\tY$ in $P$}
+& \qquad \text{$M \mid P = \tsample$, $N = M[\underline{s(M,P)}/P]$ and $\lambda$ does not occur after $@_2$ or $\tY$ in $P$}
 \end{align*}
 
 \paragraph{}
