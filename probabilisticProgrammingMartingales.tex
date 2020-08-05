@@ -86,6 +86,7 @@ pdfstartview=FitH ]{hyperref}
 \newcommand{\tscore}{\textsf{score}}
 \DeclareMathOperator{\red}{red}
 \DeclareMathOperator{\nnext}{next}
+\DeclareMathOperator{\cbv}{cbv}
 
 
 \usepackage{amsthm}
@@ -402,6 +403,43 @@ The remaining case is that $P_1 < P_2$ or $P_1 > P_2$. Assume without loss of ge
 If $M \to N$, with the redex at position $P$, then no position in any term reachable from $N$ is related by $\sim$ to $(M,P)$.
 \end{lemma}
 \begin{proof}
+\end{proof}
+
+\paragraph{}
+The reduction relation $\Rightarrow$ is nondeterministic, so it admits multiple possible reduction strategies. A reduction strategy starting from a closed term $M$ is a partial function $f$ from $Rch(M)$ to positions, such that for any reachable term $N$ where $f$ is defined, $f(N)$ is a position of a valid redex in $N$, and if $f(N)$ is not defined, $N$ is a value. Using a reduction strategy, a subset of $\Rightarrow$ that isn't nondeterministic, $\Rightarrow_f$, can be defined by $(N,s) \Rightarrow_f (N',s')$ iff $(N,s) \Rightarrow (N',s')$ and $N$ reduces to $N'$ with the redex at $f(N)$.
+
+The usual call-by-value semantics can be implemented as one of these reduction strategies, given by (with $V$ a value and $T$ a term that isn't a value and $M$ a general term)
+\begin{align*}
+\cbv(T M) & = @_1 ; \cbv(T) \\
+\cbv(V T) & = @_1 ; \cbv(T) \\
+\cbv(\underline f(V_1, \dots, V_{k-1}, T, M_{k+1}, \dots, M_n)) & = \underline f_k ; \cbv(T) \\
+\cbv(\tY T) & = \tY ; \cbv(T) \\
+\cbv(\tif{T < 0}{M_1}{M_2}) & = \textsf{if}_1 ; \cbv(T) \\
+\cbv(\tscore(T)) & = \tscore ; \cbv(T) \\
+\cbv(V) & \text{ is undefined} \\
+\cbv(T) & = \cdot \text{ otherwise}
+\end{align*}
+(this last case covers redexes at the root position).
+
+A closed term $M$ terminates with a given reduction strategy $f$ and samples $s$ if there is some natural number $n$ such that $(M,s) \Rightarrow_f^n (N,s')$ where $f$ gives no reduction at $N$. The term terminates almost surely with respect to $f$ if it terminates with $f$ for almost all $s$.
+
+\begin{theorem} \label{AstEquivalence}
+A closed term $M$ is AST with respect to $\cbv$ iff it is AST.
+\end{theorem}
+\begin{proof}
+\end{proof}
+
+\begin{theorem} \label{CbvIsTerminatingest}
+If $M$ terminates with some reduction strategy $f$ and samples $s$, it terminates with $\cbv$ and $s$.
+\end{theorem}
+\begin{proof}
+\end{proof}
+
+\begin{corollary}
+If $M$ is AST with respect to any reduction strategy, it is AST.
+\end{corollary}
+\begin{proof}
+Suppose $M$ is AST with respect to $f$. Let the set of samples with which it terminates with this reduction strategy be $X$. By \ref{CbvIsTerminatingest}, $M$ also terminates with $\cbv$ and every element of $X$, and $X$ has measure 1, by assumption, therefore $M$ is AST with respect to $\cbv$ therefore by \ref{AstEquivalence} it is AST.
 \end{proof}
 
 
