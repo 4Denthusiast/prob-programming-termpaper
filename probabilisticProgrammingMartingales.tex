@@ -130,11 +130,11 @@ Various theorems about probabilistic programs rely on the assumption that the pr
 
 \subsection{Syntax of SPCF}
 
-The language SPCF is a simply-typed lambda calculus with sampling of real numbers from $[0,1]$ and unbounded scoring, following \cite{MakOP20b}. Types and terms are defined as follows, where $r$ is a real, $x$ is a variable, $f : \mathbb{R}^n \to \mathbb{R}$ is any measurable function and $\Gamma$ is an environment:
+The language SPCF is a simply-typed lambda calculus with sampling of real numbers from $[0,1]$ and unbounded scoring, following \cite{MakOP20b}. Types and terms are defined as follows, where $r$ is a real number, $x$ is a variable, $f : \mathbb{R}^n \to \mathbb{R}$ is any measurable function, and $\Gamma$ is an environment:
 \begin{align*}
   & \text{types } A, B ::= \textsf{R}  \mid  A \to B \\
   & \text{values } v ::= \lambda x.s  \mid  \underline{r} \\
-  & \text{terms } s, t ::= v  \mid  x  \mid  t_1 t_2  \mid  \underline{f}(s_1,\dots ,s_n)  \mid  \tY s  \mid  \tif{s < 0}{t_1}{t_2}  \mid  \tsample  \mid  \tscore(s)
+  & \text{terms } s, t ::= v  \mid  x  \mid  t_1 \, t_2  \mid  \underline{f}(s_1,\dots ,s_n)  \mid  \tY s  \mid  \tif{s < 0}{t_1}{t_2}  \mid  \tsample  \mid  \tscore(s)
 \end{align*}
 \begin{align*}
   \frac{}{\Gamma ; x:A \vdash x:A} \qquad
@@ -151,9 +151,9 @@ The language SPCF is a simply-typed lambda calculus with sampling of real number
 The set of all terms is denoted $\Lambda$, and the set of closed terms is denoted $\Lambda^0$.
 
 \paragraph{}
-To define the reduction relation, let evaluation contexts be of the form:
+To define the reduction relation, let \emph{evaluation contexts} be of the form:
 \begin{align*}
-  E ::= & \, [\,] \mid E t \mid v E \mid \underline{f}(r_1,\dots ,r_{k-1}, E, s_{k+1}, \dots, s_n) \\ & \mid \tY E \mid \tif{E<0}{s_1}{s_2} \mid \tscore (E)
+  E ::= & \, [\,] \mid E \, t \mid v \, E \mid \underline{f}(r_1,\dots ,r_{k-1}, E, s_{k+1}, \dots, s_n) \\ & \mid \tY E \mid \tif{E<0}{s_1}{s_2} \mid \tscore (E)
 \end{align*}
 then a term reduces if it is formed by substituting a redex in a context i.e.
 \begin{align*}
@@ -170,6 +170,7 @@ then a term reduces if it is formed by substituting a redex in a context i.e.
 
 Every closed well-typed term either is a value or reduces to another term.
 
+\lo{NOTATION. A minor point: metavariables for terms are $s, t$, etc.~up to this point, but $M, N$, etc.~here after all.}
 
 \subsection{Sampling semantics}
 This version of the reduction relation allows $\tsample$ to reduce to any number in $[0,1]$. To more precisely specify the probabilities, an additional argument is needed to determine the outcome of random samples. Let $ I = [0,1] \subset \mathbb{R} $, and let $S = I^{\mathbb{N}}$, with the \changed[lo]{Borel $\sigma$-algebra $\calF$} and the probability measure, denoted $\mu$, given by the limit of $1 \gets I \gets I^2 \gets \cdots$, where the maps are the projections that ignore the last element. Equivalently, a basis of measurable sets is $\prod_{i=0}^\infty X_i$ where $X_i$ are all Borel and all but finitely many are $I$, and $\mu (\prod_{i=0}^\infty X_i) = \prod_{i=0}^\infty \Leb(X_i)$.
@@ -368,7 +369,7 @@ What all of these cases have in common is that in the branch other than the one 
 \end{proof}
 
 
-\akr{As this proof is takng a long time to sort out, I'm just going to assume for now some of the results, and proceed from there. The results I'm assuming are that if $M \to N$, the $\sim$ relation on $Rch(N)$ is equal to the restriction of the $\sim$ relation on $Rch(M)$, restricted to $Rch(N)$.}
+\akr{As this proof is taking a long time to sort out, I'm just going to assume for now some of the results, and proceed from there. The results I'm assuming are that if $M \to N$, the $\sim$ relation on $Rch(N)$ is equal to the restriction of the $\sim$ relation on $Rch(M)$, restricted to $Rch(N)$.}
 
 \begin{lemma}
 The relation $\sim$ is defined on $L_0(M)$ with reference to a particular starting term $M$, so different versions, $\sim_M$ and $\sim_N$, can be defined starting at different terms. If $M \to N$, then $\sim^*_N$ is equal to the restriction of $\sim^*_M$ to $L_0(N)$.
