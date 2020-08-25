@@ -377,6 +377,8 @@ The relation $\sim$ is defined on $L_0(M)$ with reference to a particular starti
 \begin{proof}
 \end{proof}
 
+\paragraph{Reduction relation $\Rightarrow$.}
+
 At each reduction step $M \to N$, the sample space must be restricted from $I^{L_s(M)}$ to $I^{L_s(N)}$. The injection $L_0(N) \to L_0(M)$ is trivial to define by appending $M \to N$ to each path, and using the previous lemma, this induces a corresponding injection on the quotient, $L(N) \to L(M)$. The corresponding map $L_s(N) \to L_s(M)$ is then denoted $i(M \to N)$.
 
 Unlike in the purely call-by-value case, the version of the reduction relation that takes into account samples is still a general relation rather than a function, so it is denoted ``$\Rightarrow$'' instead of ``$\red$'', and it relates $\biguplus_{M \in \Lambda_0} I^{L_s(M)}$ to itself.
@@ -443,7 +445,20 @@ If $M$ is AST with respect to any reduction strategy, it is AST.
 Suppose $M$ is AST with respect to $f$. Let the set of samples with which it terminates with this reduction strategy be $X$. By \ref{CbvIsTerminatingest}, $M$ also terminates with $\cbv$ and every element of $X$, and $X$ has measure 1, by assumption, therefore $M$ is AST with respect to $\cbv$ therefore by \ref{AstEquivalence} it is AST.
 \end{proof}
 
-
+\akr{For the standard CBV semantics, this example is indeed not a problem. 
+In the alternative semantics, defining 
+\begin{align*}
+A[x] &= \tif{\tif{x>0}{I}{I} \, \tsample - 0.5 > 0}{0}{\Omega}\\
+B &= \tif{\tsample - 0.5 > 0}{0}{\Omega}
+\end{align*}
+The set of samples where it terminates is 
+\[\begin{array}{l}
+\bigcup_{r \in [0,1]} \{s \in I^{L_s(A[\tsample])} \mid s([A[\tsample]], \mathsf{if}_1;\underline{ -
+}_1;@_1;\mathsf{if}_1) = r, \\
+\qquad \qquad \hfill \qquad \qquad s([A[\tsample], A[r], \ldots, B, \mathsf{if}_1) > 0.5 \}.
+\end{array}\] 
+This is a rather unwieldy expression, but the crucial part is that $r$ occurs twice in the conditions on $s$: once as the value a sample must take, and once in the location of a sample. 
+It is this set that's unmeasurable.}
 
 \section{Ranking functions}
 Given a probabilistic program (i.e.~a closed term $M$), in order to construct a supermartingale to prove its a.s.~termination, a function to assign values to each reachable program state is necessary. 
