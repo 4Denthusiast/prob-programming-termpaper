@@ -79,10 +79,12 @@ pdfstartview=FitH ]{hyperref}
 \usepackage{amsthm}
 \usepackage{amssymb}
 \usepackage{verbatim}
+\usepackage{enumitem}
 \newcommand{\tY}{\textsf{Y}}
 \newcommand{\tif}[3]{\textsf{if }#1\textsf{ then }#2\textsf{ else }#3}
 \newcommand{\tsample}{\textsf{sample}}
 \newcommand{\tscore}{\textsf{score}}
+\newcommand{\skeletonPlaceholder}{\textsf{X}} % I'm not sure what the best notation here is.
 \DeclareMathOperator{\red}{red}
 \DeclareMathOperator{\nnext}{next}
 \DeclareMathOperator{\cbv}{cbv}
@@ -277,9 +279,11 @@ In each of these cases, $M \mid P$ is the redex, and reduction takes place at $P
 \lo{The definition above is clear. But as a general rule, it is good to illustrate definitions -- especially if they are genuinely new -- with an example or two.}
 
 \paragraph{}
-Labelling the pre-chosen samples by the positions in the term would also not work because in some cases, a $\tsample$ will be duplicated before being reduced, for example, in $(\lambda x. {\underline x \, 0} \, \mathbin{\underline{+}} \, {x \, \underline 0}) (\lambda y. \tsample)$, both of the $\tsample$ redexes that eventually occur originate at $@_2 ; \lambda$. It is therefore necessary to consider possible positions that may occur in other terms reachable from the original term. This is itself inadequate because some of the positions in different reachable terms need to be considered the same.
+Labelling the pre-chosen samples by the positions in the term would also not work because in some cases, a $\tsample$ will be duplicated before being reduced, for example, in $(\lambda x. {\underline x \, 0} \, \mathbin{\underline{+}} \, {x \, \underline 0}) (\lambda y. \tsample)$, both of the $\tsample$ redexes that eventually occur originate at $@_2 ; \lambda$. It is therefore necessary to consider possible positions that may occur in other terms reachable from the original term. This is itself inadequate because some of the positions in different reachable terms need to be considered the same, and the number of reachable terms is in general uncountable, which leads to measure-theoretic issues.
 
-Given a closed term $M$, let $L_0(M)$ be the set of pairs, the first element of which is a reduction sequence starting at $M$, and the second of which is a position in the final term of the reduction sequence. Reduction sequences are used rather than reachable terms because if the same term is reached twice, different samples may be needed, but they will be discussed as though they were terms, by abuse of notation. \lo{Readers would benefit greatly from some examples of an $L_0(M)$-pair, and the relations $\sim_p$ and $\sim_c$, here, before the formal definitions. Explain the underlying intuition.} The relation $\sim$ is defined as the union of the symmetric relations $\sim_p$ \changed[lo]{($p$ for parent-child relationship)} and $\sim_c$ \changed[lo]{($c$ for cousin relationship)} where
+Define a skeleton, to be a term but instead of having real constants $\underline r$, it has a placeholder $\skeletonPlaceholder$, so that each term has a skeleton and each skeleton can be converted to a term given the appropriate number of real numbers to substitute in. The positions in a skeleton and the reduction relation on skeletons can be extended from the definitions on terms in the obvious way, with $\tif{\skeletonPlaceholder}{A}{B}$ reducing nondeterministically to both $A$ and $M$.
+
+Given a closed term $M$, let $L_0(M)$ be the set of pairs, the first element of which is a reduction sequence of skeletons starting at $M$, and the second of which is a position in the final skeleton of the reduction sequence. \akr{I've yet to go through and replace references to terms with references to skeletons, but it should be reasonably obvious where the substitution should take place. This is potentially even more confusing though because I'm now implicitly identifying terms, skeletons, reduction sequences and skeletal reduction sequences.} Reduction sequences are used rather than reachable terms because if the same term is reached twice, different samples may be needed, but they will be discussed as though they were terms, by abuse of notation. \lo{Readers would benefit greatly from some examples of an $L_0(M)$-pair, and the relations $\sim_p$ and $\sim_c$, here, before the formal definitions. Explain the underlying intuition.} The relation $\sim$ is defined as the union of the symmetric relations $\sim_p$ \changed[lo]{($p$ for parent-child relationship)} and $\sim_c$ \changed[lo]{($c$ for cousin relationship)} where
 \lo{As defined, $\sim_p$ is not a symmetric relation.}
 \begin{enumerate}
     \item If $N$ reduces to $O$ with the redex at position $P$\lo{Do you mean: $M \to^\ast N \to O = N[\dotDelta / P]$ for some redex contraction $\Delta \to \dotDelta$}, and $Q$ is a position in $N$ disjoint from $P$, then $(N,Q) \sim_p (O,Q)$.
@@ -302,7 +306,7 @@ Given a closed term $M$, let $L_0(M)$ be the set of pairs, the first element of 
         
         \item $N \mid P = \tY (\lambda x. A)$, $A$ reduced at $Q$ is $A'$, $(R_i)_i$ is a list of all the positions where $A' \mid R  = x$, ordered from left to right, $O_1$ is $N$ reduced first at $P;\tY;\lambda;Q$ then at $P$, and $O_2$ is $N$ reduced first at $P$ then at $P;\lambda;@_1;Q$ then at $P;\lambda;@_1;R_i;Y;\lambda;Q$ for each $i$ in order.
     \end{enumerate}
-    and $O_1$ and $O_2$ are equal as terms, but with different reduction sequences (which merely requires that in cases a, c and d, if the redexes of unspecified type are $\tsample$, corresponding $\tsample$s reduce to the same numbers), $O_1'$ and $O_2'$ are the results of applying some reduction sequence to each of $O_1$ and $O_2$ (the same reductions in each case, which is always possible because they're equal terms), and $S$ is a position in $O_1'$ (or equivalently $O_2'$), then $(O_1',S) \sim_c (O_2',S)$.
+    (in which case $O_1$ and $O_2$ are equal as terms, but with different reduction sequences), $O_1'$ and $O_2'$ are the results of applying some reduction sequence to each of $O_1$ and $O_2$ (the same reductions in each case, which is always possible because they're equal terms), and $S$ is a position in $O_1'$ (or equivalently $O_2'$), then $(O_1',S) \sim_c (O_2',S)$.
 \end{enumerate}
 
 \begin{figure}
@@ -331,41 +335,59 @@ For now, here's a summary of the lemmas and theorems I intend to prove about thi
 \paragraph{}
 Before defining the new version of the reduction relation $\red$, a few lemmas about the properties of $\sim$ are necessary for it to be well-defined.
 
-\begin{lemma}
-If $(N_1,P_1) \sim^* (N_2,P_2)$, there is some term $O$, position $Q$ in $O$, and descendants $O_1$ and $O_2$ of $O$ such that $(N_1,P_1) \sim_c^* (O_1,P_1) \sim_p^* (O,Q) \sim_p^* (O_2,P_2) \sim_c^* (N_2,P_2)$.
+\begin{lemma} \label{downAcrossUp}
+If $(N_1,P_1) \sim^* (N_2,P_2)$, there is some descendants $N'_1, N'_2$ of $N_1$ resp.~$N_2$, and a position $P'$ in both of them such that $(N_1,P_1) \sim_p^* (N'_1, P') \sim_c^* (N'_2, P') \sim_p^* (N_2, P_2)$.
 \end{lemma}
 \begin{proof}
-The proof will proceed by successively modifying the sequence of $\sim$-steps from $(N_1,P_1)$ to $(N_2,P_2)$ to more restricted forms. If we call the length of a reduction sequence from M (here being identified with its final term) its level, where longer reduction sequences are lower levels, then the relation $(N_1,P_1) \sim^* (N_2,P_2)$ implies that there exists some sequence of $\sim_p$ steps to higher or lower levels, and $\sim_c$ steps horizontally, in some arbitrary order. The first step of the simplification is to find a form where all the $\sim_p$ steps up happen before all the $\sim_p$ steps down. This proceeds by induction on the level of the innermost incorrectly-ordered pair of $\sim_p$ steps.
+The $\sim$ relation can be split into $\sim_\downarrow \cup \sim_\uparrow$, where $(A,P_A) \sim_\downarrow (B,P_B)$ if either $A \to B$ and $(A,P_A) \sim_p (B,P_B)$ or $(A,P_A) \sim_c (B,P_B)$, and similarly $(A,P_A) \sim_\uparrow (B,P_B)$ if either $B \to A$ and $(A,P_A) \sim_p (B,P_B)$ or $(A,P_A) \sim_c (B,P_B)$. The sequence of $\sim$ relations linking $N_1$ to $N_2$ can then be expressed as an alternating sequence of $\sim_\downarrow^*$ and $\sim_\uparrow^*$s, starting with $\sim_\downarrow^*$ and ending with $\sim_\uparrow^*$, and the proof proceeds by induction on the number of these alternations.
 
-Suppose there is, in the $\sim$-sequence, some pair of steps $(A_1,R_1) \sim_p (A'_1, R'_1)$ and $(A'_2,R'_2) \sim_p (A_2, R_2)$, occurring in this order, where $A_1 \to A'_1$ and $A_2 \to A'_2$, and furthermore the levels of $A'_1$ and $A'_2$ are the lowest of any such pair (and therefore equal, call it $n$), and there is no such $A'_2$ closer to $A'_1$ in the sequence. There cannot be any more $\sim_p$ steps between $A'_1$ and $A'_2$, therefore $(A'_1, R'_1) \sim_c^* (A'_2, R'_2)$. We aim to show that there is some sequence of $\sim$ steps from $(A_1,R_1)$ to $(A_2,R_2)$, none of whose intermediate terms pass to level $n$ or below, by analysis of the possible sequences of $\sim_c$ steps.
+In the base case, that $(N_1,P_1) \sim_\downarrow^* X \sim_\uparrow^* (N_2,P_2)$, \dots
 
-If $A'_1 = A'_2$, as each is descended from a unique parent term, it must also be the case that $A_1 = A_2$ and $R_1 = R_2$, therefore $(A_1,R_1) \sim^* (A_2,R_2)$ with no $\sim_p$ steps to level $n$ trivially.
-
-Otherwise, consider the first $\sim_c$ step between $(A'_1, R'_1)$ and $(A'_2, R'_2)$, $(A'_1, R'_1) \sim_c (D, R'_1)$. If the reduction sequence $O_1 \to O'_1$ involved in the definition of $\sim_c$ in this case is not trivial (i.e.~it has at least one step), then it includes as its final step the reduction $A_1 \to A'_1$ therefore there is some equivalent $A''_1$ of $A_1$ descended from $O_2$ instead, and $(A_1, R_1) \sim_c (A''_1, R_1) \sim_p (D,R'_1)$. There is then a similar but strictly shorter sequence of $\sim$-steps from $(A''_1, R_1)$ to $(A_2, R_2)$, so assuming there is a solution for that one inductively, it can be composed with $(A_1, R_1) \sim_c (A''_1, R_1)$ to form a suitable sequence from $(A_1,R_1)$ to $(A_2,R_2)$.
-
-In the other case, that $O_1 = O'_1$, the reduction step from $A_1$ to $A'_1$ is the last step in the reduction sequence of $N$ to either $O_1$ or $O_2$ in one of the cases 4.a to 4.f defining $\sim_c$, which restricts the cases that are possible according to the form of the reduction $A_1 \to A'_1$. If $A'_1 = O_1$ resp.~$O_2$, by following the reductions $N \to A_1$ backwards then those $N \to O_2$ resp.~$O_1$ forwards, a path by which $(A_1,R_1) \sim_p^* (O_2,R'_1)$ can be constructed except in certain cases listed below, which will be dealth with separately, then as before the required relation between $(A_1,R_1)$ and $(A_2,R_2)$ can be constructed by induction. The cases where this doesn't work are:
-\akr{There are so many variables in scope here it's hard to avoid name clashes. I'll need to re-name some things later to make them more unique, but for now I'll just awkwardly avoid using some of them.}
-\begin{itemize}
-    \item Case a, when $A'_1 = O_1$ and $(O_2,R'_1)$ does not have a parent due to that position being newly generated by the last reduction, or vice-versa (swapping $O_1$ and $O_2$)
-    \item Case c, when $A'_1 = O_2$ and $R'_1 \geq P;Q$, being a position generated by the reduction $B \to B'$
-    \item Case d, when $A'_1 = O_2$ and $R'_1 \geq P;Q$, being a position generates by the reduction $R \to R'$
-    \item Case e, when $A'_1 = O_1$ and $R'_1 \geq P;R_i;Q$, where $i$ is not the last in the list, being a position generated by the reduction $B \to B'$.
-    \item Case e, when $A'_1 = O_1$ and $P;R_i;Q \geq R'_1 \geq P$, where $i$ is not the last in the list
-    \item Case f, when $A'_1 = O_1$ and $R'_1 \geq P$.
-\end{itemize}
-What all of these cases have in common is that in the branch other than the one leading to $A'_1$ (i.e.~ $N \to^* D$), $(D, R'_1)$ is newly generated by the latest reduction and is not related to anything above by $\sim_p$. It is therefore impossible for $D$ to be equal to $A'_2$. This property (that the relevant location has no parent) is preserved by any $\sim_c$ step that has its $O_1$ and $O_2$ at a strictly higher level than its $O'_1$ and $O'_2$, so consider the next $\sim_c$ step that does occur at level $n$.
-
-\akr{I want to then say that the mentioned $\sim_c$ must be the first one in reverse, because it has to be one of the cases mentioned above where the position is new, and none of the cases overlap with each other, but that doesn't quite work as planned because the intermediate $\sim_c$s at a level 1 higher could interfere with the non-overlappingness.}
+\akr{Actually proving that this process terminates will be a pain although I'm confident it will work, but the basic idea is that the sequence of $\sim$ steps can be altered by repeatedly replacing the subsequence $\sim_c, \sim_{p,\downarrow}$ with $\sim_{p,\downarrow}, \sim_c$, the subsequence $\sim_{p,\uparrow}, \sim_c$ with $\sim_c, \sim_{p,\uparrow}$, and the subsequence $\sim_{p,\uparrow}, \sim_{p,\downarrow}$ with $\sim_{p,\downarrow}^*, \sim_c, \sim_{p,\uparrow}^*$, until everything is in the correct order.}
 \end{proof}
 
 
-\akr{As this proof is takng a long time to sort out, I'm just going to assume for now some of the results, and proceed from there. The results I'm assuming are that if $M \to N$, the $\sim$ relation on $Rch(N)$ is equal to the restriction of the $\sim$ relation on $Rch(M)$, restricted to $Rch(N)$.}
+\begin{lemma} \label{canonicalCousins}
+For any reduction sequence $X$, there is a unique reduction sequence $X_{cbv}$ that is related to $X$ by $\sim_c$ (for each position in the final term in $X$) and is in call-by-value order, and if $X \sim_c^* Y$, then $X_{cbv} = Y_{cbv}$.
+\end{lemma}
+\begin{proof}
+Note that although the reductions that occur in $X_{cbv}$ are in call-by-value order, it may not be the actual call-by-value reduction sequence because some redexes may remain un-reduced even when other reductions that should happen afterwards occur. It is only required that the reductions that do occur occur in the correct order.
+
+Proof sketch:
+Starting at $X$, take the last pair of adjacent reductions which aren't in CBV order, and switch them (with $\sim_c$). Repeat this process until CBV order is reached.
+
+If $Y \sim_c X \sim_c^* X_{cbv}$, and the reductions involved in $Y \sim_c X$ are not the last pair of reductions in $Y$ that aren't in CBV order, the order of the $\sim_c$s can be rearranged so that the sequence $Y \sim_c^* X_{cbv}$ is the canonical sequence given above, therefore $Y_{cbv} = X_{cbv}$.
+
+If Y is in CBV order and $Y \sim_c^* X$, then $Y_{cbv} = X_{cbv}$ but also $Y_{cbv} = Y$ therefore $X_{cbv}$ is unique.
+\end{proof}
+
 
 \begin{lemma}
 The relation $\sim$ is defined on $L_0(M)$ with reference to a particular starting term $M$, so different versions, $\sim_M$ and $\sim_N$, can be defined starting at different terms. If $M \to N$, then $\sim^*_N$ is equal to the restriction of $\sim^*_M$ to $L_0(N)$.
-\end{lemma}
+\end{lemma} 
 \begin{proof}
+$\sim_N^*$ is trivially a subset of $\sim_M^*$ because $\sim_N$ is a subset of $\sim_M$.
+
+In the other direction, suppose $(N_1, P_1) \sim_M^* (N_2, P_2)$ where both $N_1$ and $N_2$ are descendants of $N$. By Lemma \ref{downAcrossUp}, take $(N_1, P_1) \sim_{p,M}^* (N'_1, P') \sim_{c,M}^* (N'_2, P') \sim_{p,M}^* (N_2, P_2)$. The $\sim_p^*$ steps remain within $Rch(N)$, and $\sim_p$ does not depend on the history of the reduction sequences, therefore $(N_1, P_1) \sim_{p,N}^* (N'_1, P') \sim_{c,M}^* (N'_2, P') \sim_{p,N}^* (N_2, P_2)$.
+
+Let $X$ be the call-by-value reduction sequence related to both $N'_1$ and $N'_2$ by $\sim_{c,M}$ given by Lemma \ref{canonicalCousins}. As $M \to N$ is the first reduction in the sequence $N'_1$, it is the last to be affected by the $\sim_{c,M}$ sequence $N'_1 \sim_{c,M}^* X$ given by Lemma \ref{canonicalCousins} therefore it can be split into $N'_1 \sim_{c,M}^* Y_1 \sim_{c,M}^* X$ where $Y_1$ is in CBV order except possibly for its first reduction, which is still $M -> N$. Let the position of the reduction $M \to N$ be $Q$. \akr{TODO: fill in the details that are missing here. It shouldn't be too hard, it's just a bit sketchy at present.} The rearrangement of the reduction sequence $Y_1 \sim_{c,M} X$ consists of moving the reduction at $Q$ down past the other reductions in $Y_1$, possibly duplicating or deleting it in the process, but not affecting the positions or the correct order for any of the other reductions. The reductions derived from $M \to N$ can be identified as follows:
+
+\begin{definition}
+A position in some (reduction sequence of) term(s) is \emph{derived from} another if it is related by the reflexive transitive closure of $\rightsquigarrow$, where $(V,R) \rightsquigarrow (W,T)$ iff $V \to W$ and one of the following cases holds:
+\begin{itemize}
+    \item $(V,R) \sim_p (W,T)$
+    \item $R = T$, $V \to W$ at $A$, and $A > R$
+    \item $V | A = (\lambda x.U) Z, U | B = x, R = A;@_2;C$ and $T = A;B;C$
+    \item $V | A = \tY (\lambda x.U), R = A;\tY;\lambda;B$ and $T = A;\lambda;@_1;B$
+    \item $V | A = \tY (\lambda x.U), U | B = x, R = A;C$ and $T = A;\lambda;@_1;B;C$
+\end{itemize}
+\end{definition}
+
+Crucially, the reductions in $X$ can be partitioned into 2 sets: those at positions derived from $(M,Q)$, and those at positions equal to the reductions in $Y_1$ (in the same order as they occur in $Y_1$. Using the same construction for $N'_2$ shows that the positions of the reductions in $Y_2$ are also the positions of the reductions in $X$ other than those derived from $(M,Q)$, therefore $Y_1 = Y_2$ therefore $N'_1 \sim_{c,M} Y_1 \sim_{c,M} N'_2$ and every reduction sequence in this sequence starts with $M \to N$ therefore $N'_1 \sim_{c,N} N'_2$.
+
+Combining this with the $\sim_{p,N}^*$s at the beginning and end then yields the desired result that $(N_1,P_1) \sim_N^* (N_2, P_2)$, therefore the restriction of $\sim_M^*$ to $\sim_N$'s domain ($Rch(N)$) is a subset of $\sim_N^*$ therefore the two versions of $\sim$ match on this domain, as desired.
 \end{proof}
+
 
 At each reduction step $M \to N$, the sample space must be restricted from $I^{L_s(M)}$ to $I^{L_s(N)}$. The injection $L_0(N) \to L_0(M)$ is trivial to define by appending $M \to N$ to each path, and using the previous lemma, this induces a corresponding injection on the quotient, $L(N) \to L(M)$. The corresponding map $L_s(N) \to L_s(M)$ is then denoted $i(M \to N)$.
 
@@ -390,14 +412,37 @@ The case that $P_1 = P_2$ is trivial, because there is at most one possible $\Ri
 The remaining case is that $P_1 < P_2$ or $P_1 > P_2$. Assume without loss of generality that $P_1 < P_2$. For each possible case of what type of redex $M | P_1$ is, and $P_2$'s position within it, there is a corresponding case of $\sim_c$, and similarly to the case where $P_1$ and $P_2$ are disjoint, the term $O_1 = O_2$ from the definition of $\sim_c$ is a suitable value of $M'$. The term $M | P_1$ can't be $\tsample$, because it has strict subterms, but the case that $M | P_2 = \tsample$ is still somewhat more complicated. $P_2$ can't be within $P_1 ; @_2$ or $P_1 ; Y$ (cases e and f of $\sim_c$) because those are not valid positions to reduce a $\tsample$, and the case that $P_2$ is within the branch of an if statement that is deleted by the reduction at $P_1$ (case b) doesn't actually present a problem because there is no corresponding reduction to $M \to M_2$ in the other branch, which leaves cases c and d, that $P_2$ is in the $\tif$ branch that isn't deleted, and that $P_2 < P_1 ; @_1 ; \lambda$.  The values that the $\tsample$s take in these cases match because $(M,P) \sim_p (M_1, P;Q)$ by cases 3 and 2 of $\sim_p$ respectively.
 \end{proof}
 
-\begin{lemma}
-If $M \to N$, with the redex at position $P$, then no position in any term reachable from $N$ is related by $\sim$ to $(M,P)$.
+\begin{lemma} \label{simpDoesn'tMix}
+If $A$ is some descendant of $M$ and $(A,D) \sim^* (M,E)$, then $(A,D) \sim_p^* (M,E)$, with the length of the reduction sequences decreasing by one each step from $A$ to $M$.
 \end{lemma}
 \begin{proof}
+This is a simple induction on $\sim^*$. In the base case, $(A,D) = (M,E)$ therefore $(A,D) \sim_p^* (M,E)$ trivially. Otherwise, suppose that $(M,E) \sim_p^* (B,F) \sim (A,D)$. Either $(B,F) \sim_p (A,D)$ or $(B,F) \sim_c (A,D)$. In the first case, either $B \to A$, in which case the result follows directly, or $A \to B$, in which case the fact that each (reduction sequence of) term(s) has only one parent implies that a $(M,E) \sim_p^* (A,D)$ directly as a subsequence of the path to $(B,F)$.
+
+In the $\sim_c$ case, consider the definition of $\sim_c$. Either $O'_1 = A$ and $O'_2 = B$ or vice-versa. As $M \to^* N \to^* O_1 \to^* B$ and $(M,E) \sim_p^* (B,F)$, and $\sim_p$ only relates positions in a term and its parent, there are some positions $G, H$ such that $(M,E) \sim_p^* (N,G) \sim_p^* (O_1, H) \sim_p^* (B,F)$. It follows that $(O_2, H) \sim_p^* (A,D)$ by following the same path, therefore it suffices to provide the only missing portion of the path from $M$ to $A$, i.e.~to prove that $(N,G) \sim_p^* (O_2,H)$ given $(N,G) \sim_p^* (O_1,H)$ (or vice-versa).
+
+If $G$ is disjoint from all the positions of reduction from $N$ to $O_1$ and $O_2$ (and consequently $G = H$), this follows from case 1 of $\sim_p$. Otherwise, this can be proved by taking cases from the definition of $\sim_c$. This is rather long, but all of the cases are similar. The general idea is that the reductions from $N$ to $O_1$ correspond to the reductions from $N$ to $O_2$, so that if a position is related by $\sim_p$ across that reduction, it is related in the other branch for the same reason. Case d, where $B = O'_1$ rather than $O'_2$, is given here in more detail as an illustrative example:
+
+Let $I$ be $N$ reduced at $P$, and $J$ be $N$ reduced at $P;@_1;\lambda;Q$, so that $N \to I \to O_1$ and $N \to J \to O_2$. All of the reduction positions are $\geq P$, and $G$ is not disjoint from all of them, therefore $G$ is not disjoint from $P$. Let $K$ be the position such that $(N,G) \sim_p (I,K) \sim_p (O_1,H)$. The fact that $(N,G) \sim_p (I,K)$ implies that $G > P;@_1;\lambda$. Let $G = P;@_1;\lambda;L$ and $H = P;L'$. If $L$ is disjoint from $Q$, then $(N,G) \sim_p (J,G) \sim_p (O_2,P;L') = (O_2;H)$ by cases 1 and 2 of $\sim_p$. In the other case, that $L$ isn't disjoint from $Q$, $L > Q$ because none of the positions $<= P;@_1;\lambda;Q$ in $N$ are related to any position in $I$ by $\sim_p$. As $(I,P;L) \sim_p (O_1,P;L')$ (with the redex at $P;Q$), for exactly the same reason $(N,P;@_1;\lambda;L) \sim_p (J,P;@_1;\lambda;L')$ (with the redex at $P;@_1;\lambda;Q$). Because $(N,P;@_1;\lambda;L) \sim_p (J,P;@_1;\lambda;L')$, $N|P;@_1;\lambda;L = J|P;@_1;\lambda;L'$, and $N|P;@_1;\lambda;L \neq $ the variable of $N|P;@_1$, therefore $J|P;@_1;\lambda;L'$ is also not the variable therefore $(J,P;@_1;\lambda;L') \sim_p (O_2, P;L') = (O_2, H)$ by case 2 of $\sim_p$. Combining these results, $(N,G) \sim_p (O_2;H)$ as desired.
+
+\end{proof}
+
+\begin{lemma} \label{redexDestroyed}
+If $M \to N$, with the redex at position $P$, then no position in any term reachable from $N$ is related by $\sim^*$ to $(M,P)$.
+\end{lemma}
+\begin{proof}
+Suppose on the contrary that $(M,P) \sim^* (A,D)$, where $N \to^* A$, then by Lemma \ref{simpDoesn'tMix}, $(M,P) \sim_p^* (A,D)$. $M \neq A$ therefore $(M,P) \sim_p$ some position in $N$, but in all the cases of the definition of $\sim_p$, no position in the child term is related to the position of the redex.
 \end{proof}
 
 \paragraph{}
 The reduction relation $\Rightarrow$ is nondeterministic, so it admits multiple possible reduction strategies. A reduction strategy starting from a closed term $M$ is a partial function $f$ from $Rch(M)$ to positions, such that for any reachable term $N$ where $f$ is defined, $f(N)$ is a position of a valid redex in $N$, and if $f(N)$ is not defined, $N$ is a value. Using a reduction strategy, a subset of $\Rightarrow$ that isn't nondeterministic, $\Rightarrow_f$, can be defined by $(N,s) \Rightarrow_f (N',s')$ iff $(N,s) \Rightarrow (N',s')$ and $N$ reduces to $N'$ with the redex at $f(N)$.
+
+Essentially what \ref{redexDestroyed} demonstrates is that the samples taken during any reduction sequence are independent of each other. This is made more precise in the following lemma.
+
+\begin{lemma}
+For any initial term $M$, reduction strategy $f$ on $M$, natural number $n$, measurable set $T$ of terms and measurable set $S$ of samples, 
+\end{lemma}
+\begin{proof}
+\end{proof}
 
 The usual call-by-value semantics can be implemented as one of these reduction strategies, given by (with $V$ a value and $T$ a term that isn't a value and $M$ a general term)
 \begin{align*}
@@ -418,6 +463,11 @@ A closed term $M$ terminates with a given reduction strategy $f$ and samples $s$
 A closed term $M$ is AST with respect to $\cbv$ iff it is AST.
 \end{theorem}
 \begin{proof}
+For both $\red$ and $\Rightarrow_{\cbv}$, the probability measure on the sample space can be used to define a measure on the reduction sequences of each finite length. The distributions are equal for each length, by induction, as follows.
+
+The base case, length 0, is trivial, because in both cases the distribution has probability 1 on the sequence containing only $M$.
+
+For the inductive case, let the distribution of terms after $n$ steps be $D_n$. This can be split into a random and a deterministic part, $D_n^r + D_n^d$, where $D_n^r$ has weight only on those terms of the form $E[\tsample]$, and $D_n^d$ only has weight on the terms not of that form. 
 \end{proof}
 
 \begin{theorem} \label{CbvIsTerminatingest}
