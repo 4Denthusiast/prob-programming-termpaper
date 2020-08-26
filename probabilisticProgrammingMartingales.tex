@@ -242,7 +242,10 @@ Having thought a bit more about this, I realise it may not be quite right. I'll 
 
 When proving almost sure termination in this way \akr{I guess I should move this section somewhere later.}, it is necessary to consider which terms a given term may reduce to. Sometimes however, the reduction that the programmer has in mind may not be strictly the call-by-value order defined so far, or considering an alternative reduction order may be simpler or more intuitive.
 
-Non-probabilistic lambda calculi generally have the Church-Rosser property, that if a term $A$ reduces to both $B_1$ and $B_2$, there is some $C$ with reduction sequences $B_1 \to^* C$ and $B_2 \to^* C$, so the reduction order mostly doesn't matter. In the probabilistic case, this may not be true, because $\beta$-reduction can duplicate $\tsample$s, so the outputs of the copies of the sample may be identical or independent, depending on whether the sample is taken before or after $\beta$-reduction. There are, however, some restricted variations on the reduction order that do not have this problem.
+Non-probabilistic lambda calculi generally have the Church-Rosser property, that if a term $A$ reduces to both $B_1$ and $B_2$, there is some $C$ 
+%with reduction sequences $B_1 \to^* C$ and $B_2 \to^* C$, 
+to which both $B_1$ and $B_2$ reduce,
+so the reduction order mostly doesn't matter. In the probabilistic case, this may not be true, because $\beta$-reduction can duplicate $\tsample$s, so the outputs of the copies of the sample may be identical or independent, depending on whether the sample is taken before or after $\beta$-reduction. There are, however, some restricted variations on the reduction order that do not have this problem.
 
 \paragraph{}
 Even with this restriction, a sampling semantics in the style of the one already defined would not be entirely Church-Rosser, as, for example, $\red^3(\tsample - \tsample, (1,0,\dots))$ would be either $1$ or $-1$ depending on the order of evaluation of the $\tsample$s, as that determines which sample from the pre-selected sequence is used for each one. To fix this, rather than pre-selecting samples according to the order they'll be drawn in, select them according to the position in the term where they'll be used instead.
@@ -264,10 +267,15 @@ M_1 M_2 \mid @_i ; P & = M_i \mid P \quad \text{for } i = 1,2 \\
 so that every subterm is located at a unique position, but not every position corresponds to a subterm (e.g. $x \, y \mid \lambda ; \cdot$ is undefined). 
 A position such that $M\mid P$ does exist is said to occur in $M$. 
 \changed[lo]{Substitution of $N$ at position $P$ in $M$, written $M[N/P]$, is defined similarly.
-Take, for example, $M = \lambda x \, y. y \, (\tif{x < 0}{y \, (\underline f (x))}{\underline 3})$ and $P =\lambda ; \lambda ; @_2 ; \textsf{if}_2 ; @_2$, then 
-\[
+For example 
+\begin{align*}
+M &= \lambda x \, y. y \, (\tif{x < 0}{y \, (\underline f (x))}{\underline 3})\\
+P &=\lambda ; \lambda ; @_2 ; \textsf{if}_2 ; @_2
+\end{align*} 
+then 
+\(
 M[\tsample / P] = \lambda x \, y. y \, (\tif{x < 0}{y \, \tsample}{\underline 3}).
-\]}
+\)}
 
 Two subterms $N_1$ and $N_2$ of a term $M$, corresponding to positions $P_1$ and $P_2$, can overlap in a few different ways. 
 If $P_1$ is an initial segment (i.e.~prefix) of $P_2$ (written as $P_1 \leq P_2$), then $N_2$ is also a subterm of $N_1$. If neither $P_1 \leq P_2$ nor $P_1 \geq P_2$, the positions are said to be disjoint. 
@@ -275,6 +283,8 @@ This is mostly relevant in that in any substitution at some position, the subter
 
 With this notation, a more general reduction relation $\to$ can be defined. \akr{It would almost work to have one of the neater versions of $\tY$-reduction here.}
 %\lo{On first reading, I struggled to parse the following clauses.}
+\begin{definition}
+\label{def:more general red}
 \changed[lo]{The binary relation $\to$ is defined by the following rules, each is conditional on a redex occurring at position $P$ in the term $M$.}
 \begin{align*}
   \text{if } M \mid P = (\lambda x.s) v,\ & M \to M[s[v/x]/P] \\
@@ -286,12 +296,12 @@ With this notation, a more general reduction relation $\to$ can be defined. \akr
   \text{if } M \mid P = \tscore(\underline r),\ & M \to M[\underline r/P].
 \end{align*}
 In each of these cases, $M \mid P$ is the redex, and reduction takes place at $P$.
-%\lo{The definition above is clear. But as a general rule, it is good to illustrate definitions -- especially if they are genuinely new -- with an example or two.}
+\end{definition}
 
 \paragraph{}
-Labelling the pre-chosen samples by the positions in the term would also not work because in some cases, a $\tsample$ will be duplicated before being reduced, for example, in $(\lambda x. {\underline x \, 0} \, \mathbin{\underline{+}} \, {x \, \underline 0}) (\lambda y. \tsample)$, both of the $\tsample$ redexes that eventually occur originate at $@_2 ; \lambda$. It is therefore necessary to consider possible positions that may occur in other terms reachable from the original term. This is itself inadequate because some of the positions in different reachable terms need to be considered the same, and the number of reachable terms is in general uncountable, which leads to measure-theoretic issues.
+Labelling the pre-chosen samples by the positions in the term would also not work because in some cases, a $\tsample$ will be duplicated before being reduced, for example, in $(\lambda x. x \, {\underline 0} \, \mathbin{\underline{+}} \, {x \, \underline 0}) (\lambda y. \tsample)$, both of the $\tsample$ redexes that eventually occur originate at $@_2 ; \lambda$. It is therefore necessary to consider possible positions that may occur in other terms reachable from the original term. This is itself inadequate because some of the positions in different reachable terms need to be considered the same, and the number of reachable terms is in general uncountable, which leads to measure-theoretic issues.
 
-Define a skeleton, to be a term but instead of having real constants $\underline r$, it has a placeholder $\skeletonPlaceholder$, so that each term has a skeleton and each skeleton can be converted to a term given the appropriate number of real numbers to substitute in. The positions in a skeleton and the reduction relation on skeletons can be extended from the definitions on terms in the obvious way, with $\tif{\skeletonPlaceholder}{A}{B}$ reducing nondeterministically to both $A$ and $M$.
+Define a \emph{skeleton} to be a term but, instead of having real constants $\underline r$, it has a placeholder $\skeletonPlaceholder$, so that each term has a skeleton and each skeleton can be converted to a term given the appropriate number of real numbers to substitute in. The positions in a skeleton and the reduction relation on skeletons can be extended from the definitions on terms in the obvious way, with $\tif{\skeletonPlaceholder}{A}{B}$ reducing nondeterministically to both $A$ and $B$.
 
 Given a closed term $M$, let $L_0(M)$ be the set of pairs, the first element of which is a reduction sequence of skeletons starting at $M$, and the second of which is a position in the final skeleton of the reduction sequence. \akr{I've yet to go through and replace references to terms with references to skeletons, but it should be reasonably obvious where the substitution should take place. This is potentially even more confusing though because I'm now implicitly identifying terms, skeletons, reduction sequences and skeletal reduction sequences.} Reduction sequences are used rather than reachable terms because if the same term is reached twice, different samples may be needed, but they will be discussed as though they were terms, by abuse of notation. \lo{Readers would benefit greatly from some examples of an $L_0(M)$-pair, and the relations $\sim_p$ and $\sim_c$, here, before the formal definitions. Explain the underlying intuition.} The relation $\sim$ is defined as the union of the symmetric relations $\sim_p$ \changed[lo]{($p$ for parent-child relationship)} and $\sim_c$ \changed[lo]{($c$ for cousin relationship)} where
 \lo{As defined, $\sim_p$ is not a symmetric relation.}
@@ -328,7 +338,10 @@ Given a closed term $M$, let $L_0(M)$ be the set of pairs, the first element of 
 See \Cref{fig:adk-diagram} for a graphical depiction of $\sim_p$- and $\sim_c$-rules.
 \end{example}
 
-The reflexive transitive closure $\sim^*$ of this relation is used to define the set of potential positions $L(M) = L_0(M) / \sim^*$, and each equivalence class can be considered as the same position as it may occur across multiple reachable terms. If $(N,P) \sim^* (O,Q)$, then $N \mid P$ and $O \mid Q$ both have the same shape (i.e.~they're either both variables, both applications, both $\tsample$s etc.), therefore it's well-defined to talk of the set of potential positions where there is a $\tsample$, $L_s(M)$. The new sample space is then defined as $I^{L_s(M)}$, with the Borel $\sigma$-algebra and product measure.
+The reflexive transitive closure $\sim^*$ of this relation is used to define the set of \emph{potential positions} $L(M) = L_0(M) / \sim^*$, and each equivalence class can be considered as the same position as it may occur across multiple reachable terms. 
+If $(N,P) \sim^* (O,Q)$, then $N \mid P$ and $O \mid Q$ both have the same shape (i.e.~they're either both variables, both applications, both $\tsample$s etc.), therefore it's well-defined to talk of the set of potential positions where there is a $\tsample$, $L_s(M)$. 
+\lo{Thus $L_s(M) := \{[(X, P)]_{\sim^\ast_M} : X \mid P = \tsample\}$.}
+The new sample space is then defined as $I^{L_s(M)}$, with the Borel $\sigma$-algebra and product measure.
 
 \paragraph{}
 For now, here's a summary of the lemmas and theorems I intend to prove about this alternative semantics:
@@ -360,8 +373,29 @@ In the base case, that $(N_1,P_1) \sim_\downarrow^* X \sim_\uparrow^* (N_2,P_2)$
 \begin{lemma} \label{canonicalCousins}
 For any reduction sequence $X$, there is a unique reduction sequence $X_{cbv}$ that is related to $X$ by $\sim_c$ (for each position in the final term in $X$) and is in call-by-value order, and if $X \sim_c^* Y$, then $X_{cbv} = Y_{cbv}$.
 \end{lemma}
+
+\lo{To be clear, should write out the definition of $X \sim_c Y$.
+Let the final term of the reduction sequences $X$ and $Y$ be $\hat{X}$ and $\hat{Y}$ respectively. 
+Write $X \sim_c Y$ to mean for every position $P$ that occurs in $\hat X$, $(\hat X, P) \sim_c (\hat Y, P)$.
+}
+\lo{As defined, $\sim_c$ is not symmetric.}
+
 \begin{proof}
 Note that although the reductions that occur in $X_{cbv}$ are in call-by-value order, it may not be the actual call-by-value reduction sequence because some redexes may remain un-reduced even when other reductions that should happen afterwards occur. It is only required that the reductions that do occur occur in the correct order.
+\lo{This paragraph (especially the last sentence) is ambiguous.
+What does it mean to say that that a reductions that occur in a reduction sequences are \emph{in CBV order}?}
+\lo{So this is permitted?
+\[
+(II)(I (I \bar I)) \to
+(II)(I\bar I) \to
+(II)\bar I 
+\]
+but not this: 
+\(
+(II)(I (I \bar I)) \to
+(II)(I \bar I) \to
+(II)\bar I 
+\)?}
 
 Proof sketch:
 Starting at $X$, take the last pair of adjacent reductions which aren't in CBV order, and switch them (with $\sim_c$). Repeat this process until CBV order is reached.
@@ -377,12 +411,17 @@ The relation $\sim$ is defined on $L_0(M)$ with reference to a particular starti
 \begin{proof}
 $\sim_N^*$ is trivially a subset of $\sim_M^*$ because $\sim_N$ is a subset of $\sim_M$.
 
-In the other direction, suppose $(N_1, P_1) \sim_M^* (N_2, P_2)$ where both $N_1$ and $N_2$ are descendants of $N$. By Lemma \ref{downAcrossUp}, take $(N_1, P_1) \sim_{p,M}^* (N'_1, P') \sim_{c,M}^* (N'_2, P') \sim_{p,M}^* (N_2, P_2)$. The $\sim_p^*$ steps remain within $Rch(N)$, and $\sim_p$ does not depend on the history of the reduction sequences, therefore $(N_1, P_1) \sim_{p,N}^* (N'_1, P') \sim_{c,M}^* (N'_2, P') \sim_{p,N}^* (N_2, P_2)$.
+In the other direction, suppose $(N_1, P_1) \sim_M^* (N_2, P_2)$ where both $N_1$ and $N_2$ are descendants of $N$. By Lemma~\ref{downAcrossUp}, take $(N_1, P_1) \sim_{p,M}^* (N'_1, P') \sim_{c,M}^* (N'_2, P') \sim_{p,M}^* (N_2, P_2)$. 
+The $\sim_p^*$ steps remain within $Rch(N)$, and $\sim_p$ does not depend on the history of the reduction sequences, therefore $(N_1, P_1) \sim_{p,N}^* (N'_1, P') \sim_{c,M}^* (N'_2, P') \sim_{p,N}^* (N_2, P_2)$.
 
-Let $X$ be the call-by-value reduction sequence related to both $N'_1$ and $N'_2$ by $\sim_{c,M}$ given by Lemma \ref{canonicalCousins}. As $M \to N$ is the first reduction in the sequence $N'_1$, it is the last to be affected by the $\sim_{c,M}$ sequence $N'_1 \sim_{c,M}^* X$ given by Lemma \ref{canonicalCousins} therefore it can be split into $N'_1 \sim_{c,M}^* Y_1 \sim_{c,M}^* X$ where $Y_1$ is in CBV order except possibly for its first reduction, which is still $M -> N$. Let the position of the reduction $M \to N$ be $Q$. \akr{TODO: fill in the details that are missing here. It shouldn't be too hard, it's just a bit sketchy at present.} The rearrangement of the reduction sequence $Y_1 \sim_{c,M} X$ consists of moving the reduction at $Q$ down past the other reductions in $Y_1$, possibly duplicating or deleting it in the process, but not affecting the positions or the correct order for any of the other reductions. The reductions derived from $M \to N$ can be identified as follows:
+Let $X$ be the call-by-value reduction sequence related to both $N'_1$ and $N'_2$ by $\sim_{c,M}$ given by Lemma~\ref{canonicalCousins}. 
+As $M \to N$ is the first reduction in the sequence $N'_1$, it is the last to be affected by the $\sim_{c,M}$ sequence $N'_1 \sim_{c,M}^* X$ given by Lemma \ref{canonicalCousins} therefore it can be split into $N'_1 \sim_{c,M}^* Y_1 \sim_{c,M}^* X$ where $Y_1$ is in CBV order except possibly for its first reduction, which is still $M -> N$. Let the position of the reduction $M \to N$ be $Q$. 
+\akr{TODO: fill in the details that are missing here. It shouldn't be too hard, it's just a bit sketchy at present.} 
+The rearrangement of the reduction sequence $Y_1 \sim_{c,M} X$ consists of moving the reduction at $Q$ down past the other reductions in $Y_1$, possibly duplicating or deleting it in the process, but not affecting the positions or the correct order for any of the other reductions. 
+The reductions derived from $M \to N$ can be identified as follows:
 
 \begin{definition}
-A position in some (reduction sequence of) term(s) is \emph{derived from} another if it is related by the reflexive transitive closure of $\rightsquigarrow$, where $(V,R) \rightsquigarrow (W,T)$ iff $V \to W$ and one of the following cases holds:
+A position in some (reduction sequence of) term(s) is \emph{derived from} another if it is related by the reflexive transitive closure of $\rightsquigarrow$, where $(V,R) \rightsquigarrow (W,T)$ just if $V \to W$ and one of the following cases holds:
 \begin{itemize}
     \item $(V,R) \sim_p (W,T)$
     \item $R = T$, $V \to W$ at $A$, and $A > R$
@@ -419,7 +458,7 @@ First consider the case that $P_1$ and $P_2$ are disjoint. Let $M_1 = M[X_1/P_1]
 
 The case that $P_1 = P_2$ is trivial, because there is at most one possible $\Rightarrow$ reduction at any given position, therefore $(M_1, s_1) = (M_2, s_2)$ already.
 
-The remaining case is that $P_1 < P_2$ or $P_1 > P_2$. Assume without loss of generality that $P_1 < P_2$. For each possible case of what type of redex $M | P_1$ is, and $P_2$'s position within it, there is a corresponding case of $\sim_c$, and similarly to the case where $P_1$ and $P_2$ are disjoint, the term $O_1 = O_2$ from the definition of $\sim_c$ is a suitable value of $M'$. The term $M | P_1$ can't be $\tsample$, because it has strict subterms, but the case that $M | P_2 = \tsample$ is still somewhat more complicated. $P_2$ can't be within $P_1 ; @_2$ or $P_1 ; Y$ (cases e and f of $\sim_c$) because those are not valid positions to reduce a $\tsample$, and the case that $P_2$ is within the branch of an if statement that is deleted by the reduction at $P_1$ (case b) doesn't actually present a problem because there is no corresponding reduction to $M \to M_2$ in the other branch, which leaves cases c and d, that $P_2$ is in the $\tif$ branch that isn't deleted, and that $P_2 < P_1 ; @_1 ; \lambda$.  The values that the $\tsample$s take in these cases match because $(M,P) \sim_p (M_1, P;Q)$ by cases 3 and 2 of $\sim_p$ respectively.
+The remaining case is that $P_1 < P_2$ or $P_1 > P_2$. Assume without loss of generality that $P_1 < P_2$. For each possible case of what type of redex $M | P_1$ is, and $P_2$'s position within it, there is a corresponding case of $\sim_c$, and similarly to the case where $P_1$ and $P_2$ are disjoint, the term $O_1 = O_2$ from the definition of $\sim_c$ is a suitable value of $M'$. The term $M | P_1$ can't be $\tsample$, because it has strict subterms, but the case that $M | P_2 = \tsample$ is still somewhat more complicated. $P_2$ can't be within $P_1 ; @_2$ or $P_1 ; Y$ (cases e and f of $\sim_c$) because those are not valid positions to reduce a $\tsample$, and the case that $P_2$ is within the branch of an if statement that is deleted by the reduction at $P_1$ (case b) doesn't actually present a problem because there is no corresponding reduction to $M \to M_2$ in the other branch, which leaves cases c and d, that $P_2$ is in the $\tif{\cdot}{\cdot}{\cdot}$ branch that isn't deleted, and that $P_2 < P_1 ; @_1 ; \lambda$.  The values that the $\tsample$s take in these cases match because $(M,P) \sim_p (M_1, P;Q)$ by cases 3 and 2 of $\sim_p$ respectively.
 \end{proof}
 
 \begin{lemma} \label{simpDoesn'tMix}
@@ -444,9 +483,11 @@ Suppose on the contrary that $(M,P) \sim^* (A,D)$, where $N \to^* A$, then by Le
 \end{proof}
 
 \paragraph{}
-The reduction relation $\Rightarrow$ is nondeterministic, so it admits multiple possible reduction strategies. A reduction strategy starting from a closed term $M$ is a partial function $f$ from $Rch(M)$ to positions, such that for any reachable term $N$ where $f$ is defined, $f(N)$ is a position of a valid redex in $N$, and if $f(N)$ is not defined, $N$ is a value. Using a reduction strategy, a subset of $\Rightarrow$ that isn't nondeterministic, $\Rightarrow_f$, can be defined by $(N,s) \Rightarrow_f (N',s')$ iff $(N,s) \Rightarrow (N',s')$ and $N$ reduces to $N'$ with the redex at $f(N)$.
+The reduction relation $\Rightarrow$ is nondeterministic, so it admits multiple possible reduction strategies. A reduction strategy starting from a closed term $M$ is a partial function $f$ from $Rch(M)$ to positions, such that for any reachable term $N$ where $f$ is defined, $f(N)$ is a position of a valid redex in $N$, and if $f(N)$ is not defined, $N$ is a value. 
+\lo{Redexes are defined in Definition~\ref{def:more general red}. What is an invalid redex?}
+Using a reduction strategy, a subset of $\Rightarrow$ that isn't nondeterministic, $\Rightarrow_f$, can be defined by $(N,s) \Rightarrow_f (N',s')$ iff $(N,s) \Rightarrow (N',s')$ and $N$ reduces to $N'$ with the redex at $f(N)$.
 
-Essentially what \ref{redexDestroyed} demonstrates is that the samples taken during any reduction sequence are independent of each other. This is made more precise in the following lemma.
+Essentially what Lemma~\ref{redexDestroyed} demonstrates is that the samples taken during any reduction sequence are independent of each other. This is made more precise in the following lemma.
 
 \begin{lemma}
 For any initial term $M$, reduction strategy $f$ on $M$, natural number $n$, measurable set $T$ of terms and measurable set $S$ of samples, 
@@ -457,7 +498,7 @@ For any initial term $M$, reduction strategy $f$ on $M$, natural number $n$, mea
 The usual call-by-value semantics can be implemented as one of these reduction strategies, given by (with $V$ a value and $T$ a term that isn't a value and $M$ a general term)
 \begin{align*}
 \cbv(T M) & = @_1 ; \cbv(T) \\
-\cbv(V T) & = @_1 ; \cbv(T) \\
+\cbv(V T) & = {\color{red} @_2} ; \cbv(T) \\
 \cbv(\underline f(V_1, \dots, V_{k-1}, T, M_{k+1}, \dots, M_n)) & = \underline f_k ; \cbv(T) \\
 \cbv(\tY T) & = \tY ; \cbv(T) \\
 \cbv(\tif{T < 0}{M_1}{M_2}) & = \textsf{if}_1 ; \cbv(T) \\
