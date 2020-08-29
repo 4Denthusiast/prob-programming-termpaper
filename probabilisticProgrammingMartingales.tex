@@ -250,11 +250,14 @@ so the reduction order mostly doesn't matter. In the probabilistic case, this ma
 \paragraph{}
 Even with this restriction, a sampling semantics in the style of the one already defined would not be entirely Church-Rosser, as, for example, $\red^3(\tsample - \tsample, (1,0,\dots))$ would be either $1$ or $-1$ depending on the order of evaluation of the $\tsample$s, as that determines which sample from the pre-selected sequence is used for each one. To fix this, rather than pre-selecting samples according to the order they'll be drawn in, select them according to the position in the term where they'll be used instead.
 
-A position \akr{I'm not really sure how to phrase the citation, but this is adapted from \cite{Kennaway96infinitarylambda}.} is a finite sequence of steps into a term, defined inductively as
+A \emph{position} 
+\akr{I'm not really sure how to phrase the citation, but this is adapted from \cite{Kennaway96infinitarylambda}.} 
+\lo{The idea is common enough. I think no citation necessary.}
+is a finite sequence of steps into a term, defined inductively as
 \begin{align*}
 P ::= \cdot \mid \lambda ; P \mid @_1 ; P \mid @_2 ; P \mid \underline f_i ; P \mid \tY ; P \mid \textsf{if}_1 ; P \mid \textsf{if}_2 ; P \mid \textsf{if}_3 ; P \mid \tscore ; P.
 \end{align*}
-The \changed[lo]{\emph{subterm of $M$ at a position $P$}, denoted $M \mid P$,} is defined as
+The \emph{subterm of $M$ at a position $P$}, denoted $M \mid P$, is defined as
 \begin{align*}
 M \mid \cdot & = M \\
 \lambda x. M \mid \lambda ; P & = M \mid P \\
@@ -266,7 +269,7 @@ M_1 M_2 \mid @_i ; P & = M_i \mid P \quad \text{for } i = 1,2 \\
 \end{align*}
 so that every subterm is located at a unique position, but not every position corresponds to a subterm (e.g. $x \, y \mid \lambda ; \cdot$ is undefined). 
 A position such that $M\mid P$ does exist is said to occur in $M$. 
-\changed[lo]{Substitution of $N$ at position $P$ in $M$, written $M[N/P]$, is defined similarly.
+\changed[lo]{\emph{Substitution} of $N$ at position $P$ in $M$, written $M[N/P]$, is defined similarly.
 For example 
 \begin{align*}
 M &= \lambda x \, y. y \, (\tif{x < 0}{y \, (\underline f (x))}{\underline 3})\\
@@ -346,7 +349,7 @@ The new sample space is then defined as $I^{L_s(M)}$, with the Borel $\sigma$-al
 \paragraph{}
 For now, here's a summary of the lemmas and theorems I intend to prove about this alternative semantics:
 \begin{itemize}
-    \item If $M \to N$, the relation $\sim_N^*$ defined on $Rch(N)$ is equal to the restriction of $\sim_M^*$ to $Rch(N)$ \lo{Define $\sim_N^*$.}
+    \item If $M \to N$, the relation $\sim_N^*$ defined on $Rch(N)$ is equal to the restriction of $\sim_M^*$ to $Rch(N)$ %\lo{Define $\sim_N^*$.}
     \item Given the definition below of $\Rightarrow$, which is still applicable to this version of $\sim$, and which is the equivalent of $\red$ in this version of the semantics, $\Rightarrow$ is Church-Rosser.
     \item If $M \to N$ at $P$, no position in any term in $Rch(N)$ is related to $(M,P)$ by $\sim_M^*$, and therefore each sample is used at most once in any reduction sequence.
     \item The subprobability distribution of values obtained by reducing a term in the usual call-by-value semantics is equal to that obtained by any reduction strategy on $\Rightarrow$ (i.e.~a sub-relation of $\Rightarrow$ that is a function) (with some allowance made for the fact that some values are not normal forms of $\Rightarrow$, so the reduction strategy might overshoot the value that $\red^\infty$ reaches. I'm not quite sure what form this will take.)
@@ -382,6 +385,7 @@ For any reduction sequence $X$, there is a unique reduction sequence $X_{cbv}$ t
 Note that although the reductions that occur in $X_{cbv}$ are in call-by-value order, it may not be the actual call-by-value reduction sequence because some redexes may remain un-reduced even when other reductions that should happen afterwards occur. It is only required that the reductions that do occur occur in the correct order.
 \lo{This paragraph (especially the last sentence) is ambiguous.
 What does it mean to say that that a reductions that occur in a reduction sequences are \emph{in CBV order}?}
+\iffalse
 \lo{So this is permitted?
 \[
 (II)(I (I \bar I)) \to
@@ -394,6 +398,7 @@ but not this:
 (II)(I \bar I) \to
 (II)\bar I 
 \)?}
+\fi
 
 Proof sketch:
 Starting at $X$, take the last pair of adjacent reductions which aren't in CBV order, and switch them (with $\sim_c$). Repeat this process until CBV order is reached.
@@ -561,7 +566,9 @@ If $M$ is AST with respect to any reduction strategy, it is AST.
 Suppose $M$ is AST with respect to $f$. Let the set of samples with which it terminates with this reduction strategy be $X$. By \ref{CbvIsTerminatingest}, $M$ also terminates with $\cbv$ and every element of $X$, and $X$ has measure 1, by assumption, therefore $M$ is AST with respect to $\cbv$ therefore by \ref{AstEquivalence} it is AST.
 \end{proof}
 
-\akr{For the standard CBV semantics, this example is indeed not a problem. 
+\lo{Give an example or two of a reduction strategy (for $\Rightarrow$) that is not $\cbv$.}
+
+\akr{NOTE. For the standard CBV semantics, this example is indeed not a problem. 
 In the alternative semantics, defining 
 \begin{align*}
 A[x] &= \tif{\tif{x>0}{I}{I} \, \tsample - 0.5 > 0}{0}{\Omega}\\
