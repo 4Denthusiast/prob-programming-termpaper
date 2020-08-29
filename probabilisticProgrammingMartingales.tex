@@ -370,14 +370,12 @@ In the base case, that $(N_1,P_1) \sim_\downarrow^* X \sim_\uparrow^* (N_2,P_2)$
 \end{proof}
 
 
+If $(X,P) \sim_c (Y,P)$ then the final skeletons in $X$ and $Y$ are equal, and $(X,Q) \sim_c (Y,Q)$, therefore $\sim_c$ can be considered to apply to reduction sequences even without positions, $X \sim_c Y$ iff $(X,\cdot) \sim_c (Y,\cdot)$.
+
 \begin{lemma} \label{canonicalCousins}
 For any reduction sequence $X$, there is a unique reduction sequence $X_{cbv}$ that is related to $X$ by $\sim_c$ (for each position in the final term in $X$) and is in call-by-value order, and if $X \sim_c^* Y$, then $X_{cbv} = Y_{cbv}$.
 \end{lemma}
 
-\lo{To be clear, should write out the definition of $X \sim_c Y$.
-Let the final term of the reduction sequences $X$ and $Y$ be $\hat{X}$ and $\hat{Y}$ respectively. 
-Write $X \sim_c Y$ to mean for every position $P$ that occurs in $\hat X$, $(\hat X, P) \sim_c (\hat Y, P)$.
-}
 \lo{As defined, $\sim_c$ is not symmetric.}
 
 \begin{proof}
@@ -483,16 +481,45 @@ Suppose on the contrary that $(M,P) \sim^* (A,D)$, where $N \to^* A$, then by Le
 \end{proof}
 
 \paragraph{}
-The reduction relation $\Rightarrow$ is nondeterministic, so it admits multiple possible reduction strategies. A reduction strategy starting from a closed term $M$ is a partial function $f$ from $Rch(M)$ to positions, such that for any reachable term $N$ where $f$ is defined, $f(N)$ is a position of a valid redex in $N$, and if $f(N)$ is not defined, $N$ is a value. 
-\lo{Redexes are defined in Definition~\ref{def:more general red}. What is an invalid redex?}
+The reduction relation $\Rightarrow$ is nondeterministic, so it admits multiple possible reduction strategies. A reduction strategy starting from a closed term $M$ is a partial function $f$ from $Rch(M)$ to positions, such that for any reachable term $N$ where $f$ is defined, $f(N)$ is a position of a redex in $N$, and if $f(N)$ is not defined, $N$ is a value.
 Using a reduction strategy, a subset of $\Rightarrow$ that isn't nondeterministic, $\Rightarrow_f$, can be defined by $(N,s) \Rightarrow_f (N',s')$ iff $(N,s) \Rightarrow (N',s')$ and $N$ reduces to $N'$ with the redex at $f(N)$.
 
-Essentially what Lemma~\ref{redexDestroyed} demonstrates is that the samples taken during any reduction sequence are independent of each other. This is made more precise in the following lemma.
+Essentially what Lemma~\ref{redexDestroyed} demonstrates is that the samples taken during any reduction sequence are independent of each other. This is made more precise in the following lemmas.
 
 \begin{lemma}
-For any initial term $M$, reduction strategy $f$ on $M$, natural number $n$, measurable set $T$ of terms and measurable set $S$ of samples, 
+For any skeletons $M \to N$, with the redex at position $P$, and measurable set of samples $S \subset I^{L_s(N)}$, $\mu(S) = \mu(\{s \in I^{L_s(M)} \mid s \circ i(M \to N) \in S\})$, and furthermore, if $M | P = \tsample$, for any $S \subset I \times I^{L_s(N)}$, $\mu(S) = \mu(\{s \in I^{L_s(M)} \mid (s(M,P), s \circ i(M \to N)) \in S\})$.
 \end{lemma}
 \begin{proof}
+If the result holds for all sets $S$ of the form $\{s \in I^{L_s(N)} \mid \forall j : s(j) \in x_i\}$, where $(x_j)_{j \in J}$ is a family of measurable subsets of $I$ indexed by some finite set $J \subset L_s(N)$ of positions, it also holds for all other $S$ by taking limits and disjoint unions.
+
+Take such a $(x_j)_{j \in J}$, where $x_j = x_k$ and define $K = i(M \to N)[J]$. Because $i(M \to N)$ is injective, it defines a bijection between $J$ and $K$. We can then calculate the measure $\mu(\{s \in I^{L_s(M)} \mid s \circ i(M \to N) \in S\}) = \mu(\{s \in I^{L_s(M)} \mid \forall k : s(k) \in x_{i(M \to N)^{-1}(k)}\}) = \prod_{k \in K} \mu_I(x_{i(M \to N)^{-1}(k)}) = \prod_{j \in J} \mu_I(x_j) = \mu(S)$.
+
+In the case that $M|P = \tsample$, we can similarly consider only those sets $S$ of the form $x_\tsample \times \{s \in I^{L_s(N)} \mid \forall j : s(j) \in x_i\}$. The position $P$ in $M$ is not related to any position in $L_s(N)$, therefore $(M,P) \not \in K$. Again, we can calculate the measure $\mu(\{s \in I^{L_s(M)} \mid (s(M,P), s \circ i(M \to N)) \in S\}) = \mu(\{s \in I^{L_s(M)} \mid s(M,P) \in x_\tsample, \forall k : s(k) \in x_{i(M \to N)^{-1}(k)}\}) = \mu_I(x_\tsample) \prod_{k \in K} \mu_I(x_{i(M \to N)^{-1}(k)}) = \mu_I(x_\tsample) \prod_{j \in J} \mu_I(x_j) = \mu(S)$.
+\end{proof}
+
+\begin{lemma}
+For any initial term $M$, reduction strategy $f$ on $M$, natural number $n$, skeleton $N$ with $k$ holes, measurable set $T \subset \mathbb R ^ k$ and measurable set $S$ of samples in $I^{L_s(N)}$, $\mu(\{s \in I^{L_s(M)} \mid \exists r \in T, s' \in S : (M,s) \Rightarrow_f^n (N[r], s')\}) = \mu(\{s \in I^{L_s(M)} \mid \exists r \in T, s' \in I^{L_s(N)} : (M,s) \Rightarrow_f^n (N[r], s')\}) \mu(S)$
+\end{lemma}
+\begin{proof}
+Suppose, to begin with, that $n = 0$. Either $\exists r \in T : N[r] = M$, in which case both sides of the equation are $\mu(S)$, or there is no such $r$, in which case both sides of the equation are 0.
+
+For $n > 0$, suppose for induction that the lemma is true for $n - 1$, for all $N, T$ and $S$. If $\exists r \in T, s' \in S : (M,s) \Rightarrow_f^n (N[r], s')$, the $r$ and $s'$ are necessarily unique, therefore we may assume that $T$ is the product of $k$ measurable setsets of $\mathbb R$, $(T_j)_{0 \leq j < k}$, as all of the other cases follow by taking unions and limits of these rectangles. Let\begin{align*}
+R_s & = \{\text{the skeleton of } O \mid O \in Rch(M), r \in \mathbb R^k, O | f(O) = \tsample, O \to N[r]\} \\
+R_d & = \{\text{the skeleton of } O \mid O \in Rch(M), r \in \mathbb R^k, O | f(O) \neq \tsample, O \to N[r]\}.
+\end{align*}
+Together, $R_s$ and $R_d$ contain all of the skeletons of terms that can reduce to $N$, and they're disjoint. For each of these skeletons, there is a map $g_O$ from the reals in $O$ to the reals in $N$, i.e. $g_O(r) = r'$ if $O[r] \to N[r']$ for $O \in R_d$, and $g_O(s, r) = r'$ if $O[r] \to N[r']$ with $s$ as the value the sample takes in the reduction. All of these functions are measurable, as they are just rearrangements of vector components, or in the case that $O|f(O) = \underline x(\skeletonPlaceholder, \dots, \skeletonPlaceholder)$, a combination fo the measurable function $x$ with a rearrangement of vector components. In the case that $O \in R_s$, the function $g_O$ simply inserts the sample into the vector of reals at a certain index, call it $h_O$.
+\begin{align*}
+& \mu(\{s \in I^{L_s(M)} \mid \exists r \in T, s' \in S : (M,s) \Rightarrow_f^n (N[r], s')\}) \\
+= & \mu(\{s \in I^{L_s(M)} \mid \exists O \in R_s, r \in \mathbb R^{k-1}, s' \in I^{L_s(O)}, r' \in T, s'' \in S : (M,s) \Rightarrow_f^{n-1} (O[r], s') \Rightarrow_f (N[r'], s'')\}) + \mu(\{s \in I^{L_s(M)} \mid \exists O \in R_d, r \in \bigcup_l \mathbb R^l, s' \in I^{L_s(O)}, r' \in T, s'' \in S : (M,s) \Rightarrow_f^{n-1} (O[r], s') \Rightarrow_f (N[r'], s'')\}) \\
+= & \sum_{O \in R_s} \mu(\{s \in I^{L_s(M)} \mid \exists r \in \mathbb R^{k-1}, s' \in I^{L_s(O)}: g_O(r,s'(O,f(O))) \in T, s' \circ i(O[r] \to N[g_O(r,s'(O,f(O)))]) \in S, (M,s) \Rightarrow_f^{n-1} (O[r], s')\}) + \sum_{O \in R_d} \mu(\{s \in I^{L_s(M)} \mid \exists r \in \bigcup_l \mathbb R^l, s' \in I^{L_s(O)}: g_O(r) \in T, s' \circ i(O[r] \to N[g_O(r)]) \in S, (M,s) \Rightarrow_f^{n-1} (O[r], s')\}) \\
+= & \sum_{O \in R_s} \mu(\{s \in I^{L_s(M)} \mid \exists r \in \prod_{j \neq h(O)} T_j, s' \in I^{L_s(O)}: s'(O,f(O)) \in T_{h(O)}, s' \circ i(O[r] \to N[g_O(r,s'(O,f(O)))]) \in S, (M,s) \Rightarrow_f^{n-1} (O[r], s')\}) + \sum_{O \in R_d} \mu(\{s \in I^{L_s(M)} \mid \exists r \in \bigcup_l \mathbb R^l, s' \in I^{L_s(O)}: g_O(r) \in T, s' \circ i(O[r] \to N[g_O(r)]) \in S, (M,s) \Rightarrow_f^{n-1} (O[r], s')\}) \\
+= & \sum_{O \in R_s} \mu(\{s \in I^{L_s(M)} \mid \exists r \in \prod_{j \neq h(O)} T_j, s' \in I^{L_s(O)} : (M,s) \Rightarrow_f^{n-1} (O[r], s')\}) \mu(\{s' \in I^{L_s(O)} \mid s'(O,f(O)) \in T_{h(O)}, s' \circ i(O[r] \to N[g_O(r,s'(O,f(O)))]) \in S\}) + \sum_{O \in R_d} \mu(\{s \in I^{L_s(M)} \mid \exists r \in \bigcup_l \mathbb R^l, s' \in I^{L_s(O)}: g_O(r) \in T, (M,s) \Rightarrow_f^{n-1} (O[r], s')\}) \mu({s' \in I^{L_s(O)} \mid s' \circ i(O[r] \to N[g_O(r)]) \in S}) \\
+= & \sum_{O \in R_s} \mu(\{s \in I^{L_s(M)} \mid \exists r \in \prod_{j \neq h(O)} T_j, s' \in I^{L_s(O)} : (M,s) \Rightarrow_f^{n-1} (O[r], s')\}) \mu(T_{h(O)}) \mu(S) + \sum_{O \in R_d} \mu(\{s \in I^{L_s(M)} \mid \exists r \in \bigcup_l \mathbb R^l, s' \in I^{L_s(O)}: g_O(r) \in T, (M,s) \Rightarrow_f^{n-1} (O[r], s')\}) \mu(S) \\
+= & \sum_{O \in R_s} \mu(\{s \in I^{L_s(M)} \mid \exists r \in \prod_{j \neq h(O)} T_j, s' \in I^{L_s(O)} : s'(O,f(O)) \in T_{h(O)}, (M,s) \Rightarrow_f^{n-1} (O[r], s')\}) \mu(S) + \sum_{O \in R_d} \mu(\{s \in I^{L_s(M)} \mid \exists r \in \bigcup_l \mathbb R^l, s' \in I^{L_s(O)}: g_O(r) \in T, (M,s) \Rightarrow_f^{n-1} (O[r], s')\}) \mu(S) \\
+= & \sum_{O \in R_s} \mu(\{s \in I^{L_s(M)} \mid \exists r \in \mathbb R^{k-1}, s' \in I^{L_s(O)} : g_O(r,s'(O,f(O))) \in T, (M,s) \Rightarrow_f^{n-1} (O[r], s')\}) \mu(S) + \sum_{O \in R_d} \mu(\{s \in I^{L_s(M)} \mid \exists r \in \bigcup_l \mathbb R^l, s' \in I^{L_s(O)}: g_O(r) \in T, (M,s) \Rightarrow_f^{n-1} (O[r], s')\}) \mu(S) \\
+= & \mu(\{s \in I^{L_s(M)} \mid \exists O \in R_s, r \in \mathbb R^{k-1}, s' \in I^{L_s(O)}, r' \in T, s'' \in I^{L_s(N)} : (M,s) \Rightarrow_f^{n-1} (O[r], s') \Rightarrow_f (N[r'], s'')\}) \mu(S) + \mu(\{s \in I^{L_s(M)} \mid \exists O \in R_d, r \in \bigcup_l \mathbb R^l, s' \in I^{L_s(O)}, r' \in T, s'' \in I^{L_s(N)} : (M,s) \Rightarrow_f^{n-1} (O[r], s') \Rightarrow_f (N[r'], s'')\}) \mu(S) \\
+= & \mu(\{s \in I^{L_s(M)} \mid \exists r \in T, s' \in I^{L_s(N)} : (M,s) \Rightarrow_f^n (N[r], s')\}) \mu(S)
+\end{align*}
 \end{proof}
 
 The usual call-by-value semantics can be implemented as one of these reduction strategies, given by (with $V$ a value and $T$ a term that isn't a value and $M$ a general term)
