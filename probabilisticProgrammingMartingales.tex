@@ -556,7 +556,7 @@ Take such a $(x_j)_{j \in J}$, where $x_j = x_k$ and define $K = i(M \to N)[J]$.
 In the case that $M|P = \tsample$, we can similarly consider only those sets $S$ of the form $x_\tsample \times \{s \in I^{L_s(N)} \mid \forall j : s(j) \in x_i\}$. The position $P$ in $M$ is not related to any position in $L_s(N)$, therefore $(M,P) \not \in K$. Again, we can calculate the measure $\mu(\{s \in I^{L_s(M)} \mid (s(M,P), s \circ i(M \to N)) \in S\}) = \mu(\{s \in I^{L_s(M)} \mid s(M,P) \in x_\tsample, \forall k : s(k) \in x_{i(M \to N)^{-1}(k)}\}) = \mu_I(x_\tsample) \prod_{k \in K} \mu_I(x_{i(M \to N)^{-1}(k)}) = \mu_I(x_\tsample) \prod_{j \in J} \mu_I(x_j) = \mu(S)$.
 \end{proof}
 
-\begin{lemma}
+\begin{lemma} \label{lem:independentSamples}
 For any initial term $M$, reduction strategy $f$ on $M$, natural number $n$, skeleton $N$ with $k$ holes, measurable set $T \subset \mathbb R ^ k$ and measurable set $S$ of samples in $I^{L_s(N)}$, $\mu(\{s \in I^{L_s(M)} \mid \exists r \in T, s' \in S : (M,s) \Rightarrow_f^n (N[r], s')\}) = \mu(\{s \in I^{L_s(M)} \mid \exists r \in T, s' \in I^{L_s(N)} : (M,s) \Rightarrow_f^n (N[r], s')\}) \mu(S)$
 \end{lemma}
 \begin{proof}
@@ -600,11 +600,21 @@ A closed term $M$ terminates with a given reduction strategy $f$ and samples $s$
 A closed term $M$ is AST with respect to $\cbv$ iff it is AST.
 \end{theorem}
 \begin{proof}
+\akr{I'm not sure whether this proof is sufficiently detailed. It would be pretty easy to fill it in more, just very verbose.}
+
 For both $\red$ and $\Rightarrow_{\cbv}$, the probability measure on the sample space can be used to define a measure on the reduction sequences of each finite length. The distributions are equal for each length, by induction, as follows.
 
 The base case, length 0, is trivial, because in both cases the distribution has probability 1 on the sequence containing only $M$.
 
-For the inductive case, let the distribution of terms after $n$ steps be $D_n$. This can be split into a random and a deterministic part, $D_n^r + D_n^d$, where $D_n^r$ has weight only on those terms of the form $E[\tsample]$, and $D_n^d$ only has weight on the terms not of that form. 
+For the inductive case, suppose that the distributions of reduction sequences of length $n$ are equal. \akr{TODO: mention the case that it has already terminated by step $n$, or is about to. The two versions of the semantics handle it a little differently.}
+
+For any term $N$ which is not a value, there is a unique environment $E$ and redex $R$ such that $N = E[R]$. The position of the hole in $E$ is equal to $\cbv(N)$, so that $N|\cbv(N) = R$, as the cases in the definition of $\cbv$ match the cases in the definition of environments. If $R \new \tsample$, let $R'$ be the result of reducing $R$ (which is equal in both versions of the semantics), then $E[R'] = N[R' / \cbv(N)]$ therefore $\red(N,s) = (E[R'],s)$ and $(N,s) \Rightarrow_{\cbv} (E[R'],s)$. The distribution of next terms, conditional on the previous term, in the case that that previous term reduces deterministically, is therefore equal for $\red$ and $\Rightarrow_{\cbv}$.
+
+In the other case that $R = \tsample$, the first (term) part of $\red(N,s)$ is $E[\underline{\pi_h(s)}]$. If $k$ is the number of samples already taken in this reduction sequence, this is equivalent to $E[\underline{s_0(k)}]$, where $s_0$ is the initial sample. For any sufficiently small neighbourhood of $N$ (i.e.~containing only reduction sequences with the same skeletons), the probability of reaching this neighbourhood is independent of $s(k)$, because it depends only on the samples taken so far, and the samples are independent. The distribution of $s(k)$ conditional on reaching $N$ is therefore the uniform distribution on $I$. Similarly for the other semantics, if the distribution of remaining samples after $n$ steps is independent of the term by Lemma \ref{lem:independentSamples}, therefore the distribution of $s(Sk(N),\cbv(N))$ conditional on $N$ is the uniform distribution on $I$. In either case, the distribution of the next term conditional on the previous term, in the case that it reduces randomly, is equal to the image under $r \mapsto E[\underline r]$ of the uniform distribution on $I$.
+
+In any case, the distribution of reduction sequences after $n+1$ steps, conditional on the reduction sequence after $n$ steps, as defined by $\Rightarrow_\cbv$ and by $\red$, is equal, any by the inductive hypothesis the distributions after $n$ steps are equal, therefore by integrating over the reduction sequence up to step $n$, the distributions on reduction sequences up to step $n+1$ are equal.
+
+The distributions on reduction sequences of any finite length as defined by $\Rightarrow_{\cbv}$ and $\red$ are therefore equal, therefore so is the probability of having reached a value after $n$ steps, therefore so is its limit, the probability of termination, therefore the probability of termination is 1 iff the probability of termination with respect to $\cbv$ is 1.
 \end{proof}
 
 \begin{theorem} \label{thm:CbvIsTerminatingest}
