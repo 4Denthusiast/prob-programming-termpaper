@@ -372,7 +372,7 @@ See \Cref{fig:adk-diagram} for a graphical depiction of $\sim_p$- and $\sim_c$-r
 \lo{TODO: Typeset Fig.~\ref{fig:adk-diagram} in vector graphics using PGF/TikZ.}
 
 The reflexive transitive closure $\sim^*$ of this relation is used to define the set of \emph{potential positions} $L(M) = L_0(M) / \sim^*$, and each equivalence class can be considered as the same position as it may occur across multiple reachable \changed[lo]{skeletons}. 
-If $(N,P) \sim^* (O,Q)$, then $N \mid P$ and $O \mid Q$ both have the same shape (i.e.~they're either both variables, both applications, both $\tsample$s etc.), therefore it's well-defined to talk of the set of potential positions where there is a $\tsample$, $L_s(M)$. 
+If $(N,P) \sim^* (O,Q)$, then $N \mid P$ and $O \mid Q$ both have the same shape (i.e.~they're either \changed[lo]{both placeholders}, both variables, both applications, both $\tsample$s etc.), therefore it's well-defined to talk of the set of potential positions where there is a $\tsample$, $L_s(M)$. 
 \changed[lo]{Formally $L_s(M) := \{[(X, P)]_{\sim^\ast_M} : X \mid P = \tsample\}$.}
 The new sample space is then defined as $I^{L_s(M)}$, with the Borel $\sigma$-algebra and product measure.
 \changed[lo]{Since $I^{L_s(M)}$ is a countable product, the measure space is well-defined \citep[Cor.~2.7.3]{AshDD00}.}
@@ -469,9 +469,9 @@ A position in some (reduction sequence of) term(s) is \emph{derived from} anothe
 \begin{itemize}
     \item $(V,R) \sim_p (W,T)$
     \item $R = T$, $V \to W$ at $A$, and $A > R$
-    \item $V | A = (\lambda x.U) Z, U | B = x, R = A;@_2;C$ and $T = A;B;C$
-    \item $V | A = \tY (\lambda x.U), R = A;\tY;\lambda;B$ and $T = A;\lambda;@_1;B$
-    \item $V | A = \tY (\lambda x.U), U | B = x, R = A;C$ and $T = A;\lambda;@_1;B;C$
+    \item $V \mid A = (\lambda x.U) Z, U | B = x, R = A;@_2;C$ and $T = A;B;C$
+    \item $V \mid A = \tY (\lambda x.U), R = A;\tY;\lambda;B$ and $T = A;\lambda;@_1;B$
+    \item $V \mid A = \tY (\lambda x.U), U | B = x, R = A;C$ and $T = A;\lambda;@_1;B;C$
 \end{itemize}
 %\end{definition}
 
@@ -482,7 +482,7 @@ Combining this with the $\sim_{p,N}^*$s at the beginning and end then yields the
 
 
 At each reduction step $M \to N$, the sample space must be restricted from $I^{L_s(M)}$ to $I^{L_s(N)}$. 
-The injection $L_0(N) \to L_0(M)$ is trivial to define by appending $M \to N$ to each path, and using Lemma~\ref{lem:sim-M-N}, this induces a corresponding injection on the quotient, $L(N) \to L(M)$. 
+The injection $L_0(N) \to L_0(M)$ is trivial to define by \changed[lo]{prepending} $M \to N$ to each path, and using Lemma~\ref{lem:sim-M-N}, this induces a corresponding injection on the quotient, $L(N) \to L(M)$. 
 The corresponding map $L_s(N) \to L_s(M)$ is then denoted $i(M \to N)$.
 
 Unlike in the purely call-by-value case, the version of the reduction relation that takes into account samples is still a general relation rather than a function, so it is denoted ``$\Rightarrow$'' instead of ``$\red$'', and it relates $\biguplus_{M \in \Lambda_0} I^{L_s(M)}$ to itself.
@@ -499,11 +499,23 @@ The relation $\Rightarrow$ is Church-Rosser.
 \begin{proof}
 Suppose that $(M,s) \Rightarrow (M_1,s_1)$ and also $(M,s) \Rightarrow (M_2,s_2)$, then it is required to prove that there is some $(M',s')$ such that both $(M_1,s_1) \Rightarrow^* (M',s')$ and $(M_2,s_2) \Rightarrow^* (M',s')$. Let the positions of the redexes in $M \to M_1$ and $M \to M_2$ be $P_1$ and $P_2$ respectively.
 
-First consider the case that $P_1$ and $P_2$ are disjoint. Let $M_1 = M[X_1/P_1]$ and similarly for $X_2$, then let $M' = M[X_1/P_1][X_2/P_2]$. As the positions are disjoint, the substitutions commute and both $M_1$ and $M_2$ reduce (with $\to$) to $M'$. Let $s' = s \circ i(M \to M_1) \circ(M_1 \to M')$. The injection $i(M \to M_1) \circ i(M_1 \to M')$ consists of appending $M \to M_1 \to M'$ to each reduction sequence, but by case 4.a of $\sim$, this is equivalent to appending $M \to M_2 \to M'$, which is $i(M \to M_2) \circ i(M_2 \to M')$. In the case that the reduction $M \to M_2$ isn't a $\tsample$-reduction, this is enough to establish that $(M_1, s_1) \Rightarrow (M', s')$, and vice-versa. If it is $\tsample$ though, in order for it to be the case that $(M_1, s_1) \Rightarrow (M', s')$, it is additionally necessary that $X_2$, the result of the reduction at $P_2$, be $s_1(M_1, P_2)$, which follows from the fact that $(M, P_2) \sim (M_1, P_2)$ by case 1. The case that the reduction $M \to M_1$ is a $\tsample$-reduction is similar.
+First consider the case that $P_1$ and $P_2$ are disjoint. Let $M_1 = M[X_1/P_1]$ and similarly for $X_2$, then let $M' = M[X_1/P_1][X_2/P_2]$. As the positions are disjoint, the substitutions commute and both $M_1$ and $M_2$ reduce (with $\to$) to $M'$. 
+Let $s' = s \circ i(M \to M_1) \circ i(M_1 \to M')$. 
+The injection $i(M \to M_1) \circ i(M_1 \to M')$ consists of \changed[lo]{prepending} $M \to M_1 \to M'$ to each reduction sequence, but by case 4.a of $\sim$, this is equivalent to \changed[lo]{prepending} $M \to M_2 \to M'$, which is $i(M \to M_2) \circ i(M_2 \to M')$. 
+In the case that the reduction $M \to M_2$ isn't a $\tsample$-reduction, this is enough to establish that $(M_1, s_1) \Rightarrow (M', s')$, and vice-versa. 
+If it is $\tsample$ though, in order for it to be the case that $(M_1, s_1) \Rightarrow (M', s')$, it is additionally necessary that $X_2$, the result of the reduction at $P_2$, be $s_1(M_1, P_2)$, which follows from the fact that $(M, P_2) \sim (M_1, P_2)$ by case 1. 
+The case that the reduction $M \to M_1$ is a $\tsample$-reduction is similar.
 
 The case that $P_1 = P_2$ is trivial, because there is at most one possible $\Rightarrow$ reduction at any given position, therefore $(M_1, s_1) = (M_2, s_2)$ already.
 
-The remaining case is that $P_1 < P_2$ or $P_1 > P_2$. Assume without loss of generality that $P_1 < P_2$. For each possible case of what type of redex $M | P_1$ is, and $P_2$'s position within it, there is a corresponding case of $\sim_c$, and similarly to the case where $P_1$ and $P_2$ are disjoint, the term $O_1 = O_2$ from the definition of $\sim_c$ is a suitable value of $M'$. The term $M | P_1$ can't be $\tsample$, because it has strict subterms, but the case that $M | P_2 = \tsample$ is still somewhat more complicated. $P_2$ can't be within $P_1 ; @_2$ or $P_1 ; Y$ (cases e and f of $\sim_c$) because those are not valid positions to reduce a $\tsample$, and the case that $P_2$ is within the branch of an if statement that is deleted by the reduction at $P_1$ (case b) doesn't actually present a problem because there is no corresponding reduction to $M \to M_2$ in the other branch, which leaves cases c and d, that $P_2$ is in the $\tif{\cdot}{\cdot}{\cdot}$ branch that isn't deleted, and that $P_2 < P_1 ; @_1 ; \lambda$.  The values that the $\tsample$s take in these cases match because $(M,P) \sim_p (M_1, P;Q)$ by cases 3 and 2 of $\sim_p$ respectively.
+The remaining case is that $P_1 < P_2$ or $P_1 > P_2$. 
+Assume without loss of generality that $P_1 < P_2$. 
+For each possible case of what type of redex $M | P_1$ is, and $P_2$'s position within it, there is a corresponding case of $\sim_c$, and similarly to the case where $P_1$ and $P_2$ are disjoint, the term $O_1 = O_2$ from the definition of $\sim_c$ is a suitable value of $M'$. 
+The term $M \mid P_1$ can't be $\tsample$, because it has strict subterms, but the case that $M \mid P_2 = \tsample$ is still somewhat more complicated. 
+$P_2$ can't be within $P_1 ; @_2$ or $P_1 ; Y$ (cases e and f of $\sim_c$) because those are not valid positions to reduce a $\tsample$, 
+and the case that $P_2$ is within the branch of an if statement that is deleted by the reduction at $P_1$ (case b) doesn't actually present a problem because there is no corresponding reduction to $M \to M_2$ in the other branch, 
+which leaves cases c and d, that $P_2$ is in the $\tif{\cdot}{\cdot}{\cdot}$ branch that isn't deleted, and that $P_2 < P_1 ; @_1 ; \lambda$.  
+The values that the $\tsample$s take in these cases match because $(M,P) \sim_p (M_1, P;Q)$ by cases 3 and 2 of $\sim_p$ respectively.
 \end{proof}
 
 \begin{lemma} \label{simpDoesn'tMix}
