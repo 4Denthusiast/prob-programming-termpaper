@@ -313,22 +313,22 @@ Labelling the pre-chosen samples by the positions in the term would also not wor
 It is therefore necessary to consider possible positions that may occur in other terms reachable from the original term. 
 Even this is itself inadequate because some of the positions in different reachable terms need to be considered the same, and the number of reachable terms is in general uncountable, which leads to measure-theoretic issues.
 
-Define a \emph{skeleton} to be a term but, instead of having real constants $\underline r$, it has placeholders $\skeletonPlaceholder$, so that each term has a skeleton and each skeleton can be converted to a term given the appropriate number of real numbers to substitute in. 
+Define a \emph{skeleton} to be a term but, instead of having real constants $\underline r$, it has a placeholder $\skeletonPlaceholder$, so that each term has a skeleton $Sk(M)$ and each skeleton can be converted to a term $S[r]$ given a vector of $n$ real numbers to substitute in, where $n$ is the number of occurrences of $\skeletonPlaceholder$ in $S$. 
 \lo{Skeleton is defined in Sec.~\ref{sec:sampling semantics}.}
-The positions in a skeleton and the reduction relation on skeletons can be extended from the definitions on terms in the obvious way, with \changed[lo]{$\tif{\skeletonPlaceholder < 0}{A}{B}$} reducing nondeterministically to both $A$ and $B$, \changed[lo]{and $M \to M[\skeletonPlaceholder' / P]$ for a freshly generated placeholder $\skeletonPlaceholder'$, in case $M \mid P = \tsample$ and $\lambda$ does not occur after $@_2$ or $\tY$ in $P$.
+The positions in a skeleton and the reduction relation on skeletons can be extended from the definitions on terms in the obvious way, with $\tif{\skeletonPlaceholder < 0}{A}{B}$ reducing nondeterministically to both $A$ and $B$, \changed[lo]{and $M \to M[\skeletonPlaceholder / P]$, in case $M \mid P = \tsample$ and $\lambda$ does not occur after $@_2$ or $\tY$ in $P$.
 (By abuse of notation, we use the same metavariables $M, N$, etc.~for skeletons as for terms.)}
-\changed[lo]{For example, we have 
+For example, we have 
 \(
-(\lambda x . \tif{x < 0}{x}{\skeletonPlaceholder_1}) \, \tsample
+(\lambda x . \tif{x < 0}{x}{\skeletonPlaceholder}) \, \tsample
 \to
-(\lambda x . \tif{x < 0}{x}{\skeletonPlaceholder_1}) \, \skeletonPlaceholder_2
+(\lambda x . \tif{x < 0}{x}{\skeletonPlaceholder}) \, \skeletonPlaceholder
 \to
-\tif{\skeletonPlaceholder_2 < 0}{\skeletonPlaceholder_2}{\skeletonPlaceholder_1}
+\tif{\skeletonPlaceholder < 0}{\skeletonPlaceholder}{\skeletonPlaceholder}
 \to
-\skeletonPlaceholder_i
-\) where $i$ is 1 or 2.}
+\skeletonPlaceholder
+\)
 
-Given a closed term $M$, let $L_0(M)$ be the set of pairs, the first element of which is a \changed[lo]{$\to$-reduction} sequence of skeletons starting at \changed[lo]{the skeleton of} $M$, and the second of which is a position in the final skeleton of the reduction sequence. 
+Given a closed term $M$, let $L_0(M)$ be the set of pairs, the first element of which is a $\to$-reduction sequence of skeletons starting at $Sk(M)$, and the second of which is a position in the final skeleton of the reduction sequence. 
 \akr{I've yet to go through and replace references to terms with references to skeletons, but it should be reasonably obvious where the substitution should take place. 
 This is potentially even more confusing though because I'm now implicitly identifying terms, skeletons, reduction sequences and skeletal reduction sequences.} 
 Reduction sequences are used rather than reachable \changed[lo]{skeletons} because if the same \changed[lo]{skeleton} is reached twice, different samples may be needed, \lo{Give a simple example illustrating this.} but they will be discussed as though they were terms, by abuse of notation. 
@@ -482,14 +482,14 @@ Combining this with the $\sim_{p,N}^*$s at the beginning and end then yields the
 
 
 At each reduction step $M \to N$, the sample space must be restricted from $I^{L_s(M)}$ to $I^{L_s(N)}$. 
-The injection $L_0(N) \to L_0(M)$ is trivial to define by \changed[lo]{prepending} $M \to N$ to each path, and using Lemma~\ref{lem:sim-M-N}, this induces a corresponding injection on the quotient, $L(N) \to L(M)$. 
+The injection $L_0(N) \to L_0(M)$ is trivial to define by appending $Sk(M) \to Sk(N)$ to each path, and using Lemma~\ref{lem:sim-M-N}, this induces a corresponding injection on the quotient, $L(N) \to L(M)$. 
 The corresponding map $L_s(N) \to L_s(M)$ is then denoted $i(M \to N)$.
 
 Unlike in the purely call-by-value case, the version of the reduction relation that takes into account samples is still a general relation rather than a function, so it is denoted ``$\Rightarrow$'' instead of ``$\red$'', and it relates $\biguplus_{M \in \Lambda_0} I^{L_s(M)}$ to itself.
 \begin{align*}
 & (M,s) \Rightarrow (N,s \circ i(M \to N)) \text{ if either} \\
 & \qquad \text{$M \to N$ and the redex is not $\tsample$, or} \\
-& \qquad \text{$M \mid P = \tsample$, $N = M[\underline{s(M,P)}/P]$ and $\lambda$ does not occur after $@_2$ or $\tY$ in $P$}
+& \qquad \text{$M \mid P = \tsample$, $N = M[\underline{s(Sk(M),P)}/P]$ and $\lambda$ does not occur after $@_2$ or $\tY$ in $P$}
 \end{align*}
 
 \paragraph{}
