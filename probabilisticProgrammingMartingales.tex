@@ -486,7 +486,7 @@ The injection $L_0(N) \to L_0(M)$ is trivial to define by appending $Sk(M) \to S
 The corresponding map $L_s(N) \to L_s(M)$ is then denoted $i(M \to N)$.
 
 Unlike in the purely call-by-value case, the version of the reduction relation that takes into account samples is still a general relation rather than a function, so it is denoted ``$\Rightarrow$'' instead of ``$\red$'', and it relates $\biguplus_{M \in \Lambda_0} I^{L_s(M)}$ to itself.
-\changed[lo]{We write an element of $\biguplus_{M \in \Lambda_0} I^{L_s(M)}$ as $(M', s)$ where the term $M' \in \Lambda^0$ identifies the component of the disjoint set, and $s \in  I^{L_s(M')}$.}
+\changed[lo]{We write an element of $\biguplus_{M \in \Lambda_0} I^{L_s(M)}$ as $(M', s)$ where the \emph{term} $M' \in \Lambda^0$ identifies the component of the disjoint set, and $s \in  I^{L_s(M')}$.}
 \begin{align*}
 & (M,s) \Rightarrow (N,s \circ i(M \to N)) \text{ if either} \\
 & \qquad \text{$M \to N$ and the redex is not $\tsample$, or} \\
