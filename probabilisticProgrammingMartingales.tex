@@ -8,7 +8,9 @@
 \input{Style/comment}
 \usepackage{calculation}
 \usepackage{graphicx}
-
+\usepackage{tikz}
+\usetikzlibrary{positioning, graphs, quotes, graphdrawing, shapes.geometric}
+\usegdlibrary{layered, circular}
 \usepackage[square]{natbib}
 \setcitestyle{aysep={}}
 
@@ -365,8 +367,8 @@ See \Cref{fig:adk-diagram} for a graphical depiction of $\sim_p$- and $\sim_c$-r
 \end{definition}
 
 \begin{figure}
-\includegraphics[height=0.9\textheight]{akr-diagram.pdf}
-\caption{\label{fig:adk-diagram} Some examples of the old version of the $\sim_p$- and $\sim_c$-rules}
+\include{sim-diagram}
+\caption{\label{fig:adk-diagram} Some examples of the $\sim_p$- and $\sim_c$-rules}
 \end{figure}
 
 \lo{TODO: Typeset Fig.~\ref{fig:adk-diagram} in vector graphics using PGF/TikZ.}

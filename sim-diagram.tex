@@ -1,0 +1,196 @@
+% !TEX root = probabilisticProgrammingMartingales.tex
+\tikzstyle{termTree}+=
+  [root/.style={circle,draw},
+  subterm/.style={draw,regular polygon, regular polygon sides=3, inner sep=1pt},
+  branch/.style={inner sep = 0pt}
+  ]
+\newsavebox{\termARoot}
+\newsavebox{\termALeft}
+\newsavebox{\termARight}
+\newsavebox{\termAEnd}
+\savebox{\termARoot}{
+  \tikz[termTree] \graph[layered layout] {
+    N[root] -- {"$p_1$" -- "$A_1$"[subterm], "$p_2$" -- "$A_2$"[subterm]}
+  };
+}
+\savebox{\termALeft}{
+  \tikz[termTree] \graph[layered layout] {
+    ""[root] -- {"$p_1$" -- "$A_1'$"[subterm], "$p_2$" -- "$A_2$"[subterm]}
+  };
+}
+\savebox{\termARight}{
+  \tikz[termTree] \graph[layered layout] {
+    ""[root] -- {"$p_1$" -- "$A_1$"[subterm], "$p_2$" -- "$A_2'$"[subterm]}
+  };
+}
+\savebox{\termAEnd}{
+  \tikz[termTree] \graph[layered layout] {
+    ""[root] -- {"$p_1$" -- "$A_1'$"[subterm], "$p_2$" -- "$A_2'$"[subterm]}
+  };
+}
+
+\newsavebox{\termBRoot}
+\newsavebox{\termBRight}
+\newsavebox{\termBEnd}
+\savebox{\termBRoot}{
+  \tikz[termTree] \graph[layered layout] {
+    N[root] -- "$p$" -- if -- {"$\underline r$", "$A$"[subterm], "$q$" -- B[subterm]}
+  };
+}
+\savebox{\termBRight}{
+  \tikz[termTree] \graph[layered layout] {
+    ""[root] -- "$p$" -- if -- {"$\underline r$", A[subterm], "$q$" -- B'[subterm]}
+  };
+}
+\savebox{\termBEnd}{
+  \tikz[termTree] \graph[layered layout] {
+    ""[root] -- "$p$" -- "$A$"[subterm]
+  };
+}
+
+\newsavebox{\termCRoot}
+\newsavebox{\termCLeft}
+\newsavebox{\termCRight}
+\newsavebox{\termCEnd}
+\savebox{\termCRoot}{
+  \tikz[termTree] \graph[layered layout] {
+    N[root] -- "$p$" -- if -- {"$\underline r$", "$A$"[subterm], "$q$" -- B[subterm]}
+  };
+}
+\savebox{\termCRight}{
+  \tikz[termTree] \graph[layered layout] {
+    N[root] -- "$p$" -- if -- {"$\underline r$", "$A$"[subterm], "$q$" -- B'[subterm]}
+  };
+}
+\savebox{\termCLeft}{
+  \tikz[termTree] \graph[layered layout] {
+    N[root] -- "$p;q$" -- "$B$"[subterm]
+  };
+}
+\savebox{\termCEnd}{
+  \tikz[termTree] \graph[layered layout] {
+    N[root] -- "$p;q$" -- "$B'$"[subterm]
+  };
+}
+
+\newsavebox{\termDRoot}
+\newsavebox{\termDLeft}
+\newsavebox{\termDRight}
+\newsavebox{\termDEnd}
+\savebox{\termDRoot}{
+  \tikz[termTree] \graph[layered layout] {
+    N[root] -- "$p$" -- "$@$" -- {"$\lambda x$" -- "$q$" -- "$R$"[subterm], "$B$"[subterm]}
+  };
+}
+\savebox{\termDRight}{
+  \tikz[termTree] \graph[layered layout] {
+    N[root] -- "$p$" -- "$@$" -- {"$\lambda x$" -- "$q$" -- "$R'$"[subterm], "$B$"[subterm]}
+  };
+}
+\savebox{\termDLeft}{
+  \tikz[termTree] \graph[layered layout] {
+    N[root] -- "$p;q$" -- "$R[B/x]$"[subterm]
+  };
+}
+\savebox{\termDEnd}{
+  \tikz[termTree] \graph[layered layout] {
+    N[root] -- "$p;q$" -- "$R'[B/x]$"[subterm]
+  };
+}
+
+\newsavebox{\termERoot}
+\newsavebox{\termELeft}
+\newsavebox{\termERight}
+\newsavebox{\termEEnd}
+\savebox{\termERoot}{
+  \tikz[termTree] \graph[layered layout] {
+    N[root] -- "$p$" -- "$@$" -- {"$\lambda x$" -- {x1/"$x$"[subterm], x2/"$x$"[subterm]}, "$q$" -- "$B$"[subterm]},
+    x1 --[dotted, "$R_i$"] x2
+  };
+}
+\savebox{\termERight}{
+  \tikz[termTree] \graph[layered layout] {
+    ""[root] -- "$p$" -- if -- {"$\underline r$", "$A$"[subterm], "$q$" -- B'[subterm]}
+  };
+}
+\savebox{\termELeft}{
+  \tikz[termTree] \graph[layered layout] {
+    ""[root] -- "$p;q$" -- "$B$"[subterm]
+  };
+}
+\savebox{\termEEnd}{
+  \tikz[termTree] \graph[layered layout] {
+    ""[root] -- "$p;q$" -- "$B'$"[subterm]
+  };
+}
+
+\newsavebox{\termFRoot}
+\newsavebox{\termFLeft1}
+\newsavebox{\termFLeft2}
+\newsavebox{\termFRight}
+\newsavebox{\termFEnd}
+\savebox{\termFRoot}{
+  \tikz[termTree] \graph[layered layout] {
+    N[root] -- "$p$" -- "$\tY$" -- "$\lambda x$" -- ""[branch] -- {"$\dots s_i \dots$" -- "$x$"[subterm], "$q$" -- "$C$"[subterm]}
+  };
+}
+\savebox{\termFLeft1}{
+  \tikz[termTree] \graph[layered layout, fresh nodes] {
+    ""[root] -- "$p$" -- "$\lambda z$" -- "$@$" -- {""[branch] -- {"$\dots s_i \dots$" -- "$\tY$" -- "$\lambda x$" -- "$q$" -- "$C$"[subterm], "$q$" -- "$C[\tY \lambda x A/x]$"[subterm]}, "$z$"}
+  };
+}
+\savebox{\termFLeft2}{
+  \tikz[termTree] \graph[layered layout, fresh nodes] {
+    ""[root] -- "$p$" -- "$\lambda z$" -- "$@$" -- {""[branch] -- {"$\dots s_i \dots$", "$q$" -- "$\dots t_i \dots$"} -- "$\tY$" -- "$\lambda x$" -- "$q$" -- "$C$"[subterm], "$z$"}
+  };
+}
+\savebox{\termFRight}{
+  \tikz[termTree] \graph[layered layout, fresh nodes] {
+    ""[root] -- "$p$" -- "$\tY$" -- "$\lambda x$" -- ""[branch] -- {"$\dots s_i \dots$" -- "$x$"[subterm], "$q$" -- "" -- {"$\dots t_i \dots$" -- "$x$"[subterm], "$C'$"[subterm]}}
+  };
+}
+\savebox{\termFEnd}{
+  \tikz[termTree] \graph[layered layout, fresh nodes] {
+    ""[root] -- "$p$" -- "$\lambda z$" -- "$@$" -- {""[branch] -- {"$\dots s_i \dots$", "$q$" -- "$\dots t_i \dots$"} -- "$\tY$" -- "$\lambda x$" -- "$q$" -- "$C'$"[subterm], "$z$"}
+  };
+}
+
+\begin{tikzpicture}
+  \graph [layered layout, level sep = 20pt, sibling sep = 20pt] {
+    termARoot/\usebox{\termARoot} -> {
+      termALeft/\usebox{\termALeft} [> "$p_1$", < "$p_2$"],
+      termARight/\usebox{\termARight} [> "$p_2$", < "$p_1$"]
+    } ->
+    termAEnd/\usebox{\termAEnd},
+    
+    termBRoot/\usebox{\termBRoot} ->["$p;\textsf{if}_3;q$"]
+    termBRight/\usebox{\termBRight} ->["$p$"]
+    termBEnd/\usebox{\termBEnd},
+    termBRoot ->["$p$"] termBEnd,
+
+    termCRoot/\usebox{\termCRoot} -> {
+      termCLeft/\usebox{\termCLeft} [> "$p$", < "$p;q$"],
+      termCRight/\usebox{\termCRight} [> "$p;\textsf{if}_3;q$", < "$p$"]
+    } ->
+    termCEnd/\usebox{\termCEnd},
+
+    termDRoot/\usebox{\termDRoot} -> {
+      termDLeft/\usebox{\termDLeft} [> "$p$", < "$p;q$"],
+      termDRight/\usebox{\termDRight} [> "$p;@_1;\lambda;q$", < "$p$"]
+    } ->
+    termDEnd/\usebox{\termDEnd},
+
+    termERoot/\usebox{\termERoot} -> {
+      termELeft/\usebox{\termELeft} [> "$p$", < "$(p;r_i;q)_i$" dotted],
+      termERight/\usebox{\termERight} [> "$p;@_2;q$", < "$p$"]
+    } ->
+    termEEnd/\usebox{\termEEnd},
+
+    termFRoot/\usebox{\termFRoot} -> {
+      termFLeft1/\usebox{\termFLeft1} [> "$p$"] ->["$[p;\lambda;@_1;q$"]
+      termFLeft2/\usebox{\termFLeft2} [< "$(p;\lambda;@_1;s_i;\tY;\lambda;q)_i \\ (p;\lambda;@_1;t_i;\tY;\lambda;q)_i$" dotted],
+      termFRight/\usebox{\termFRight} [> "$p;\tY;\lambda;q$", < "$p$"]
+    } ->
+    termFEnd/\usebox{\termFEnd}
+  };
+\end{tikzpicture}
