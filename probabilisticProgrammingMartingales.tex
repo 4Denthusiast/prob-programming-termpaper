@@ -488,6 +488,7 @@ The injection $L_0(N) \to L_0(M)$ is trivial to define by appending $Sk(M) \to S
 The corresponding map $L_s(N) \to L_s(M)$ is then denoted $i(M \to N)$.
 
 Unlike in the purely call-by-value case, the version of the reduction relation that takes into account samples is still a general relation rather than a function, so it is denoted ``$\Rightarrow$'' instead of ``$\red$'', and it relates $\biguplus_{M \in \Lambda_0} I^{L_s(M)}$ to itself.
+\changed[lo]{We write an element of $\biguplus_{M \in \Lambda_0} I^{L_s(M)}$ as $(M', s)$ where the term $M' \in \Lambda^0$ identifies the component of the disjoint set, and $s \in  I^{L_s(M')}$.}
 \begin{align*}
 & (M,s) \Rightarrow (N,s \circ i(M \to N)) \text{ if either} \\
 & \qquad \text{$M \to N$ and the redex is not $\tsample$, or} \\
@@ -503,7 +504,7 @@ Suppose that $(M,s) \Rightarrow (M_1,s_1)$ and also $(M,s) \Rightarrow (M_2,s_2)
 
 First consider the case that $P_1$ and $P_2$ are disjoint. Let $M_1 = M[X_1/P_1]$ and similarly for $X_2$, then let $M' = M[X_1/P_1][X_2/P_2]$. As the positions are disjoint, the substitutions commute and both $M_1$ and $M_2$ reduce (with $\to$) to $M'$. 
 Let $s' = s \circ i(M \to M_1) \circ i(M_1 \to M')$. 
-The injection $i(M \to M_1) \circ i(M_1 \to M')$ consists of \changed[lo]{prepending} $M \to M_1 \to M'$ to each reduction sequence, but by case 4.a of $\sim$, this is equivalent to \changed[lo]{prepending} $M \to M_2 \to M'$, which is $i(M \to M_2) \circ i(M_2 \to M')$. 
+The injection $i(M \to M_1) \circ i(M_1 \to M')$ consists of prepending $M \to M_1 \to M'$ to each reduction sequence, but by case 4.a of $\sim$, this is equivalent to prepending $M \to M_2 \to M'$, which is $i(M \to M_2) \circ i(M_2 \to M')$. 
 In the case that the reduction $M \to M_2$ isn't a $\tsample$-reduction, this is enough to establish that $(M_1, s_1) \Rightarrow (M', s')$, and vice-versa. 
 If it is $\tsample$ though, in order for it to be the case that $(M_1, s_1) \Rightarrow (M', s')$, it is additionally necessary that $X_2$, the result of the reduction at $P_2$, be $s_1(M_1, P_2)$, which follows from the fact that $(M, P_2) \sim (M_1, P_2)$ by case 1. 
 The case that the reduction $M \to M_1$ is a $\tsample$-reduction is similar.
