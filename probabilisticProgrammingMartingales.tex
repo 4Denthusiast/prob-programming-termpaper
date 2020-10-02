@@ -369,13 +369,16 @@ The $\sim_c$-rules are illustrated in the following diagrams.
 
 \include{sim-diagram}
 
-\lo{TODO: Typeset Fig.~\ref{fig:adk-diagram} in vector graphics using PGF/TikZ.}
+%\lo{TODO: Typeset Fig.~\ref{fig:adk-diagram} in vector graphics using PGF/TikZ.}
 
 The reflexive transitive closure $\sim^*$ of this relation is used to define the set of \emph{potential positions} $L(M) = L_0(M) / \sim^*$, and each equivalence class can be considered as the same position as it may occur across multiple reachable \changed[lo]{skeletons}. 
 If $(N,P) \sim^* (O,Q)$, then $N \mid P$ and $O \mid Q$ both have the same shape (i.e.~they're either \changed[lo]{both placeholders}, both variables, both applications, both $\tsample$s etc.), therefore it's well-defined to talk of the set of potential positions where there is a $\tsample$, $L_s(M)$. 
 \changed[lo]{Formally $L_s(M) := \{[(X, P)]_{\sim^\ast_M} : X \mid P = \tsample\}$.}
 The new sample space is then defined as $I^{L_s(M)}$, with the Borel $\sigma$-algebra and product measure.
 \changed[lo]{Since $I^{L_s(M)}$ is a countable product, the measure space is well-defined \citep[Cor.~2.7.3]{AshDD00}.}
+
+\paragraph{}
+Although the six cases in the definition of $\sim_c$ are defined separately, there are some commonalities worth noting. Each case (except a, which is symmetrical) has a right branch and a left branch (the branches of case b are unfortunately displayed the wrong way around in the diagram). The right branch has reduction steps at two positions, $\beta$ then $\alpha$, where $\beta > \alpha$ (i.e.~$\beta$ is inside $\alpha$), and in the left branch, these order of these reductions are swapped, so the reductions are at $\alpha$ then $\beta_1, \dots, \beta_n$. The position $\alpha$ of one of the reductions is unchanged, and the other reduction may have multiple (in cases e and f) or 0 (in cases b and e) images in the left branch. The images $(\beta_i)$ are all still inside (greater than) $\alpha$, and although they are not generally equal to $\beta$, the subskeletons at these positions have a similar shape to the subskeleton (initially) at position $\beta$, so that the reductions at these positions are the same type of reduction (e.g.~both $\beta$-reduction or both $\textsf{if}$-reduction). Case a is also similar, except that the relevant positions are all disjoint rather than contained in one another, and either branch could be considered the right branch.
 
 \iffalse
 \changed[lo]{Since $L_s(M)$ is a countable set, there is a unique probability measure $\mu$ on the infinite product $\prod_{i \in L_s(M)} \Sigma_I$ of the Borel $\sigma$-algebras $\Sigma_I$ satisfying
@@ -468,7 +471,7 @@ In the other case, there is some overlap between the regions involved in $Y \sim
 \end{itemize}
 
 \paragraph{}
-If Y is in CBV order and $Y \sim_c^* X$, then $Y_{cbv} = X_{cbv}$ but also $Y_{cbv} = Y$ therefore $X_{cbv}$ is unique.
+If $Y$ is in CBV order and $Y \sim_c^* X$, then $Y_{cbv} = X_{cbv}$ but also $Y_{cbv} = Y$ therefore $X_{cbv}$ is unique.
 \end{proof}
 
 \begin{lemma}
@@ -510,7 +513,7 @@ The injection $L_0(N) \to L_0(M)$ is trivial to define by appending $Sk(M) \to S
 The corresponding map $L_s(N) \to L_s(M)$ is then denoted $i(M \to N)$.
 
 Unlike in the purely call-by-value case, the version of the reduction relation that takes into account samples is still a general relation rather than a function, so it is denoted ``$\Rightarrow$'' instead of ``$\red$'', and it relates $\biguplus_{M \in \Lambda_0} I^{L_s(M)}$ to itself.
-\changed[lo]{We write an element of $\biguplus_{M \in \Lambda_0} I^{L_s(M)}$ as $(M', s)$ where the term $M' \in \Lambda^0$ identifies the component of the disjoint set, and $s \in  I^{L_s(M')}$.}
+\changed[lo]{We write an element of $\biguplus_{M \in \Lambda_0} I^{L_s(M)}$ as $(M', s)$ where the \emph{term} $M' \in \Lambda^0$ and $s \in  I^{L_s(M')}$.}
 \begin{align*}
 & (M,s) \Rightarrow (N,s \circ i(M \to N)) \text{ if either} \\
 & \qquad \text{$M \to N$ and the redex is not $\tsample$, or} \\
