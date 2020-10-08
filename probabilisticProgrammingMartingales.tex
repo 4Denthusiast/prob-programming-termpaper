@@ -415,7 +415,7 @@ In the base case, that $(N_1,P_1) \sim_\downarrow^* X \sim_\uparrow^* (N_2,P_2)$
 \end{proof}
 
 
-If $(X,P) \sim_c (Y,P)$ then the final skeletons in $X$ and $Y$ are equal, and $(X,Q) \sim_c (Y,Q)$, therefore $\sim_c$ can be considered to apply to reduction sequences even without positions, $X \sim_c Y$ iff $(X,\cdot) \sim_c (Y,\cdot)$.
+If $(X,P) \sim_c (Y,P)$ then the final skeletons in $X$ and $Y$ are equal, and $(X,Q) \sim_c (Y,Q)$, therefore $\sim_c$ can be considered to apply to reduction sequences even without positions, $X \sim_c Y$ iff $(X,\cdot) \sim_c (Y,\cdot)$. The structure of $\sim_c$ can be seen more clearly by choosing a canonical example from each equivalence class. For this, the member of the class that's in call-by-value order is used. A reduction sequence is in call-by-value order if for every pair of reductions in the sequence at positions $\alpha$ and $\beta$, where the reduction at $\alpha$ happens first, either $\alpha \leq \beta$ or $\alpha$ and $\beta$ are disjoint, with $\alpha$ to the left of $\beta$ (i.e.~the first elements of the sequences $\alpha, \beta$ where they differ are $@_1$ and $@_2$, $\underline f_i$ and $\underline f_j$ for $i < j$, or $\textsf{if}_i$ and $\textsf{if}_j$ for $i < j$, in that order). Note that although the reductions that occur in the sequence are in call-by-value order, it may not be the actual call-by-value reduction sequence starting from that point because some redexes may remain un-reduced even when other reductions that should happen afterwards occur. It is only required that the reductions that do occur occur in the correct order.
 
 \begin{lemma} \label{canonicalCousins}
 For any reduction sequence $X$, there is a unique reduction sequence $X_{cbv}$ that is related to $X$ by $\sim_c$ and is in call-by-value order, and if $X \sim_c^* Y$, then $X_{cbv} = Y_{cbv}$.
@@ -424,7 +424,7 @@ For any reduction sequence $X$, there is a unique reduction sequence $X_{cbv}$ t
 \lo{As defined, $\sim_c$ is not symmetric.}
 
 \begin{proof}
-A reduction sequence is in call-by-value order if for every pair of reductions in the sequence at positions $\alpha$ and $\beta$, where the reduction at $\alpha$ happens first, either $\alpha \leq \beta$ or $\alpha$ and $\beta$ are disjoint, with $\alpha$ to the left of $\beta$ (i.e.~the first elements of the sequences $\alpha, \beta$ where they differ are $@_1$ and $@_2$, $\underline f_i$ and $\underline f_j$ for $i < j$, or $\textsf{if}_i$ and $\textsf{if}_j$ for $i < j$, in that order. Note that although the reductions that occur in $X_{cbv}$ are in call-by-value order, it may not be the actual call-by-value reduction sequence because some redexes may remain un-reduced even when other reductions that should happen afterwards occur. It is only required that the reductions that do occur occur in the correct order.
+
 \lo{This paragraph (especially the last sentence) is ambiguous.
 What does it mean to say that that a reductions that occur in a reduction sequences are \emph{in CBV order}?}
 \iffalse
