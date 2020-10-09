@@ -137,35 +137,35 @@ Various theorems about probabilistic programs rely on the assumption that the pr
 The language SPCF is a simply-typed lambda calculus with sampling of real numbers from $[0,1]$ and unbounded scoring, following \cite{MakOP20b}. Types and terms are defined as follows, where $r$ is a real number, $x$ is a variable, $f : \mathbb{R}^n \to \mathbb{R}$ is any measurable function, and $\Gamma$ is an environment:
 \begin{align*}
   & \text{types } A, B ::= \textsf{R}  \mid  A \to B \\
-  & \text{values } v ::= \lambda x.s  \mid  \underline{r} \\
-  & \text{terms } s, t ::= v  \mid  x  \mid  t_1 \, t_2  \mid  \underline{f}(s_1,\dots ,s_n)  \mid  \tY s  \mid  \tif{s < 0}{t_1}{t_2}  \mid  \tsample  \mid  \tscore(s)
+  & \text{values } V ::= \lambda x.M  \mid  \underline{r} \\
+  & \text{terms } M, N ::= V  \mid  x  \mid  M_1 \, M_2  \mid  \underline{f}(M_1,\dots ,M_n)  \mid  \tY M  \mid  \tif{M < 0}{N_1}{N_2}  \mid  \tsample  \mid  \tscore(M)
 \end{align*}
 \begin{align*}
   \frac{}{\Gamma ; x:A \vdash x:A} \qquad
-  \frac{\Gamma ; x:A \vdash s : B}{\Gamma \vdash \lambda x.s : A \to B} \qquad
+  \frac{\Gamma ; x:A \vdash M : B}{\Gamma \vdash \lambda x.M : A \to B} \qquad
   \frac{}{\underline{r} : \textsf{R}} \qquad
-  \frac{\Gamma \vdash s:A \to B \quad \Gamma \vdash t : A}{\Gamma \vdash s \, t : B} \\ \\
-  \frac{\Gamma \vdash s_1:\textsf{R} \dots \Gamma \vdash s_n:\textsf{R}}{\Gamma \vdash \underline{f}(s_1,\dots,s_n) : \textsf{R}} \ f : \mathbb{R}^n \to \mathbb{R} \qquad
-  \frac{\Gamma \vdash s : (A \to B) \to (A \to B)}{\Gamma \vdash \tY s : (A \to B)} \\ \\
-  \frac{\Gamma \vdash c : \textsf{R} \quad \Gamma \vdash s_1 : A \quad \Gamma \vdash s_2 : A}{\Gamma \vdash \tif{c < 0}{s_1}{s_2} : A} \qquad
+  \frac{\Gamma \vdash M:A \to B \quad \Gamma \vdash N : A}{\Gamma \vdash M \, N : B} \\ \\
+  \frac{\Gamma \vdash M_1:\textsf{R} \dots \Gamma \vdash M_n:\textsf{R}}{\Gamma \vdash \underline{f}(M_1,\dots,M_n) : \textsf{R}} \ f : \mathbb{R}^n \to \mathbb{R} \qquad
+  \frac{\Gamma \vdash M : (A \to B) \to (A \to B)}{\Gamma \vdash \tY M : (A \to B)} \\ \\
+  \frac{\Gamma \vdash M : \textsf{R} \quad \Gamma \vdash N_1 : A \quad \Gamma \vdash N_2 : A}{\Gamma \vdash \tif{M < 0}{N_1}{N_2} : A} \qquad
   \frac{}{\Gamma \vdash \tsample : \textsf{R}} \qquad
   \frac{\Gamma \vdash s : \textsf{R}}{\Gamma \vdash \tscore (s) : \textsf{R}}
 \end{align*}
 
-The set of all terms is denoted $\Lambda$, and the set of closed terms is denoted $\Lambda^0$.
+Terms are identified up to $\alpha$-equivalence, as usual. The set of all terms is denoted $\Lambda$, and the set of closed terms is denoted $\Lambda^0$.
 
 \paragraph{}
 To define the reduction relation, let \emph{evaluation contexts} be of the form:
 \begin{align*}
-  E ::= & \, [\,] \mid E \, t \mid v \, E \mid \underline{f}(r_1,\dots ,r_{k-1}, E, s_{k+1}, \dots, s_n) \\ & \mid \tY E \mid \tif{E<0}{s_1}{s_2} \mid \tscore (E)
+  E ::= & \, [\,] \mid E \, M \mid V \, E \mid \underline{f}(\underline r_1,\dots ,\underline r_{k-1}, E, M_{k+1}, \dots, M_n) \\ & \mid \tY E \mid \tif{E<0}{M_1}{M_2} \mid \tscore (E)
 \end{align*}
 then a term reduces if it is formed by substituting a redex in a context i.e.
 \begin{align*}
-  E[(\lambda x.s) v] & \to E[s[v/x]] \\
+  E[(\lambda x.M) N] & \to E[M[N/x]] \\
   E[\underline f (\underline r_1, \dots , \underline r_n)] & \to E[\underline{f(r_1,\dots,r_n)}] \\
-  E[\tY \lambda x. s] & \to E[\lambda z. s[(\tY \lambda x. s)/x] z] \text{ where $z$ is not free in $s$}\\
-  E[\tif{\underline r < 0}{s_1}{s_2}] & \to E[s_1] \text{ where }r < 0 \\
-  E[\tif{\underline r < 0}{s_1}{s_2}] & \to E[s_2] \text{ where }r \geq 0 \\
+  E[\tY \lambda x. M] & \to E[\lambda z. M[(\tY \lambda x. M)/x] z] \text{ where $z$ is not free in $s$}\\
+  E[\tif{\underline r < 0}{M_1}{M_2}] & \to E[M_1] \text{ where }r < 0 \\
+  E[\tif{\underline r < 0}{M_1}{M_2}] & \to E[M_2] \text{ where }r \geq 0 \\
   E[\tsample] & \to E[\underline r] \text{ where } r \in [0,1] \\
   E[\tscore(\underline r)] & \to E[\underline r].
 \end{align*}
@@ -173,8 +173,6 @@ then a term reduces if it is formed by substituting a redex in a context i.e.
 \lo{The $\tscore$ rule should have a side condition: if $r > 0$.}
 
 Every closed well-typed term either is a value or reduces to another term.
-
-\lo{NOTATION. A minor point: metavariables for terms are $s, t$, etc.~up to this point, but $M, N$, etc.~here after all.}
 
 \subsection{Sampling semantics}
 \label{sec:sampling semantics}
@@ -260,36 +258,36 @@ A \emph{position}
 %\lo{The idea is common enough. I think no citation necessary.}
 is a finite sequence of steps into a term, defined inductively as
 \begin{align*}
-P ::= \cdot \mid \lambda ; P \mid @_1 ; P \mid @_2 ; P \mid \underline f_i ; P \mid \tY ; P \mid \textsf{if}_1 ; P \mid \textsf{if}_2 ; P \mid \textsf{if}_3 ; P \mid \tscore ; P.
+\alpha ::= \cdot \mid \lambda ; \alpha \mid @_1 ; \alpha \mid @_2 ; \alpha \mid \underline f_i ; \alpha \mid \tY ; \alpha \mid \textsf{if}_1 ; \alpha \mid \textsf{if}_2 ; \alpha \mid \textsf{if}_3 ; \alpha \mid \tscore ; \alpha.
 \end{align*}
-The \emph{subterm of $M$ at a position $P$}, denoted $M \mid P$, is defined as
+The \emph{subterm of $M$ at a position $\alpha$}, denoted $M \mid \alpha$, is defined as
 \begin{align*}
 M \mid \cdot & = M \\
-\lambda x. M \mid \lambda ; P & = M \mid P \\
-M_1 M_2 \mid @_i ; P & = M_i \mid P \quad \text{for } i = 1,2 \\
-\underline f(M_1,\dots,M_n) \mid \underline f_i ; P & = M_i \mid P \quad \text{for }i \leq n \\
-\tY M \mid \tY ; P & = M \mid P \\
-\tif{M_1 < 0}{M_2}{M_3} \mid \textsf{if}_i ; P & = M_i \mid P \quad \text{for } i = 1,2,3 \\
-\tscore(M) \mid \tscore ; P & = M \mid P
+\lambda x. M \mid \lambda ; \alpha & = M \mid \alpha \\
+M_1 M_2 \mid @_i ; \alpha & = M_i \mid \alpha \quad \text{for } i = 1,2 \\
+\underline f(M_1,\dots,M_n) \mid \underline f_i ; \alpha & = M_i \mid \alpha \quad \text{for }i \leq n \\
+\tY M \mid \tY ; \alpha & = M \mid \alpha \\
+\tif{M_1 < 0}{M_2}{M_3} \mid \textsf{if}_i ; \alpha & = M_i \mid \alpha \quad \text{for } i = 1,2,3 \\
+\tscore(M) \mid \tscore ; \alpha & = M \mid \alpha
 \end{align*}
-so that every subterm is located at a unique position, but not every position corresponds to a subterm (e.g. $x \, y \mid \lambda ; \cdot$ is undefined). 
-A position such that $M\mid P$ does exist is said to \emph{occur} in $M$. 
+so that every subterm is located at a unique position, but not every position corresponds to a subterm (e.g. $x \, y \mid \lambda$ is undefined). 
+A position such that $M\mid \alpha$ does exist is said to \emph{occur} in $M$. 
 %\changed[lo]{
-\emph{Substitution} of $N$ at position $P$ in $M$, written $M[N/P]$, is defined similarly.
+\emph{Substitution} of $N$ at position $\alpha$ in $M$, written $M[N/\alpha]$, is defined similarly.
 For example, let 
 \[
 M = \lambda x \, y. y \, (\tif{x < 0}{y \, (\underline f (x))}{\underline 3})
 \qquad
-P =\lambda ; \lambda ; @_2 ; \textsf{if}_2 ; @_2
+\alpha =\lambda ; \lambda ; @_2 ; \textsf{if}_2 ; @_2
 \]
 then 
 \(
-M[\tsample / P] = \lambda x \, y. y \, (\tif{x < 0}{y \, \tsample}{\underline 3}).
+M[\tsample / \alpha] = \lambda x \, y. y \, (\tif{x < 0}{y \, \tsample}{\underline 3}).
 \)
 %}
 
-Two subterms $N_1$ and $N_2$ of a term $M$, corresponding to positions $P_1$ and $P_2$, can overlap in a few different ways. 
-If $P_1$ is an initial segment (i.e.~prefix) of $P_2$ (written as $P_1 \leq P_2$), then $N_2$ is also a subterm of $N_1$. If neither $P_1 \leq P_2$ nor $P_1 \geq P_2$, the positions are said to be disjoint. 
+Two subterms $N_1$ and $N_2$ of a term $M$, corresponding to positions $\alpha_1$ and $\alpha_2$, can overlap in a few different ways. 
+If $\alpha_1$ is an initial segment (i.e.~prefix) of $\alpha_2$ (written as $\alpha_1 \leq \alpha_2$), then $N_2$ is also a subterm of $N_1$. If neither $\alpha_1 \leq \alpha_2$ nor $\alpha_1 \geq \alpha_2$, the positions are said to be disjoint. 
 This is mostly relevant in that in any substitution at some position, the subterms at all other positions are unaffected. 
 %\lo{The preceding sentence is unclear. Typo? Mostly $\mapsto$ most?}
 
@@ -297,17 +295,17 @@ With this notation, a more general reduction relation $\to$ can be defined. \akr
 %\lo{On first reading, I struggled to parse the following clauses.}
 \begin{definition}
 \label{def:more general red}
-The binary relation $\to$ is defined by the following rules, each is conditional on a redex occurring at position $P$ in the term $M$:
+The binary relation $\to$ is defined by the following rules, each is conditional on a redex occurring at position $\alpha$ in the term $M$:
 \begin{align*}
-  \text{if } M \mid P = (\lambda x.s) v,\ & M \to M[s[v/x]/P] \\
-  \text{if } M \mid P = \underline f (\underline r_1, \dots , \underline r_n),\ & M \to M[\underline{f(r_1,\dots,r_n)}/P] \\
-  \text{if } M \mid P = \tY \lambda x. s,\ & M \to M[\lambda z. s[(\tY \lambda x. s)/x] z/P] \text{ where $z$ is not free in $s$}\\
-  \text{if } M \mid P = \tif{\underline r < 0}{s_1}{s_2},\ & M \to M[s_1/P] \text{ where }r < 0 \\
-  \text{if } M \mid P = \tif{\underline r < 0}{s_1}{s_2},\ & M \to M[s_2/P] \text{ where }r \geq 0 \\
-  \text{if } M \mid P = \tsample & \text{ and $\lambda$ does not occur after $@_2$ or $\tY$ in $P$},\\ & M \to M[\underline r/P] \text{ where } r \in [0,1] \\
-  \text{if } M \mid P = \tscore(\underline r),\ & M \to M[\underline r/P].
+  \text{if } M \mid \alpha = (\lambda x.N) V,\ & M \to M[N[V/x]/\alpha] \\
+  \text{if } M \mid \alpha = \underline f (\underline r_1, \dots , \underline r_n),\ & M \to M[\underline{f(r_1,\dots,r_n)}/\alpha] \\
+  \text{if } M \mid \alpha = \tY \lambda x. N,\ & M \to M[\lambda z. N[(\tY \lambda x. N)/x] z/\alpha] \text{ where $z$ is not free in $N$}\\
+  \text{if } M \mid \alpha = \tif{\underline r < 0}{N_1}{N_2},\ & M \to M[N_1/\alpha] \text{ where }r < 0 \\
+  \text{if } M \mid \alpha = \tif{\underline r < 0}{N_1}{N_2},\ & M \to M[N_2/\alpha] \text{ where }r \geq 0 \\
+  \text{if } M \mid \alpha = \tsample & \text{ and $\lambda$ does not occur after $@_2$ or $\tY$ in $\alpha$},\\ & M \to M[\underline r/\alpha] \text{ where } r \in [0,1] \\
+  \text{if } M \mid \alpha = \tscore(\underline r),\ & M \to M[\underline r/\alpha].
 \end{align*}
-In each of these cases, $M \mid P$ is the \emph{redex}, and reduction takes place at $P$.
+In each of these cases, $M \mid \alpha$ is the \emph{redex}, and reduction takes place at $\alpha$.
 \end{definition}
 
 \paragraph{}
@@ -317,8 +315,7 @@ Even this is itself inadequate because some of the positions in different reacha
 
 Define a \emph{skeleton} to be a term but, instead of having real constants $\underline r$, it has a placeholder $\skeletonPlaceholder$, so that each term has a skeleton $Sk(M)$ and each skeleton can be converted to a term $S[r]$ given a vector of $n$ real numbers to substitute in, where $n$ is the number of occurrences of $\skeletonPlaceholder$ in $S$. 
 \lo{Skeleton is defined in Sec.~\ref{sec:sampling semantics}.}
-The positions in a skeleton and the reduction relation on skeletons can be extended from the definitions on terms in the obvious way, with $\tif{\skeletonPlaceholder < 0}{A}{B}$ reducing nondeterministically to both $A$ and $B$, \changed[lo]{and $M \to M[\skeletonPlaceholder / P]$, in case $M \mid P = \tsample$ and $\lambda$ does not occur after $@_2$ or $\tY$ in $P$.
-(By abuse of notation, we use the same metavariables $M, N$, etc.~for skeletons as for terms.)}
+The positions in a skeleton and the reduction relation on skeletons can be extended from the definitions on terms in the obvious way, with $\tif{\skeletonPlaceholder < 0}{A}{B}$ reducing nondeterministically to both $A$ and $B$, and $\tsample$ reducing to $\skeletonPlaceholder$.
 For example, we have 
 \(
 (\lambda x . \tif{x < 0}{x}{\skeletonPlaceholder}) \, \tsample
@@ -331,9 +328,7 @@ For example, we have
 \)
 
 Given a closed term $M$, let $L_0(M)$ be the set of pairs, the first element of which is a $\to$-reduction sequence of skeletons starting at $Sk(M)$, and the second of which is a position in the final skeleton of the reduction sequence. 
-\akr{I've yet to go through and replace references to terms with references to skeletons, but it should be reasonably obvious where the substitution should take place. 
-This is potentially even more confusing though because I'm now implicitly identifying terms, skeletons, reduction sequences and skeletal reduction sequences.} 
-Reduction sequences are used rather than reachable \changed[lo]{skeletons} because if the same \changed[lo]{skeleton} is reached twice, different samples may be needed, \lo{Give a simple example illustrating this.} but they will be discussed as though they were terms, by abuse of notation. 
+Reduction sequences are used rather than reachable skeletons because if the same skeleton is reached twice, different samples may be needed, \lo{Give a simple example illustrating this.} but the reduction sequences of skeletons will be discussed as though they were just skeletons, identifying them with their final skeletons. With this abuse of notation, a reduction sequence $N$ (actually $N_1 \to \dots \to N_n = N$) may be said to reduce to a reduction sequence $O$, where the reduction sequence implicitly associated with the final skeleton $O$ is $N_1 \to \dots \to N_n \to O$.
 
 \lo{Readers would benefit greatly from some examples of an $L_0(M)$-pair, and the relations $\sim_p$ and $\sim_c$, here, before the formal definitions. Explain the underlying intuition.} 
 
@@ -341,27 +336,27 @@ Reduction sequences are used rather than reachable \changed[lo]{skeletons} becau
 The relation $\sim$ is defined as the union of the symmetric relations $\sim_p$ \changed[lo]{($p$ for parent-child)} and $\sim_c$ \changed[lo]{($c$ for cousin)} where
 \lo{As defined, $\sim_p$ is not a symmetric relation.}
 \begin{enumerate}
-    \item If $N$ reduces to $O$ with the redex at position $P$ \changed[lo]{(i.e.~$M \to^\ast N \to O = N[\dotDelta / P]$ with $O \mid P = \Delta$ for some redex contraction $\Delta \to \dotDelta$)}, and $Q$ is a position in $N$ disjoint from $P$, then $(N,Q) \sim_p (O,Q)$.
+    \item If $N$ reduces to $O$ with the redex at position $\alpha$, and $\beta$ is a position in $N$ disjoint from $\alpha$, then $(N,\beta) \sim_p (O,\beta)$.
     
-    \item If $N$ $\beta$-reduces to $O$ at position $P$, $Q$ is a position in $N \mid P;@_1;\lambda$ and $N \mid P;@_1;\lambda;Q$ is not the variable involved in the reduction, $(N,P;@_1;\lambda;Q) \sim_p (O, P;Q)$
+    \item If $N$ $\beta$-reduces to $O$ at position $\alpha$, $\beta$ is a position in $N \mid \alpha;@_1;\lambda$ and $N \mid \alpha;@_1;\lambda;\beta$ is not the variable involved in the reduction, $(N,\alpha;@_1;\lambda;\beta) \sim_p (O, \alpha;\beta)$
     
-    \item If $N$ $\textsf{if}$-reduces to $O$ at position $P$, with the first resp. second branch being taken, and $P;\textsf{if}_i;Q$ occurs in $N$ (where $i = 2$ resp. $3$), $(N,P;\textsf{if}_i;Q) \sim_p (O,P;Q)$
+    \item If $N$ $\textsf{if}$-reduces to $O$ at position $\alpha$, with the first resp. second branch being taken, and $\alpha;\textsf{if}_i;\beta$ occurs in $N$ (where $i = 2$ resp. $3$), $(N,\alpha;\textsf{if}_i;\beta) \sim_p (O,\alpha;\beta)$
     
     \item If $N$, $O_1$ and $O_2$ match any of the following cases:
     \begin{enumerate}
-        \item $N$ contains redexes at disjoint positions $P_1$ and $P_2$, $O_1$ is $N$ reduced first at $P_1$ then $P_2$ and $O_2$ is $N$ reduced first at $P_2$ then at $P_1$.
+        \item $N$ contains redexes at disjoint positions $\alpha_1$ and $\alpha_2$, $O_1$ is $N$ reduced first at $\alpha_1$ then $\alpha_2$ and $O_2$ is $N$ reduced first at $\alpha_2$ then at $\alpha_1$.
         
-        \item $N \mid P = \tif{\underline r < 0}{N_1}{N_2}$, where $r < 0$ (or, respectively, $r \geq 0$), $(N_2 \text{ resp. } N_1) \mid Q$ is a redex, and $O_1$ is $N$ reduced at $P$ and $O_2$ is $N$ reduced first at $P;(\textsf{if}_3 \text{ resp. } \textsf{if}_2);Q$ then at $P$
+        \item $N \mid \alpha = \tif{\underline r < 0}{N_1}{N_2}$, where $r < 0$ (or, respectively, $r \geq 0$), $(N_2 \text{ resp. } N_1) \mid \beta$ is a redex, and $O_1$ is $N$ reduced at $\alpha$ and $O_2$ is $N$ reduced first at $\alpha;(\textsf{if}_3 \text{ resp. } \textsf{if}_2);\beta$ then at $\alpha$
         
-        \item $N \mid P = \tif{\underline r < 0}{N_1}{N_2}$, where $r < 0$ (or, respectively, $r \geq 0$), $(N_1 \text{ resp. } N_2) \mid Q$ is a redex, and $O_1$ is $N$ reduced first at $P$ then at $P;Q$ and $O_2$ is $N$ reduced first at $P;(\textsf{if}_2 \text{ resp. } \textsf{if}_3);Q$ then at $P$
+        \item $N \mid \alpha = \tif{\underline r < 0}{N_1}{N_2}$, where $r < 0$ (or, respectively, $r \geq 0$), $(N_1 \text{ resp. } N_2) \mid \beta$ is a redex, and $O_1$ is $N$ reduced first at $\alpha$ then at $\alpha;\beta$ and $O_2$ is $N$ reduced first at $\alpha;(\textsf{if}_2 \text{ resp. } \textsf{if}_3);\beta$ then at $\alpha$
         
-        \item $N \mid P = (\lambda x. A) B$, there is a redex in $A$ at position $Q$, $O_1$ is $N$ reduced first at $P$ then at $P;Q$, and $O_2$ is $N$ reduced first at $P;@_1;\lambda;Q$ then at $P$
+        \item $N \mid \alpha = (\lambda x. A) B$, there is a redex in $A$ at position $\beta$, $O_1$ is $N$ reduced first at $\alpha$ then at $\alpha;\beta$, and $O_2$ is $N$ reduced first at $\alpha;@_1;\lambda;\beta$ then at $\alpha$
         
-        \item $N \mid P = (\lambda x. A) B$, $B \mid Q$ is a redex, $(R_i)_i$ is a list of all the positions in $A$ where $A \mid R = x$, ordered from left to right, $O_1$ is $N$ reduced first at $P ; @_2 ; Q$ then at $P$, and $O_2$ is $N$ reduced first at $P$ then at $P;R_i;Q$ for each $i$ in order.
+        \item $N \mid \alpha = (\lambda x. A) B$, $B \mid \beta$ is a redex, $(\gamma_i)_i$ is a list of all the positions in $A$ where $A \mid \gamma = x$, ordered from left to right, $O_1$ is $N$ reduced first at $\alpha ; @_2 ; \beta$ then at $\alpha$, and $O_2$ is $N$ reduced first at $\alpha$ then at $\alpha;\gamma_i;\beta$ for each $i$ in order.
         
-        \item $N \mid P = \tY (\lambda x. A)$, $A$ reduced at $Q$ is $A'$, $(R_i)_i$ is a list of all the positions where $A' \mid R  = x$, ordered from left to right, $O_1$ is $N$ reduced first at $P;\tY;\lambda;Q$ then at $P$, and $O_2$ is $N$ reduced first at $P$ then at $P;\lambda;@_1;R_i;Y;\lambda;Q$ for each $i$ in order where $R_i$ is left of $Q$ then at $P;\lambda;@_1;Q$ then at $P;\lambda;@_1;R_i;Y;\lambda;Q$ for the remaining values of $i$.
+        \item $N \mid \alpha = \tY (\lambda x. A)$, $A$ reduced at $\beta$ is $A'$, $(\gamma_i)_i$ is a list of all the positions where $A' \mid \gamma  = x$, ordered from left to right, $O_1$ is $N$ reduced first at $\alpha;\tY;\lambda;\beta$ then at $\alpha$, and $O_2$ is $N$ reduced first at $\alpha$ then at $\alpha;\lambda;@_1;\gamma_i;Y;\lambda;\beta$ for each $i$ in order where $\gamma_i$ is left of $\beta$ then at $\alpha;\lambda;@_1;\beta$ then at $\alpha;\lambda;@_1;\gamma_i;Y;\lambda;\beta$ for the remaining values of $i$.
     \end{enumerate}
-    (in which case $O_1$ and $O_2$ are equal as terms, but with different reduction sequences), $O_1'$ and $O_2'$ are the results of applying some reduction sequence to each of $O_1$ and $O_2$ (the same reductions in each case, which is always possible because they're equal terms), and $S$ is a position in $O_1'$ (or equivalently $O_2'$), then $(O_1',S) \sim_c (O_2',S)$.
+    (in which case $O_1$ and $O_2$ are equal as skeletons, but with different reduction sequences), $O_1'$ and $O_2'$ are the results of applying some reduction sequence to each of $O_1$ and $O_2$ (the same reductions in each case, which is always possible because they're equal terms), and $\delta$ is a position in $O_1'$ (or equivalently $O_2'$), then $(O_1',\delta) \sim_c (O_2',\delta)$.
 \end{enumerate}
 The $\sim_c$-rules are illustrated in the following diagrams.
 \end{definition}
@@ -369,11 +364,9 @@ The $\sim_c$-rules are illustrated in the following diagrams.
 
 \include{sim-diagram}
 
-%\lo{TODO: Typeset Fig.~\ref{fig:adk-diagram} in vector graphics using PGF/TikZ.}
-
-The reflexive transitive closure $\sim^*$ of this relation is used to define the set of \emph{potential positions} $L(M) = L_0(M) / \sim^*$, and each equivalence class can be considered as the same position as it may occur across multiple reachable \changed[lo]{skeletons}. 
-If $(N,P) \sim^* (O,Q)$, then $N \mid P$ and $O \mid Q$ both have the same shape (i.e.~they're either \changed[lo]{both placeholders}, both variables, both applications, both $\tsample$s etc.), therefore it's well-defined to talk of the set of potential positions where there is a $\tsample$, $L_s(M)$. 
-\changed[lo]{Formally $L_s(M) := \{[(X, P)]_{\sim^\ast_M} : X \mid P = \tsample\}$.}
+The reflexive transitive closure $\sim^*$ of this relation is used to define the set of \emph{potential positions} $L(M) = L_0(M) / \sim^*$, and each equivalence class can be considered as the same position as it may occur across multiple reachable skeletons. 
+If $(N,\alpha) \sim^* (O,\beta)$, then $N \mid \alpha$ and $O \mid \beta$ both have the same shape (i.e.~they're either both the placeholder $\skeletonPlaceholder$, both variables, both applications, both $\tsample$s etc.), therefore it's well-defined to talk of the set of potential positions where there is a $\tsample$, $L_s(M)$. 
+Formally $L_s(M) := \{[(X, \alpha)]_{\sim^\ast_M} : X \mid \alpha = \tsample\}$.
 The new sample space is then defined as $I^{L_s(M)}$, with the Borel $\sigma$-algebra and product measure.
 \changed[lo]{Since $I^{L_s(M)}$ is a countable product, the measure space is well-defined \citep[Cor.~2.7.3]{AshDD00}.}
 
@@ -393,7 +386,7 @@ where $\Leb$ is the Lebesgue measure on the measurable space $(I, \Sigma_I)$.}
 \begin{itemize}
     \item If $M \to N$, the relation $\sim_N^*$ defined on $Rch(N)$ is equal to the restriction of $\sim_M^*$ to $Rch(N)$ %\lo{Define $\sim_N^*$.}
     \item Given the definition below of $\Rightarrow$, which is still applicable to this version of $\sim$, and which is the equivalent of $\red$ in this version of the semantics, $\Rightarrow$ is Church-Rosser.
-    \item If $M \to N$ at $P$, no position in any term in $Rch(N)$ is related to $(M,P)$ by $\sim_M^*$, and therefore each sample is used at most once in any reduction sequence.
+    \item If $M \to N$ at $\alpha$, no position in any term in $Rch(N)$ is related to $(M,\alpha)$ by $\sim_M^*$, and therefore each sample is used at most once in any reduction sequence.
     \item The subprobability distribution of values obtained by reducing a term in the usual call-by-value semantics is equal to that obtained by any reduction strategy on $\Rightarrow$ (i.e.~a sub-relation of $\Rightarrow$ that is a function) (with some allowance made for the fact that some values are not normal forms of $\Rightarrow$, so the reduction strategy might overshoot the value that $\red^\infty$ reaches. I'm not quite sure what form this will take.)
     \item Similarly, the probability of termination is equal in $\red^\infty$ and any reduction strategy on $\Rightarrow$, so almost sure termination can be equivalently defined based on $\Rightarrow$.
     \item For any closed term $N$, if there is any reduction strategy for $N$ and ranking function corresponding to that reduction strategy, $N$ is AST.
@@ -404,18 +397,18 @@ where $\Leb$ is the Lebesgue measure on the measurable space $(I, \Sigma_I)$.}
 Before defining the new version of the reduction relation $\red$, a few lemmas about the properties of $\sim$ are necessary for it to be well-defined.
 
 \begin{lemma} \label{downAcrossUp}
-If $(N_1,P_1) \sim^* (N_2,P_2)$, there is some descendants $N'_1, N'_2$ of $N_1$ resp.~$N_2$, and a position $P'$ in both of them such that $(N_1,P_1) \sim_p^* (N'_1, P') \sim_c^* (N'_2, P') \sim_p^* (N_2, P_2)$.
+If $(N_1,\alpha_1) \sim^* (N_2,\alpha_2)$, there is some descendants $N'_1, N'_2$ of $N_1$ resp.~$N_2$, and a position $\alpha'$ in both of them such that $(N_1,\alpha_1) \sim_p^* (N'_1, \alpha') \sim_c^* (N'_2, \alpha') \sim_p^* (N_2, \alpha_2)$.
 \end{lemma}
 \begin{proof}
-The $\sim$ relation can be split into $\sim_\downarrow \cup \sim_\uparrow$, where $(A,P_A) \sim_\downarrow (B,P_B)$ if either $A \to B$ and $(A,P_A) \sim_p (B,P_B)$ or $(A,P_A) \sim_c (B,P_B)$, and similarly $(A,P_A) \sim_\uparrow (B,P_B)$ if either $B \to A$ and $(A,P_A) \sim_p (B,P_B)$ or $(A,P_A) \sim_c (B,P_B)$. The sequence of $\sim$ relations linking $N_1$ to $N_2$ can then be expressed as an alternating sequence of $\sim_\downarrow^*$ and $\sim_\uparrow^*$s, starting with $\sim_\downarrow^*$ and ending with $\sim_\uparrow^*$, and the proof proceeds by induction on the number of these alternations.
+The $\sim$ relation can be split into $\sim_\downarrow \cup \sim_\uparrow$, where $(A,\alpha) \sim_\downarrow (B,\beta)$ if either $A \to B$ and $(A,\alpha) \sim_p (B,\beta)$ or $(A,\alpha) \sim_c (B,\beta)$, and similarly $(A,\alpha) \sim_\uparrow (B,\beta)$ if either $B \to A$ and $(A,\alpha) \sim_p (B,\beta)$ or $(A,\alpha) \sim_c (B,\beta)$. The sequence of $\sim$ relations linking $N_1$ to $N_2$ can then be expressed as an alternating sequence of $\sim_\downarrow^*$ and $\sim_\uparrow^*$s, starting with $\sim_\downarrow^*$ and ending with $\sim_\uparrow^*$, and the proof proceeds by induction on the number of these alternations.
 
-In the base case, that $(N_1,P_1) \sim_\downarrow^* X \sim_\uparrow^* (N_2,P_2)$, \dots
+In the base case, that $(N_1,\alpha_1) \sim_\downarrow^* X \sim_\uparrow^* (N_2,\alpha_2)$, \dots
 
 \akr{Actually proving that this process terminates will be a pain although I'm confident it will work, but the basic idea is that the sequence of $\sim$ steps can be altered by repeatedly replacing the subsequence $\sim_c, \sim_{p,\downarrow}$ with $\sim_{p,\downarrow}, \sim_c$, the subsequence $\sim_{p,\uparrow}, \sim_c$ with $\sim_c, \sim_{p,\uparrow}$, and the subsequence $\sim_{p,\uparrow}, \sim_{p,\downarrow}$ with $\sim_{p,\downarrow}^*, \sim_c, \sim_{p,\uparrow}^*$, until everything is in the correct order.}
 \end{proof}
 
 
-If $(X,P) \sim_c (Y,P)$ then the final skeletons in $X$ and $Y$ are equal, and $(X,Q) \sim_c (Y,Q)$, therefore $\sim_c$ can be considered to apply to reduction sequences even without positions, $X \sim_c Y$ iff $(X,\cdot) \sim_c (Y,\cdot)$. The structure of $\sim_c$ can be seen more clearly by choosing a canonical example from each equivalence class. For this, the member of the class that's in call-by-value order is used. A reduction sequence is in call-by-value order if for every pair of reductions in the sequence at positions $\alpha$ and $\beta$, where the reduction at $\alpha$ happens first, either $\alpha \leq \beta$ or $\alpha$ and $\beta$ are disjoint, with $\alpha$ to the left of $\beta$ (i.e.~the first elements of the sequences $\alpha, \beta$ where they differ are $@_1$ and $@_2$, $\underline f_i$ and $\underline f_j$ for $i < j$, or $\textsf{if}_i$ and $\textsf{if}_j$ for $i < j$, in that order). Note that although the reductions that occur in the sequence are in call-by-value order, it may not be the actual call-by-value reduction sequence starting from that point because some redexes may remain un-reduced even when other reductions that should happen afterwards occur. It is only required that the reductions that do occur occur in the correct order.
+If $(X,\alpha) \sim_c (Y,\alpha)$ then the final skeletons in $X$ and $Y$ are equal, and $(X,\beta) \sim_c (Y,\beta)$ for any $\beta$ that occurs in this skeleton, therefore $\sim_c$ can be considered to apply to reduction sequences even without positions, $X \sim_c Y$ iff $(X,\cdot) \sim_c (Y,\cdot)$. The structure of $\sim_c$ can be seen more clearly by choosing a canonical example from each equivalence class. For this, the member of the class that's in call-by-value order is used. A reduction sequence is in call-by-value order if for every pair of reductions in the sequence at positions $\alpha$ and $\beta$, where the reduction at $\alpha$ happens first, either $\alpha \leq \beta$ or $\alpha$ and $\beta$ are disjoint, with $\alpha$ to the left of $\beta$ (i.e.~the first elements of the sequences $\alpha, \beta$ where they differ are $@_1$ and $@_2$, $\underline f_i$ and $\underline f_j$ for $i < j$, or $\textsf{if}_i$ and $\textsf{if}_j$ for $i < j$, in that order). Note that although the reductions that occur in the sequence are in call-by-value order, it may not be the actual call-by-value reduction sequence starting from that point because some redexes may remain un-reduced even when other reductions that should happen afterwards occur. It is only required that the reductions that do occur occur in the correct order.
 
 \begin{lemma} \label{canonicalCousins}
 For any reduction sequence $X$, there is a unique reduction sequence $X_{cbv}$ that is related to $X$ by $\sim_c$ and is in call-by-value order, and if $X \sim_c^* Y$, then $X_{cbv} = Y_{cbv}$.
@@ -424,23 +417,6 @@ For any reduction sequence $X$, there is a unique reduction sequence $X_{cbv}$ t
 \lo{As defined, $\sim_c$ is not symmetric.}
 
 \begin{proof}
-
-\lo{This paragraph (especially the last sentence) is ambiguous.
-What does it mean to say that that a reductions that occur in a reduction sequences are \emph{in CBV order}?}
-\iffalse
-\lo{So this is permitted?
-\[
-(II)(I (I \bar I)) \to
-(II)(I\bar I) \to
-(II)\bar I 
-\]
-but not this: 
-\(
-(II)(I (I \bar I)) \to
-(II)(I \bar I) \to
-(II)\bar I 
-\)?}
-\fi
 
 Define $X_n$ recursively so that $X_0 = X$ and if $X_n$ is not in CBV order, take the last pair of reductions in $X_n$ which aren't in CBV order. They are adjacent in the sequence, as the CBV order is a total order. Let the positions of these reductions be $\alpha$ and $\beta$ respecively. If they are disjoint, they can be considered as one of the branches of $\sim_c$ case a. Otherwise, $\beta < \alpha$, and the sub-skeleton at position $\beta$ at the appropriate point in the reduction sequence is a redex with non-trivial subterms, therefore it's of one of the forms $\tif{\skeletonPlaceholder>0}{A}{B}$, $(\lambda x.A) B$ or $\tY \lambda x. A$, therefore the reductions $\alpha$ and $\beta$ form the $O_2$ branch of one of the cases b, c, d, e or f of $\sim_c$. In either case, define $X_{n+1}$ as equal to $X_n$ except taking the other (left) branch, so that the order of the reductions at $\alpha$ and $\beta$ are switched (although the equivalent(s) of the reduction at $\alpha$ may not actually be at that position).
 
@@ -483,29 +459,29 @@ The relation $\sim$ is defined on $L_0(M)$ with reference to a particular starti
 \begin{proof}
 $\sim_N^*$ is trivially a subset of $\sim_M^*$ because $\sim_N$ is a subset of $\sim_M$.
 
-In the other direction, suppose $(N_1, P_1) \sim_M^* (N_2, P_2)$ where both $N_1$ and $N_2$ are descendants of $N$. By Lemma~\ref{downAcrossUp}, take $(N_1, P_1) \sim_{p,M}^* (N'_1, P') \sim_{c,M}^* (N'_2, P') \sim_{p,M}^* (N_2, P_2)$. 
-The $\sim_p^*$ steps remain within $Rch(N)$, and $\sim_p$ does not depend on the history of the reduction sequences, therefore $(N_1, P_1) \sim_{p,N}^* (N'_1, P') \sim_{c,M}^* (N'_2, P') \sim_{p,N}^* (N_2, P_2)$.
+In the other direction, suppose $(N_1, \alpha_1) \sim_M^* (N_2, \alpha_2)$ where both $N_1$ and $N_2$ are descendants of $N$. By Lemma~\ref{downAcrossUp}, take $(N_1, \alpha_1) \sim_{p,M}^* (N'_1, \alpha') \sim_{c,M}^* (N'_2, \alpha') \sim_{p,M}^* (N_2, \alpha_2)$. 
+The $\sim_p^*$ steps remain within $Rch(N)$, and $\sim_p$ does not depend on the history of the reduction sequences, therefore $(N_1, \alpha_1) \sim_{p,N}^* (N'_1, \alpha') \sim_{c,M}^* (N'_2, \alpha') \sim_{p,N}^* (N_2, \alpha_2)$.
 
 Let $X$ be the call-by-value reduction sequence related to both $N'_1$ and $N'_2$ by $\sim_{c,M}$ given by Lemma~\ref{canonicalCousins}. 
-As $M \to N$ is the first reduction in the sequence $N'_1$, it is the last to be affected by the $\sim_{c,M}$ sequence $N'_1 \sim_{c,M}^* X$ given by Lemma \ref{canonicalCousins} therefore it can be split into $N'_1 \sim_{c,M}^* Y_1 \sim_{c,M}^* X$ where $Y_1$ is in CBV order except possibly for its first reduction, which is still $M -> N$. Let the position of the reduction $M \to N$ be $Q$. 
+As $M \to N$ is the first reduction in the sequence $N'_1$, it is the last to be affected by the $\sim_{c,M}$ sequence $N'_1 \sim_{c,M}^* X$ given by Lemma \ref{canonicalCousins} therefore it can be split into $N'_1 \sim_{c,M}^* Y_1 \sim_{c,M}^* X$ where $Y_1$ is in CBV order except possibly for its first reduction, which is still $M \to N$. Let the position of the reduction $M \to N$ be $\beta$. 
 \akr{TODO: fill in the details that are missing here. It shouldn't be too hard, it's just a bit sketchy at present.} 
-The rearrangement of the reduction sequence $Y_1 \sim_{c,M} X$ consists of moving the reduction at $Q$ down past the other reductions in $Y_1$, possibly duplicating or deleting it in the process, but not affecting the positions or the correct order for any of the other reductions. 
+The rearrangement of the reduction sequence $Y_1 \sim_{c,M} X$ consists of moving the reduction at $\beta$ down past the other reductions in $Y_1$, possibly duplicating or deleting it in the process, but not affecting the positions or the correct order for any of the other reductions. 
 The reductions derived from $M \to N$ can be identified as follows:
 
 %\begin{definition}
-A position in some (reduction sequence of) term(s) is \emph{derived from} another if it is related by the reflexive transitive closure of $\rightsquigarrow$, where $(V,R) \rightsquigarrow (W,T)$ just if $V \to W$ and one of the following cases holds:
+A position in some (reduction sequence of) term(s) is \emph{derived from} another if it is related by the reflexive transitive closure of $\rightsquigarrow$, where $(V,\gamma) \rightsquigarrow (W,\delta)$ just if $V \to W$ and one of the following cases holds:
 \begin{itemize}
-    \item $(V,R) \sim_p (W,T)$
-    \item $R = T$, $V \to W$ at $A$, and $A > R$
-    \item $V \mid A = (\lambda x.U) Z, U | B = x, R = A;@_2;C$ and $T = A;B;C$
-    \item $V \mid A = \tY (\lambda x.U), R = A;\tY;\lambda;B$ and $T = A;\lambda;@_1;B$
-    \item $V \mid A = \tY (\lambda x.U), U | B = x, R = A;C$ and $T = A;\lambda;@_1;B;C$
+    \item $(V,\gamma) \sim_p (W,\delta)$
+    \item $\gamma = \delta$, $V \to W$ at $\epsilon$, and $\epsilon > \gamma$
+    \item $V \mid \epsilon = (\lambda x.U) Z, U | \zeta = x, \gamma = \epsilon;@_2;\theta$ and $\delta = \epsilon;\zeta;\theta$
+    \item $V \mid \epsilon = \tY (\lambda x.U), \gamma = \epsilon;\tY;\lambda;\zeta$ and $\delta = \epsilon;\lambda;@_1;\zeta$
+    \item $V \mid \epsilon = \tY (\lambda x.U), U | \zeta = x, \gamma = \epsilon;\theta$ and $\delta = \epsilon;\lambda;@_1;\zeta;\theta$
 \end{itemize}
 %\end{definition}
 
-Crucially, the reductions in $X$ can be partitioned into 2 sets: those at positions derived from $(M,Q)$, and those at positions equal to the reductions in $Y_1$ (in the same order as they occur in $Y_1$. Using the same construction for $N'_2$ shows that the positions of the reductions in $Y_2$ are also the positions of the reductions in $X$ other than those derived from $(M,Q)$, therefore $Y_1 = Y_2$ therefore $N'_1 \sim_{c,M} Y_1 \sim_{c,M} N'_2$ and every reduction sequence in this sequence starts with $M \to N$ therefore $N'_1 \sim_{c,N} N'_2$.
+Crucially, the reductions in $X$ can be partitioned into 2 sets: those at positions derived from $(M,\beta)$, and those at positions equal to the reductions in $Y_1$ (in the same order as they occur in $Y_1$). Using the same construction for $N'_2$ shows that the positions of the reductions in $Y_2$ are also the positions of the reductions in $X$ other than those derived from $(M,\beta)$, therefore $Y_1 = Y_2$ therefore $N'_1 \sim_{c,M} Y_1 \sim_{c,M} N'_2$ and every reduction sequence in this sequence starts with $M \to N$ therefore $N'_1 \sim_{c,N} N'_2$.
 
-Combining this with the $\sim_{p,N}^*$s at the beginning and end then yields the desired result that $(N_1,P_1) \sim_N^* (N_2, P_2)$, therefore the restriction of $\sim_M^*$ to $\sim_N$'s domain ($Rch(N)$) is a subset of $\sim_N^*$ therefore the two versions of $\sim$ match on this domain, as desired.
+Combining this with the $\sim_{p,N}^*$s at the beginning and end then yields the desired result that $(N_1,\alpha_1) \sim_N^* (N_2, \alpha_2)$, therefore the restriction of $\sim_M^*$ to $\sim_N$'s domain ($Rch(N)$) is a subset of $\sim_N^*$ therefore the two versions of $\sim$ match on this domain, as desired.
 \end{proof}
 
 
@@ -518,7 +494,7 @@ Unlike in the purely call-by-value case, the version of the reduction relation t
 \begin{align*}
 & (M,s) \Rightarrow (N,s \circ i(M \to N)) \text{ if either} \\
 & \qquad \text{$M \to N$ and the redex is not $\tsample$, or} \\
-& \qquad \text{$M \mid P = \tsample$, $N = M[\underline{s(Sk(M),P)}/P]$ and $\lambda$ does not occur after $@_2$ or $\tY$ in $P$}
+& \qquad \text{$M \mid \alpha = \tsample$, $N = M[\underline{s(Sk(M),\alpha)}/\alpha]$ and $\lambda$ does not occur after $@_2$ or $\tY$ in $\alpha$}
 \end{align*}
 
 \paragraph{}
@@ -526,45 +502,45 @@ Unlike in the purely call-by-value case, the version of the reduction relation t
 The relation $\Rightarrow$ is Church-Rosser.
 \end{lemma}
 \begin{proof}
-Suppose that $(M,s) \Rightarrow (M_1,s_1)$ and also $(M,s) \Rightarrow (M_2,s_2)$, then it is required to prove that there is some $(M',s')$ such that both $(M_1,s_1) \Rightarrow^* (M',s')$ and $(M_2,s_2) \Rightarrow^* (M',s')$. Let the positions of the redexes in $M \to M_1$ and $M \to M_2$ be $P_1$ and $P_2$ respectively.
+Suppose that $(M,s) \Rightarrow (M_1,s_1)$ and also $(M,s) \Rightarrow (M_2,s_2)$, then it is required to prove that there is some $(M',s')$ such that both $(M_1,s_1) \Rightarrow^* (M',s')$ and $(M_2,s_2) \Rightarrow^* (M',s')$. Let the positions of the redexes in $M \to M_1$ and $M \to M_2$ be $\alpha_1$ and $\alpha_2$ respectively.
 
-First consider the case that $P_1$ and $P_2$ are disjoint. Let $M_1 = M[X_1/P_1]$ and similarly for $X_2$, then let $M' = M[X_1/P_1][X_2/P_2]$. As the positions are disjoint, the substitutions commute and both $M_1$ and $M_2$ reduce (with $\to$) to $M'$. 
+First consider the case that $\alpha_1$ and $\alpha_2$ are disjoint. Let $M_1 = M[X_1/\alpha_1]$ and similarly for $X_2$, then let $M' = M[X_1/\alpha_1][X_2/\alpha_2]$. As the positions are disjoint, the substitutions commute and both $M_1$ and $M_2$ reduce (with $\to$) to $M'$. 
 Let $s' = s \circ i(M \to M_1) \circ i(M_1 \to M')$. 
-The injection $i(M \to M_1) \circ i(M_1 \to M')$ consists of prepending $M \to M_1 \to M'$ to each reduction sequence, but by case 4.a of $\sim$, this is equivalent to prepending $M \to M_2 \to M'$, which is $i(M \to M_2) \circ i(M_2 \to M')$. 
+The injection $i(M \to M_1) \circ i(M_1 \to M')$ consists of prepending $M \to M_1 \to M'$ to each reduction sequence, but by case a of $\sim_c$, this is equivalent to prepending $M \to M_2 \to M'$, which is $i(M \to M_2) \circ i(M_2 \to M')$. 
 In the case that the reduction $M \to M_2$ isn't a $\tsample$-reduction, this is enough to establish that $(M_1, s_1) \Rightarrow (M', s')$, and vice-versa. 
-If it is $\tsample$ though, in order for it to be the case that $(M_1, s_1) \Rightarrow (M', s')$, it is additionally necessary that $X_2$, the result of the reduction at $P_2$, be $s_1(M_1, P_2)$, which follows from the fact that $(M, P_2) \sim (M_1, P_2)$ by case 1. 
+If it is $\tsample$ though, in order for it to be the case that $(M_1, s_1) \Rightarrow (M', s')$, it is additionally necessary that $X_2$, the result of the reduction at $\alpha_2$, be $s_1(M_1, \alpha_2)$, which follows from the fact that $(M, \alpha_2) \sim (M_1, \alpha_2)$ by case 1 of $\sim_p$. 
 The case that the reduction $M \to M_1$ is a $\tsample$-reduction is similar.
 
-The case that $P_1 = P_2$ is trivial, because there is at most one possible $\Rightarrow$ reduction at any given position, therefore $(M_1, s_1) = (M_2, s_2)$ already.
+The case that $\alpha_1 = \alpha_2$ is trivial, because there is at most one possible $\Rightarrow$ reduction at any given position, therefore $(M_1, s_1) = (M_2, s_2)$ already.
 
-The remaining case is that $P_1 < P_2$ or $P_1 > P_2$. 
-Assume without loss of generality that $P_1 < P_2$. 
-For each possible case of what type of redex $M | P_1$ is, and $P_2$'s position within it, there is a corresponding case of $\sim_c$, and similarly to the case where $P_1$ and $P_2$ are disjoint, the term $O_1 = O_2$ from the definition of $\sim_c$ is a suitable value of $M'$. 
-The term $M \mid P_1$ can't be $\tsample$, because it has strict subterms, but the case that $M \mid P_2 = \tsample$ is still somewhat more complicated. 
-$P_2$ can't be within $P_1 ; @_2$ or $P_1 ; Y$ (cases e and f of $\sim_c$) because those are not valid positions to reduce a $\tsample$, 
-and the case that $P_2$ is within the branch of an if statement that is deleted by the reduction at $P_1$ (case b) doesn't actually present a problem because there is no corresponding reduction to $M \to M_2$ in the other branch, 
-which leaves cases c and d, that $P_2$ is in the $\tif{\cdot}{\cdot}{\cdot}$ branch that isn't deleted, and that $P_2 < P_1 ; @_1 ; \lambda$.  
-The values that the $\tsample$s take in these cases match because $(M,P) \sim_p (M_1, P;Q)$ by cases 3 and 2 of $\sim_p$ respectively.
+The remaining case is that $\alpha_1 < \alpha_2$ or $\alpha_1 > \alpha_2$. 
+Assume without loss of generality that $\alpha_1 < \alpha_2$. 
+For each possible case of what type of redex $M | \alpha_1$ is, and $\alpha_2$'s position within it, there is a corresponding case of $\sim_c$, and similarly to the case where $\alpha_1$ and $\alpha_2$ are disjoint, the term $O_1 = O_2$ from the definition of $\sim_c$ is a suitable value of $M'$. 
+The term $M \mid \alpha_1$ can't be $\tsample$, because it has strict subterms, but the case that $M \mid \alpha_2 = \tsample$ is still somewhat more complicated. 
+$\alpha_2$ can't be within $\alpha_1 ; @_2$ or $\alpha_1 ; Y$ (cases e and f of $\sim_c$) because those are not valid positions to reduce a $\tsample$, 
+and the case that $\alpha_2$ is within the branch of an if statement that is deleted by the reduction at $\alpha_1$ (case b) doesn't actually present a problem because there is no corresponding reduction to $M \to M_2$ in the other branch, 
+which leaves cases c and d, that $\alpha_2$ is in the $\tif{\cdot}{\cdot}{\cdot}$ branch that isn't deleted, and that $\alpha_2 < \alpha_1 ; @_1 ; \lambda$.  
+The values that the $\tsample$s take in these cases match because $(M,\alpha) \sim_p (M_1, \alpha;\beta)$ by cases 3 and 2 of $\sim_p$ respectively.
 \end{proof}
 
 \begin{lemma} \label{simpDoesn'tMix}
-If $A$ is some descendant of $M$ and $(A,D) \sim^* (M,E)$, then $(A,D) \sim_p^* (M,E)$, with the length of the reduction sequences decreasing by one each step from $A$ to $M$.
+If $A$ is some descendant of $M$ and $(A,\gamma) \sim^* (M,\delta)$, then $(A,\gamma) \sim_p^* (M,\delta)$, with the length of the reduction sequences decreasing by one each step from $A$ to $M$.
 \end{lemma}
 \begin{proof}
-This is a simple induction on $\sim^*$. In the base case, $(A,D) = (M,E)$ therefore $(A,D) \sim_p^* (M,E)$ trivially. Otherwise, suppose that $(M,E) \sim_p^* (B,F) \sim (A,D)$. Either $(B,F) \sim_p (A,D)$ or $(B,F) \sim_c (A,D)$. In the first case, either $B \to A$, in which case the result follows directly, or $A \to B$, in which case the fact that each (reduction sequence of) term(s) has only one parent implies that a $(M,E) \sim_p^* (A,D)$ directly as a subsequence of the path to $(B,F)$.
+This is a simple induction on $\sim^*$. In the base case, $(A,\gamma) = (M,\delta)$ therefore $(A,\gamma) \sim_p^* (M,\delta)$ trivially. Otherwise, suppose that $(M,\delta) \sim_p^* (B,\epsilon) \sim (A,\gamma)$. Either $(B,\epsilon) \sim_p (A,\gamma)$ or $(B,\epsilon) \sim_c (A,\gamma)$. In the first case, either $B \to A$, in which case the result follows directly, or $A \to B$, in which case the fact that each (reduction sequence of) skeleton(s) has only one parent implies that a $(M,\delta) \sim_p^* (A,\gamma)$ directly as a subsequence of the path to $(B,\epsilon)$.
 
-In the $\sim_c$ case, consider the definition of $\sim_c$. Either $O'_1 = A$ and $O'_2 = B$ or vice-versa. As $M \to^* N \to^* O_1 \to^* B$ and $(M,E) \sim_p^* (B,F)$, and $\sim_p$ only relates positions in a term and its parent, there are some positions $G, H$ such that $(M,E) \sim_p^* (N,G) \sim_p^* (O_1, H) \sim_p^* (B,F)$. It follows that $(O_2, H) \sim_p^* (A,D)$ by following the same path, therefore it suffices to provide the only missing portion of the path from $M$ to $A$, i.e.~to prove that $(N,G) \sim_p^* (O_2,H)$ given $(N,G) \sim_p^* (O_1,H)$ (or vice-versa).
+In the $\sim_c$ case, consider the definition of $\sim_c$. Either $O'_1 = A$ and $O'_2 = B$ or vice-versa. As $M \to^* N \to^* O_1 \to^* B$ and $(M,\delta) \sim_p^* (B,\epsilon)$, and $\sim_p$ only relates positions in a term and its parent, there are some positions $\zeta, \theta$ such that $(M,\delta) \sim_p^* (N,\zeta) \sim_p^* (O_1, \theta) \sim_p^* (B,\epsilon)$. It follows that $(O_2, \theta) \sim_p^* (A,\gamma)$ by following the same path, therefore it suffices to provide the only missing portion of the path from $M$ to $A$, i.e.~to prove that $(N,\zeta) \sim_p^* (O_2,\theta)$ given $(N,\zeta) \sim_p^* (O_1,\theta)$ (or vice-versa).
 
-If $G$ is disjoint from all the positions of reduction from $N$ to $O_1$ and $O_2$ (and consequently $G = H$), this follows from case 1 of $\sim_p$. Otherwise, this can be proved by taking cases from the definition of $\sim_c$. This is rather long, but all of the cases are similar. The general idea is that the reductions from $N$ to $O_1$ correspond to the reductions from $N$ to $O_2$, so that if a position is related by $\sim_p$ across that reduction, it is related in the other branch for the same reason. Case d, where $B = O'_1$ rather than $O'_2$, is given here in more detail as an illustrative example:
+If $\zeta$ is disjoint from all the positions of reduction from $N$ to $O_1$ and $O_2$ (and consequently $\zeta = \theta$), this follows from case 1 of $\sim_p$. Otherwise, this can be proved by taking cases from the definition of $\sim_c$. This is rather long, but all of the cases are similar. The general idea is that the reductions from $N$ to $O_1$ correspond to the reductions from $N$ to $O_2$, so that if a position is related by $\sim_p$ across that reduction, it is related in the other branch for the same reason. Case d, where $B = O'_1$ rather than $O'_2$, is given here in more detail as an illustrative example:
 
-Let $I$ be $N$ reduced at $P$, and $J$ be $N$ reduced at $P;@_1;\lambda;Q$, so that $N \to I \to O_1$ and $N \to J \to O_2$. All of the reduction positions are $\geq P$, and $G$ is not disjoint from all of them, therefore $G$ is not disjoint from $P$. Let $K$ be the position such that $(N,G) \sim_p (I,K) \sim_p (O_1,H)$. The fact that $(N,G) \sim_p (I,K)$ implies that $G > P;@_1;\lambda$. Let $G = P;@_1;\lambda;L$ and $H = P;L'$. If $L$ is disjoint from $Q$, then $(N,G) \sim_p (J,G) \sim_p (O_2,P;L') = (O_2;H)$ by cases 1 and 2 of $\sim_p$. In the other case, that $L$ isn't disjoint from $Q$, $L > Q$ because none of the positions $<= P;@_1;\lambda;Q$ in $N$ are related to any position in $I$ by $\sim_p$. As $(I,P;L) \sim_p (O_1,P;L')$ (with the redex at $P;Q$), for exactly the same reason $(N,P;@_1;\lambda;L) \sim_p (J,P;@_1;\lambda;L')$ (with the redex at $P;@_1;\lambda;Q$). Because $(N,P;@_1;\lambda;L) \sim_p (J,P;@_1;\lambda;L')$, $N|P;@_1;\lambda;L = J|P;@_1;\lambda;L'$, and $N|P;@_1;\lambda;L \neq $ the variable of $N|P;@_1$, therefore $J|P;@_1;\lambda;L'$ is also not the variable therefore $(J,P;@_1;\lambda;L') \sim_p (O_2, P;L') = (O_2, H)$ by case 2 of $\sim_p$. Combining these results, $(N,G) \sim_p (O_2;H)$ as desired.
+Let $I$ be $N$ reduced at $\alpha$, and $J$ be $N$ reduced at $\alpha;@_1;\lambda;\beta$, so that $N \to I \to O_1$ and $N \to J \to O_2$. All of the reduction positions are $\geq \alpha$, and $\zeta$ is not disjoint from all of them, therefore $\zeta$ is not disjoint from $\alpha$. Let $\iota$ be the position such that $(N,\zeta) \sim_p (I,\iota) \sim_p (O_1,\theta)$. The fact that $(N,\zeta) \sim_p (I,\iota)$ implies that $\zeta > \alpha;@_1;\lambda$. Let $\zeta = \alpha;@_1;\lambda;\kappa$ and $\theta = \alpha;\kappa'$. If $\kappa$ is disjoint from $\beta$, then $(N,\zeta) \sim_p (J,\zeta) \sim_p (O_2,\alpha;\kappa') = (O_2;\theta)$ by cases 1 and 2 of $\sim_p$. In the other case, that $\kappa$ isn't disjoint from $\beta$, $\kappa > \beta$ because none of the positions $<= \alpha;@_1;\lambda;\beta$ in $N$ are related to any position in $I$ by $\sim_p$. As $(I,\alpha;\kappa) \sim_p (O_1,\alpha;\kappa')$ (with the redex at $\alpha;\beta$), for exactly the same reason $(N,\alpha;@_1;\lambda;\kappa) \sim_p (J,\alpha;@_1;\lambda;\kappa')$ (with the redex at $\alpha;@_1;\lambda;\beta$). Because $(N,\alpha;@_1;\lambda;\kappa) \sim_p (J,\alpha;@_1;\lambda;\kappa')$, $N|\alpha;@_1;\lambda;\kappa = J|\alpha;@_1;\lambda;\kappa'$, and $N|\alpha;@_1;\lambda;\kappa \neq $ the variable of $N|\alpha;@_1$, therefore $J|\alpha;@_1;\lambda;\kappa'$ is also not the variable therefore $(J,\alpha;@_1;\lambda;\kappa') \sim_p (O_2, \alpha;\kappa') = (O_2, \theta)$ by case 2 of $\sim_p$. Combining these results, $(N,\zeta) \sim_p^* (O_2;\theta)$ as desired.
 \end{proof}
 
 \begin{lemma} \label{lem:redexDestroyed}
-If $M \to N$, with the redex at position $P$, then no position in any term reachable from $N$ is related by $\sim^*$ to $(M,P)$.
+If $M \to N$, with the redex at position $\alpha$, then no position in any term reachable from $N$ is related by $\sim^*$ to $(M,\alpha)$.
 \end{lemma}
 \begin{proof}
-Suppose on the contrary that $(M,P) \sim^* (A,D)$, where $N \to^* A$, then by Lemma \ref{simpDoesn'tMix}, $(M,P) \sim_p^* (A,D)$. $M \neq A$ therefore $(M,P) \sim_p$ some position in $N$, but in all the cases of the definition of $\sim_p$, no position in the child term is related to the position of the redex.
+Suppose on the contrary that $(M,\alpha) \sim^* (A,\beta)$, where $N \to^* A$, then by Lemma \ref{simpDoesn'tMix}, $(M,\alpha) \sim_p^* (A,\beta)$. $M \neq A$ therefore $(M,\alpha) \sim_p$ some position in $N$, but in all the cases of the definition of $\sim_p$, no position in the child term is related to the position of the redex.
 \end{proof}
 
 \paragraph{}
@@ -575,14 +551,14 @@ Using a reduction strategy $f$, a subset of $\Rightarrow$ that isn't nondetermin
 Essentially what Lemma~\ref{lem:redexDestroyed} demonstrates is that the samples taken during any reduction sequence are independent of each other. This is made more precise in the following lemmas.
 
 \begin{lemma}
-For any skeletons $M \to N$, with the redex at position $P$, and measurable set of samples $S \subset I^{L_s(N)}$, $\mu(S) = \mu(\{s \in I^{L_s(M)} \mid s \circ i(M \to N) \in S\})$, and furthermore, if $M | P = \tsample$, for any $S \subset I \times I^{L_s(N)}$, $\mu(S) = \mu(\{s \in I^{L_s(M)} \mid (s(M,P), s \circ i(M \to N)) \in S\})$.
+For any skeletons $M \to N$, with the redex at position $\alpha$, and measurable set of samples $S \subset I^{L_s(N)}$, $\mu(S) = \mu(\{s \in I^{L_s(M)} \mid s \circ i(M \to N) \in S\})$, and furthermore, if $M | \alpha = \tsample$, for any $S \subset I \times I^{L_s(N)}$, $\mu(S) = \mu(\{s \in I^{L_s(M)} \mid (s(M,\alpha), s \circ i(M \to N)) \in S\})$.
 \end{lemma}
 \begin{proof}
 If the result holds for all sets $S$ of the form $\{s \in I^{L_s(N)} \mid \forall j : s(j) \in x_i\}$, where $(x_j)_{j \in J}$ is a family of measurable subsets of $I$ indexed by some finite set $J \subset L_s(N)$ of positions, it also holds for all other $S$ by taking limits and disjoint unions.
 
 Take such a $(x_j)_{j \in J}$, where $x_j = x_k$ and define $K = i(M \to N)[J]$. Because $i(M \to N)$ is injective, it defines a bijection between $J$ and $K$. We can then calculate the measure $\mu(\{s \in I^{L_s(M)} \mid s \circ i(M \to N) \in S\}) = \mu(\{s \in I^{L_s(M)} \mid \forall k : s(k) \in x_{i(M \to N)^{-1}(k)}\}) = \prod_{k \in K} \mu_I(x_{i(M \to N)^{-1}(k)}) = \prod_{j \in J} \mu_I(x_j) = \mu(S)$.
 
-In the case that $M|P = \tsample$, we can similarly consider only those sets $S$ of the form $x_\tsample \times \{s \in I^{L_s(N)} \mid \forall j : s(j) \in x_i\}$. The position $P$ in $M$ is not related to any position in $L_s(N)$, therefore $(M,P) \not \in K$. Again, we can calculate the measure $\mu(\{s \in I^{L_s(M)} \mid (s(M,P), s \circ i(M \to N)) \in S\}) = \mu(\{s \in I^{L_s(M)} \mid s(M,P) \in x_\tsample, \forall k : s(k) \in x_{i(M \to N)^{-1}(k)}\}) = \mu_I(x_\tsample) \prod_{k \in K} \mu_I(x_{i(M \to N)^{-1}(k)}) = \mu_I(x_\tsample) \prod_{j \in J} \mu_I(x_j) = \mu(S)$.
+In the case that $M|\alpha = \tsample$, we can similarly consider only those sets $S$ of the form $x_\tsample \times \{s \in I^{L_s(N)} \mid \forall j : s(j) \in x_i\}$. The position $\alpha$ in $M$ is not related to any position in $L_s(N)$, therefore $(M,\alpha) \not \in K$. Again, we can calculate the measure $\mu(\{s \in I^{L_s(M)} \mid (s(M,\alpha), s \circ i(M \to N)) \in S\}) = \mu(\{s \in I^{L_s(M)} \mid s(M,\alpha) \in x_\tsample, \forall k : s(k) \in x_{i(M \to N)^{-1}(k)}\}) = \mu_I(x_\tsample) \prod_{k \in K} \mu_I(x_{i(M \to N)^{-1}(k)}) = \mu_I(x_\tsample) \prod_{j \in J} \mu_I(x_j) = \mu(S)$.
 \end{proof}
 
 \begin{lemma} \label{lem:independentSamples}
