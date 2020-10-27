@@ -86,17 +86,17 @@
 }
 \savebox{\termDRight}{
   \tikz[termTree] \graph[termTree] {
-    N[root] -- "p" -- "@" -- {"\lambda x" -- "q" -- "R'"[subterm], "B"[subterm]}
+    ""[root] -- "p" -- "@" -- {"\lambda x" -- "q" -- "R'"[subterm], "B"[subterm]}
   };
 }
 \savebox{\termDLeft}{
   \tikz[termTree] \graph[termTree] {
-    N[root] -- "p;q" -- "R[B/x]"[subterm]
+    ""[root] -- "p;q" -- "R[B/x]"[subterm]
   };
 }
 \savebox{\termDEnd}{
   \tikz[termTree] \graph[termTree] {
-    N[root] -- "p;q" -- "R'[B/x]"[subterm]
+    ""[root] -- "p;q" -- "R'[B/x]"[subterm]
   };
 }
 
@@ -111,7 +111,7 @@
 }
 \savebox{\termERight}{
   \tikz[termTree] \graph[termTree] {
-    N[root] -- "p" -- "@" -- {"\lambda x" -- "\dots r_i \dots" -- x[subterm], "q" -- "B'"[subterm]}
+    ""[root] -- "p" -- "@" -- {"\lambda x" -- "\dots r_i \dots" -- x[subterm], "q" -- "B'"[subterm]}
   };
 }
 \savebox{\termELeft}{
