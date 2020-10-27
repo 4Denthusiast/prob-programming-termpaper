@@ -12,22 +12,22 @@
 \newsavebox{\termAEnd}
 \savebox{\termARoot}{
   \tikz[termTree] \graph[termTree] {
-    N[root] -- {p_1 -- A_1[subterm], p_2 -- A_2[subterm]}
+    N[root] -- {"\alpha_1" -- A_1[subterm], "\alpha_2" -- A_2[subterm]}
   };
 }
 \savebox{\termALeft}{
   \tikz[termTree] \graph[termTree] {
-    ""[root] -- {"p_1" -- "A_1'"[subterm], "p_2" -- "A_2"[subterm]}
+    ""[root] -- {"\alpha_1" -- "A_1'"[subterm], "\alpha_2" -- "A_2"[subterm]}
   };
 }
 \savebox{\termARight}{
   \tikz[termTree] \graph[termTree] {
-    ""[root] -- {"p_1" -- "A_1"[subterm], "p_2" -- "A_2'"[subterm]}
+    ""[root] -- {"\alpha_1" -- "A_1"[subterm], "\alpha_2" -- "A_2'"[subterm]}
   };
 }
 \savebox{\termAEnd}{
   \tikz[termTree] \graph[termTree] {
-    ""[root] -- {"p_1" -- "A_1'"[subterm], "p_2" -- "A_2'"[subterm]}
+    ""[root] -- {"\alpha_1" -- "A_1'"[subterm], "\alpha_2" -- "A_2'"[subterm]}
   };
 }
 
@@ -36,17 +36,17 @@
 \newsavebox{\termBEnd}
 \savebox{\termBRoot}{
   \tikz[termTree] \graph[termTree] {
-    N[root] -- "p" -- "\mathsf{if}" -- {"\underline r", "A"[subterm], "q" -- B[subterm]}
+    N[root] -- "\alpha" -- "\mathsf{if}" -- {"\underline r", "A"[subterm], "\beta" -- B[subterm]}
   };
 }
 \savebox{\termBRight}{
   \tikz[termTree] \graph[termTree] {
-    ""[root] -- "p" -- "\mathsf{if}" -- {"\underline r", A[subterm], "q" -- B'[subterm]}
+    ""[root] -- "\alpha" -- "\mathsf{if}" -- {"\underline r", A[subterm], "\beta" -- B'[subterm]}
   };
 }
 \savebox{\termBEnd}{
   \tikz[termTree] \graph[termTree] {
-    ""[root] -- "p" -- "A"[subterm]
+    ""[root] -- "\alpha" -- "A"[subterm]
   };
 }
 
@@ -56,22 +56,22 @@
 \newsavebox{\termCEnd}
 \savebox{\termCRoot}{
   \tikz[termTree] \graph[termTree] {
-    N[root] -- "p" -- "\mathsf{if}" -- {"\underline r", "A"[subterm], "q" -- B[subterm]}
+    N[root] -- "\alpha" -- "\mathsf{if}" -- {"\underline r", "A"[subterm], "\beta" -- B[subterm]}
   };
 }
 \savebox{\termCRight}{
   \tikz[termTree] \graph[termTree] {
-    ""[root] -- "p" -- "\mathsf{if}" -- {"\underline r", "A"[subterm], "q" -- B'[subterm]}
+    ""[root] -- "\alpha" -- "\mathsf{if}" -- {"\underline r", "A"[subterm], "\beta" -- B'[subterm]}
   };
 }
 \savebox{\termCLeft}{
   \tikz[termTree] \graph[termTree] {
-    ""[root] -- "p;q" -- "B"[subterm]
+    ""[root] -- "\alpha;\beta" -- "B"[subterm]
   };
 }
 \savebox{\termCEnd}{
   \tikz[termTree] \graph[termTree] {
-    ""[root] -- "p;q" -- "B'"[subterm]
+    ""[root] -- "\alpha;\beta" -- "B'"[subterm]
   };
 }
 
@@ -81,22 +81,22 @@
 \newsavebox{\termDEnd}
 \savebox{\termDRoot}{
   \tikz[termTree] \graph[termTree] {
-    N[root] -- "p" -- "@" -- {"\lambda x" -- "q" -- "R"[subterm], "B"[subterm]}
+    N[root] -- "\alpha" -- "@" -- {"\lambda x" -- "\beta" -- "R"[subterm], "B"[subterm]}
   };
 }
 \savebox{\termDRight}{
   \tikz[termTree] \graph[termTree] {
-    ""[root] -- "p" -- "@" -- {"\lambda x" -- "q" -- "R'"[subterm], "B"[subterm]}
+    ""[root] -- "\alpha" -- "@" -- {"\lambda x" -- "\beta" -- "R'"[subterm], "B"[subterm]}
   };
 }
 \savebox{\termDLeft}{
   \tikz[termTree] \graph[termTree] {
-    ""[root] -- "p;q" -- "R[B/x]"[subterm]
+    ""[root] -- "\alpha;\beta" -- "R[B/x]"[subterm]
   };
 }
 \savebox{\termDEnd}{
   \tikz[termTree] \graph[termTree] {
-    ""[root] -- "p;q" -- "R'[B/x]"[subterm]
+    ""[root] -- "\alpha;\beta" -- "R'[B/x]"[subterm]
   };
 }
 
@@ -106,22 +106,22 @@
 \newsavebox{\termEEnd}
 \savebox{\termERoot}{
   \tikz[termTree] \graph[termTree] {
-    N[root] -- "p" -- "@" -- {"\lambda x" -- "\dots r_i \dots" -- x[subterm], "q" -- "B"[subterm]}
+    N[root] -- "\alpha" -- "@" -- {"\lambda x" -- "\dots \gamma_i \dots" -- x[subterm], "\beta" -- "B"[subterm]}
   };
 }
 \savebox{\termERight}{
   \tikz[termTree] \graph[termTree] {
-    ""[root] -- "p" -- "@" -- {"\lambda x" -- "\dots r_i \dots" -- x[subterm], "q" -- "B'"[subterm]}
+    ""[root] -- "\alpha" -- "@" -- {"\lambda x" -- "\dots \gamma_i \dots" -- x[subterm], "\beta" -- "B'"[subterm]}
   };
 }
 \savebox{\termELeft}{
   \tikz[termTree] \graph[termTree] {
-    ""[root] -- p -- "\dots r_i \dots" -- q -- B[subterm]
+    ""[root] -- "\alpha" -- "\dots \gamma_i \dots" -- "\beta" -- B[subterm]
   };
 }
 \savebox{\termEEnd}{
   \tikz[termTree] \graph[termTree] {
-    ""[root] -- p -- "\dots r_i \dots" -- q -- B'[subterm]
+    ""[root] -- "\alpha" -- "\dots \gamma_i \dots" -- "\beta" -- B'[subterm]
   };
 }
 
@@ -132,27 +132,27 @@
 \newsavebox{\termFEnd}
 \savebox{\termFRoot}{
   \tikz[termTree] \graph[termTree] {
-    N[root] -- "p" -- "\tY" -- "\lambda x" -- ""[branch] -- {"\dots s_i \dots" -- "x"[subterm], "q" -- "C"[subterm]}
+    N[root] -- "\alpha" -- "\tY" -- "\lambda x" -- ""[branch] -- {"\dots \gamma_i \dots" -- "x"[subterm], "\beta" -- "C"[subterm]}
   };
 }
 \savebox{\termFLeftFirst}{
   \tikz[termTree] \graph[termTree, fresh nodes] {
-    ""[root] -- "p" -- "\lambda z" -- "@" -- {""[branch] -- {"\dots s_i \dots" -- "\tY" -- "\lambda x" -- "q" -- "C"[subterm], "q" -- "C[\tY \lambda x A/x]"[subterm]}, "z"}
+    ""[root] -- "\alpha" -- "\lambda z" -- "@" -- {""[branch] -- {"\dots \gamma_i \dots" -- "\tY" -- "\lambda x" -- "\beta" -- "C"[subterm], "\beta" -- "C[\tY \lambda x A/x]"[subterm]}, "z"}
   };
 }
 \savebox{\termFLeftSecond}{
   \tikz[termTree] \graph[termTree, fresh nodes] {
-    ""[root] -- "p" -- "\lambda z" -- "@" -- {""[branch] -- {"\dots s_i \dots", "q" -- "\dots t_i \dots"} -- "\tY" -- "\lambda x" -- "q" -- "C"[subterm], "z"}
+    ""[root] -- "\alpha" -- "\lambda z" -- "@" -- {""[branch] -- {"\dots \gamma_i \dots", "\beta" -- "\dots \delta_i \dots"} -- "\tY" -- "\lambda x" -- "\beta" -- "C"[subterm], "z"}
   };
 }
 \savebox{\termFRight}{
   \tikz[termTree] \graph[termTree, fresh nodes] {
-    ""[root] -- "p" -- "\tY" -- "\lambda x" -- ""[branch] -- {"\dots s_i \dots" -- "x"[subterm], "q" -- "" -- {"\dots t_i \dots" -- "x"[subterm], "C'"[subterm]}}
+    ""[root] -- "\alpha" -- "\tY" -- "\lambda x" -- ""[branch] -- {"\dots \gamma_i \dots" -- "x"[subterm], "\beta" -- "" -- {"\dots \delta_i \dots" -- "x"[subterm], "C'"[subterm]}}
   };
 }
 \savebox{\termFEnd}{
   \tikz[termTree] \graph[termTree, fresh nodes] {
-    ""[root] -- "p" -- "\lambda z" -- "@" -- {""[branch] -- {"\dots s_i \dots", "q" -- "\dots t_i \dots"} -- "\tY" -- "\lambda x" -- "q" -- "C'"[subterm], "z"}
+    ""[root] -- "\alpha" -- "\lambda z" -- "@" -- {""[branch] -- {"\dots \gamma_i \dots", "\beta" -- "\dots \delta_i \dots"} -- "\tY" -- "\lambda x" -- "\beta" -- "C'"[subterm], "z"}
   };
 }
 
@@ -163,8 +163,8 @@ graphs/reduction sequence/.style = {layered layout, level sep = 20pt, sibling se
   \begin{scope}[xshift=-1cm]
     \graph [reduction sequence] {
       termARoot/\usebox{\termARoot} -> {
-        termALeft/\usebox{\termALeft} [> "$p_1$"', < "$p_2$"'],
-        termARight/\usebox{\termARight} [> "$p_2$", < "$p_1$"]
+        termALeft/\usebox{\termALeft} [> "$\alpha_1$"', < "$\alpha_2$"'],
+        termARight/\usebox{\termARight} [> "$\alpha_2$", < "$\alpha_1$"]
       } ->
       termAEnd/\usebox{\termAEnd}
     };
@@ -173,10 +173,10 @@ graphs/reduction sequence/.style = {layered layout, level sep = 20pt, sibling se
 
   \begin{scope}[xshift=5cm]
     \graph [reduction sequence] {
-      termBRoot/\usebox{\termBRoot} ->["$p;\textsf{if}_3;q$"']
-      termBRight/\usebox{\termBRight} ->["$p$"']
+      termBRoot/\usebox{\termBRoot} ->["$\alpha;\textsf{if}_3;\beta$"']
+      termBRight/\usebox{\termBRight} ->["$\alpha$"']
       termBEnd/\usebox{\termBEnd},
-      termBRoot ->["$p$"] termBEnd
+      termBRoot ->["$\alpha$"] termBEnd
     };
     \node at (termBRoot.north) [above=5mm] {b};
   \end{scope}
@@ -184,8 +184,8 @@ graphs/reduction sequence/.style = {layered layout, level sep = 20pt, sibling se
   \begin{scope}[xshift=9cm]
     \graph [reduction sequence] {
       termCRoot/\usebox{\termCRoot} -> {
-        termCLeft/\usebox{\termCLeft} [> "$p$"', < "$p;q$"'],
-        termCRight/\usebox{\termCRight} [> "$p;\textsf{if}_3;q$", < "$p$"]
+        termCLeft/\usebox{\termCLeft} [> "$\alpha$"', < "$\alpha;\beta$"'],
+        termCRight/\usebox{\termCRight} [> "$\alpha;\textsf{if}_3;\beta$", < "$\alpha$"]
       } ->
       termCEnd/\usebox{\termCEnd}
     };
@@ -196,8 +196,8 @@ graphs/reduction sequence/.style = {layered layout, level sep = 20pt, sibling se
 \begin{tikzpicture}[reduction sequence]
   \graph [reduction sequence] {
     termDRoot/\usebox{\termDRoot} -> {
-      termDLeft/\usebox{\termDLeft} [> "$p$", < "$p;q$"],
-      termDRight/\usebox{\termDRight} [> "$p;@_1;\lambda;q$", < "$p$"]
+      termDLeft/\usebox{\termDLeft} [> "$\alpha$", < "$\alpha;\beta$"],
+      termDRight/\usebox{\termDRight} [> "$\alpha;@_1;\lambda;\beta$", < "$\alpha$"]
     } ->
     termDEnd/\usebox{\termDEnd}
   };
@@ -206,8 +206,8 @@ graphs/reduction sequence/.style = {layered layout, level sep = 20pt, sibling se
   \begin{scope}[xshift=8cm]
     \graph [reduction sequence] {
       termERoot/\usebox{\termERoot} -> {
-        termELeft/\usebox{\termELeft} [> "$p$"', < "$(p;r_i;q)_i$"', < dashed],
-        termERight/\usebox{\termERight} [> "$p;@_2;q$", < "$p$"]
+        termELeft/\usebox{\termELeft} [> "$\alpha$"', < "$(\alpha;\gamma_i;\beta)_i$"', < dashed],
+        termERight/\usebox{\termERight} [> "$\alpha;@_2;\beta$", < "$\alpha$"]
       } ->
       termEEnd/\usebox{\termEEnd}
     };
@@ -222,15 +222,15 @@ graphs/reduction sequence/.style = {layered layout, level sep = 20pt, sibling se
   \node (termFRight) at (6,-1) {\usebox{\termFRight}};
   \node (termFEnd) at (4,-13) {\usebox{\termFEnd}};
   \graph {
-    (termFRoot) ->["$p$"']
-    (termFLeft1) ->["$p;\lambda;@_1;q$"']
+    (termFRoot) ->["$\alpha$"']
+    (termFLeft1) ->["$\alpha;\lambda;@_1;\beta$"']
     (termFLeft2) ->[dashed]
     (termFEnd),
     
-    (termFRoot) ->["$p;\tY;\lambda;q$"]
-    (termFRight) ->["$p$"]
+    (termFRoot) ->["$\alpha;\tY;\lambda;\beta$"]
+    (termFRight) ->["$\alpha$"]
     (termFEnd)
   };
-  \node at (1,-13.3) [align=center] {$(p;\lambda;@_1;s_i;\tY;\lambda;q)_i$ \\ $(p;\lambda;@_1;q;t_i;\tY;\lambda;q)_i$};
+  \node at (1,-13.3) [align=center] {$(\alpha;\lambda;@_1;\gamma_i;\tY;\lambda;\beta)_i$ \\ $(\alpha;\lambda;@_1;\beta;\delta_i;\tY;\lambda;\beta)_i$};
   \node at (termFRoot.north) [above=5mm] {f};
 \end{tikzpicture}
