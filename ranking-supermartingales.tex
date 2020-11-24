@@ -64,11 +64,11 @@ Fix a closed SPCF term $M \in \Lambda^0$, and a ranking function $f$ for it, sat
 Let $n \in \omega$, define the following random variables on the probability space $(S, \calF, \mu)$:
 \begin{align*}
 M_n(s) &:= \pi_0 (\red^n(M, s))\\
-\ndraw{n}{s} &:= l \textrm{ where $\pi_1 (\red^n(M, s)) = \underbrace{\pi_t( \cdots (\pi_t}_l(s))$}
+\ndraw{n}{s} &:= |\{k < n \mid \exists E: M_k(s) = E[\tsample]\}|,
 \end{align*}
-and the filtration $\mathcal{F}_n = \sigma(M_1, \cdots, M_n)$.
+ so that $\pi_1 (\red^n(M, s)) = \underbrace{\pi_t( \cdots (\pi_t}_{\ndraw n s}(s))$, and the filtration $\mathcal{F}_n = \sigma(M_1, \cdots, M_n)$.
 The $\calF_n$-measurability of $M_n$ (and hence of $\#\mathrm{draw}_n$) follows from \citep{DBLP:conf/icfp/BorgstromLGS16};
-$\#\mathrm{draw}_n$ is a stopping time (bounded by $n$).
+$\#\mathrm{draw}_n$ is a stopping time (bounded by $n$). \akr{$\#\mathrm{draw}_n$ is not a stopping time. It doesn't look like you actually use this claim anyway, so it should just be fine to remove, but did you mean something different?}
 Take $s \in A \in \calF_n$ with $\ndraw{n}{s} = l$.
 For any $s'\in S$, if $s_{\leq l} = s_{\leq l}'$ then $s' \in A$.
 It follows that ${\set{s_{\leq l}} \cdot I^\omega} \subseteq A$.
