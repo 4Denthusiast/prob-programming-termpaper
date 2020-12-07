@@ -565,17 +565,43 @@ Therefore, by a telescoping sum
 which is a contradiction, therefore the claim must be true, therefore $P[T > n]$ tends to 0 as $n$ tends to infinity, therefore $T < \infty$ almost surely.
 \end{proof}
 
-\paragraph{Results to prove:}
-\begin{enumerate}
-\item (AST Soundness) If a closed SPCF term $M$ is antitone rankable, then $T^{\tY}_M < \infty$ a.s.~(equivalently $M$ is AST). \lo{This should be fine.}
+\begin{theorem}[Antitone ranking function soundness]
+If a closed SPCF term $M$ is antitone rankable, then $T_M^{\tY} < \infty$ a.s.~(equivalently, $M$ is AST).
+\end{theorem}
+\begin{proof}
+As in Theorem \ref{thm:basicRankingSoundness}, take the set $S$ of traces as a probability space, and define the same random variables $T_n, X_n, Y_n, T_M^{\tY}$. As before, $(Y_n)_{n \in \omega}$ is a supermartingale, and because $M$ is now assumed to be antitone rankable, it is an antitone strict supermartingale with respect to the stopping time $T_M^{\tY}$, therefore $T_M^{\tY}$ is almost surely finite.
+\end{proof}
 
-\item A partial ranking function theorem for antitone-convex ranking functions. \lo{TODO}
-\end{enumerate}
+\paragraph{}
+As before, constructing antitone ranking fuctions completely is not necessary, and there is a corresponding notion of an antitone partial ranking function.
+
+Define an \emph{antitone partial ranking function} on a closed term $M$ to be a partial function $F : Rch(M) \rightharpoonup \mathbb{R}$ such that for some antitone function $\epsilon : \mathbb{R}_{\geq 0} \to \mathbb{R}_{>0}$
+\begin{itemize}
+\item $f(N) \geq 0$ for all $N$ where $f$ is defined.
+\item $f$ is defined at $M$.
+\item For any $N$ in the domain of definition of $f$, evaluation of $N$ will eventually reach some $O$ which is either a value or in the domain of definition of $f$, and $f(N) \geq \mathbb E [f(O) + \epsilon(f(O)) \times \text{the number of $\tY$-reduction steps from $N$ to $O$}]$ (where $f(O)$ is taken to be 0 if $O$ is a value outside of the domain of $f$).
+\end{itemize}
+
+\begin{theorem}
+  Every antitone partial ranking function is a restriction of an antitone ranking function.
+\end{theorem}
+\begin{proof}
+  Take a closed term $M$ and an antitone partial ranking function $f$ on $M$, with a corresponding antitone function $\epsilon$. Assume wlog that $\epsilon$ is convex (as if it isn't, we can just take its convex hull instead). As in Theorem \ref{partial implies rankable}, define $f_1 : Rch(M) \rightharpoonup \mathbb R$ by
+  \begin{align*}
+    f_1(N) &= f(N) \text{ whenever $f(N)$ is defined},\\
+    f_1(V) &= 0 \text{ for values $V$ not in the domain of $f$.}
+  \end{align*}
+
+  Define $(\nnext(N,s),\_) = \red^n(N,s)$ for the least $n \geq 0$ such that it's in the domain of $f_1$, and $g(N,s) = \left | \{m < n \mid \red^m(N,s) \text{ is of the form } (E[\tY N'],s') \} \right |$. 
+  The function $\nnext$ is well-defined (i.e.~$n$ is finite) for all $N \in Rch(M)$ by induction on the path from $M$ to $N$, by the third condition on antitone partial ranking functions. Define $f_2(N) = \int_S f_1(\nnext(N,s)) + \epsilon(f_1(\nnext(N,s))) g(N,s) \, \mu(\mathrm d s)$. For any term $N$ where $f$ is defined, $f_2(N) = f(N)$, and the value that $f_2$ would have at $N$ if $f$ were not defined at $N$ is $\leq f(N)$, by the third condition on antitone partial ranking functions. In order to show that $f_2$ is an antitone partial ranking function, it therefore suffices to show that the value that $f_2$ would have had at each term if $f$ were not defined at that term is at least the expectation of $f_2$ after one reduction step (plus $\epsilon(f_2(N))$ if the reduction step is a $tY$-reduction). For any term $N$ which is not of the form $E[R]$ for some $\tY$-redex $R$, this is trivial. If $R$ is a $tY$-redex, then $\epsilon(f_2(N)) \leq \int_S \epsilon(f_1(\nnext(N,s)))\, \mu(\mathrm d s)$ by the convexity of $\epsilon$, because $n$ is bounded. Therefore, the (total) function $f_2$, which agrees with $f$ on $f$'s domain, is an antitone ranking function on $M$ (with the same function $\epsilon$ if it's convex).
+\end{proof}
+
+As a corollary, any term which admits an antitone partial ranking function terminates almost surely.
 
 \paragraph{\Cref{ex:ac-ranking} revisited}
 
 Programs $M_1$ and $M_3$ are AST.
-To construct antitone ranking functions, we appeal \lo{(hopefully)} to a partial ranking function theorem for antitone ranking functions.
+To construct antitone ranking functions, we appeal to a partial ranking function theorem for antitone ranking functions.
 \iffalse
 \lo{NOTE. Suppose a function $f : E \to \Real$ from a convex subset $E \subseteq \Real^n$ has continuous second-order partial derivatives. Then it is convex iff its Hessian is positive semidefinite.}
 \fi
