@@ -763,9 +763,9 @@ M[\tsample / \alpha] = \lambda x \, y. y \, (\tif{x < 0}{y \, \tsample}{\underli
 %}
 
 Two subterms $N_1$ and $N_2$ of a term $M$, corresponding to positions $\alpha_1$ and $\alpha_2$, can overlap in a few different ways. 
-If $\alpha_1$ is an initial segment (i.e.~prefix) of $\alpha_2$ (written as $\alpha_1 \leq \alpha_2$), then $N_2$ is also a subterm of $N_1$. If neither $\alpha_1 \leq \alpha_2$ nor $\alpha_1 \geq \alpha_2$, the positions are said to be disjoint. 
+If $\alpha_1$ is an initial segment (i.e.~prefix) of $\alpha_2$ (written as $\alpha_1 \leq \alpha_2$), then $N_2$ is also a subterm of $N_1$. If neither $\alpha_1 \leq \alpha_2$ nor $\alpha_1 \geq \alpha_2$, the positions are said to be \emph{disjoint}. 
 This is mostly relevant in that in any substitution at some position, the subterms at all other positions are unaffected. 
-%\lo{The preceding sentence is unclear. Typo? Mostly $\mapsto$ most?}
+\lo{The preceding sentence is unclear. Typo?} 
 
 With this notation, a more general reduction relation $\to$ can be defined. \akr{It would almost work to have one of the neater versions of $\tY$-reduction here.}
 %\lo{On first reading, I struggled to parse the following clauses.}
@@ -789,7 +789,7 @@ Labelling the pre-chosen samples by the positions in the term would also not wor
 It is therefore necessary to consider possible positions that may occur in other terms reachable from the original term. 
 Even this is itself inadequate because some of the positions in different reachable terms need to be considered the same, and the number of reachable terms is in general uncountable, which leads to measure-theoretic issues.
 
-Define a \emph{skeleton} to be a term but, instead of having real constants $\underline r$, it has a placeholder $\skeletonPlaceholder$, so that each term has a skeleton $Sk(M)$ and each skeleton can be converted to a term $S[r]$ given a vector of $n$ real numbers to substitute in, where $n$ is the number of occurrences of $\skeletonPlaceholder$ in $S$. 
+Define a \emph{skeleton} to be a term but, instead of having real constants $\underline r$, it has a placeholder $\skeletonPlaceholder$, so that each \changed[lo]{term $M$} has a skeleton $Sk(M)$, and each \changed[lo]{skeleton $S$} can be converted to a term $S[r]$ given a \changed[lo]{vector $r$} of $n$ real numbers to substitute in, where $n$ is the number of occurrences of $\skeletonPlaceholder$ in $S$. \lo{Do we actually use the notation $S[r]$ in what follows?}
 \lo{Skeleton is defined in Sec.~\ref{sec:sampling semantics}.}
 The positions in a skeleton and the reduction relation on skeletons can be extended from the definitions on terms in the obvious way, with $\tif{\skeletonPlaceholder < 0}{A}{B}$ reducing nondeterministically to both $A$ and $B$, and $\tsample$ reducing to $\skeletonPlaceholder$.
 For example, we have 
