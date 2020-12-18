@@ -288,7 +288,7 @@ Let $f$ be the candidate least ranking function defined above, and suppose $g$ i
 \Cref{thm:rankable and strict rankable});
 therefore $\mathbb E[g(M_n)] \leq \mathbb E[f(M_n)] + g(M)-f(M)$, for all $n$.
 
-We have $\mathbb E[f(M_n)] = \sum_{k=n}^\infty \mathbb P[M_n = E[\tY N] \text{ for some }E, N] \to 0 \text{ as } n \to \infty$; 
+We have $\mathbb E[f(M_n)] = \sum_{k=n}^\infty \mathbb P[M_k = E[\tY N] \text{ for some }E, N] \to 0 \text{ as } n \to \infty$; 
 therefore as $g(M) - f(M) < 0$, eventually $\mathbb E[g(M_n)] < 0$, which is impossible. 
 It follows that $g \geq f$ as required.
 
@@ -296,7 +296,10 @@ In order for $f$ to be the least ranking function of $M$, it also has to actuall
 \end{proof}
 
 \subsection{Partial ranking functions}
-Even in the case of reasonable simple terms, explicitly constructing a ranking function would be a lot of work, and \Cref{thm:minimal} makes even stronger assumptions than almost-sure termination, so it isn't useful for proving it. Take, for example, the term
+Even in the case of reasonable simple terms, explicitly constructing a ranking function would be a lot of work, and \Cref{thm:minimal} makes even stronger assumptions than almost-sure termination, so it isn't useful for proving it. 
+
+\begin{example}[Geometric distribution]
+Consider the term
 \begin{align*}
 &(\tY \lambda f, n: \\
 &\quad \tif{\tsample - 0.5 < 0}{n}{f (n+1)} \\
@@ -371,6 +374,7 @@ You have 2, 3 and 10 because your $\tY$-redex rule is
 \tY \lambda x. s \to \lambda z. (\lambda x.s)\, (\tY \lambda x. s) \, z
 \]
 which is not the official definition.}
+\end{example}
 
 Even in this simple case, defining a ranking function explicitly is awkward because of the number of cases, although in most cases, because the value need only be greater than or equal to that of the next term in sequence, it suffices to take the ranking function as taking only 3 distinct values.
 (We will explain why later.)
@@ -420,7 +424,7 @@ A partial ranking function could be defined with respect to this shortcut reduct
 A similar procedure would work for other forms of syntactic sugar. If a closed term $N$ eventually reduces to one of a set of other terms $\{N_i \mid i \in I\}$ with certain probabilities, a partial ranking function defined with respect to a reduction sequence that skips straight from $N$ to $N_i$ is also a valid partial ranking function for the original reduction function, and therefore its existence implies almost sure termination. There is a caveat, however, that $\tY$-reduction steps skipped over in the shortcut still need to be counted for the expected number of $\tY$-reduction steps.
 
 \paragraph{}
-With this abbreviation, the geometric distribution example from earlier can be written as $(\tY f, n. n \oplus_{0.5} f(n+1)) \underline 0$. It is then easy to see that the following is a partial ranking function:
+With this abbreviation, the geometric distribution example from earlier can be written as $(\tY f, n. n \oplus_{0.5} f(n+1)) \, \underline 0$. It is then easy to see that the following is a partial ranking function:
 \begin{align*}
 (\tY f, n. n \oplus_{0.5} f(n+1)) N \mapsto 2 \\
 \underline i \oplus_{0.5} (\tY f, n. n \oplus_{0.5} f(n+1)) (\underline i + 1) \mapsto 1 \\
