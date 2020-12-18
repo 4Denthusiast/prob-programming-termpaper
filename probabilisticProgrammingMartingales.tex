@@ -603,6 +603,9 @@ Define an \emph{antitone partial ranking function} on a closed term $M$ to be a 
 As a corollary, any term which admits an antitone partial ranking function terminates almost surely.
 
 \paragraph{\Cref{ex:ac-ranking} revisited}
+\akr{All of these ranking functions are slightly incorrect, because $\Xi \underline n$ reduces to something like $\Xi (\underline n + 1)$ then $(\lambda z. \text{something}[\Xi/f]) (\underline n + 1)$, rather than reducing the argument first. This could be fixed by appealing to the confluent semantics version of the antitone ranking theorem, but it would be nice to have at least some examples here illustrating how antitone ranking functions work, rather than actually saving all these examples until the end.
+
+Even though the difference is quite trivial, this was actually the original motivating example for the confluent trace semantics.}
 
 Programs $M_1$ and $M_2$ are AST. For $M_1$, the partial ranking function $\big(\tY \, \lambda f n . \, \tif{n=0}{0}{f \, (n-1) \oplus_{3/2} f \, (n+1)}\big) \, \underline x \mapsto 3x + 1$ suffices to prove its termination (and could equivalently be considered an antitone partial ranking function with the constant antitone function $\epsilon_1(x) = 1$).
 
@@ -653,7 +656,7 @@ For a more complex (not $\tY$-PAST) example, consider the following ``continuous
 \underbrace{\big
 (\tY \, f \, x . \tif{x \leq 0}{0}{f(x - \tsample + 1/2)} \big)}_{\Xi} \, 10
 \]
-Let $g(x) := 2 + log(x + 1)$ again and let $\epsilon$ be the function specified by
+Let $g(x) := 2 + \log(x + 1)$ again and let $\epsilon$ be the function specified by
 \[
 \epsilon(g(x-1/2)) = g(x) - \int_{x-1/2}^{x+1/2}g(y) \, \mathrm d y.
 \]
@@ -667,7 +670,7 @@ g(l)
 0 &\mapsto 0
 \end{align*}
 \end{example}
-The value of $g$ after one $\tY$-reduction step is at least $g(l-1/2)$ therefore the expectation of $\epsilon$ after one $tY$-reduction step is at most $\epsilon(g(l-1/2)) = g(x) - \int_{x-1/2}^{x+1/2}g(y) \, \mathrm d y$, therefore in the case where $l > 0$, $g$ decreases by the required amount, and in the case where $l \leq 0$, $g(\Xi \, l) \geq 2 + log(1/2) > \log(\frac{3 \sqrt 3} 2 - 1 = \epsilon(g(0-1/2))$ as well, therefore this is a valid partial antitone ranking function and the term is AST.
+The value of $g$ after one $\tY$-reduction step is at least $g(l-1/2)$ therefore the expectation of $\epsilon$ after one $tY$-reduction step is at most $\epsilon(g(l-1/2)) = g(x) - \int_{x-1/2}^{x+1/2}g(y) \, \mathrm d y$, therefore in the case where $l > 0$, $g$ decreases by the required amount, and in the case where $l \leq 0$, $g(\Xi \, l) \geq 2 + \log(1/2) > \log(\frac{3 \sqrt 3} 2) - 1 = \epsilon(g(0-1/2))$ as well, therefore this is a valid partial antitone ranking function and the term is AST.
 
 \begin{example}[Fair-in-the-limit random walk]
 \label{ex:Fair-in-the-limit random walk}\citep[\S 5.3]{DBLP:journals/pacmpl/McIverMKK18}
@@ -694,12 +697,31 @@ For $n > 2$, $z_n = \log(n-1)$ works. The expected decrease is $\frac 1 2(\log(1
 \label{ex:escaping spline}\citep[\S 5.4]{DBLP:journals/pacmpl/McIverMKK18}
 \[
 \underbrace{\big
-(\tY \, f \, x . 
-\tif{x \leq 0}{0}{0 \oplus_{\frac{1}{x+1}} f(x + 1)} \big)}_{\Xi} 
+(\tY \, f \, x . \,
+0 \oplus_{\frac{1}{x+1}} f(x + 1) \big)}_{\Xi} 
 \, 10
 \]
+
+In this case, the fact that the ranking function must decrease at each $\tY$-step (in an antitone partial ranking function) by the expected value of $\epsilon$ not at the current term, but at the next term where the ranking function is defined, is a little harder to deal with, because the variable $x$ can change all the way to $0$ in one step, therefore simply adding a small offset doesn't suffice to compensate for this fact.
+
+Consider the candidate ranking function $\Xi n \mapsto n + 1$. For each $n$, $\Xi n$ reduces to either $0$ (with probability $\frac 1 {n + 1}$) or $\Xi (n + 1)$, therefore the expected value of the ranking function is $\frac{n(n+2)}{n+1} = n + 1 - \frac 1 {(n+1)^2}$, and the required decrease is $\frac{\epsilon(0) + n \epsilon(n + 2)}{n + 1}$, therefore eventually, the expected decrease isn't enough, whatever the value of $\epsilon(0)$ is.
+
+If instead, we take the ranking function to be defined after the $\tY$-reduction but before the $\tsample$-reduction as well, this can be resolved. Letting $\Theta[n] = \underline 0 \oplus_{\frac 1 n} \Xi n$:
+\begin{align*}
+\Theta[n] \mapsto n \\
+\Xi 10 \mapsto 12.
+\end{align*}
+For each $n$, $\Theta[n]$ reduces to either $0$ or $\Theta[n+1]$, with a $tY$-reduction only in the latter case, and the condition that this is an antitone partial ranking function is that $n \geq \frac{(n-1)(n+1)}{n} + \frac{n-1}{n} \epsilon(n+1)$ and $12 \geq 11 + \epsilon(11)$. These are satisfied by setting $\epsilon(x) = \min(1, 1/x)$, therefore this term is AST.
 \end{example}
 
+\paragraph{Completeness}
+It seems very likely that this method is complete in the case that every reachable term is AST, but we have been unable to actually prove this. It is certainly at least capable of proving the termination of terms which terminate arbitrarily slowly (in the sense that there is no similar limitation to Theorem \ref{thm:rankable implies termination}, which can only prove termination of $\tY$-PAST terms).
+
+The following theorem does not prove completeness, but is suggestive in that direction:
+\begin{theorem}
+For any stopping time $T$ which is almost surely finite, if $(\calF_n)_n$ is the coarsest filtration to which $T$ is adapted, then there is a supermartingale $(Y_n)_n$ adapted to $(\calF_n)_n$ and an antitone function $\epsilon$ such that $(Y_n)_n$ is an antitone ranking supermartingale with respect to $T$ and $\epsilon$.
+\end{theorem}
+\akr{TODO: Move proof of this theorem here, and edit it so that it's actually proving this, rather than trying to prove something stronger.}
 \input{y-stopping-time}
 
 \input{relativised-completeness}
