@@ -228,17 +228,19 @@ which terminates on the set $\pi_h^{-1}[[0,0.5]]$, has probability 0.5 of failin
 Note that the requirement that $M$ be closed is not important for the proofs of the theorems, but is simply required to ensure that $M$ reaches a value, rather than a general normal form like $x \, y$.
 
 \paragraph{}
-This definition of almost sure termination is equivalent to that given in \citep{MakOP20b}, although the program semantics is stated in a slightly different way. In particular, the argument to $\tscore$ is not relevant to termination (except for the possibility that its argument's evaluation wouldn't terminate).
+This definition of almost-sure termination is equivalent to that given in \citep{MakOP20b}, although the program semantics is stated in a slightly different way. In particular, the argument to $\tscore$ is not relevant to termination (except for the possibility that its argument's evaluation wouldn't terminate).
 
+\iffalse
 \lo{Your operational semantics does not maintain a record of the current weight of the reduction.
 A.s.~termination does depend on $\tscore$: see \cite[\S 4.3]{DBLP:journals/corr/abs-2004-03924}\footnote{\url{https://arxiv.org/abs/2004.03924}}.
 I think it important to take the behaviour of $\tscore$ into account;
 you should do it as a future task.}
+\fi
 
 \section{Supermartingales}
 One approach to proving that a term terminates almost surely is to find some variant that is bounded below and, on average, decreases sufficiently quickly that it must eventually reach 0, similarly to the approach taken in \citep{DBLP:journals/pacmpl/McIverMKK18} for imperative programs.
 
-These variants are defined as functions from reachable terms (i.e.~possible states of the program's execution) to real numbers. Specifically, let the set of reachable terms from a given closed starting term $M$ be $Rch(M) = \{N \in \Lambda \mid M \to^* N \}$, with the $\sigma$-algebra induced as a subset of $\Lambda$.
+These variants are defined as functions from reachable terms (i.e.~possible states of the program's execution) to real numbers. Specifically, let the set of reachable terms from a given closed starting term $M$ be $Rch(M) := \{N \in \Lambda \mid M \to^* N \}$, with the $\sigma$-algebra induced as a subset of $\Lambda$.
 
 \begin{definition}\rm
 A \emph{ranking function on $M$} is a measurable function $f:\mathit{Rch}(M) \to \mathbb{R}$ such that $f(N) \geq 0$ for all $N$, and
@@ -250,7 +252,9 @@ A \emph{ranking function on $M$} is a measurable function $f:\mathit{Rch}(M) \to
 \end{enumerate}
 We say that the ranking function $f$ is \emph{strict} if there exists $\epsilon > 0$ such that $f(N) = 0$ iff $N$ is a value, and for all $E$ and $R \to R'$, $f(E[R']) \leq f(E[R]) - \epsilon$.
 
-Any closed term for which a ranking (respectively, strict ranking) function exists is called \emph{rankable} (respectively, \emph{strictly rankable}). It will be demonstrated later that for any rankable term $M$, if $(M_n)_n$ is the reduction sequence starting from $M$, then $(f(M_n))_n$ is a supermartingale, and $M$ terminates almost surely, but first, some preliminaries about supermartingales.
+Any closed term for which a ranking (respectively, strict ranking) function exists is called \emph{rankable} (respectively, \emph{strictly rankable}). 
+\changed[lo]{For example, the term $(\tY \lambda x.x) \, \underline 0$ is not rankable.}
+It will be demonstrated later that for any rankable term $M$, if $(M_n)_{n \in \omega}$ is the reduction sequence starting from $M$, then $(f(M_n))_{n\in\omega}$ is a supermartingale, and $M$ terminates almost surely, but first, some preliminaries about supermartingales.
 \end{definition}
 
 \input{ranking-supermartingales}
@@ -258,11 +262,11 @@ Any closed term for which a ranking (respectively, strict ranking) function exis
 \section{Constructing Ranking Functions}
 Although rankability implies almost-sure termination, the converse does not hold in general. For example,
 \begin{equation}
-\tif{{-}\tsample < 0}{\underline{0}}{(\tY \lambda x. x) \; \underline 0}
+\tif{{-}\tsample < 0}{\underline{0}}{(\tY \lambda x. x) \, \underline 0}
 \label{ex:0 probability reachable}
 \end{equation}
-terminates in 3 steps with probability 1, but isn't rankable because $(\tY \lambda x. x) \underline 0$ is reachable, although that has probability 0. 
-Not only is this counterexample AST, it's positively almost surely terminating i.e.~the expected time to termination is finite.
+terminates in 3 steps with probability 1, but isn't rankable because $(\tY \lambda x. x) \, \underline 0$ is reachable, although that has probability 0. 
+Not only is this counterexample AST, it's PAST. %positively almost surely terminating i.e.~the expected time to termination is finite.
 
 A ranking function can be constructed under the stronger assumptions that, for every $N$ reachable from $M$, the expected number of $\tY$-reduction steps from $N$ to a value is finite. In particular, the expected number of $\tY$-reduction steps from each reachable term is a ranking function. Note that a finite number of expected $\tY$-reduction steps does not necessarily imply a finite number of expected total reduction steps.
 
@@ -279,11 +283,14 @@ terminates with only 2 $\tY$-reductions on average i.e.~$\expect{T_M^\tY} = 2$, 
 Given a closed term $M$, the function $f:Rch(M) \to \mathbb R$ given by $f(N) = \mathbb E [\text{the number of }\tY\text{-reduction steps from }N\text{ to a value}]$, if it exists, is the least of all possible ranking functions of $M$.
 \end{theorem}
 \begin{proof}
-Let $f$ be the candidate least ranking function defined above, and suppose $g$ is another ranking function such that $f(N) > g(N)$ for some $N \in Rch(M)$. The restrictions of $f$ and $g$ to $Rch(N)$ have the same properties assumed of $f$ and $g$, so assume w.l.o.g.~that $N=M$. The difference $g - f$ is then a supermartingale (with the same setup as in the proof of \Cref{thm:rankable gives supermartingale}
+Let $f$ be the candidate least ranking function defined above, and suppose $g$ is another ranking function such that $f(N) > g(N)$ for some $N \in Rch(M)$. The restrictions of $f$ and $g$ to $Rch(N)$ have the same properties assumed of $f$ and $g$, so assume w.l.o.g.~that $N=M$. The difference $g - f$ is then a supermartingale (with the same setup as in the proof of %\Cref{thm:rankable gives supermartingale}
 %Theorem \ref{rankable implies ast}) 
-therefore $\forall n.\ \mathbb E[g(M_n)] \leq \mathbb E[f(M_n)] + g(M)-f(M)$.
+\Cref{thm:rankable and strict rankable});
+therefore $\mathbb E[g(M_n)] \leq \mathbb E[f(M_n)] + g(M)-f(M)$, for all $n$.
 
-$\mathbb E[f(M_n)] = \sum_{k=n}^\infty \mathbb P[M_n = E[\tY N] \text{ for some }E, N] \to 0 \text{ as } n \to \infty$ therefore as $g(M) - f(M) < 0$, eventually $\mathbb E[g(M_n)] < 0$, which is impossible, therefore $g \geq f$ as required.
+We have $\mathbb E[f(M_n)] = \sum_{k=n}^\infty \mathbb P[M_n = E[\tY N] \text{ for some }E, N] \to 0 \text{ as } n \to \infty$; 
+therefore as $g(M) - f(M) < 0$, eventually $\mathbb E[g(M_n)] < 0$, which is impossible. 
+It follows that $g \geq f$ as required.
 
 In order for $f$ to be the least ranking function of $M$, it also has to actually be a ranking function itself. Each of the conditions on a ranking function is easily verified from the definition of $f$.
 \end{proof}
