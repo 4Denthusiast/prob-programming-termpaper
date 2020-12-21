@@ -159,78 +159,85 @@
 \tikzstyle{reduction sequence} += [
 graphs/reduction sequence/.style = {layered layout, level sep = 20pt, sibling sep = 20pt},
   ]
-\begin{tikzpicture}[reduction sequence]
-  \begin{scope}[xshift=-1cm]
-    \graph [reduction sequence] {
-      termARoot/\usebox{\termARoot} -> {
-        termALeft/\usebox{\termALeft} [> "$\alpha_1$"', < "$\alpha_2$"'],
-        termARight/\usebox{\termARight} [> "$\alpha_2$", < "$\alpha_1$"]
-      } ->
-      termAEnd/\usebox{\termAEnd}
-    };
-    \node at (termARoot.north) [above=5mm] {a};
-  \end{scope}
 
-  \begin{scope}[xshift=5cm]
-    \graph [reduction sequence] {
-      termBRoot/\usebox{\termBRoot} ->["$\alpha;\textsf{if}_3;\beta$"']
-      termBRight/\usebox{\termBRight} ->["$\alpha$"']
-      termBEnd/\usebox{\termBEnd},
-      termBRoot ->["$\alpha$"] termBEnd
-    };
-    \node at (termBRoot.north) [above=5mm] {b};
-  \end{scope}
+\noindent\makebox[\textwidth]{
+    \begin{tikzpicture}[reduction sequence]
+      \begin{scope}[xshift=-1cm]
+        \graph [reduction sequence] {
+          termARoot/\usebox{\termARoot} -> {
+            termALeft/\usebox{\termALeft} [> "$\alpha_1$"', < "$\alpha_2$"'],
+            termARight/\usebox{\termARight} [> "$\alpha_2$", < "$\alpha_1$"]
+          } ->
+          termAEnd/\usebox{\termAEnd}
+        };
+        \node at (termARoot.north) [above=5mm] {a};
+      \end{scope}
 
-  \begin{scope}[xshift=9cm]
-    \graph [reduction sequence] {
-      termCRoot/\usebox{\termCRoot} -> {
-        termCLeft/\usebox{\termCLeft} [> "$\alpha$"', < "$\alpha;\beta$"'],
-        termCRight/\usebox{\termCRight} [> "$\alpha;\textsf{if}_3;\beta$", < "$\alpha$"]
-      } ->
-      termCEnd/\usebox{\termCEnd}
-    };
-    \node at (termCRoot.north) [above=5mm] {c};
-  \end{scope}
-\end{tikzpicture}
+      \begin{scope}[xshift=5cm]
+        \graph [reduction sequence] {
+          termBRoot/\usebox{\termBRoot} ->["$\alpha;\textsf{if}_3;\beta$"']
+          termBRight/\usebox{\termBRight} ->["$\alpha$"']
+          termBEnd/\usebox{\termBEnd},
+          termBRoot ->["$\alpha$"] termBEnd
+        };
+        \node at (termBRoot.north) [above=5mm] {b};
+      \end{scope}
 
-\begin{tikzpicture}[reduction sequence]
-  \graph [reduction sequence] {
-    termDRoot/\usebox{\termDRoot} -> {
-      termDLeft/\usebox{\termDLeft} [> "$\alpha$", < "$\alpha;\beta$"],
-      termDRight/\usebox{\termDRight} [> "$\alpha;@_1;\lambda;\beta$", < "$\alpha$"]
-    } ->
-    termDEnd/\usebox{\termDEnd}
-  };
-  \node at (termDRoot.north) [above=5mm] {d};
+      \begin{scope}[xshift=9cm]
+        \graph [reduction sequence] {
+          termCRoot/\usebox{\termCRoot} -> {
+            termCLeft/\usebox{\termCLeft} [> "$\alpha$"', < "$\alpha;\beta$"'],
+            termCRight/\usebox{\termCRight} [> "$\alpha;\textsf{if}_3;\beta$", < "$\alpha$"]
+          } ->
+          termCEnd/\usebox{\termCEnd}
+        };
+        \node at (termCRoot.north) [above=5mm] {c};
+      \end{scope}
+    \end{tikzpicture}
+}
 
-  \begin{scope}[xshift=8cm]
-    \graph [reduction sequence] {
-      termERoot/\usebox{\termERoot} -> {
-        termELeft/\usebox{\termELeft} [> "$\alpha$"', < "$(\alpha;\gamma_i;\beta)_i$"', < dashed],
-        termERight/\usebox{\termERight} [> "$\alpha;@_2;\beta$", < "$\alpha$"]
-      } ->
-      termEEnd/\usebox{\termEEnd}
-    };
-    \node at (termERoot.north) [above=5mm] {e};
-  \end{scope}
-\end{tikzpicture}
+\noindent\makebox[\textwidth]{
+    \begin{tikzpicture}[reduction sequence]
+      \graph [reduction sequence] {
+        termDRoot/\usebox{\termDRoot} -> {
+          termDLeft/\usebox{\termDLeft} [> "$\alpha$", < "$\alpha;\beta$"],
+          termDRight/\usebox{\termDRight} [> "$\alpha;@_1;\lambda;\beta$", < "$\alpha$"]
+        } ->
+        termDEnd/\usebox{\termDEnd}
+      };
+      \node at (termDRoot.north) [above=5mm] {d};
 
-\begin{tikzpicture}[reduction sequence]
-  \node (termFRoot) at (0,0) {\usebox{\termFRoot}};
-  \node (termFLeft1) at (-6,-5) {\usebox{\termFLeftFirst}};
-  \node (termFLeft2) at (-2,-12) {\usebox{\termFLeftSecond}};
-  \node (termFRight) at (6,-1) {\usebox{\termFRight}};
-  \node (termFEnd) at (4,-13) {\usebox{\termFEnd}};
-  \graph {
-    (termFRoot) ->["$\alpha$"']
-    (termFLeft1) ->["$\alpha;\lambda;@_1;\beta$"']
-    (termFLeft2) ->[dashed]
-    (termFEnd),
-    
-    (termFRoot) ->["$\alpha;\tY;\lambda;\beta$"]
-    (termFRight) ->["$\alpha$"]
-    (termFEnd)
-  };
-  \node at (1,-13.3) [align=center] {$(\alpha;\lambda;@_1;\gamma_i;\tY;\lambda;\beta)_i$ \\ $(\alpha;\lambda;@_1;\beta;\delta_i;\tY;\lambda;\beta)_i$};
-  \node at (termFRoot.north) [above=5mm] {f};
-\end{tikzpicture}
+      \begin{scope}[xshift=8cm]
+        \graph [reduction sequence] {
+          termERoot/\usebox{\termERoot} -> {
+            termELeft/\usebox{\termELeft} [> "$\alpha$"', < "$(\alpha;\gamma_i;\beta)_i$"', < dashed],
+            termERight/\usebox{\termERight} [> "$\alpha;@_2;\beta$", < "$\alpha$"]
+          } ->
+          termEEnd/\usebox{\termEEnd}
+        };
+        \node at (termERoot.north) [above=5mm] {e};
+      \end{scope}
+    \end{tikzpicture}
+}
+
+\noindent\makebox[\textwidth]{
+    \begin{tikzpicture}[reduction sequence]
+      \node (termFRoot) at (0,0) {\usebox{\termFRoot}};
+      \node (termFLeft1) at (-6,-5) {\usebox{\termFLeftFirst}};
+      \node (termFLeft2) at (-2,-12) {\usebox{\termFLeftSecond}};
+      \node (termFRight) at (6,-1) {\usebox{\termFRight}};
+      \node (termFEnd) at (4,-13) {\usebox{\termFEnd}};
+      \graph {
+        (termFRoot) ->["$\alpha$"']
+        (termFLeft1) ->["$\alpha;\lambda;@_1;\beta$"']
+        (termFLeft2) ->[dashed]
+        (termFEnd),
+        
+        (termFRoot) ->["$\alpha;\tY;\lambda;\beta$"]
+        (termFRight) ->["$\alpha$"]
+        (termFEnd)
+      };
+      \node at (1,-13.3) [align=center] {$(\alpha;\lambda;@_1;\gamma_i;\tY;\lambda;\beta)_i$ \\ $(\alpha;\lambda;@_1;\beta;\delta_i;\tY;\lambda;\beta)_i$};
+      \node at (termFRoot.north) [above=5mm] {f};
+    \end{tikzpicture}
+}
