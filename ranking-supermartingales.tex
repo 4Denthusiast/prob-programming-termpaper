@@ -316,7 +316,7 @@ X_n(s) & := f(M_n(s)) \nonumber \\
 Y_n(s) & := X_{T_n}(s) \nonumber \\
 T_M^\tY(s) &:= \min \set{n \mid M_{T_n(s)}(s) \textrm{ is a value}} \label{eq:y stopping time}
 \end{align}
-The random variable $T_M^\tY$ is known as the \emph{$\tY$-runtime of $M$}, and it can equivalently be defined as the number of $\tY$-reduction steps in the reduction sequence of $M$. Note that, as the type system ensures that the reduction relation excluding $\tY$-reduction is strongly normalising, only finitely many reductions can occur in a row without one of them being a $\tY$-reduction, therefore $T_M^\tY < \infty$ \changed[lo]{a.s.}~iff $M$ is AST.
+The random variable $T_M^\tY$ is known as the \emph{$\tY$-runtime of $M$}, and it can equivalently be defined as the number of $\tY$-reduction steps in the reduction sequence of $M$. Note that, as the type system ensures that the reduction relation excluding $\tY$-reduction is strongly normalising, only finitely many reductions can occur in a row without one of them being a $\tY$-reduction, therefore $T_M^\tY < \infty$ a.s.~iff $M$ is AST.
 
 \begin{theorem}[Soundness] \label{thm:rankable implies termination}
 \begin{enumerate}
