@@ -296,89 +296,44 @@ In order for $f$ to be the least ranking function of $M$, it also has to actuall
 \end{proof}
 
 \subsection{Partial ranking functions}
-Even in the case of reasonable simple terms, explicitly constructing a ranking function would be a lot of work, and \Cref{thm:minimal} makes even stronger assumptions than almost-sure termination, so it isn't useful for proving it. 
-
-\lo{NOTATION. To be consistent, we write $\lambda x. M$ rather than $\lambda x : M$.}
+Even in the case of reasonable simple terms, explicitly constructing a ranking function would be a lot of work, and \Cref{thm:minimal} makes even stronger assumptions than almost-sure termination, so it isn't useful for proving it.
 
 \begin{example}[Geometric distribution]
 Consider the term
 \begin{align*}
-&(\tY \lambda f, n: \\
+&(\tY \lambda f, n. \\
 &\quad \tif{\tsample - 0.5 < 0}{n}{f (n+1)} \\
 &) \, \underline{0}
 \end{align*}
-which generates a geometric distribution.
+which generates a geometric distribution (let $\Theta = \lambda f, n : \tif{\tsample \underline{- 0.5} < 0}{n}{f (n\underline{+ 1})}$, then the term is $(\tY \Theta)\ \underline 0$).
     Despite its simplicity, its $Rch$ contains all the terms
-\begin{enumerate}
-    \item $(\tY \lambda f, n: \tif{\tsample - 0.5 < 0}{n}{f (n+1)}) \underline{0}$
-    \item $(\lambda z.(\lambda f, n: \tif{\tsample - 0.5 < 0}{n}{f (n+1)}) (\tY \lambda f, n: \tif{\tsample - 0.5 < 0}{n}{f (n+1)}) z) \underline{i}$
-    \item $(\lambda f, n: \tif{\tsample - 0.5 < 0}{n}{f (n+1)}) (\tY \lambda f, n: \tif{\tsample - 0.5 < 0}{n}{f (n+1)}) \underline{i}$
-    \item $(\lambda n: \tif{\tsample - 0.5 < 0}{n}{(\tY \lambda f, m: \tif{\tsample - 0.5 < 0}{n}{f (m+1)}) (m+1)}) \underline{i}$
-    \item $\tif{\tsample - 0.5 < 0}{\underline{i}}{(\tY \lambda f, m: \tif{\tsample - 0.5 < 0}{m}{f (m+1)}) (\underline{i}+1)}$
-    \item $\tif{\underline r - 0.5 < 0}{\underline{i}}{(\tY \lambda f, m: \tif{\tsample - 0.5 < 0}{m}{f (m+1)}) (\underline{i}+1)}$
-    \item $\tif{\underline{r - 0.5} < 0}{\underline{i}}{(\tY \lambda f, m: \tif{\tsample - 0.5 < 0}{m}{f (m+1)}) (\underline{i}+1)}$
-    \item $\underline{i}$
-    \item $(\tY \lambda f, m: \tif{\tsample - 0.5 < 0}{m}{f (m+1)}) (\underline{i}+1)$
-    \item $(\lambda z.(\lambda f, n: \tif{\tsample - 0.5 < 0}{n}{f (n+1)}) (\tY \lambda f, n: \tif{\tsample - 0.5 < 0}{n}{f (n+1)}) z) (\underline{i} + 1)$.
-\end{enumerate}
-\akr{TODO: make this into a diagram with arrows.}
 
-\lo{Here is a more readable version.}
+\begin{tikzpicture}[node distance=0.5em, anchor=west]
+    \node (1) at (0,-0) {$\tY\ \Theta\ \underline 0$};
+    \node (2) at (0,-1) {$(\lambda z. (\lambda n. \tif{\tsample \underline{- 0.5} < 0}{n}{\tY\ \Theta\ (n \underline{+ 1})}) z)\ \underline i$};
+    \node (3) at (0,-2) {$(\lambda n. \tif{\tsample \underline{- 0.5} < 0}{n}{\tY\ \Theta\ (n \underline{+ 1})})\ \underline i$};
+    \node (4) at (0,-3) {$\tif{\tsample \underline{- 0.5} < 0}{\underline i}{\tY\ \Theta\ (\underline i\ \underline{+ 1})}$};
+    \node (5) at (0,-4) {$\tif{\underline r\ \underline{- 0.5} < 0}{\underline i}{\tY\ \Theta\ (\underline i\ \underline{+ 1})}$};
+    \node (6) at (0,-5) {$\tif{\underline r < 0}{\underline i}{\tY\ \Theta\ (\underline i\ \underline{+ 1})}$};
+    \node (7) at (2,-6) [text width=] {$\underline i$};
+    \node (8) at (0,-7) {$\tY\ \Theta\ (\underline i\ \underline{+ 1})$};
+    \node (9) at (0,-8) {$(\lambda z. (\lambda n. \tif{\tsample \underline{- 0.5} < 0}{n}{\tY\ \Theta\ (n \underline{+ 1})}) z)\ (\underline i\ \underline{+ 1})$};
+    
+    \draw [->] (1.south west) to [bend right=45] (2.north west);
+    \draw [->] (2.south west) to [bend right=45] (3.north west);
+    \draw [->] (3.south west) to [bend right=45] (4.north west);
+    \draw [->] (4.south west) to [bend right=45] (5.north west);
+    \draw [->] (5.south west) to [bend right=45] (6.north west);
+    \draw [->] (6.south west) to [bend right=45] (8.north west);
+    \draw [->] (8.south west) to [bend right=45] (9.north west);
+    
+    \draw [->] (9.west) to [bend left=45] (2.west);
+    \draw [->] (6) to (7);
+\end{tikzpicture}
 
-Writing $\Theta = \lambda f, n : \tif{\tsample - 0.5 < 0}{n}{f (n+1)}$, we have
-\begin{enumerate}
-    \item $(\tY \, \Theta) \; \underline{0}$
-
-    \item $\big(\lambda z.\Theta \; (\tY \, \Theta) \; z \big) \; \underline{i}$
-    
-    \item $\Theta \; (\tY \, \Theta) \; \underline{i}$
-    
-    \item \changed[akr]{$(\lambda n: \tif{\tsample - 0.5 < 0}{n}{(\tY \lambda f, m: \tif{\tsample - 0.5 < 0}{n}{f (m+1)}) (m+1)}) \; \underline{i}$}
-
-    \lo{I think the preceding should be: $(\lambda n: \tif{\tsample - 0.5 < 0}{n}{(\tY \lambda f, m: \tif{\tsample - 0.5 < 0}{m}{f (m+1)}) (n+1)}) \; \underline{i}$, and so, more succinctly:
-    \[
-    \big(
-    \lambda n: 
-    \tif{\tsample - 0.5 < 0}{n}{(\tY \, \Theta) \; (n+1)} 
-    \big) 
-    \; \underline{i}
-    \]}
-
-    \item $\tif{\tsample - 0.5 < 0}{\underline{i}}{
-    (\tY \, \Theta) \, (\underline{i}+1)}$
-    
-    \item $\tif{\underline r - 0.5 < 0}{\underline{i}}{(\tY \, \Theta) (\underline{i}+1)}$
-    
-    \item $\tif{\underline{r - 0.5} < 0}{\underline{i}}{(\tY \, \Theta) (\underline{i}+1)}$
-    
-    \item $\underline{i}$
-    
-    \item $(\tY \, \Theta) \; (\underline{i}+1)$
-    
-    \item $\big(\lambda z. \Theta \; (\tY \, \Theta) \;  z\big) \; (\underline{i} + 1)$
-
-    \item $\Big(\lambda z. \big(
-    \lambda n: 
-    \tif{\tsample - 0.5 < 0}{n}{(\tY \, \Theta) \; (n+1)} 
-    \big) \, z \Big)
-    \; \underline{i}$
-\end{enumerate}
-
-\lo{So we have:
-\[
-\begin{array}{ll}
-1 \to 11 \to 4 \to 5 \to 6 \to 7 \to 8\\
-7 \to 9 \to 11 \to \cdots
-\end{array}
-\]
-You have 2, 3 and 10 because your $\tY$-redex rule is
-\[
-\tY \lambda x. s \to \lambda z. (\lambda x.s)\, (\tY \lambda x. s) \, z
-\]
-which is not the official definition.}
 \end{example}
 
-Even in this simple case, defining a ranking function explicitly is awkward because of the number of cases, although in most cases, because the value need only be greater than or equal to that of the next term in sequence, it suffices to take the ranking function as taking only 3 distinct values.
+Even in this simple case, defining a ranking function explicitly is awkward because of the number of cases, although in most cases, because the value need only be greater than or equal to that of the next term in sequence, it suffices to take the ranking function as having the same value as the next term, so that overall it takes only 3 distinct values.
 (We will explain why later.)
 
 The definition of rankability is also inconvenient for syntactic sugar. It could be useful, for example, to define $M \oplus_p N = \tif{\tsample - p < 0} M N$, where $M \oplus_p N$ reduces to $M$ or $N$, depending on the first value of $s$\lo{Need a name for $s$.}, with probability $p$ resp.~$(1-p)$. Technically though, it reduces first to $\tif{\underline r - p < 0} M N$ for all $r \in I$, so those terms all need values of the ranking function too.
@@ -429,13 +384,14 @@ A partial ranking function could be defined with respect to this shortcut reduct
 A similar procedure would work for other forms of syntactic sugar. If a closed term $N$ eventually reduces to one of a set of other terms $\{N_i \mid i \in I\}$ with certain probabilities, a partial ranking function defined with respect to a reduction sequence that skips straight from $N$ to $N_i$ is also a valid partial ranking function for the original reduction function, and therefore its existence implies almost sure termination. There is a caveat, however, that $\tY$-reduction steps skipped over in the shortcut still need to be counted for the expected number of $\tY$-reduction steps.
 
 \paragraph{}
-With this abbreviation, the geometric distribution example from earlier can be written as $(\tY f, n. n \oplus_{0.5} f(n+1)) \, \underline 0$. It is then easy to see that the following is a partial ranking function:
+With this abbreviation, the geometric distribution example from earlier can be written as $(\tY \lambda f n.\ n \oplus_{0.5} f(n+1)) \, \underline 0$. It is then easy to see that the following is a partial ranking function:
 \begin{align*}
-(\tY f, n. n \oplus_{0.5} f(n+1)) N \mapsto 2 \\
-\underline i \oplus_{0.5} (\tY f, n. n \oplus_{0.5} f(n+1)) (\underline i + 1) \mapsto 1 \\
-\underline i \mapsto 0
+(\tY \lambda f n.\ n \oplus_{0.5} f(n+1))\ N & \mapsto 2 \\
+\underline i \oplus_{0.5} (\tY \lambda f n.\ n \oplus_{0.5} f(n+1))\ (\underline i + 1) & \mapsto 1 \\
+\underline i & \mapsto 0.
 \end{align*}
 
+In fact, even the partial function $\tY \Theta N \mapsto 2$ alone is a partial ranking function for this term.
 \section{Antitone ranking functions}
 
 \begin{example}[Random walk]
@@ -968,7 +924,7 @@ In the other case, there is some overlap between the regions involved in $Y \sim
 \item $Y \sim_c X$ forwards, $\alpha \leq \gamma$ and $\alpha$ (and therefore also $\gamma$) is disjoint from $\beta$: In this case, $(X_i)_i$ proceeds by swapping $\beta_1 = \beta$ below $\alpha$ by case a, then swapping $\gamma$ below $\alpha$ by one of the other cases, and $(Y_j)_j$ proceeds by swapping $\gamma$ and $\alpha$, then swapping $\beta$ below $\alpha$ then all of the images of $\gamma$ (which are $\geq \alpha$ and therefore left of $\beta$). In both cases, the subterm at $\alpha$ when $\alpha$ and $\gamma$ are swapped is unaffected by the reduction at $\beta$, therefore it produces the same result in both cases, therefore the overall sequence in both cases is $\alpha$ then the images of $\gamma$ then $\beta$.
 \item Both $\gamma$ and $\beta$ are $> \alpha$ but they're disjoint from each other, and either the skeleton at position $\alpha$ is of the form $\tif{\skeletonPlaceholder > 0}{A}{B}$ or it is of the form $A B$ and either both $\gamma$ and $\beta$ are $> \alpha;@_1$ or they are both $> \alpha;@_2$: In this case, $(X_i)_i$ proceeds by swapping $\beta$ then $\gamma$ below $\alpha$, in each case possibly forming 0 or multiple images. The only way the number of images of each of these positions can be different is if the subskeleton at $\alpha$ is an $\textsf{if}$, and there are 0 of one of them and 1 of the other, in which case they're trivially in the correct order already. Otherwise, all of the images of $\beta$ and $\gamma$ are disjoint from one another, therefore none of the positions, or their relative order, change when they are swapped, therefore the next part of the sequence $(X_i)_i$ is just insertion-sort running on the images of $\beta$ and $\gamma$ with $\sim_c$ case a swaps until they're in the correct order. The sequence $(Y_j)_j$ starts by swapping $\gamma$ then $\beta$ below $\alpha$, then as before, sorting the images into the correct order by case a swaps. The images originally formed of $\gamma$ and $\beta$ are the same in both cases, therefore the final order is the same, so $X_i = Y_j$ for some $i$ and $j$.
 \item $Y \sim_c X$ forwards, $\alpha;@_1 < \gamma$, and $\alpha;@_2 < \beta$: Let $x$ be the variable involved in the $\beta$-reduction at $\alpha$, so that the sub-skeleton at $\alpha$ is $(\lambda x. A) B$ for some $A, B$, where $\gamma = \alpha;@_1;\lambda;\gamma'$ and $A \to A'$ at $\gamma'$, and $\beta = \alpha;@_2;\beta'$, and $B \to B'$ at $\beta'$. In this case, $(X_i)_i$ starts by swapping $\beta$ below $\alpha$ by case e, producing one image of $\beta$ for each $x$ in $A'$, then swapping $\gamma$ below $\alpha$ by case d, producing a single image $\alpha;\gamma'$. For each of the instances of $x$ in $A$ left of $\gamma'$, the reduction at $\alpha;\gamma'$ is then swapped below the corresponding image of $\beta$. The sequence $(Y_j)_j$ starts by swapping $\gamma$ below $\alpha$ then $\beta$ below $\alpha$, but in this case the images of $\beta$ produced may be different. In this case the swap happens earlier in the reduction sequence than $\gamma$, so that the body of the lambda is still $A$ rather than $A'$, and the reduction at $\gamma$ may rearrange or change the number of instances of $x$. Next, each of the images of $\beta$ to the right of $\alpha;\gamma'$ are swapped with it by case a. At this point, the next few reductions before $\alpha;\gamma'$ will in general be images of $\beta$ at positions inside $\alpha;\gamma'$. The subskeleton at position $\alpha;\gamma'$ before these reductions is $(A|\gamma')[B/x]$, then by the images of $\beta$ this reduces to $(A|\gamma')[B'/x]$, then it reduces at its root position ($\alpha;\gamma'$ in the overall skeleton) to $(A'|\gamma')[B'/x]$. For each position of an $x$ in $(A|\gamma')$, there are 0 or more corresponding positions of $x$ in $(A'|\gamma')$, depending on what type of reduction $A \to A'$ is. Because $B$ and $B'$ cannot contain any instances of the variable involved in the reduction $A \to A'$ (if it's a $\beta$-reduction or $\tY$-reduction), each instance of $B$ in $(A|\gamma')[B/x]$ has the same set of images in $(A'|\gamma')[B/x]$ as the corresponding $x$ in $(A|\gamma')$. When these images of $\beta$ that overlap with the image of $\gamma$ are swapped below it, each of them has its own images, one at each position of $B$ in $(A'|\gamma')[B/x]$ corresponding to its original copy of $B$ in $(A|\gamma')[B/x]$. After all of them are swapped below $\alpha;\gamma'$ (and rearranged among themselved by case a), there is therefore one reduction at each copy of $B$ in $(A'|\gamma')[B/x]$, i.e.~one at position $\beta'$ relative to each $x$ in $(A'|\gamma')$. They are therefore the same as the images of $\beta$ in $X_1$ that overlap with $\alpha;\gamma'$, because those are also one reduction at position $\beta'$ relative to each $x$ in $(A'|\gamma)$. Both $(X_i)_i$ and $(Y_j)_j$ therefore eventually reach a point where the relevant sub-reduction-sequence is $\alpha$, the images of $\beta$ to the left of $\alpha;\gamma'$, $\alpha;\gamma'$ itself, the aforementioned images of $\beta$ that overlap with $\alpha;\gamma'$, then all the images of $\beta$ to the right of $\alpha;\gamma'$.
-\item $Y \sim_c X$ forwards, $\gamma$ and $\beta$ are disjoint and both $> \alpha$, and the reduction at $\alpha$ is a $\tY$-reduction: This is similar to the previous case, but more complicated, so it will need some definitions to explain properly what's going on. Let the term at $\alpha$ before any of the reductions be $\tY \lambda x. A$, let $\gamma = \alpha;\tY;\lambda;\gamma'$, let $\beta = \alpha;\tY;\lambda;\beta'$, let $A | \beta' = B \to B'$ with the reduction at $\cdot$, let $A | \gamma' = C \to C'$ with the reduction at $\cdot$, let the positions in $A$ where $x$ occurs that are left of $\gamma'$, between $\gamma'$ and $\beta'$ (but still disjoint from both), and right of $\beta'$ respectively be $(\delta^l_i)$, $(\delta^m_i)$ and $(\delta^r_i)$, let the positions in $B$, $C$, $B'$ and $C'$ respectively where $x$ occurs be $(\delta^B_i)$, $(\delta^C_i)$, $(\delta^{B'}_i)$ and $(\delta^{C'}_i)$ (so that all the positions in $A$ where $x$ occurs, in left-to-right order, are $(\delta^l_i)_i, (\delta^C_i)_i, (\delta^m_i)_i, (\delta^B_i)_i, (\delta^r_i)_i$). The sequence $(X_i)_i$ starts by swapping $\beta$ then $\gamma$ below $\alpha$. With the shorthand that $\gamma'(\epsilon) = \alpha;\lambda;@_1;\epsilon;\tY;\lambda;\gamma'$, $\gamma'_0 = \alpha;\lambda;@_1;\gamma'$, and similarly for $\beta'$, the relevant portion of $X_2$ is then $\alpha,\ (\gamma'(\delta^l_i))_i,\ \gamma'_0,\ (\gamma'(\delta^{C'}_i))_i,\ (\gamma'(\delta^m_i))_i,\ (\gamma'(\delta^B_i))_i,\ (\gamma'(\delta^r_i))_i,\ (\beta'(\delta^l_i))_i,\ (\beta'(\delta^{C'}_i))_i,\ (\beta'(\delta^m_i))_i,\ \beta'_0,\ (\beta'(\delta^{B'}_i))_i,\ (\beta'(\delta^r_i))_i$. Next in $(X_k)_k$, for each $i$, $\gamma'(\delta^r_i)$ are swapped past all the images of $\beta$ until it is immediately before $\beta'(\delta^r_i)$ by case a, then for each $i$, $\gamma'(\delta^B_i)$ is swapped past all the images of $\beta$ until $\beta'_0$ by case a, then swapped with $\beta'_0$ by one of the other cases depending on what type of reduction $B \to B'$ is and the relative positions. Even if it's case d or f, all of the images of $\gamma'(\delta^B_i)$ are disjoint from each other (and from the positions of the other reductions after $\beta'_0$) because the redex, $C$, doesn't contain any instances of the variable involved in the reduction $B \to B'$. Expanding the definitions, this is swapping $\alpha;\lambda;@_1;\delta^B_i;\tY;\lambda;\gamma'$ with $\alpha;\lambda;@_1;\beta'$ at a point in the reduction sequence where the subskeleton at $\alpha;\lambda;@_1;\beta'$ is $B$ with a mixture of $\tY \lambda x. A$ and $\tY \lambda x. A[C'/\gamma']$ substituted for its occurrences of $x$, and one of these occurrences of $x$ is at $\delta^B_i$. For each $\delta^B_j$, there are some corresponding $\delta^{B'}_k$, where the images of the $x$ at $\delta^B_j$ end up after the reduction $B \to B'$. These cover all the $\delta^{B'}_k$, and uniquely, and for each $\delta^B_i$, the images of $\zeta;\delta^B_i;\theta$ after swapping it with $\zeta;\beta'$ are precisely $(\zeta;\delta^{B'}_k;\theta)$ for those same values of $k$, therefore after swapping all of the $(\gamma'(\delta^B_i))_i$ down past $\beta'_0$, their images are $(\gamma'(\delta^{B'}_i))_i$. After swapping with $\beta'_0$, each of these images than swaps by case a to take its place among the $(\beta'(\delta^{B'}_i))_i$. Next up in $(X_i)_i$, the $(\gamma'(\delta^m_i))_i$s and the $(\gamma'(\delta^{C'}_i))_i$s swap down past some images of $\beta$ they're disjoint from to take their place before their matching image of $\beta$, then $\gamma'_0$ swaps past the $(\beta'(\delta^l_i))_i$, stopping immediately before $\beta'(\delta^{C'}_1)$, then the $(\gamma'(\delta^l_i))_i$ and the $(\beta'(\delta^l_i))_i$ mix. The end result of the rearrangement of (this subsequence of) the reduction sequence is therefore $\alpha,\ (\gamma'(\delta^l_i), \beta'(\delta^l_i))_i,\ \gamma'_0,\ (\gamma'(\delta^{C'}_i), \beta'(\delta^{C'}_i))_i,\ (\gamma'(\delta^m_i), \beta'(\delta^m_i))_i,\ \beta'_0,\ (\gamma'(\delta^{B'}_i), \beta'(\delta^{B'}_i))_i,\ (\gamma'(\delta^r_i), \beta'(\delta^r_i))_i$.
+\item $Y \sim_c X$ forwards, $\gamma$ and $\beta$ are disjoint and both $> \alpha$, and the reduction at $\alpha$ is a $\tY$-reduction: This is similar to the previous case, but more complicated, so it will need some definitions to explain properly what's going on. Let the term at $\alpha$ before any of the reductions be $\tY \lambda x. A$, let $\gamma = \alpha;\tY;\lambda;\gamma'$, let $\beta = \alpha;\tY;\lambda;\beta'$, let $A | \beta' = B \to B'$ with the reduction at $\cdot$, let $A | \gamma' = C \to C'$ with the reduction at $\cdot$, let the positions in $A$ where $x$ occurs that are left of $\gamma'$, between $\gamma'$ and $\beta'$ (but still disjoint from both), and right of $\beta'$ respectively be $(\delta^l_i)$, $(\delta^m_i)$ and $(\delta^r_i)$, let the positions in $B$, $C$, $B'$ and $C'$ respectively where $x$ occurs be $(\delta^B_i)$, $(\delta^C_i)$, $(\delta^{B'}_i)$ and $(\delta^{C'}_i)$ (so that all the positions in $A$ where $x$ occurs, in left-to-right order, are $(\delta^l_i)_i, (\delta^C_i)_i, (\delta^m_i)_i, (\delta^B_i)_i, (\delta^r_i)_i$). The sequence $(X_i)_i$ starts by swapping $\beta$ then $\gamma$ below $\alpha$. With the shorthand that $\gamma'(\epsilon) = \alpha;\lambda;@_1;\epsilon;\tY;\lambda;\gamma'$, $\gamma'_0 = \alpha;\lambda;@_1;\gamma'$, and similarly for $\beta'$, the relevant portion of $X_2$ is then $\alpha$, $(\gamma'(\delta^l_i))_i$, $\gamma'_0$, $(\gamma'(\delta^{C'}_i))_i$, $(\gamma'(\delta^m_i))_i$, $(\gamma'(\delta^B_i))_i$, $(\gamma'(\delta^r_i))_i$, $(\beta'(\delta^l_i))_i$, $(\beta'(\delta^{C'}_i))_i$, $(\beta'(\delta^m_i))_i$, $\beta'_0$, $(\beta'(\delta^{B'}_i))_i$, $(\beta'(\delta^r_i))_i$. Next in $(X_k)_k$, for each $i$, $\gamma'(\delta^r_i)$ are swapped past all the images of $\beta$ until it is immediately before $\beta'(\delta^r_i)$ by case a, then for each $i$, $\gamma'(\delta^B_i)$ is swapped past all the images of $\beta$ until $\beta'_0$ by case a, then swapped with $\beta'_0$ by one of the other cases depending on what type of reduction $B \to B'$ is and the relative positions. Even if it's case d or f, all of the images of $\gamma'(\delta^B_i)$ are disjoint from each other (and from the positions of the other reductions after $\beta'_0$) because the redex, $C$, doesn't contain any instances of the variable involved in the reduction $B \to B'$. Expanding the definitions, this is swapping $\alpha;\lambda;@_1;\delta^B_i;\tY;\lambda;\gamma'$ with $\alpha;\lambda;@_1;\beta'$ at a point in the reduction sequence where the subskeleton at $\alpha;\lambda;@_1;\beta'$ is $B$ with a mixture of $\tY \lambda x. A$ and $\tY \lambda x. A[C'/\gamma']$ substituted for its occurrences of $x$, and one of these occurrences of $x$ is at $\delta^B_i$. For each $\delta^B_j$, there are some corresponding $\delta^{B'}_k$, where the images of the $x$ at $\delta^B_j$ end up after the reduction $B \to B'$. These cover all the $\delta^{B'}_k$, and uniquely, and for each $\delta^B_i$, the images of $\zeta;\delta^B_i;\theta$ after swapping it with $\zeta;\beta'$ are precisely $(\zeta;\delta^{B'}_k;\theta)$ for those same values of $k$, therefore after swapping all of the $(\gamma'(\delta^B_i))_i$ down past $\beta'_0$, their images are $(\gamma'(\delta^{B'}_i))_i$. After swapping with $\beta'_0$, each of these images than swaps by case a to take its place among the $(\beta'(\delta^{B'}_i))_i$. Next up in $(X_i)_i$, the $(\gamma'(\delta^m_i))_i$s and the $(\gamma'(\delta^{C'}_i))_i$s swap down past some images of $\beta$ they're disjoint from to take their place before their matching image of $\beta$, then $\gamma'_0$ swaps past the $(\beta'(\delta^l_i))_i$, stopping immediately before $\beta'(\delta^{C'}_1)$, then the $(\gamma'(\delta^l_i))_i$ and the $(\beta'(\delta^l_i))_i$ mix. The end result of the rearrangement of (this subsequence of) the reduction sequence is therefore $\alpha$, $(\gamma'(\delta^l_i), \beta'(\delta^l_i))_i$, $\gamma'_0$, $(\gamma'(\delta^{C'}_i), \beta'(\delta^{C'}_i))_i$, $(\gamma'(\delta^m_i), \beta'(\delta^m_i))_i$, $\beta'_0$, $(\gamma'(\delta^{B'}_i), \beta'(\delta^{B'}_i))_i$, $(\gamma'(\delta^r_i), \beta'(\delta^r_i))_i$.
 
   The other sequence, $(Y_j)_j$, proceeds similarly, but with the images of $\gamma$ starting out after the images of $\beta$. It swaps all the images of $\beta$ that are right of $\gamma_0$ to the appropriate places by case a, then swaps all the $(\beta'(\delta^C_i)_i$ first to then past $\gamma'_0$, resulting in $(\beta'(\delta^{C'}_i))_i$ for the same reason as with swapping those images of $\gamma$ that overlapped with $\beta'_0$ past it in the $(X_i)_i$ case above, then finally swapping the $(\beta'(\delta^l_i))_i$s and the $(\gamma'(\delta^l_i))_i$s into the correct order. As required, this produces the same result as in $(X_i)_i$.
   \item $Y \to X$ forwards, and $\alpha < \gamma < \beta$: Let $\gamma'$ be such that $\gamma = \alpha;\textsf{if}_i;\gamma'$, $\alpha;@_1;\lambda;\gamma'$, $\alpha;@_2;\gamma'$ or $\alpha;\tY;\lambda;\gamma'$, so that $\gamma'$ is the freely varying later part of $\gamma$ as in the definition of $\sim_c$, whichever case applies to swapping $\gamma$ and $\alpha$. Similarly, let $\beta'$ be the freely varying part of $\beta$ relative to $\gamma$. Let the images of $\gamma$ after swapping it with $\alpha$ (where this swap occurs later in the reduction sequence than $\beta$) then be $(\alpha;\delta_i;\gamma')_i$, and the images of $\beta$ after swapping it with $\gamma$ be $(\gamma;\epsilon_i;\beta')_i$. Depending on the skeleton at $\alpha$, and $\gamma$'s position within it, $(\delta_i)_i$ may be empty (case b), a singleton containing $\cdot$ (cases c and d), all the positions of the relevant variable in the lambda in the skeleton at $\alpha$ (case e), or $\lambda;@_1$ and $\lambda;@_1;\zeta;\tY;\lambda$ for each position $\zeta$ of the relevant variable (case f), but in all cases (except a, which is excluded because none of $\alpha, \gamma$ and $\beta$ are disjoint) the set of images has this general structure. Furthermore, the positions $(\delta_i)_i$ are determined only by the general position of $\gamma$ within $\alpha$ (the part excluded from $\gamma'$), and the positions of the relevant variable within the skeleton at $\alpha$. They do not depend on $\alpha$ or $\gamma$, so that if both initial positions were moved somewhere else the relative positions of the images of $\gamma$ would be unaffected, and similarly if some position within $\gamma$ were swapped with $\alpha$, the relative positions of its images would be the same (except to the extent that, in case f, the positions of the relevant variable are taken after the inner reduction takes place, so that some of those may still change). Because there are so many of them and they don't actually affect the multiset of positions where reductions take place, I will be ignoring swaps by case a in the proof of this case, and just assuming that all the final positions end up in the correct order.
@@ -1109,14 +1065,34 @@ R_d & = \{\text{the skeleton of } O \mid O \in Rch(M), r \in \mathbb R^k, O | f(
 Together, $R_s$ and $R_d$ contain all of the skeletons of terms that can reduce to $N$, and they're disjoint. For each of these skeletons, there is a map $g_O$ from the reals in $O$ to the reals in $N$, i.e. $g_O(r) = r'$ if $O[r] \to N[r']$ for $O \in R_d$, and $g_O(s, r) = r'$ if $O[r] \to N[r']$ with $s$ as the value the sample takes in the reduction. All of these functions are measurable, as they are just rearrangements of vector components, or in the case that $O|f(O) = \underline x(\skeletonPlaceholder, \dots, \skeletonPlaceholder)$, a combination fo the measurable function $x$ with a rearrangement of vector components. In the case that $O \in R_s$, the function $g_O$ simply inserts the sample into the vector of reals at a certain index, call it $h_O$.
 \begin{align*}
 & \mu(\{s \in I^{L_s(M)} \mid \exists r \in T, s' \in S : (M,s) \Rightarrow_f^n (N[r], s')\}) \\
-= & \mu(\{s \in I^{L_s(M)} \mid \exists O \in R_s, r \in \mathbb R^{k-1}, s' \in I^{L_s(O)}, r' \in T, s'' \in S : (M,s) \Rightarrow_f^{n-1} (O[r], s') \Rightarrow_f (N[r'], s'')\}) + \mu(\{s \in I^{L_s(M)} \mid \exists O \in R_d, r \in \bigcup_l \mathbb R^l, s' \in I^{L_s(O)}, r' \in T, s'' \in S : (M,s) \Rightarrow_f^{n-1} (O[r], s') \Rightarrow_f (N[r'], s'')\}) \\
-= & \sum_{O \in R_s} \mu(\{s \in I^{L_s(M)} \mid \exists r \in \mathbb R^{k-1}, s' \in I^{L_s(O)}: g_O(r,s'(O,f(O))) \in T, s' \circ i(O[r] \to N[g_O(r,s'(O,f(O)))]) \in S, (M,s) \Rightarrow_f^{n-1} (O[r], s')\}) + \sum_{O \in R_d} \mu(\{s \in I^{L_s(M)} \mid \exists r \in \bigcup_l \mathbb R^l, s' \in I^{L_s(O)}: g_O(r) \in T, s' \circ i(O[r] \to N[g_O(r)]) \in S, (M,s) \Rightarrow_f^{n-1} (O[r], s')\}) \\
-= & \sum_{O \in R_s} \mu(\{s \in I^{L_s(M)} \mid \exists r \in \prod_{j \neq h(O)} T_j, s' \in I^{L_s(O)}: s'(O,f(O)) \in T_{h(O)}, s' \circ i(O[r] \to N[g_O(r,s'(O,f(O)))]) \in S, (M,s) \Rightarrow_f^{n-1} (O[r], s')\}) + \sum_{O \in R_d} \mu(\{s \in I^{L_s(M)} \mid \exists r \in \bigcup_l \mathbb R^l, s' \in I^{L_s(O)}: g_O(r) \in T, s' \circ i(O[r] \to N[g_O(r)]) \in S, (M,s) \Rightarrow_f^{n-1} (O[r], s')\}) \\
-= & \sum_{O \in R_s} \mu(\{s \in I^{L_s(M)} \mid \exists r \in \prod_{j \neq h(O)} T_j, s' \in I^{L_s(O)} : (M,s) \Rightarrow_f^{n-1} (O[r], s')\}) \mu(\{s' \in I^{L_s(O)} \mid s'(O,f(O)) \in T_{h(O)}, s' \circ i(O[r] \to N[g_O(r,s'(O,f(O)))]) \in S\}) + \sum_{O \in R_d} \mu(\{s \in I^{L_s(M)} \mid \exists r \in \bigcup_l \mathbb R^l, s' \in I^{L_s(O)}: g_O(r) \in T, (M,s) \Rightarrow_f^{n-1} (O[r], s')\}) \mu({s' \in I^{L_s(O)} \mid s' \circ i(O[r] \to N[g_O(r)]) \in S}) \\
-= & \sum_{O \in R_s} \mu(\{s \in I^{L_s(M)} \mid \exists r \in \prod_{j \neq h(O)} T_j, s' \in I^{L_s(O)} : (M,s) \Rightarrow_f^{n-1} (O[r], s')\}) \mu(T_{h(O)}) \mu(S) + \sum_{O \in R_d} \mu(\{s \in I^{L_s(M)} \mid \exists r \in \bigcup_l \mathbb R^l, s' \in I^{L_s(O)}: g_O(r) \in T, (M,s) \Rightarrow_f^{n-1} (O[r], s')\}) \mu(S) \\
-= & \sum_{O \in R_s} \mu(\{s \in I^{L_s(M)} \mid \exists r \in \prod_{j \neq h(O)} T_j, s' \in I^{L_s(O)} : s'(O,f(O)) \in T_{h(O)}, (M,s) \Rightarrow_f^{n-1} (O[r], s')\}) \mu(S) + \sum_{O \in R_d} \mu(\{s \in I^{L_s(M)} \mid \exists r \in \bigcup_l \mathbb R^l, s' \in I^{L_s(O)}: g_O(r) \in T, (M,s) \Rightarrow_f^{n-1} (O[r], s')\}) \mu(S) \\
-= & \sum_{O \in R_s} \mu(\{s \in I^{L_s(M)} \mid \exists r \in \mathbb R^{k-1}, s' \in I^{L_s(O)} : g_O(r,s'(O,f(O))) \in T, (M,s) \Rightarrow_f^{n-1} (O[r], s')\}) \mu(S) + \sum_{O \in R_d} \mu(\{s \in I^{L_s(M)} \mid \exists r \in \bigcup_l \mathbb R^l, s' \in I^{L_s(O)}: g_O(r) \in T, (M,s) \Rightarrow_f^{n-1} (O[r], s')\}) \mu(S) \\
-= & \mu(\{s \in I^{L_s(M)} \mid \exists O \in R_s, r \in \mathbb R^{k-1}, s' \in I^{L_s(O)}, r' \in T, s'' \in I^{L_s(N)} : (M,s) \Rightarrow_f^{n-1} (O[r], s') \Rightarrow_f (N[r'], s'')\}) \mu(S) + \mu(\{s \in I^{L_s(M)} \mid \exists O \in R_d, r \in \bigcup_l \mathbb R^l, s' \in I^{L_s(O)}, r' \in T, s'' \in I^{L_s(N)} : (M,s) \Rightarrow_f^{n-1} (O[r], s') \Rightarrow_f (N[r'], s'')\}) \mu(S) \\
+= & \mu(\{s \in I^{L_s(M)} \mid \exists O \in R_s, r \in \mathbb R^{k-1}, s' \in I^{L_s(O)}, r' \in T, s'' \in S :\\
+    & (M,s) \Rightarrow_f^{n-1} (O[r], s') \Rightarrow_f (N[r'], s'')\})\\
+    + & \mu(\{s \in I^{L_s(M)} \mid \exists O \in R_d, r \in \bigcup_l \mathbb R^l, s' \in I^{L_s(O)}, r' \in T, s'' \in S :\\
+    & (M,s) \Rightarrow_f^{n-1} (O[r], s') \Rightarrow_f (N[r'], s'')\}) \\
+\end{align*}
+\begin{align*}
+= & \sum_{O \in R_s} \mu(\{s \in I^{L_s(M)} \mid \exists r \in \mathbb R^{k-1}, s' \in I^{L_s(O)}:\\
+    & g_O(r,s'(O,f(O))) \in T, s' \circ i(O[r] \to N[g_O(r,s'(O,f(O)))]) \in S, (M,s) \Rightarrow_f^{n-1} (O[r], s')\})\\
+     + & \sum_{O \in R_d} \mu(\{s \in I^{L_s(M)} \mid \exists r \in \bigcup_l \mathbb R^l, s' \in I^{L_s(O)}:\\
+     & g_O(r) \in T, s' \circ i(O[r] \to N[g_O(r)]) \in S, (M,s) \Rightarrow_f^{n-1} (O[r], s')\}) \\
+= & \sum_{O \in R_s} \mu(\{s \in I^{L_s(M)} \mid \exists r \in \prod_{j \neq h(O)} T_j, s' \in I^{L_s(O)}:\\
+    & s'(O,f(O)) \in T_{h(O)}, s' \circ i(O[r] \to N[g_O(r,s'(O,f(O)))]) \in S, (M,s) \Rightarrow_f^{n-1} (O[r], s')\})\\
+    + & \sum_{O \in R_d} \mu(\{s \in I^{L_s(M)} \mid \exists r \in \bigcup_l \mathbb R^l, s' \in I^{L_s(O)}:\\
+    & g_O(r) \in T, s' \circ i(O[r] \to N[g_O(r)]) \in S, (M,s) \Rightarrow_f^{n-1} (O[r], s')\}) \\
+= & \sum_{O \in R_s} \mu(\{s \in I^{L_s(M)} \mid \exists r \in \prod_{j \neq h(O)} T_j, s' \in I^{L_s(O)} : (M,s) \Rightarrow_f^{n-1} (O[r], s')\})\\
+    & \mu(\{s' \in I^{L_s(O)} \mid s'(O,f(O)) \in T_{h(O)}, s' \circ i(O[r] \to N[g_O(r,s'(O,f(O)))]) \in S\})\\
+    + & \sum_{O \in R_d} \mu(\{s \in I^{L_s(M)} \mid \exists r \in \bigcup_l \mathbb R^l, s' \in I^{L_s(O)}: g_O(r) \in T, (M,s) \Rightarrow_f^{n-1} (O[r], s')\})\\
+    & \mu({s' \in I^{L_s(O)} \mid s' \circ i(O[r] \to N[g_O(r)]) \in S}) \\
+= & \sum_{O \in R_s} \mu(\{s \in I^{L_s(M)} \mid \exists r \in \prod_{j \neq h(O)} T_j, s' \in I^{L_s(O)} : (M,s) \Rightarrow_f^{n-1} (O[r], s')\}) \mu(T_{h(O)}) \mu(S)\\
+    + & \sum_{O \in R_d} \mu(\{s \in I^{L_s(M)} \mid \exists r \in \bigcup_l \mathbb R^l, s' \in I^{L_s(O)}: g_O(r) \in T, (M,s) \Rightarrow_f^{n-1} (O[r], s')\}) \mu(S) \\
+= & \sum_{O \in R_s} \mu(\{s \in I^{L_s(M)} \mid \exists r \in \prod_{j \neq h(O)} T_j, s' \in I^{L_s(O)} : s'(O,f(O)) \in T_{h(O)}, (M,s) \Rightarrow_f^{n-1} (O[r], s')\}) \mu(S)\\
+    + & \sum_{O \in R_d} \mu(\{s \in I^{L_s(M)} \mid \exists r \in \bigcup_l \mathbb R^l, s' \in I^{L_s(O)}: g_O(r) \in T, (M,s) \Rightarrow_f^{n-1} (O[r], s')\}) \mu(S) \\
+= & \sum_{O \in R_s} \mu(\{s \in I^{L_s(M)} \mid \exists r \in \mathbb R^{k-1}, s' \in I^{L_s(O)} : g_O(r,s'(O,f(O))) \in T, (M,s) \Rightarrow_f^{n-1} (O[r], s')\}) \mu(S)\\
+    + & \sum_{O \in R_d} \mu(\{s \in I^{L_s(M)} \mid \exists r \in \bigcup_l \mathbb R^l, s' \in I^{L_s(O)}: g_O(r) \in T, (M,s) \Rightarrow_f^{n-1} (O[r], s')\}) \mu(S) \\
+= & \mu(\{s \in I^{L_s(M)} \mid \exists O \in R_s, r \in \mathbb R^{k-1}, s' \in I^{L_s(O)}, r' \in T, s'' \in I^{L_s(N)} :\\
+    & (M,s) \Rightarrow_f^{n-1} (O[r], s') \Rightarrow_f (N[r'], s'')\}) \mu(S)\\
+    + & \mu(\{s \in I^{L_s(M)} \mid \exists O \in R_d, r \in \bigcup_l \mathbb R^l, s' \in I^{L_s(O)}, r' \in T, s'' \in I^{L_s(N)} :\\
+    & (M,s) \Rightarrow_f^{n-1} (O[r], s') \Rightarrow_f (N[r'], s'')\}) \mu(S) \\
 = & \mu(\{s \in I^{L_s(M)} \mid \exists r \in T, s' \in I^{L_s(N)} : (M,s) \Rightarrow_f^n (N[r], s')\}) \mu(S)
 \end{align*}
 \end{proof}
