@@ -395,7 +395,7 @@ Define a \emph{partial ranking function} on a closed term $M$ to be a partial fu
 \end{definition}
 A partial ranking function that is total is just a ranking function. Providing a partial ranking function is essentially part way between providing a ranking function and directly proving almost sure termination.
 
-\begin{theorem} \label{partial implies rankable}
+\begin{theorem} \label{thm:partial implies rankable}
 Every partial ranking function is a restriction of a ranking function.
 \end{theorem}
 \begin{proof}
@@ -575,7 +575,7 @@ In this case, $(Y_n)_{n \in \omega}$ either tends to $4$ as $n \to \infty$, or d
 \lo{@Andrew: I refer to the preceding highlighted claim. Did you mean: for all $n, s$, $\epsilon(Y_n(s)) > Y_n(s)$?} \akr{No. This phrasing should be clearer.}
 \end{example}
 
-\begin{theorem}[Antitone ranking function soundness]
+\begin{theorem}[Antitone ranking function soundness] \label{thm:antitone rankable implies termination}
 If a closed SPCF term $M$ is antitone rankable, then $T_M^{\tY} < \infty$ a.s.~(equivalently, $M$ is AST).
 \end{theorem}
 \begin{proof}
@@ -594,11 +594,11 @@ Define an \emph{antitone partial ranking function} on a closed term $M$ to be a 
 \item For any $N$ in the domain of definition of $f$, evaluation of $N$ will eventually reach some $O$ which is either a value or in the domain of definition of $f$, and $f(N) \geq \mathbb E [f(O) + \epsilon(f(O)) \times \text{the number of $\tY$-reduction steps from $N$ to $O$}]$ (where $f(O)$ is taken to be 0 if $O$ is a value outside of the domain of $f$).
 \end{itemize}
 
-\begin{theorem}
+\begin{theorem}  \label{thm:antitone partial implies rankable}
   Every antitone partial ranking function is a restriction of an antitone ranking function.
 \end{theorem}
 \begin{proof}
-  Take a closed term $M$ and an antitone partial ranking function $f$ on $M$, with a corresponding antitone function $\epsilon$. Assume wlog that $\epsilon$ is convex (as if it isn't, we can just take its convex hull instead). As in Theorem \ref{partial implies rankable}, define $f_1 : Rch(M) \rightharpoonup \mathbb R$ by
+  Take a closed term $M$ and an antitone partial ranking function $f$ on $M$, with a corresponding antitone function $\epsilon$. Assume wlog that $\epsilon$ is convex (as if it isn't, we can just take its convex hull instead). As in Theorem \ref{thm:partial implies rankable}, define $f_1 : Rch(M) \rightharpoonup \mathbb R$ by
   \begin{align*}
     f_1(N) &= f(N) \text{ whenever $f(N)$ is defined},\\
     f_1(V) &= 0 \text{ for values $V$ not in the domain of $f$.}
@@ -748,10 +748,10 @@ The following theorem does not prove completeness, but is suggestive in that dir
 \begin{theorem}
 For any stopping time $T$ which is almost surely finite, if $(\calF_n)_n$ is the coarsest filtration to which $T$ is adapted, then there is a supermartingale $(Y_n)_n$ adapted to $(\calF_n)_n$ and an antitone function $\epsilon$ such that $(Y_n)_n$ is an antitone ranking supermartingale with respect to $T$ and $\epsilon$.
 \end{theorem}
-\akr{TODO: Move proof of this theorem here, and edit it so that it's actually proving this, rather than trying to prove something stronger.}
-\input{y-stopping-time}
 
 \input{relativised-completeness}
+
+\input{y-stopping-time}
 
 \section{Confluent Trace Semantics}
 When proving almost sure termination in this way, it is necessary to consider which terms a given term may reduce to. Sometimes however, the reduction that the programmer has in mind may not be strictly the call-by-value order defined so far, or considering an alternative reduction order may be simpler or more intuitive.
@@ -896,18 +896,6 @@ Although the six cases in the definition of $\sim_c$ are defined separately, the
 \]
 where $\Leb$ is the Lebesgue measure on the measurable space $(I, \Sigma_I)$.}
 \fi
-
-\paragraph{}
-\akr{For now, here's a summary of the lemmas and theorems I intend to prove about this alternative semantics:
-\begin{itemize}
-    \item If $M \to N$, the relation $\sim_N^*$ defined on $Rch(N)$ is equal to the restriction of $\sim_M^*$ to $Rch(N)$ %\lo{Define $\sim_N^*$.}
-    \item Given the definition below of $\Rightarrow$, which is still applicable to this version of $\sim$, and which is the equivalent of $\red$ in this version of the semantics, $\Rightarrow$ is Church-Rosser.
-    \item If $M \to N$ at $\alpha$, no position in any term in $Rch(N)$ is related to $(M,\alpha)$ by $\sim_M^*$, and therefore each sample is used at most once in any reduction sequence.
-    \item The subprobability distribution of values obtained by reducing a term in the usual call-by-value semantics is equal to that obtained by any reduction strategy on $\Rightarrow$ (i.e.~a sub-relation of $\Rightarrow$ that is a function) (with some allowance made for the fact that some values are not normal forms of $\Rightarrow$, so the reduction strategy might overshoot the value that $\red^\infty$ reaches. I'm not quite sure what form this will take.)
-    \item Similarly, the probability of termination is equal in $\red^\infty$ and any reduction strategy on $\Rightarrow$, so almost sure termination can be equivalently defined based on $\Rightarrow$.
-    \item For any closed term $N$, if there is any reduction strategy for $N$ and ranking function corresponding to that reduction strategy, $N$ is AST.
-    \item Corresponding sparse and antitone-strict ranking function theorems.
-\end{itemize}}
 
 \paragraph{}
 Before defining the new version of the reduction relation $\red$, a few lemmas about the properties of $\sim$ are necessary for it to be well-defined.
@@ -1166,6 +1154,57 @@ If $M$ is AST with respect to any reduction strategy, it is AST.
 Suppose $M$ is AST with respect to $f$. Let the set of samples with which it terminates with this reduction strategy be $X$. By Theorem~\ref{thm:CbvIsTerminatingest}, $M$ also terminates with $\cbv$ and every element of $X$, and $X$ has measure 1, by assumption, therefore $M$ is AST with respect to $\cbv$ therefore by Theorem~\ref{thm:AstEquivalence} it is AST.
 \end{proof}
 
+All of the theorems on the termination of rankable terms therefore extend to other reduction strategies too. The proofs of Theorems \ref{thm:rankable implies termination}, \ref{thm:partial implies rankable}, \ref{thm:antitone rankable implies termination} and \ref{thm:antitone partial implies rankable} are all sufficiently generic with respect to what the reduction relation actually is that they can be directly applied to other reduction strategies. They only require that the number of reductions that can occur without any of them being a $\tY$-reduction is bounded for any starting term (which is true, because Theorem \ref{thm:de groote} applies equally to any reduction strategy). For a reduction strategy $r$ and term $M$, just substitute $N[r(N)]$ being a $\tY$-redex for $N$ being of the form $E[\tY \lambda x. O]$, and $r(N)$ being undefined for $N$ being a value.
+
+The domain of definition of the ranking functions also needs to be changed from the reachable terms $Rch(M)$ to the \emph{reachable terms with respect to the reduction strategy $r$},
+\[
+Rch_r(M) = \{N \mid \exists n, N_0, \dots, N_n: N_0 = M, N_n = N, N_i \to N_{i+1} \text{ at } r(N_i)\}.
+\]
+
+To be more explicit, the modified forms of the theorems are:
+\begin{definition}\rm
+A \emph{ranking function on $M$ with respect to a reduction strategy $r$} is a measurable function $f:\mathit{Rch}_r(M) \to \mathbb{R}$ such that $f(N) \geq 0$ for all $N$, and
+\begin{itemize}
+    \item $f(N) \geq 1+ f(N')$ if $N[r(N)]$ is a $\tY$-redex and $N$ reduces to $N'$ at $r(N)$
+    \item $f(N) \geq \int_I f(N[\underline{x}/r(N)]) \, \Leb(\mathrm{d}x)$ if $N[r(N)] = \tsample$
+
+    \item $f(N) \geq f(N')$ if $r(N)$ is any other redex, where $N \to N'$ at $r(N)$.
+\end{itemize}
+Any closed term for which a ranking function with respect to a reduction strategy $r$ exists is called \emph{rankable} with respect to $r$. 
+\end{definition}
+
+\begin{definition}
+A \emph{partial ranking function on $M$ with respect to a reduction strategy $r$} is a partial function $f : Rch_r(M) \rightharpoonup \mathbb R$ such that
+\begin{itemize}
+    \item $f(N) \geq 0$ for all $N$ where $f$ is defined.
+    \item $f$ is defined at $M$.
+    \item For any $N$ in the domain of definition of $f$, evaluation of $N$ at the positions specified by $r$ will eventually reach some $O$ such that either $r(O)$ isn't defined or $f(O)$ is, and $f(N) \geq \mathbb E[f(O) + \text{ the number of $\tY$-reduction steps from $N$ to $O$}]$ (where $f(O)$ is taken to be 0 if $O$ is a value outside of the domain of $f$).
+\end{itemize}
+\end{definition}
+
+\begin{definition}\rm
+An \emph{antitone ranking function on $M$ with respect to a reduction strategy $r$} is a measurable function $f:\mathit{Rch}_r(M) \to \mathbb{R}$ such that $f(N) \geq 0$ for all $N$, and there exists an antitone function $\epsilon : \nnReal \to \pReal$ such that
+\begin{itemize}
+    \item $f(N) \geq \epsilon(f(N)) + f(N')$ if $N[r(N)]$ is a $\tY$-redex and $N$ reduces to $N'$ at $r(N)$
+    \item $f(N) \geq \int_I f(N[\underline{x}/r(N)]) \, \Leb(\mathrm{d}x)$ if $N[r(N)] = \tsample$
+
+    \item $f(N) \geq f(N')$ if $r(N)$ is any other redex, where $N \to N'$ at $r(N)$.
+\end{itemize}
+Any closed term for which an antitone ranking function with respect to a reduction strategy $r$ exists is called \emph{antitone rankable} with respect to $r$. 
+\end{definition}
+
+\begin{definition}
+An \emph{antitone partial ranking function on $M$ with respect to a reduction strategy $r$} is a partial function $f : Rch_r(M) \rightharpoonup \mathbb R$ such that there exists some antitone function $\epsilon : \nnReal \to \pReal$ such that
+\begin{itemize}
+    \item $f(N) \geq 0$ for all $N$ where $f$ is defined.
+    \item $f$ is defined at $M$.
+    \item For any $N$ in the domain of definition of $f$, evaluation of $N$ at the positions specified by $r$ will eventually reach some $O$ such that either $r(O)$ isn't defined or $f(O)$ is, and $f(N) \geq \mathbb E[f(O) + \epsilon(f(O)) \times \text{the number of $\tY$-reduction steps from $N$ to $O$}]$ (where $f(O)$ is taken to be 0 if $O$ is a value outside of the domain of $f$).
+\end{itemize}
+\end{definition}
+
+\begin{theorem}
+If a closed SPCF term $M$ has a ranking function, partial ranking function, antitone ranking function or antitone partial ranking function with respect to a reduction strategy $r$, then $M$ is AST with respect to $r$, and AST.
+\end{theorem}
 \lo{Give an example or two of a reduction strategy (for $\Rightarrow$) that is not $\cbv$.}
 
 \akr{NOTE. For the standard CBV semantics, this example is indeed not a problem. 
