@@ -296,89 +296,44 @@ In order for $f$ to be the least ranking function of $M$, it also has to actuall
 \end{proof}
 
 \subsection{Partial ranking functions}
-Even in the case of reasonable simple terms, explicitly constructing a ranking function would be a lot of work, and \Cref{thm:minimal} makes even stronger assumptions than almost-sure termination, so it isn't useful for proving it. 
-
-\lo{NOTATION. To be consistent, we write $\lambda x. M$ rather than $\lambda x : M$.}
+Even in the case of reasonable simple terms, explicitly constructing a ranking function would be a lot of work, and \Cref{thm:minimal} makes even stronger assumptions than almost-sure termination, so it isn't useful for proving it.
 
 \begin{example}[Geometric distribution]
 Consider the term
 \begin{align*}
-&(\tY \lambda f, n: \\
+&(\tY \lambda f, n. \\
 &\quad \tif{\tsample - 0.5 < 0}{n}{f (n+1)} \\
 &) \, \underline{0}
 \end{align*}
-which generates a geometric distribution.
+which generates a geometric distribution (let $\Theta = \lambda f, n : \tif{\tsample \underline{- 0.5} < 0}{n}{f (n\underline{+ 1})}$, then the term is $(\tY \Theta)\ \underline 0$).
     Despite its simplicity, its $Rch$ contains all the terms
-\begin{enumerate}
-    \item $(\tY \lambda f, n: \tif{\tsample - 0.5 < 0}{n}{f (n+1)}) \underline{0}$
-    \item $(\lambda z.(\lambda f, n: \tif{\tsample - 0.5 < 0}{n}{f (n+1)}) (\tY \lambda f, n: \tif{\tsample - 0.5 < 0}{n}{f (n+1)}) z) \underline{i}$
-    \item $(\lambda f, n: \tif{\tsample - 0.5 < 0}{n}{f (n+1)}) (\tY \lambda f, n: \tif{\tsample - 0.5 < 0}{n}{f (n+1)}) \underline{i}$
-    \item $(\lambda n: \tif{\tsample - 0.5 < 0}{n}{(\tY \lambda f, m: \tif{\tsample - 0.5 < 0}{n}{f (m+1)}) (m+1)}) \underline{i}$
-    \item $\tif{\tsample - 0.5 < 0}{\underline{i}}{(\tY \lambda f, m: \tif{\tsample - 0.5 < 0}{m}{f (m+1)}) (\underline{i}+1)}$
-    \item $\tif{\underline r - 0.5 < 0}{\underline{i}}{(\tY \lambda f, m: \tif{\tsample - 0.5 < 0}{m}{f (m+1)}) (\underline{i}+1)}$
-    \item $\tif{\underline{r - 0.5} < 0}{\underline{i}}{(\tY \lambda f, m: \tif{\tsample - 0.5 < 0}{m}{f (m+1)}) (\underline{i}+1)}$
-    \item $\underline{i}$
-    \item $(\tY \lambda f, m: \tif{\tsample - 0.5 < 0}{m}{f (m+1)}) (\underline{i}+1)$
-    \item $(\lambda z.(\lambda f, n: \tif{\tsample - 0.5 < 0}{n}{f (n+1)}) (\tY \lambda f, n: \tif{\tsample - 0.5 < 0}{n}{f (n+1)}) z) (\underline{i} + 1)$.
-\end{enumerate}
-\akr{TODO: make this into a diagram with arrows.}
 
-\lo{Here is a more readable version.}
+\begin{tikzpicture}[node distance=0.5em, anchor=west]
+    \node (1) at (0,-0) {$\tY\ \Theta\ \underline 0$};
+    \node (2) at (0,-1) {$(\lambda z. (\lambda n. \tif{\tsample \underline{- 0.5} < 0}{n}{\tY\ \Theta\ (n \underline{+ 1})}) z)\ \underline i$};
+    \node (3) at (0,-2) {$(\lambda n. \tif{\tsample \underline{- 0.5} < 0}{n}{\tY\ \Theta\ (n \underline{+ 1})})\ \underline i$};
+    \node (4) at (0,-3) {$\tif{\tsample \underline{- 0.5} < 0}{\underline i}{\tY\ \Theta\ (\underline i\ \underline{+ 1})}$};
+    \node (5) at (0,-4) {$\tif{\underline r\ \underline{- 0.5} < 0}{\underline i}{\tY\ \Theta\ (\underline i\ \underline{+ 1})}$};
+    \node (6) at (0,-5) {$\tif{\underline r < 0}{\underline i}{\tY\ \Theta\ (\underline i\ \underline{+ 1})}$};
+    \node (7) at (2,-6) [text width=] {$\underline i$};
+    \node (8) at (0,-7) {$\tY\ \Theta\ (\underline i\ \underline{+ 1})$};
+    \node (9) at (0,-8) {$(\lambda z. (\lambda n. \tif{\tsample \underline{- 0.5} < 0}{n}{\tY\ \Theta\ (n \underline{+ 1})}) z)\ (\underline i\ \underline{+ 1})$};
+    
+    \draw [->] (1.south west) to [bend right=45] (2.north west);
+    \draw [->] (2.south west) to [bend right=45] (3.north west);
+    \draw [->] (3.south west) to [bend right=45] (4.north west);
+    \draw [->] (4.south west) to [bend right=45] (5.north west);
+    \draw [->] (5.south west) to [bend right=45] (6.north west);
+    \draw [->] (6.south west) to [bend right=45] (8.north west);
+    \draw [->] (8.south west) to [bend right=45] (9.north west);
+    
+    \draw [->] (9.west) to [bend left=45] (2.west);
+    \draw [->] (6) to (7);
+\end{tikzpicture}
 
-Writing $\Theta = \lambda f, n : \tif{\tsample - 0.5 < 0}{n}{f (n+1)}$, we have
-\begin{enumerate}
-    \item $(\tY \, \Theta) \; \underline{0}$
-
-    \item $\big(\lambda z.\Theta \; (\tY \, \Theta) \; z \big) \; \underline{i}$
-    
-    \item $\Theta \; (\tY \, \Theta) \; \underline{i}$
-    
-    \item \changed[akr]{$(\lambda n: \tif{\tsample - 0.5 < 0}{n}{(\tY \lambda f, m: \tif{\tsample - 0.5 < 0}{n}{f (m+1)}) (m+1)}) \; \underline{i}$}
-
-    \lo{I think the preceding should be: $(\lambda n: \tif{\tsample - 0.5 < 0}{n}{(\tY \lambda f, m: \tif{\tsample - 0.5 < 0}{m}{f (m+1)}) (n+1)}) \; \underline{i}$, and so, more succinctly:
-    \[
-    \big(
-    \lambda n: 
-    \tif{\tsample - 0.5 < 0}{n}{(\tY \, \Theta) \; (n+1)} 
-    \big) 
-    \; \underline{i}
-    \]}
-
-    \item $\tif{\tsample - 0.5 < 0}{\underline{i}}{
-    (\tY \, \Theta) \, (\underline{i}+1)}$
-    
-    \item $\tif{\underline r - 0.5 < 0}{\underline{i}}{(\tY \, \Theta) (\underline{i}+1)}$
-    
-    \item $\tif{\underline{r - 0.5} < 0}{\underline{i}}{(\tY \, \Theta) (\underline{i}+1)}$
-    
-    \item $\underline{i}$
-    
-    \item $(\tY \, \Theta) \; (\underline{i}+1)$
-    
-    \item $\big(\lambda z. \Theta \; (\tY \, \Theta) \;  z\big) \; (\underline{i} + 1)$
-
-    \item $\Big(\lambda z. \big(
-    \lambda n: 
-    \tif{\tsample - 0.5 < 0}{n}{(\tY \, \Theta) \; (n+1)} 
-    \big) \, z \Big)
-    \; \underline{i}$
-\end{enumerate}
-
-\lo{So we have:
-\[
-\begin{array}{ll}
-1 \to 11 \to 4 \to 5 \to 6 \to 7 \to 8\\
-7 \to 9 \to 11 \to \cdots
-\end{array}
-\]
-You have 2, 3 and 10 because your $\tY$-redex rule is
-\[
-\tY \lambda x. s \to \lambda z. (\lambda x.s)\, (\tY \lambda x. s) \, z
-\]
-which is not the official definition.}
 \end{example}
 
-Even in this simple case, defining a ranking function explicitly is awkward because of the number of cases, although in most cases, because the value need only be greater than or equal to that of the next term in sequence, it suffices to take the ranking function as taking only 3 distinct values.
+Even in this simple case, defining a ranking function explicitly is awkward because of the number of cases, although in most cases, because the value need only be greater than or equal to that of the next term in sequence, it suffices to take the ranking function as having the same value as the next term, so that overall it takes only 3 distinct values.
 (We will explain why later.)
 
 The definition of rankability is also inconvenient for syntactic sugar. It could be useful, for example, to define $M \oplus_p N = \tif{\tsample - p < 0} M N$, where $M \oplus_p N$ reduces to $M$ or $N$, depending on the first value of $s$\lo{Need a name for $s$.}, with probability $p$ resp.~$(1-p)$. Technically though, it reduces first to $\tif{\underline r - p < 0} M N$ for all $r \in I$, so those terms all need values of the ranking function too.
@@ -429,13 +384,14 @@ A partial ranking function could be defined with respect to this shortcut reduct
 A similar procedure would work for other forms of syntactic sugar. If a closed term $N$ eventually reduces to one of a set of other terms $\{N_i \mid i \in I\}$ with certain probabilities, a partial ranking function defined with respect to a reduction sequence that skips straight from $N$ to $N_i$ is also a valid partial ranking function for the original reduction function, and therefore its existence implies almost sure termination. There is a caveat, however, that $\tY$-reduction steps skipped over in the shortcut still need to be counted for the expected number of $\tY$-reduction steps.
 
 \paragraph{}
-With this abbreviation, the geometric distribution example from earlier can be written as $(\tY f, n. n \oplus_{0.5} f(n+1)) \, \underline 0$. It is then easy to see that the following is a partial ranking function:
+With this abbreviation, the geometric distribution example from earlier can be written as $(\tY \lambda f n.\ n \oplus_{0.5} f(n+1)) \, \underline 0$. It is then easy to see that the following is a partial ranking function:
 \begin{align*}
-(\tY f, n. n \oplus_{0.5} f(n+1)) N \mapsto 2 \\
-\underline i \oplus_{0.5} (\tY f, n. n \oplus_{0.5} f(n+1)) (\underline i + 1) \mapsto 1 \\
-\underline i \mapsto 0
+(\tY \lambda f n.\ n \oplus_{0.5} f(n+1))\ N & \mapsto 2 \\
+\underline i \oplus_{0.5} (\tY \lambda f n.\ n \oplus_{0.5} f(n+1))\ (\underline i + 1) & \mapsto 1 \\
+\underline i & \mapsto 0.
 \end{align*}
 
+In fact, even the partial function $\tY \Theta N \mapsto 2$ alone is a partial ranking function for this term.
 \section{Antitone ranking functions}
 
 \begin{example}[Random walk]
