@@ -436,36 +436,6 @@ With this abbreviation, the geometric distribution example from earlier can be w
 \underline i \mapsto 0
 \end{align*}
 
-\lo{Call the above partial function $h$.
-I assume that $h: (\tY f, n. n \oplus_{0.5} f(n+1)) N \mapsto 2$ for all $N$ (such that $(\tY f, n. n \oplus_{0.5} f(n+1)) N$ is reachable from $M$), 
-and the second and third clauses hold for all $i \geq 0$.
-
-Maybe I have misread / misunderstood the preceding, but I don't see why $h$ is a restriction of a ranking function. 
-Suppose $h$ is a restriction of $H$.
-Consider the reduction sequence (writing $\Xi = (\tY f, n. n \oplus_{0.5} f(n+1))$):
-\[
-\Xi \, 0 
-\xrightarrow{\tY} 
-0 \oplus_{0.5} \Xi \, 1 
-\to 
-\Xi \, 1
-\xrightarrow{\tY} 
-1 \oplus_{0.5} \Xi \, 2
-\to
-\Xi \, 2
-\xrightarrow{\tY} 
-2 \oplus_{0.5} \Xi \, 3
-\]
-Since $H(\Xi \, 0) = 2$, we must have 
-$H(\Xi \, 1) \leq 1$ and $H(\Xi \, 2) \leq 0$, contradicting the restriction assumption.
-}
-\akr{
-In this case, $H(0 \oplus_{0.5} \Xi 1) \leq 1$, but that term reduces to either $0$ or $\Xi 1$ therefore the actual condition is that $0.5 H(0) + 0.5 H(\Xi 1) \leq 1$, which is possible.
-}
-\lo{
-  OK. I see it now.
-}
-
 \section{Antitone ranking functions}
 
 \begin{example}[Random walk]
@@ -601,8 +571,8 @@ Y_k :=
 \end{cases} 
 \]
 and $\epsilon(x) = \frac{4-x}{4}$. 
-In this case, $(Y_n)_{n \in \omega}$ either tends to $4$ as $n \to \infty$, or drops to 0 at some point, with an exponentially decreasing probability. It is an antitone strict supermartingale \changed[akr]{except that $\epsilon$ goes to $0$ at $4$, which is larger than any value $(Y_n)_{n \in \omega}$ can actually take}, and $T = \infty$ with probability $\frac 1 2$.
-\lo{@Andrew: I refer to the preceding highlighted claim. Did you mean: for all $n, s$, $\epsilon(Y_n(s)) > Y_n(s)$?}
+In this case, $(Y_n)_{n \in \omega}$ either tends to $4$ as $n \to \infty$, or drops to 0 at some point, with an exponentially decreasing probability. It is an antitone strict supermartingale except that $\epsilon$ goes to $0$ at $4$, and $T = \infty$ with probability $\frac 1 2$ even though $4$ is larger than any value $(Y_n)_{n \in \omega}$ can actually take and $\epsilon(Y_n)$ never actually reaches $0$.
+\lo{@Andrew: I refer to the preceding highlighted claim. Did you mean: for all $n, s$, $\epsilon(Y_n(s)) > Y_n(s)$?} \akr{No. This phrasing should be clearer.}
 \end{example}
 
 \begin{theorem}[Antitone ranking function soundness]
@@ -831,8 +801,8 @@ M[\tsample / \alpha] = \lambda x \, y. y \, (\tif{x < 0}{y \, \tsample}{\underli
 
 Two subterms $N_1$ and $N_2$ of a term $M$, corresponding to positions $\alpha_1$ and $\alpha_2$, can overlap in a few different ways. 
 If $\alpha_1$ is an initial segment (i.e.~prefix) of $\alpha_2$ (written as $\alpha_1 \leq \alpha_2$), then $N_2$ is also a subterm of $N_1$. If neither $\alpha_1 \leq \alpha_2$ nor $\alpha_1 \geq \alpha_2$, the positions are said to be \emph{disjoint}. 
-This is mostly relevant in that in any substitution at some position, the subterms at all other positions are unaffected. 
-\lo{The preceding sentence is unclear. Typo?} 
+The notion of disjointness is mostly relevant in that if $\alpha_1$ and $\alpha_2$ are disjoint, performing a substitution at $\alpha_1$ will leave the subterm at $\alpha_2$ inaffected.
+\lo{The preceding sentence is unclear. Typo?} \akr{It wasn't a typo, but I've made it a little more explicit now. Is this clearer?} 
 
 With this notation, a more general reduction relation $\to$ can be defined. \akr{It would almost work to have one of the neater versions of $\tY$-reduction here.}
 %\lo{On first reading, I struggled to parse the following clauses.}
@@ -856,7 +826,7 @@ Labelling the pre-chosen samples by the positions in the term would also not wor
 It is therefore necessary to consider possible positions that may occur in other terms reachable from the original term. 
 Even this is itself inadequate because some of the positions in different reachable terms need to be considered the same, and the number of reachable terms is in general uncountable, which leads to measure-theoretic issues.
 
-Define a \emph{skeleton} to be a term but, instead of having real constants $\underline r$, it has a placeholder $\skeletonPlaceholder$, so that each \changed[lo]{term $M$} has a skeleton $Sk(M)$, and each \changed[lo]{skeleton $S$} can be converted to a term $S[r]$ given a \changed[lo]{vector $r$} of $n$ real numbers to substitute in, where $n$ is the number of occurrences of $\skeletonPlaceholder$ in $S$. \lo{Do we actually use the notation $S[r]$ in what follows?}
+Define a \emph{skeleton} to be a term but, instead of having real constants $\underline r$, it has a placeholder $\skeletonPlaceholder$, so that each term $M$ has a skeleton $Sk(M)$, and each skeleton $S$ can be converted to a term $S[r]$ given a vector $r$ of $n$ real numbers to substitute in, where $n$ is the number of occurrences of $\skeletonPlaceholder$ in $S$. \lo{Do we actually use the notation $S[r]$ in what follows?} \akr{Yes, in Lemma \ref{lem:independentSamples} for example.}
 \lo{Skeleton is defined in Sec.~\ref{sec:sampling semantics}.}
 The positions in a skeleton and the reduction relation on skeletons can be extended from the definitions on terms in the obvious way, with $\tif{\skeletonPlaceholder < 0}{A}{B}$ reducing nondeterministically to both $A$ and $B$, and $\tsample$ reducing to $\skeletonPlaceholder$.
 For example, we have 
@@ -870,14 +840,17 @@ For example, we have
 \skeletonPlaceholder
 \)
 
-Given a closed term $M$, let $L_0(M)$ be the set of pairs, the first element of which is a $\to$-reduction sequence of skeletons starting at $Sk(M)$, and the second of which is a position in the final skeleton of the reduction sequence. 
-Reduction sequences are used rather than reachable skeletons because if the same skeleton is reached twice, different samples may be needed, \lo{Give a simple example illustrating this.} but the reduction sequences of skeletons will be discussed as though they were just skeletons, identifying them with their final skeletons. With this abuse of notation, a reduction sequence $N$ (actually $N_1 \to \dots \to N_n = N$) may be said to reduce to a reduction sequence $O$, where the reduction sequence implicitly associated with the final skeleton $O$ is $N_1 \to \dots \to N_n \to O$.
+Given a closed term $M$, let $L_0(M)$ be the set of pairs, the first element of which is a $\to$-reduction sequence of skeletons starting at $Sk(M)$, and the second of which is a position in the final skeleton of the reduction sequence. As with the traces from $I^{\mathbb N}$ used to pre-select samples to use in the usual linear sampling semantics, there will be (with one more caveat introduced later) a sample from $I$ pre-selected for each element of $L_0(M)$, which will then be used if a $\tsample$ reduction is ever performed at that position.
 
-\lo{Readers would benefit greatly from some examples of an $L_0(M)$-pair, and the relations $\sim_p$ and $\sim_c$, here, before the formal definitions. Explain the underlying intuition.} 
+Reduction sequences are used rather than reachable skeletons because if the same skeleton is reached twice, different samples may be needed. For example, consider the term $M = \tY (\lambda f x.\ \tif{\tsample - \underline{0.5} < 0}{f \, x}{x}) \, \underline 0$, which reduces after a few steps to $N = \tif{\tsample - \underline{0.5}  < 0}{M}{\underline 0}$. If the pre-selected sample for $(N,\textsf{if}_1;\underline{-}_1)$ is less than 0.5, $N$ reduces back to $M$, then $N$ again, then the same sample is used the next time, therefore it's an infinite loop, whereas if samples are labelled by reduction sequences, the samples for $M \to \dots \to N$ are independent from the samples for $M \to \dots \to N \to M \to \dots \to N$, and so on.
+
+The reduction sequences of skeletons will often be discussed as though they were just skeletons, identifying them with their final skeletons. With this abuse of notation, a reduction sequence $N$ (actually $N_1 \to \dots \to N_n = N$) may be said to reduce to a reduction sequence $O$, where the reduction sequence implicitly associated with the final skeleton $O$ is $N_1 \to \dots \to N_n \to O$.
+
+\paragraph{}
+This is still not quite sufficient because sometimes the same samples must be used at corresponding positions in different reduction sequences. For example, the term $M = \tsample + \tsample$ has the reachable skeletons $N_1 = \skeletonPlaceholder + \tsample, N_2 = \tsample + \skeletonPlaceholder, O = \skeletonPlaceholder + \skeletonPlaceholder$ and $\skeletonPlaceholder$, with reductions $M \to N_1 \to O \to \skeletonPlaceholder$ and $M \to N_2 \to O \to \skeletonPlaceholder$. In the reduction $M \to N_1$, the sample labelled $(M, \underline{+}_2)$ is used, and in the reduction $N_2 \to O$, the sample labelled $(M \to N_2, \underline{+}_2)$ is used. Each of these samples becomes the value of the second numeral in $O$ in their respective reduction sequences, therefore in order for Church-Rosserness to be attained, they must be the same. Which elements of $L_0(M)$ must match can be described by the relation $\sim^*$:
 
 \begin{definition}
-The relation $\sim$ is defined as the union of the symmetric relations $\sim_p$ \changed[lo]{($p$ for parent-child)} and $\sim_c$ \changed[lo]{($c$ for cousin)} where
-\lo{As defined, $\sim_p$ is not a symmetric relation.}
+The relation $\sim$ is defined as the union of the minimal symmetric relations $\sim_p$ (``$p$'' for parent-child) and $\sim_c$ (``$c$'' for cousin) satisfying
 \begin{enumerate}
     \item If $N$ reduces to $O$ with the redex at position $\alpha$, and $\beta$ is a position in $N$ disjoint from $\alpha$, then $(N,\beta) \sim_p (O,\beta)$.
     
@@ -914,7 +887,7 @@ The new sample space is then defined as $I^{L_s(M)}$, with the Borel $\sigma$-al
 \changed[lo]{Since $I^{L_s(M)}$ is a countable product, the measure space is well-defined \citep[Cor.~2.7.3]{AshDD00}.}
 
 \paragraph{}
-Although the six cases in the definition of $\sim_c$ are defined separately, there are some commonalities worth noting. Each case (except a, which is symmetrical) has a right branch and a left branch (the branches of case b are unfortunately displayed the wrong way around in the diagram). The right branch has reduction steps at two positions, $\beta$ then $\alpha$, where $\beta > \alpha$ (i.e.~$\beta$ is inside $\alpha$), and in the left branch, these order of these reductions are swapped, so the reductions are at $\alpha$ then $\beta_1, \dots, \beta_n$. The position $\alpha$ of one of the reductions is unchanged, and the other reduction may have multiple (in cases e and f) or 0 (in cases b and e) images in the left branch. The images $(\beta_i)$ are all still inside (greater than or equal to) $\alpha$, and although they are not generally equal to $\beta$, the subskeletons at these positions have a similar shape to the subskeleton (initially) at position $\beta$, so that the reductions at these positions are the same type of reduction (e.g.~both $\beta$-reduction or both $\textsf{if}$-reduction). Case a is also similar, except that the relevant positions are all disjoint rather than contained in one another, and either branch could be considered the right branch.
+Although the six cases in the definition of $\sim_c$ are defined separately, there are some commonalities worth noting. Each case (except a, which is symmetrical) has a right branch and a left branch (the branches of case b are unfortunately displayed the wrong way around in the diagram). The right branch has reduction steps at two positions, $\beta$ then $\alpha$, where $\beta > \alpha$ (i.e.~$\beta$ is inside $\alpha$), and in the left branch, the order of these reductions are swapped, so the reductions are at $\alpha$ then $\beta_1, \dots, \beta_n$. The position $\alpha$ of one of the reductions is unchanged, and the other reduction may have multiple (in cases e and f) or 0 (in cases b and e) images in the left branch. The images $(\beta_i)$ are all still inside (greater than or equal to) $\alpha$, and although they are not generally equal to $\beta$, the subskeletons at these positions have a similar shape to the subskeleton (initially) at position $\beta$, so that the reductions at these positions are the same type of reduction (e.g.~both $\beta$-reduction or both $\textsf{if}$-reduction). Case a is also similar, except that the relevant positions are all disjoint rather than contained in one another, and either branch could be considered the right branch.
 
 \iffalse
 \changed[lo]{Since $L_s(M)$ is a countable set, there is a unique probability measure $\mu$ on the infinite product $\prod_{i \in L_s(M)} \Sigma_I$ of the Borel $\sigma$-algebras $\Sigma_I$ satisfying
