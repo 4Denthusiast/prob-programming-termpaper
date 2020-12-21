@@ -562,7 +562,7 @@ which is a contradiction, therefore the claim must be true, therefore $P[T > n]$
 Note that it is essential in this proof that $\epsilon$ be defined for all $\mathbb R_{\geq 0}$, not just the values that $(Y_n)_{n \in \omega}$ actually takes (or at least if $(Y_n)_{n \in \omega}$ is uniformly bounded, $\epsilon$ must be positive at the supremum as well as the actual values). 
 
 \begin{example}
-Consider a random variable $X$, uniformly distributed in the interval $[-1,1]$, $T := \min \set{n \mid 2^{-n} < X}$, 
+\akr{Consider a random variable $X$, uniformly distributed in the interval $[-1,1]$, $T := \min \set{n \mid 2^{-n} < X}$, 
 \[
 Y_k := 
 \begin{cases}
@@ -570,9 +570,29 @@ Y_k :=
 0 & \hbox{otherwise}
 \end{cases} 
 \]
-and $\epsilon(x) = \frac{4-x}{4}$. 
-In this case, $(Y_n)_{n \in \omega}$ either tends to $4$ as $n \to \infty$, or drops to 0 at some point, with an exponentially decreasing probability. It is an antitone strict supermartingale except that $\epsilon$ goes to $0$ at $4$, and $T = \infty$ with probability $\frac 1 2$ even though $4$ is larger than any value $(Y_n)_{n \in \omega}$ can actually take and $\epsilon(Y_n)$ never actually reaches $0$.
-\lo{@Andrew: I refer to the preceding highlighted claim. Did you mean: for all $n, s$, $\epsilon(Y_n(s)) > Y_n(s)$?} \akr{No. This phrasing should be clearer.}
+} \lo{The following reformulation defines $T$ and $Y_k$ directly as a measurable function on a probability space (rather than via a r.v.~$X$).}
+
+Take the probability space $(\Omega, \calF, \mathbb{P})$ where $\Omega$ is the closed interval of reals $[-1, 1]$, $\calF$ the Borel $\sigma$-algebra, and $\mathbb{P}$ the corresponding Lebesgue probability measure.
+Let $\omega \in [-1, 1]$. Define random variables $T$ and $(Y_k)_{k \in \omega}$:
+\begin{align*}
+T(\omega) & := 
+\begin{cases}
+\min\set{n \in \mathbb{N} \mid \omega > 2^{-n}} & \hbox{if $\omega \in (0, 1]$}\\
+\infty & \hbox{otherwise}
+\end{cases} 
+\\
+Y_k(\omega) & := 
+\begin{cases}
+4-2^{-k} & \hbox{if $\omega \in [-1, 2^{-k}]$ (equivalently $k < T(\omega)$)}\\
+0 & \hbox{otherwise}
+\end{cases} 
+\end{align*}
+\lo{N.B.~$\set{T = n} = (\frac{1}{2^{n}}, \frac{1}{2^{n-1}}]$, and so, $\set{T > n} = [-1, \frac{1}{2^n}]$.}
+Plainly, $T$ is a stopping time, and $(Y_n)_{n \in \omega}$ is a supermartingale, adapted to the filtration $(\calF_n)_{n \in \omega}$ where $\calF_n = \calF$ for all $n$. 
+In this case, $(Y_n)_{n \in \omega}$ either tends to $4$ as $n \to \infty$, or drops to 0 at some point, with an exponentially decreasing probability. 
+With respect to the antitone function $\epsilon(x) = \frac{4-x}{4}$ and stopping time $T$, we have that $(Y_n)_{n \in \omega}$ is an antitone strict supermartingale, except that $\epsilon(4) = 0$, and $T = \infty$ with probability $\frac 1 2$, even though $4$ is larger than any value $(Y_n)_{n \in \omega}$ can actually take, and $\epsilon(Y_n)$ never actually reaches $0$.
+
+%\lo{@Andrew: I refer to the preceding highlighted claim. Did you mean: for all $n, s$, $\epsilon(Y_n(s)) > Y_n(s)$?} \akr{No. This phrasing should be clearer.}
 \end{example}
 
 \begin{theorem}[Antitone ranking function soundness] \label{thm:antitone rankable implies termination}
