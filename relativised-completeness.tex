@@ -18,7 +18,7 @@ This ensures that
 \lo{This would imply $\frac{2^k}{t_{k+1}-t_k} \geq \epsilon(2^{k-1})$. Why?} \akr{Corrected: it should have been min, not max.}
 \end{itemize}
 
-$y_n$ is then defined recursively by
+The sequence $(y_n)_{n \in \omega}$ is then defined recursively by
 \begin{align*}
     y_0 = 2, \quad
     y_{n+1} = (y_n - \epsilon(y_n)) \frac{\mathbb P[T > n]}{\mathbb P[T > n+1]}.
@@ -37,14 +37,15 @@ The fact $y_{t_k} \geq 2^{k+1}$ is proven by induction on $k$. For base case, $2
 \end{align*}
 as required. Substituting $n = t_{k+1}$ and using the fact that $\frac{\mathbb P[T > t_k]}{\mathbb P[T > t_{k+1}]} > 4$, the same reasoning gives $y_{t_{k+1}} \geq 2^{k+2}$, as required.
 
-Although the stronger induction hypothesis was necessary for the induction to work, the only reason this is needed is to prove that $y_n > 0$ for all n, which implies that $Y_n \geq 0$. The other condition for $(Y_n)$ to be an antitone-strict supermartingale is
+Although the stronger induction hypothesis was necessary for the induction to work, the only reason this is needed is to prove that $y_n > 0$ for all $n$, which implies that $Y_n \geq 0$. 
+The other condition for $(Y_n)$ to be an antitone-strict supermartingale is
 \begin{align*}
     & \expect{Y_{n+1} \mid \mathcal F_n} \\
-    = & \expect{y_{n+1} 1_{T \geq n+1} \mid \mathcal F_n} \\
-    = & y_{n+1} \expect{1_{T \geq n+1} \mid \mathcal F_n} \\ 
-    = & y_{n+1} 1_{T \geq n} \frac{\mathbb P[T > n+1]}{\mathbb P[T > n]} \\
-    = & (y_n - \epsilon(y_n)) 1_{T \geq n} \\
-    = & Y_n - \epsilon(y_n) 1_{T \geq n}
+    = & \expect{y_{n+1} \, 1_{\set{T \geq n+1}} \mid \mathcal F_n} \\
+    = & y_{n+1} \, \expect{1_{\set{T \geq n+1}} \mid \mathcal F_n} \\ 
+    = & y_{n+1} \, 1_{\set{T \geq n}} \frac{\mathbb P[T > n+1]}{\mathbb P[T > n]} \\
+    = & (y_n - \epsilon(y_n)) \, 1_{\set{T \geq n}} \\
+    = & Y_n - \epsilon(y_n) \, 1_{\set{T \geq n}}
 \end{align*}
 therefore $(Y_n)_n$ is an antitone strict supermartingale with respect to $(T,\epsilon)$.
 \end{proof}
