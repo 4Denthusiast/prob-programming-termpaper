@@ -1,14 +1,12 @@
 \documentclass[conference]{IEEEtran}
-\providecommand{\event}{ArXiv} % Name of the event you are submitting to
-\usepackage{breakurl}             % Not needed if you use pdflatex only.
-\usepackage{underscore}           % Only needed if you use pdflatex.
+\pagestyle{plain}
 
-%% BEGIN {Luke's Macros}
-%%
 \newif\ifdraft
 \drafttrue %% To hide all comments and highlighting, just comment this line out 
 
-\input{../Style/comment}
+\include{header-dw}
+\include{headerlics-dw}
+
 \usepackage{calculation-new}
 \usepackage{graphicx}
 \usepackage{tikz}
@@ -17,16 +15,16 @@
 \usepackage[square]{natbib}
 \setcitestyle{aysep={}}
 
-\definecolor{oxblue}{RGB}{0,33,71}
-\definecolor{oxgold}{HTML}{a0630a}
-\usepackage[final,
-bookmarks,
-bookmarksopen,
-colorlinks,
-final,
-linkcolor=red,
-citecolor=oxgold,
-pdfstartview=FitH ]{hyperref}
+%\definecolor{oxblue}{RGB}{0,33,71}
+%\definecolor{oxgold}{HTML}{a0630a}
+% \usepackage[final,
+% bookmarks,
+% bookmarksopen,
+% colorlinks,
+% final,
+% linkcolor=red,
+% citecolor=oxgold,
+% pdfstartview=FitH ]{hyperref}
 
 %\usepackage{amsmath} % cleveref must be loaded afer amsmath
 % \usepackage{cleveref}
@@ -63,7 +61,7 @@ pdfstartview=FitH ]{hyperref}
 \newcommand{\pReal}{\mathbb{R}_{{>}0}}
 
 \newcommand\expect[1]{\mathbb{E}[#1]}
-\newcommand\set[1]{\{#1\}}
+%\newcommand\set[1]{\{#1\}}
 \newcommand\dif{\mathrm{d}}
 \newcommand\calF{\mathcal{F}}
 \newcommand\calI{\mathcal{I}}
@@ -80,8 +78,8 @@ pdfstartview=FitH ]{hyperref}
 %%
 %% END {Luke's Macros}
 
-\usepackage{amsmath,amsfonts,amsthm}
-\usepackage{amssymb}
+%\usepackage{amsmath,amsfonts,amsthm}
+%\usepackage{amssymb}
 \usepackage{verbatim}
 \usepackage{enumitem}
 \newcommand{\tY}{\mathsf{Y}}
@@ -95,7 +93,7 @@ pdfstartview=FitH ]{hyperref}
 \DeclareMathOperator{\cbv}{cbv}
 
 %\usepackage{mathtools}
-\usepackage{thmtools,thm-restate}
+%\usepackage{thmtools,thm-restate}
 
 % \usepackage{amsthm}
 % \theoremstyle{definition}
@@ -110,12 +108,17 @@ pdfstartview=FitH ]{hyperref}
 
 % \theoremstyle{remark}
 % \newtheorem*{remark}{Remark}
+%\input{headerieee}
 
-\input{headerieee}
+\def\titlerunning{Supermartingales and Statistical PCF}
+\def\authorrunning{Andrew Kenyon-Roberts and Luke Ong}
+
+\begin{document}
 
 \title{Supermartingales and Statistical PCF}
 
-\begin{document}
+\author{Andrew Kenyon-Roberts
+\and Luke Ong}
 
 \maketitle
 

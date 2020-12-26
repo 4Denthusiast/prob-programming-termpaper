@@ -1,0 +1,201 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% BEGIN {Introduced by Luke}
+
+\usepackage{paralist}
+
+% \usepackage{appendix}
+%% END {introduced by Luke}
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\usepackage[inline]{enumitem}
+\setlist[enumerate,1]{label={(\roman*)}}
+\usepackage{bussproofs}
+
+\usepackage[caption=false]{subfig}
+
+\newlist{thmlist}{enumerate}{1}
+\setlist[thmlist]{label=\textup{(\roman{thmlisti})},ref={(\roman{thmlisti})},noitemsep}
+
+\newlist{complist}{enumerate}{1}
+% in that case, at least label must be specified using \setlist
+\setlist[complist,1]{noitemsep,label=\textbf{(C\arabic*)},leftmargin=2.5\parindent}
+
+\usepackage{diagbox} %for diagonal division of a cell in tabular
+\usepackage{makecell} %for diagonal division of a cell in tabular
+
+\usepackage{pifont}% http://ctan.org/pkg/pifont
+\newcommand{\cmark}{\ding{51}}% tick
+\newcommand{\xmark}{\ding{55}}% cross
+
+\tikzstyle{resnode}=[anchor=base,fill=black!15,inner sep=2pt]
+\tikzstyle{unode}=[anchor=base]
+
+\DeclareMathOperator{\qc}{qc}
+\DeclareMathOperator{\qm}{qm}
+%\ifdraft
+
+\makeatletter
+
+\renewcommand{\p@thmlisti}{\perh@ps{\thetheorem}}
+\protected\def\perh@ps#1#2{\textup{#1#2}}
+\newcommand{\itemrefperh@ps}[2]{\textup{#2}}
+\newcommand{\itemref}[1]{\begingroup\let\perh@ps\itemrefperh@ps Part~\ref{#1}\endgroup}
+\newcommand{\itemrefs}[2]{\begingroup\let\perh@ps\itemrefperh@ps Parts~\ref{#1} and~\ref{#2}\endgroup}
+
+% \renewcommand{\Res}{\Rightarrow_{\Resh,\As}}
+% \newcommand{\Resp}{\Rightarrow_{\Reshh,\Ad}}
+% \newcommand{\Respstr}[1]{\Rightarrow_{\Reshh,#1}}
+\renewcommand{\Res}{\vdash_\As}
+\newcommand{\Resp}{\vdash_\Ad}
+\newcommand{\Respstr}[1]{\vdash_{#1}}
+\newcommand{\embed}[1]{\left[ #1\right]}
+
+
+\newcommand{\vals}{\mathfrak a}
+% \renewcommand{\Rd}{\mathfrak r}
+% \renewcommand{\Sd}{\mathfrak s}
+% \renewcommand{\Td}{\mathfrak t}
+
+% theorems
+\declaretheorem[
+    name=Theorem,
+    Refname={Theorem,Theorems}]{theorem}
+\declaretheorem[
+    name=Lemma,
+    Refname={Lemma,Lemmas},
+    sibling=theorem]{lemma}
+\declaretheorem[
+    name=Proposition,
+    Refname={Prop.,Propositions},
+    sibling=theorem]{proposition}
+\declaretheorem[
+    name=Corollary,
+    Refname={Corollary,Corollaries},
+    sibling=theorem]{corollary}
+\declaretheorem[
+    name=Claim,
+    Refname={Claim,Claims}
+    ]{claim}
+\declaretheorem[
+    name=Fact,
+    Refname={Fact,Facts},
+    sibling=theorem]{fact}
+\declaretheorem[
+    name=Conjecture,
+    Refname={Conjecture,Conjectures},
+    sibling=theorem]{conjecture}
+\declaretheorem[numbered=no,
+    name=Assumption,
+    Refname={Assumption,Assumptions}]{assumption}
+\theoremstyle{definition}
+\declaretheorem[
+    name=Definition,
+    Refname={Definition,Definitions},
+    sibling=theorem]{definition}
+\declaretheorem[
+    name=Example,
+    Refname={Example,Examples},
+    sibling=theorem]{example}
+\theoremstyle{remark}
+\declaretheorem[
+    name=Remark,
+    Refname={Remark,Remarks},
+    sibling=theorem]{remark}
+
+    \declaretheoremstyle[
+    spaceabove=-4pt, 
+    spacebelow=6pt, 
+    headfont=\it, 
+    bodyfont = \normalfont,
+    postheadspace=1em, 
+    qed=$\blacksquare$, 
+    headpunct={.}]{myproofstyle} %<---- change this name
+\declaretheorem[name={Proof}, style=myproofstyle, unnumbered]{claimproof}
+
+% reset claim counter at the beginning of each proof
+\let\oldproof\proof
+\let\oldendproof\endproof
+\def\proof{\setcounter{claim}{0}\begingroup\oldproof}
+\def\endproof{\oldendproof \endgroup}
+
+
+% \declaretheoremstyle[
+%     spaceabove=-4pt, 
+%     spacebelow=6pt, 
+%     headfont=\it, 
+%     bodyfont = \normalfont,
+%     postheadspace=1em, 
+%     qed=$\blacksquare$, 
+%     headpunct={.}]{myproofstyle} %<---- change this name
+% \declaretheorem[name={Proof}, style=myproofstyle, unnumbered]{claimproof}
+
+% % reset claim counter at the beginning of each proof
+% \let\oldproof\proof
+% \let\oldendproof\endproof
+% \def\proof{\setcounter{claim}{0}\begingroup\oldproof}
+% \def\endproof{\oldendproof \endgroup}
+
+\usepackage{hyperref}
+% \fi
+\usepackage[capitalize]{cleveref}
+
+%\usepackage{cleveref}
+
+\Crefname{theorem}{Thm.}{Theorems}
+\Crefname{corollary}{Cor.}{Corollary}
+\crefname{proposition}{Prop.}{Propositions}
+\Crefname{claim}{Claim}{Claims}
+\Crefname{definition}{Def.}{Definitions}
+\Crefname{fact}{Fact}{Facts}
+\Crefname{conj}{Conjecture}{Conjectures}
+\Crefname{example}{Ex.}{Examples}
+\Crefname{example}{Rem.}{Remarks}
+\Crefname{convention}{Convention}{Conventions}
+\Crefname{lemma}{Lemma}{Lemmas}
+%\Crefname{assumption}{Assumption}{Assumptions}
+\Crefname{section}{Sec.}{Sec.}
+\Crefname{appendix}{App.}{App.}
+
+\addtotheorempostheadhook[theorem]{\crefalias{thmlisti}{theorem}}
+\addtotheorempostheadhook[lemma]{\crefalias{thmlisti}{lemma}}
+\addtotheorempostheadhook[proposition]{\crefalias{thmlisti}{proposition}}
+\addtotheorempostheadhook[corollary]{\crefalias{thmlisti}{corollary}}
+\addtotheorempostheadhook[claim]{\crefalias{thmlisti}{claim}}
+\addtotheorempostheadhook[fact]{\crefalias{thmlisti}{fact}}
+\addtotheorempostheadhook[conjecture]{\crefalias{thmlisti}{conjecture}}
+\addtotheorempostheadhook[example]{\crefalias{thmlisti}{example}}
+\addtotheorempostheadhook[definition]{\crefalias{thmlisti}{definition}}
+\addtotheorempostheadhook[remark]{\crefalias{thmlisti}{remark}}
+
+\newcommand{\inferbinlics}[5]{\begin{minipage}{22ex}{\bfseries #1}\end{minipage} {
+    \begin{minipage}{10ex}{$\infer{#4}{#2 &&& #3}$}\end{minipage}
+    \par\noindent #5}}
+\newcommand{\inferthrlics}[6]{\begin{minipage}{13ex}{\bfseries #1}\end{minipage} {
+    \begin{minipage}{10ex}{$\infer{#5}{#2 &&& #3 &&& #4}$}\end{minipage}
+    \par\noindent #6}}
+\newcommand{\inferunlics}[4]{\begin{minipage}{22ex}{\bfseries #1}\end{minipage} {
+    \begin{minipage}{10ex}{$\infer{#3}{#2}$}
+    \end{minipage}
+    \par\noindent
+      #4
+    }}
+\newcommand{\inferannlics}[5]{\begin{minipage}{22ex}{\bfseries #1}\end{minipage} {
+    \begin{minipage}{10ex}{$\infer[#3]{#4}{#2}$}\end{minipage}
+    \par\noindent #5}}
+
+\newcommand{\inferthrplics}[6]{\begin{minipage}{22ex}{\bfseries #1}\end{minipage} {
+    \begin{minipage}{10ex}{$\infer{#5}{#2 &&& #3 &&& #4}$}\end{minipage}
+    \par\noindent #6}}
+
+
+
+
+% Set high/infinite penalties for inappropriate line breaking.
+% \binoppenalty=\maxdimen
+% \relpenalty=\maxdimen
+% \clubpenalty10000
+% \widowpenalty10000
+% \displaywidowpenalty=10000
+
+
+\makeindex
