@@ -59,21 +59,27 @@ Note that the connected components of $\Lambda$ have the form $\{M\} \times \Rea
 We fix the Borel algebra of this topology to be the $\sigma$-algebra on $\Lambda$.}
 
 The one-step reduction is given by the function $\red : \Lambda^0 \times S \to \Lambda^0 \times S$ where
-\begin{equation}
+\begin{equation*}
 \red(M,s) = \left\{
     \begin{array}{ll}
-        (E[N],s) & \text{if } M = E[R], R \to N \text{ and } R \neq \tsample \\
+        (E[N],s) & \text{if } M = E[R], R \to N\\
+        & \qquad \text{ and } R \neq \tsample \\
         (E[\underline{\pi_h(s)}],\pi_t(s)) & \text{if } M = E[\tsample] \\
         (M,s) & \text{if } M \text{ is a value}
     \end{array} \right .
-\end{equation}
+\end{equation*}
 \lo{Both $\to$ and $\red$ are called reduction relation.}
 
-The result after $n$ steps is then simply $\red^n(M,s) = \overbrace{\red(...\red(}^n M,s)...)$, and the limit $\red^\infty$ can then be defined as a partial function as $\lim_{n \to \infty} \red^n(M,s)$ whenever that sequence becomes constant by reaching a value. A term $M$ terminates for a sample sequence $s$ if the limit $\red^\infty(M,s)$ is defined.
+The result after $n$ steps is then simply 
+\[
+\red^n(M,s) = \underbrace{\red(\ldots\red(}_n M,s)\ldots)
+\] 
+and the limit $\red^\infty$ can then be defined as a partial function as $\lim_{n \to \infty} \red^n(M,s)$ whenever that sequence becomes constant by reaching a value. A term $M$ terminates for a sample sequence $s$ if the limit $\red^\infty(M,s)$ is defined.
 
 The reduction function is measurable, and the set of values is measurable, therefore the set of $s$ such that $M$ terminates at $s$ within $n$ steps is measurable for any $n$, therefore $\{s \mid M \text{ terminates at } s \}$ is measurable. 
 We say that a term $M$ is \emph{almost-surely terminating} (AST) just if $\mu(\{s \mid M \text{ terminates at } s\}) = 1$.
 
+\iffalse
 \lo{Alternatively, define the \emph{runtime of $M$} to be the random variable 
 \[
 T_M(s) := 
@@ -84,7 +90,7 @@ T_M(s) :=
 \]
 Equivalently, we say that $M$ is \emph{almost-surely terminating} (AST) if $T_M < \infty$ a.s.; 
 and $M$ is \emph{positively almost-surely terminating} (PAST) if $\expect{T_M} < \infty$.}
-
+\fi
 For example, the term 
 \[
 (\tY \lambda f, n: \tif{\tsample - 0.5 < 0}{n}{f (n+1)} ) \, \underline{0},
@@ -95,10 +101,10 @@ which generates a geometric distribution, terminates on the set $S \setminus [0.
 \] 
 which terminates on the set $\pi_h^{-1}[[0,0.5]]$, has probability 0.5 of failing to terminate.
 
-\paragraph{}
+%\paragraph{}
 Note that the requirement that $M$ be closed is not important for the proofs of the theorems, but is simply required to ensure that $M$ reaches a value, rather than a general normal form like $x \, y$.
 
-\paragraph{}
+%\paragraph{}
 This definition of almost-sure termination is equivalent to that given in \citep{MakOPW21}, although the program semantics is stated in a slightly different way. In particular, the argument to $\tscore$ is not relevant to termination (except for the possibility that its argument's evaluation wouldn't terminate).
 
 \iffalse

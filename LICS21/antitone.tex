@@ -35,7 +35,7 @@ M_3 =
 
 The term $M_1$ is rankable, terminating in 31 $\tY$-steps on average, and $M_3$ only has a $1/1024$ chance of terminating, but in between, $M_2$ is AST, but isn't $\tY$-PAST, therefore it isn't rankable and \Cref{thm:rankable implies termination} is insufficient to prove its termination. We therefore want to find a generalised notion of ranking function so that $M_2$ becomes rankable, and then prove it sound i.e.~rankable in this generalised sense implies AST.
 
-\paragraph{Idea.} 
+\paragraph*{Idea.} 
 
 The definition of antitone-convex ranking function $f$ (say) for $M \in \Lambda^0$ is the same as that of ranking function except that in the case of $\tY$-redex, 
 we require the existence of an antitone (meaning: $r < r'$ implies $\epsilon(r) \geq \epsilon(r')$) function $\epsilon : \nnReal \to \pReal$ such that the ranking function $f :\mathit{Rch}(M) \to \nnReal$ satisfies

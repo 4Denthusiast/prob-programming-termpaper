@@ -9,21 +9,21 @@ One approach to proving that a term terminates almost surely is to find some var
 These variants are defined as functions from reachable terms (i.e.~possible states of the program's execution) to real numbers. Specifically, let the set of reachable terms from a given closed starting term $M$ be $Rch(M) := \{N \in \Lambda \mid M \to^* N \}$, with the $\sigma$-algebra induced as a subset of $\Lambda$.
 
 \begin{definition}\rm
-A \emph{ranking function on $M$} is a measurable function $f:\mathit{Rch}(M) \to \mathbb{R}$ such that $f(N) \geq 0$ for all $N$, and
+A \emph{ranking function on $M \in \Lambda^0$} is a measurable function $f:\mathit{Rch}(M) \to \mathbb{R}$ such that $f(N) \geq 0$ for all $N$, and
 \begin{enumerate}
-    \item $f(E[\tY \lambda x. N]) \geq 1+ f(E[\lambda z. N[(\tY \lambda x. N)/x] z) \text{ where $z$ is not free in $N$}$
+    \item $f(E[\tY \lambda x. N]) \geq 1+ f(E[\lambda z. N[(\tY \lambda x. N)/x] z)$ where $z$ is not free in $N$
     \item $f(E[\tsample]) \geq \int_I f(E[\underline{x}]) \, \Leb(\mathrm{d}x)$
-
     \item $f(E[R]) \geq f(E[R'])$ for any other redex $R$, where $R \to R'$.
 \end{enumerate}
-We say that the ranking function $f$ is \emph{strict} if there exists $\epsilon > 0$ such that $f(N) = 0$ iff $N$ is a value, and for all $E$ and $R \to R'$, $f(E[R']) \leq f(E[R]) - \epsilon$.
+We say that the ranking function $f$ is \emph{strict} if there exists $\epsilon > 0$ such that $f(N) = 0$ iff $N$ is a value; and for all $E$ and $R \to R'$, $f(E[R']) \leq f(E[R]) - \epsilon$.
 
 Any closed term for which a ranking (respectively, strict ranking) function exists is called \emph{rankable} (respectively, \emph{strictly rankable}). 
-\changed[lo]{For example, the term $(\tY \lambda x.x) \, \underline 0$ is not rankable.}
+For example, the term $(\tY \lambda x.x) \, \underline 0$ is not rankable.
+
 It will be demonstrated later that for any rankable term $M$, if $(M_n)_{n \in \omega}$ is the reduction sequence starting from $M$, then $(f(M_n))_{n\in\omega}$ is a supermartingale, and $M$ terminates almost surely, but first, some preliminaries about supermartingales.
 \end{definition}
 
-\paragraph{}
+%\paragraph{}
 
 Fix a probability space $(\Omega, \calF, \mathbb{P})$. 
 We have in mind $\Omega = S$, and $\mathbb{P} = \mu$.
@@ -54,7 +54,7 @@ Recall the $\sigma$-algebra (consisting of measurable subsets ``prior to $T$'')
 \]
 and if $T \leq T'$, then $\calF_{T} \subseteq \calF_{T'}$.
 
-The following is an iterated version of Doob's well-known Optional Sampling Theorem (see, e.g., \cite[\S 6.7]{AshDD00} and \cite[Theorem 7.2]{DBLP:conf/popl/FioritiH15}).
+The following is an iterated version of Doob's well-known Optional Sampling Theorem (see, e.g., \cite[\S 6.7]{AshDD00} and \cite[Thm.~7.2]{DBLP:conf/popl/FioritiH15}).
 \begin{theorem}[Optional Sampling]
 \label{thm:optional sampling}
 Let $(X_n)_{n\in \omega}$ be a supermartingale, and $(T_n)_{n \in \omega}$ a sequence of increasing stopping times, both adapted to filtration $(\calF_n)_{n \in \omega}$, then $(X_{T_n})_{n \in \omega}$ is a supermartingale adapted to $(\calF_{T_n})_{n \in \omega}$ if one of the following conditions holds:
@@ -67,20 +67,21 @@ Let $(X_n)_{n\in \omega}$ be a supermartingale, and $(T_n)_{n \in \omega}$ a seq
 \begin{lemma}%[{\citep[Lemma 5.5]{DBLP:conf/popl/FioritiH15}}]
 % \citep[Prop 1]{DBLP:conf/popl/ChatterjeeFNH16}}
 \label{lem:rank-PAST}
-Let $(Y_n)_{n \in \omega}$ be a $\epsilon$-ranking supermartingale with respect to the stopping time $T$, then $T < \infty$ almost surely, and $\expect{T} \leq \dfrac{\expect{Y_0}}{\epsilon}$.
+Let $(Y_n)_{n \in \omega}$ be a $\epsilon$-ranking supermartingale with respect to the stopping time $T$, then $T < \infty$ almost surely, and $\expect{T} \leq \frac{\expect{Y_0}}{\epsilon}$.
 \end{lemma}
 
 \begin{proof}
-We first prove by induction on $n$: 
+We first prove (by induction on $n$): for all $n \in \omega$
 \[
-\forall n \in \omega \, . \, \expect{Y_n} \leq \expect{Y_0} - \epsilon \cdot \Big(\sum_{i=0}^{n-1} \mathbb{P}[T > i]\Big).
+%\forall n \in \omega \, . \, 
+\expect{Y_n} \leq \expect{Y_0} - \epsilon \cdot \big(\textstyle\sum_{i=0}^{n-1} \mathbb{P}[T > i]\big).
 \]
-It follows that $\sum_{i=0}^{\infty} \mathbb{P}[T > i]$ converges; hence $\lim_{i \to \infty} \mathbb{P}[T > i] = 0$ and so $\mathbb{P}[T < \infty] = 1$.
+It follows that $\sum_{i=0}^{\infty} \mathbb{P}[T > i]$ converges; hence we have $\lim_{i \to \infty} \mathbb{P}[T > i] = 0$ and so $\mathbb{P}[T < \infty] = 1$.
 It then remains to observe: if $T < \infty$ a.s., then $\expect{T} = \sum^\infty_{i=0} \mathbb{P}[T > i]$.
 \end{proof}
 
-\changed[lo]{\Cref{lem:rank-PAST} is a slight extension of \citep[Lemma 5.5]{DBLP:conf/popl/FioritiH15}. 
-In Lemma 5.5 of op.~cit., the stopping time $T$ is assumed to be the random variable $s \mapsto \min\set{n \mid Y_n(s) = 0}$.}
+\changed[lo]{\Cref{lem:rank-PAST} is a slight extension of \citep[Lemma 5.5]{DBLP:conf/popl/FioritiH15},
+wherein the stopping time $T$ is assumed to be the random variable $s \mapsto \min\set{n \mid Y_n(s) = 0}$.}
 
 \medskip
 
@@ -242,19 +243,18 @@ where
 \item $E_i[\cdot][\tsample] \in \mathsf{Sk}_{j_i}$, and $\sigma_i : S \to \Real^{j_i}$, and $\rho(s) := \pi_h(\pi_1(\red^n(M, s))) = \pi_h(\pi_t^{l_i}(s)) \in \Real$ 
 \item $\set{U_i}_{i \in \calI}$ is a partition of $\mathbf{T}_2$, 
 where each $U_i$ is determined by a skeletal term $E_i[\cdot][\tsample]$ and a number (of draws) $l_i \leq n$, satisfying
-\[
+\(
 s \in U_i
 \iff
 (E_i[\underline{r}][{\tsample}], \pi_t^{l_i}(s)) = \red^n(M, s),
 \;
-\hbox{for some }r \in \Real^{j_i}
-\]
-(We use the (measurable) function $\sigma_i : S \to \Real^{j_i}$ to skolemise the existentially quantified $r$.)
-
-Equivalently
-\(
-U_i := \#\mathrm{draw}_n^{-1}(l_i) \cap M_n^{-1}(E_i[\cdot][\tsample], \Real^{j_i}) \in \calF_n.
+\hbox{for some }r \in \Real^{j_i}.
 \)
+(We use the (measurable) function $\sigma_i : S \to \Real^{j_i}$ to skolemise the existentially quantified $r$.)
+Equivalently
+\[
+U_i := \#\mathrm{draw}_n^{-1}(l_i) \cap M_n^{-1}(E_i[\cdot][\tsample], \Real^{j_i}) \in \calF_n.
+\]
 %\lo{I.e.~$(E_i[\underline{\sigma_i(s)}][{\tsample}], \pi_t^{l_i}(s)) = \red^n(M, s)$ iff $s \in U_i$.}
 \end{itemize}
 
@@ -274,7 +274,7 @@ Take $s \in U_i$, and set $l = l_i$.
 Plainly $\sigma_i(s)$ depends on $s_{\leq l}$, and $\rho(s)$ depends on $s_{\leq l +1}$.
 Take $u \in (U_i)_{\leq l}$.
 It then follows from the definition of ranking function that
-\[
+\[%\textstyle
 \int_I \Leb(\dif r) \, f(E_i[\underline{\widehat{\sigma_i}(u)}][\underline{r}])) \leq f(E_i[\underline{\widehat{\sigma_i}(u)}][\tsample])).
 \]
 Take $A \in \calF_n$, and integrating both sides, we get
