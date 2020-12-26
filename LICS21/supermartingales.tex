@@ -1,7 +1,7 @@
+% !TEX root = main.tex
 \section{Supermartingales}
+\label{sec:supermartingales}
 
-
-\section{Supermartingales}
 One approach to proving that a term terminates almost surely is to find some variant that is bounded below and, on average, decreases sufficiently quickly that it must eventually reach 0, similarly to the approach taken in 
 %\citep{DBLP:journals/pacmpl/McIverMKK18} 
 \cite{DBLP:conf/popl/FioritiH15} for imperative programs.
@@ -290,16 +290,16 @@ Since $\Leb_{l+1}$ is the (unique) product measure satisfying $\Leb_{l+1}(V \tim
 \int_{(A \cap U_i)_{\leq l+1}} \Leb_{l+1}(\dif u') \, f(E_i[\underline{\widehat{\sigma_i}(u')}][\tsample]))
 \end{align*}
 and so, by (\ref{eqn:truncate})
-\begin{equation}
-\int_{A \cap U_i} \mu(\dif s) \, f(E_i[\underline{\sigma_i(s)}][\underline{\rho(s)}])) \\
-\leq 
+\begin{align}
+& \int_{A \cap U_i} \mu(\dif s) \, f(E_i[\underline{\sigma_i(s)}][\underline{\rho(s)}])) \nonumber \\
+& \leq 
 \int_{A \cap U_i} \mu(\dif s) \, f(E_i[\underline{\sigma_i(s)}][\tsample])).
 \label{eqn:a u ui}
-\end{equation}
+\end{align}
 
 Now, integrating both sides of (\ref{eqn:f 2 n+1}), we have
 \begin{align*}
-\int_A \mu(\dif s) \, f_{n+1}(M)[s \in \mathbf{T}_i] 
+& \int_A \mu(\dif s) \, f_{n+1}(M)[s \in \mathbf{T}_i] \\
 &= 
 \int_A \mu(\dif s) \, \sum_{i \in \calI} f(E_i[\underline{\sigma_i(s)}][\underline{\rho(s)}])[s \in U_i] \\
 &= 
@@ -316,15 +316,16 @@ Now, integrating both sides of (\ref{eqn:f 2 n+1}), we have
 \end{proof}
 
 As an immediate corollary of \Cref{lem:key rankable}, each $f(M_n)$ is integrable:
-\[
+\begin{align*}
 \int_{S} \mu(\dif s) \, |f(M_n)(s)| 
-=
+&=
 \int_{S} \mu(\dif s) \, f(M_n)(s)
-\leq
+\\
+&\leq
 \int_{S} \mu(\dif s) \, f(M_0)(s)
 =
 f(M).
-\]
+\end{align*}
 
 \iffalse
 [** To see $f_{2, n+1}(M) \leq f(M_n)[T_2]$, take $s \in T_2$. Then $f_{2, n+1}(M)(s) = f(E[\underline{a}])$ and $M_n = E[\tsample]$, for some $a \in [0, 1]$ and evaluation context $E$. Hence 
@@ -342,7 +343,8 @@ As before, fix a closed SPCF term $M \in \Lambda^0$.
 Define random variables on the probability space $(S, \calF, \mu)$:
 \begin{align}
 T_{-1}(s) & := -1 \nonumber \\
-T_{n+1}(s) & := \min \{ k \mid k>T_n(s), M_k(s) \textrm{ a value or of form } E[\tY \lambda x. N] \} \nonumber \\
+T_{n+1}(s) & := \min \{ k \mid k>T_n(s), M_k(s) \textrm{ a value} \nonumber\\
+& \qquad\qquad\qquad\qquad\qquad \hbox{or of form } E[\tY \lambda x. N] \} \nonumber \\
 X_n(s) & := f(M_n(s)) \nonumber \\
 Y_n(s) & := X_{T_n}(s) \nonumber \\
 T_M^\tY(s) &:= \min \set{n \mid M_{T_n(s)}(s) \textrm{ is a value}} \label{eq:y stopping time}

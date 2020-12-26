@@ -1,3 +1,4 @@
+% !TEX root = main.tex
 \section{Antitone ranking functions}
 \label{sec:antitone}
 
@@ -72,12 +73,22 @@ Therefore
 
 \begin{calculation}
 \expect{Y_n \mid T > n}
-  \step[=]{rearranging terms}
-\dfrac{\mathbb P[T > n] \, \expect{Y_n \mid T > n} 
+   \step[=]{rearranging terms}
+% \dfrac{\mathbb P[T > n] \, \expect{Y_n \mid T > n} 
+% + 
+% \mathbb P[T \leq n] \, \expect{Y_n \mid T \leq n} 
+% - 
+% \mathbb P[T \leq n] \, \expect{Y_n \mid T \leq n}}{\mathbb P[T > n]}
+\dfrac{
+\begin{array}{l}
+\mathbb P[T > n] \, \expect{Y_n \mid T > n} 
 + 
 \mathbb P[T \leq n] \, \expect{Y_n \mid T \leq n} 
-- 
-\mathbb P[T \leq n] \, \expect{Y_n \mid T \leq n}}{\mathbb P[T > n]}
+\\
+{} - 
+\mathbb P[T \leq n] \, \expect{Y_n \mid T \leq n}
+\end{array}
+}{\mathbb P[T > n]}
   \step[=]{definition of conditional expectation}
 \dfrac{\expect{Y_n} - \mathbb P[T \leq n] \, \expect{Y_n \mid T \leq n}}{\mathbb P[T > n]}
   \step[\leq]{$Y_n \geq 0$ always}
@@ -102,12 +113,12 @@ We have
 %\lo{Change of justification of the second equality below: event, not discrete r.v. Recall: expectation conditioning on r.v.~(resp.~event) is a r.v.~(resp.~number).}
 \begin{calculation}
 \expect{Y_n-Y_{n+1}}
-  \step[=]{$\calF_n \subseteq \calF_{n+1}$, definition and linearity of conditional expectation}
+  \step[=]{$\calF_n \subseteq \calF_{n+1}$, def.~\& linearity of cond.~expectation}
 \expect{Y_n - \expect{Y_{n+1} \mid \calF_n}}
   \step[\geq]{antitone strict assumption}
 \expect{\epsilon(Y_n) \cdot 1_{\set{T > n}}}
 %  \step[=]{definition of conditional expectation for a discrete variable}
-\step[=]{definition of expectation conditioning on an \emph{event}}
+\step[=]{def.~expectation conditioning on an \emph{event}}
 \mathbb P[T > n]\ \expect{\epsilon(Y_n) \mid T > n}
   \step[\geq]{Jensen's inequality}
 \mathbb P[T > n]\ \epsilon(\expect{Y_n \mid T > n})
@@ -117,9 +128,11 @@ We have
 x \; \epsilon\big(\expect{Y_0} \, x^{-1}\big).
 \end{calculation}
 Therefore, by a telescoping sum
-\[
-\expect{Y_{B_x}} = \expect{Y_{B_x}-Y_0+Y_0} \leq \expect{Y_0} - B_x \; x \; \epsilon(\expect{Y_0} \, x^{-1}) \leq -1 < 0 
-\]
+\begin{align*}
+\expect{Y_{B_x}} 
+&= \expect{Y_{B_x}-Y_0+Y_0} \leq \expect{Y_0} - B_x \; x \; \epsilon(\expect{Y_0} \, x^{-1})\\
+&\leq -1 < 0 
+\end{align*}
 %\lo{$\expect{Y_0 - B_x \; x \; \epsilon(\expect{Y_0} \, x^{-1})}$}
 which is a contradiction, therefore the claim must be true, therefore $P[T > n]$ tends to 0 as $n$ tends to infinity, therefore $T < \infty$ almost surely.
 \end{proof}
@@ -226,7 +239,7 @@ g_2(n)
 For $n \geq 1$, $\Theta_2 \, n$ reduces in several steps to either $\Theta_2 \, (n-1)$ or $\Theta_2 \, (n+1)$, each with probability $1/2$, with one $\tY$-reduction.
 Now
 \begin{align*}
-g_2(n) - \frac{g_2(n-1) + g_2(n+1)} 2 
+& g_2(n) - \frac{g_2(n-1) + g_2(n+1)} 2 \\
   &=  \log \Big(\frac{n+1}{\sqrt{n(n+2)}}\Big) \\
   &=  \frac 1 2 \log\left(\frac{(n+1)^2}{n(n+2)}\right) \\
   &=  \frac 1 2 \log\left(1 + \frac 1 {n(n+2)}\right) \\
@@ -381,11 +394,11 @@ Although the stronger induction hypothesis was necessary for the induction to wo
 The other condition for $(Y_n)$ to be an antitone-strict supermartingale is
 \begin{align*}
     & \expect{Y_{n+1} \mid \mathcal F_n} \\
-    = & \expect{y_{n+1} \, 1_{\set{T \geq n+1}} \mid \mathcal F_n} \\
-    = & y_{n+1} \, \expect{1_{\set{T \geq n+1}} \mid \mathcal F_n} \\ 
-    = & y_{n+1} \, 1_{\set{T \geq n}} \frac{\mathbb P[T > n+1]}{\mathbb P[T > n]} \\
-    = & (y_n - \epsilon(y_n)) \, 1_{\set{T \geq n}} \\
-    = & Y_n - \epsilon(y_n) \, 1_{\set{T \geq n}}
+    &=  \expect{y_{n+1} \, 1_{\set{T \geq n+1}} \mid \mathcal F_n} \\
+    &=  y_{n+1} \, \expect{1_{\set{T \geq n+1}} \mid \mathcal F_n} \\ 
+    &=  y_{n+1} \, 1_{\set{T \geq n}} \frac{\mathbb P[T > n+1]}{\mathbb P[T > n]} \\
+    &=  (y_n - \epsilon(y_n)) \, 1_{\set{T \geq n}} \\
+    &= Y_n - \epsilon(y_n) \, 1_{\set{T \geq n}}
 \end{align*}
 therefore $(Y_n)_n$ is an antitone strict supermartingale with respect to $(T,\epsilon)$.
 \end{proof}

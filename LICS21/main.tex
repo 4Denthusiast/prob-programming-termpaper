@@ -1,4 +1,4 @@
-\documentclass[conference,a4paper]{IEEEtran}
+\documentclass[conference]{IEEEtran}
 \providecommand{\event}{ArXiv} % Name of the event you are submitting to
 \usepackage{breakurl}             % Not needed if you use pdflatex only.
 \usepackage{underscore}           % Only needed if you use pdflatex.
@@ -28,23 +28,23 @@ linkcolor=red,
 citecolor=oxgold,
 pdfstartview=FitH ]{hyperref}
 
-\usepackage{amsmath} % cleveref must be loaded afer amsmath
-\usepackage{cleveref}
-\Crefname{theorem}{Theorem}{Theorems}
-\Crefname{corollary}{Corollary}{Corollary}
-\crefname{proposition}{Proposition}{Propositions}
-\Crefname{claim}{Claim}{Claims}
-\Crefname{definition}{Definition}{Definitions}
-\Crefname{fact}{Fact}{Facts}
-\Crefname{conj}{Conjecture}{Conjectures}
-\Crefname{example}{Example}{Examples}
-\Crefname{remark}{Remark}{Remarks}
-\Crefname{convention}{Convention}{Conventions}
-\Crefname{lemma}{Lemma}{Lemmas}
-\Crefname{assumption}{Assumption}{Assumptions}
-\Crefname{section}{Section}{Sections}
-\Crefname{appendix}{Appendix}{Appendices}
-\Crefname{figure}{Figure}{Figures}
+%\usepackage{amsmath} % cleveref must be loaded afer amsmath
+% \usepackage{cleveref}
+% \Crefname{theorem}{Theorem}{Theorems}
+% \Crefname{corollary}{Corollary}{Corollary}
+% \crefname{proposition}{Proposition}{Propositions}
+% \Crefname{claim}{Claim}{Claims}
+% \Crefname{definition}{Definition}{Definitions}
+% \Crefname{fact}{Fact}{Facts}
+% \Crefname{conj}{Conjecture}{Conjectures}
+% \Crefname{example}{Example}{Examples}
+% \Crefname{remark}{Remark}{Remarks}
+% \Crefname{convention}{Convention}{Conventions}
+% \Crefname{lemma}{Lemma}{Lemmas}
+% \Crefname{assumption}{Assumption}{Assumptions}
+% \Crefname{section}{Section}{Sections}
+% \Crefname{appendix}{Appendix}{Appendices}
+% \Crefname{figure}{Figure}{Figures}
 %\Crefname{equation}{Eq.}{Equations}
 
 % \addtotheorempostheadhook[theorem]{\crefalias{thmlisti}{theorem}}
@@ -80,8 +80,7 @@ pdfstartview=FitH ]{hyperref}
 %%
 %% END {Luke's Macros}
 
-\usepackage{amsfonts}
-\usepackage{amsthm}
+\usepackage{amsmath,amsfonts,amsthm}
 \usepackage{amssymb}
 \usepackage{verbatim}
 \usepackage{enumitem}
@@ -95,20 +94,24 @@ pdfstartview=FitH ]{hyperref}
 \DeclareMathOperator{\nnext}{next}
 \DeclareMathOperator{\cbv}{cbv}
 
+%\usepackage{mathtools}
+\usepackage{thmtools,thm-restate}
 
-\usepackage{amsthm}
-\theoremstyle{definition}
-\newtheorem{definition}{Definition}
-\newtheorem{example}{Example}
+% \usepackage{amsthm}
+% \theoremstyle{definition}
+% \newtheorem{definition}{Definition}
+% \newtheorem{example}{Example}
 
-\theoremstyle{lemma}
-\newtheorem{lemma}{Lemma}
-\newtheorem{theorem}{Theorem}
-\newtheorem{corollary}{Corollary}
-\newtheorem{conjecture}{Conjecture}
+% \theoremstyle{lemma}
+% \newtheorem{lemma}{Lemma}
+% \newtheorem{theorem}{Theorem}
+% \newtheorem{corollary}{Corollary}
+% \newtheorem{conjecture}{Conjecture}
 
-\theoremstyle{remark}
-\newtheorem*{remark}{Remark}
+% \theoremstyle{remark}
+% \newtheorem*{remark}{Remark}
+
+\input{headerieee}
 
 \title{Supermartingales and Statistical PCF}
 
