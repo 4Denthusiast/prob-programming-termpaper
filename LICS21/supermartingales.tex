@@ -1,4 +1,28 @@
-%!TEX root = probabilisticProgrammingMartingales.tex
+\section{Supermartingales}
+
+
+\section{Supermartingales}
+One approach to proving that a term terminates almost surely is to find some variant that is bounded below and, on average, decreases sufficiently quickly that it must eventually reach 0, similarly to the approach taken in 
+%\citep{DBLP:journals/pacmpl/McIverMKK18} 
+\cite{DBLP:conf/popl/FioritiH15} for imperative programs.
+
+These variants are defined as functions from reachable terms (i.e.~possible states of the program's execution) to real numbers. Specifically, let the set of reachable terms from a given closed starting term $M$ be $Rch(M) := \{N \in \Lambda \mid M \to^* N \}$, with the $\sigma$-algebra induced as a subset of $\Lambda$.
+
+\begin{definition}\rm
+A \emph{ranking function on $M$} is a measurable function $f:\mathit{Rch}(M) \to \mathbb{R}$ such that $f(N) \geq 0$ for all $N$, and
+\begin{enumerate}
+    \item $f(E[\tY \lambda x. N]) \geq 1+ f(E[\lambda z. N[(\tY \lambda x. N)/x] z) \text{ where $z$ is not free in $N$}$
+    \item $f(E[\tsample]) \geq \int_I f(E[\underline{x}]) \, \Leb(\mathrm{d}x)$
+
+    \item $f(E[R]) \geq f(E[R'])$ for any other redex $R$, where $R \to R'$.
+\end{enumerate}
+We say that the ranking function $f$ is \emph{strict} if there exists $\epsilon > 0$ such that $f(N) = 0$ iff $N$ is a value, and for all $E$ and $R \to R'$, $f(E[R']) \leq f(E[R]) - \epsilon$.
+
+Any closed term for which a ranking (respectively, strict ranking) function exists is called \emph{rankable} (respectively, \emph{strictly rankable}). 
+\changed[lo]{For example, the term $(\tY \lambda x.x) \, \underline 0$ is not rankable.}
+It will be demonstrated later that for any rankable term $M$, if $(M_n)_{n \in \omega}$ is the reduction sequence starting from $M$, then $(f(M_n))_{n\in\omega}$ is a supermartingale, and $M$ terminates almost surely, but first, some preliminaries about supermartingales.
+\end{definition}
+
 \paragraph{}
 
 Fix a probability space $(\Omega, \calF, \mathbb{P})$. 

@@ -1,0 +1,108 @@
+\section{Statistical PCF}
+\label{sec:SPCF}
+
+\subsection{Syntax of SPCF}
+
+The language SPCF is a simply-typed lambda calculus with sampling of real numbers from $[0,1]$ and unbounded scoring, following \cite{MakOPW21}. Types and terms are defined as follows, where $r$ is a real number, $x$ is a variable, $f : \mathbb{R}^n \to \mathbb{R}$ is any measurable function, and $\Gamma$ is an environment:
+\begin{align*}
+  & \text{types } A, B ::= \textsf{R}  \mid  A \to B \\
+  & \text{values } V ::= \lambda x.M  \mid  \underline{r} \\
+  & \text{terms } M, N ::= V  \mid  x  \mid  M_1 \, M_2  \mid  \underline{f}(M_1,\dots ,M_n)  \mid  \tY M  \mid  \tif{M < 0}{N_1}{N_2}  \mid  \tsample  \mid  \tscore(M)
+\end{align*}
+\begin{align*}
+  \frac{}{\Gamma ; x:A \vdash x:A} \qquad
+  \frac{\Gamma ; x:A \vdash M : B}{\Gamma \vdash \lambda x.M : A \to B} \qquad
+  \frac{}{\underline{r} : \textsf{R}} \qquad
+  \frac{\Gamma \vdash M:A \to B \quad \Gamma \vdash N : A}{\Gamma \vdash M \, N : B} \\ \\
+  \frac{\Gamma \vdash M_1:\textsf{R} \dots \Gamma \vdash M_n:\textsf{R}}{\Gamma \vdash \underline{f}(M_1,\dots,M_n) : \textsf{R}} \ f : \mathbb{R}^n \to \mathbb{R} \qquad
+  \frac{\Gamma \vdash M : (A \to B) \to (A \to B)}{\Gamma \vdash \tY M : (A \to B)} \\ \\
+  \frac{\Gamma \vdash M : \textsf{R} \quad \Gamma \vdash N_1 : A \quad \Gamma \vdash N_2 : A}{\Gamma \vdash \tif{M < 0}{N_1}{N_2} : A} \qquad
+  \frac{}{\Gamma \vdash \tsample : \textsf{R}} \qquad
+  \frac{\Gamma \vdash s : \textsf{R}}{\Gamma \vdash \tscore (s) : \textsf{R}}
+\end{align*}
+
+Terms are identified up to $\alpha$-equivalence, as usual. The set of all terms is denoted $\Lambda$, and the set of closed terms is denoted $\Lambda^0$.
+
+\paragraph{}
+To define the reduction relation, let \emph{evaluation contexts} be of the form:
+\begin{align*}
+  E ::= & \, [\,] \mid E \, M \mid V \, E \mid \underline{f}(\underline r_1,\dots ,\underline r_{k-1}, E, M_{k+1}, \dots, M_n) \\ & \mid \tY E \mid \tif{E<0}{M_1}{M_2} \mid \tscore (E)
+\end{align*}
+then a term reduces if it is formed by substituting a redex in a context i.e.
+\begin{align*}
+  E[(\lambda x.M) N] & \to E[M[N/x]] \\
+  E[\underline f (\underline r_1, \dots , \underline r_n)] & \to E[\underline{f(r_1,\dots,r_n)}] \\
+  E[\tY \lambda x. M] & \to E[\lambda z. M[(\tY \lambda x. M)/x] z] \text{ where $z$ is not free in $s$}\\
+  E[\tif{\underline r < 0}{M_1}{M_2}] & \to E[M_1] \text{ where }r < 0 \\
+  E[\tif{\underline r < 0}{M_1}{M_2}] & \to E[M_2] \text{ where }r \geq 0 \\
+  E[\tsample] & \to E[\underline r] \text{ where } r \in [0,1] \\
+  E[\tscore(\underline r)] & \to E[\underline r].
+\end{align*}
+\changed[lo]{We write $\to^\ast$ for the reflexive, transitive closure of $\to$.}
+\lo{The $\tscore$ rule should have a side condition: if $r > 0$.}
+
+Every closed well-typed term either is a value or reduces to another term.
+
+\subsection{Sampling semantics}
+\label{sec:sampling semantics}
+This version of the reduction relation allows $\tsample$ to reduce to any number in $[0,1]$. To more precisely specify the probabilities, an additional argument is needed to determine the outcome of random samples. Let $ I = [0,1] \subset \mathbb{R} $, and let $S = I^{\mathbb{N}}$, with the \changed[lo]{Borel $\sigma$-algebra $\calF$} and the probability measure, denoted $\mu$, given by the limit of $1 \gets I \gets I^2 \gets \cdots$, where the maps are the projections that ignore the last element. Equivalently, a basis of measurable sets is $\prod_{i=0}^\infty X_i$ where $X_i$ are all Borel and all but finitely many are $I$, and $\mu (\prod_{i=0}^\infty X_i) = \prod_{i=0}^\infty \Leb(X_i)$.
+The maps $\pi_h:S \to I, \; \pi_t:S \to S$ popping the first element are then measurable.
+\changed[lo]{Following \cite{DBLP:conf/esop/CulpepperC17}, we call the probability space $(S, \calF, \mu)$ the \emph{entropy space}.}
+
+The $\sigma$-algebra and measure on $\Lambda$ are defined by considering it as a disjoint union of equivalence classes under replacing all the real constants by a placeholder, where the measure on each class is that of $\mathbb{R}^n$, where $n$ is the number of real constants.
+\changed[lo]{Precisely, following \cite{DBLP:conf/icfp/BorgstromLGS16},
+we view $\Lambda$ as $\bigcup_{m\in\omega} \big(\mathsf{Sk}_m \times \Real^m \big)$,
+where $\mathsf{Sk}_m$ is the set of SPCF terms with exactly $m$ place-holders (a.k.a.~\emph{skeleton terms}) for numerals.
+Thus identified, we give $\Lambda$ the countable disjoint union topology of the product topology of the discrete topology on $\mathsf{Sk}_m$ and the standard topology on $\Real^m$.
+Note that the connected components of $\Lambda$ have the form $\{M\} \times \Real^m$, with $M$ ranging over $\mathsf{Sk}_m$, and $m$ over $\omega$. 
+We fix the Borel algebra of this topology to be the $\sigma$-algebra on $\Lambda$.}
+
+The one-step reduction is given by the function $\red : \Lambda^0 \times S \to \Lambda^0 \times S$ where
+\begin{equation}
+\red(M,s) = \left\{
+    \begin{array}{ll}
+        (E[N],s) & \text{if } M = E[R], R \to N \text{ and } R \neq \tsample \\
+        (E[\underline{\pi_h(s)}],\pi_t(s)) & \text{if } M = E[\tsample] \\
+        (M,s) & \text{if } M \text{ is a value}
+    \end{array} \right .
+\end{equation}
+\lo{Both $\to$ and $\red$ are called reduction relation.}
+
+The result after $n$ steps is then simply $\red^n(M,s) = \overbrace{\red(...\red(}^n M,s)...)$, and the limit $\red^\infty$ can then be defined as a partial function as $\lim_{n \to \infty} \red^n(M,s)$ whenever that sequence becomes constant by reaching a value. A term $M$ terminates for a sample sequence $s$ if the limit $\red^\infty(M,s)$ is defined.
+
+The reduction function is measurable, and the set of values is measurable, therefore the set of $s$ such that $M$ terminates at $s$ within $n$ steps is measurable for any $n$, therefore $\{s \mid M \text{ terminates at } s \}$ is measurable. 
+We say that a term $M$ is \emph{almost-surely terminating} (AST) just if $\mu(\{s \mid M \text{ terminates at } s\}) = 1$.
+
+\lo{Alternatively, define the \emph{runtime of $M$} to be the random variable 
+\[
+T_M(s) := 
+\begin{cases}
+\min \set{n \mid \pi_0(\red^n(M, s)) \textrm{ is a value}} & \hbox{if $\red^\infty(M,s)$ is defined}\\
+\infty & \hbox{otherwise}
+\end{cases}
+\]
+Equivalently, we say that $M$ is \emph{almost-surely terminating} (AST) if $T_M < \infty$ a.s.; 
+and $M$ is \emph{positively almost-surely terminating} (PAST) if $\expect{T_M} < \infty$.}
+
+For example, the term 
+\[
+(\tY \lambda f, n: \tif{\tsample - 0.5 < 0}{n}{f (n+1)} ) \, \underline{0},
+\] 
+which generates a geometric distribution, terminates on the set $S \setminus [0.5,1]^\mathbb N$, which has measure 1, therefore it terminates almost surely, whereas 
+\[
+\tif{\tsample - 0.5 < 0}{\underline 0}{(\tY \lambda x. x) \underline 0}
+\] 
+which terminates on the set $\pi_h^{-1}[[0,0.5]]$, has probability 0.5 of failing to terminate.
+
+\paragraph{}
+Note that the requirement that $M$ be closed is not important for the proofs of the theorems, but is simply required to ensure that $M$ reaches a value, rather than a general normal form like $x \, y$.
+
+\paragraph{}
+This definition of almost-sure termination is equivalent to that given in \citep{MakOPW21}, although the program semantics is stated in a slightly different way. In particular, the argument to $\tscore$ is not relevant to termination (except for the possibility that its argument's evaluation wouldn't terminate).
+
+\iffalse
+\lo{Your operational semantics does not maintain a record of the current weight of the reduction.
+A.s.~termination does depend on $\tscore$: see \cite[\S 4.3]{MakOPW21}\footnote{\url{https://arxiv.org/abs/2004.03924}}.
+I think it important to take the behaviour of $\tscore$ into account;
+you should do it as a future task.}
+\fi
