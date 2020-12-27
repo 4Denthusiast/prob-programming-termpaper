@@ -35,7 +35,7 @@ M_3 =
 
 The term $M_1$ is rankable, terminating in 31 $\tY$-steps on average, and $M_3$ only has a $1/1024$ chance of terminating, but in between, $M_2$ is AST, but isn't $\tY$-PAST, therefore it isn't rankable and \Cref{thm:rankable implies termination} is insufficient to prove its termination. We therefore want to find a generalised notion of ranking function so that $M_2$ becomes rankable, and then prove it sound i.e.~rankable in this generalised sense implies AST.
 
-\paragraph*{Idea.} 
+\paragraph*{Idea} 
 
 The definition of antitone-convex ranking function $f$ (say) for $M \in \Lambda^0$ is the same as that of ranking function except that in the case of $\tY$-redex, 
 we require the existence of an antitone (meaning: $r < r'$ implies $\epsilon(r) \geq \epsilon(r')$) function $\epsilon : \nnReal \to \pReal$ such that the ranking function $f :\mathit{Rch}(M) \to \nnReal$ satisfies
@@ -70,7 +70,6 @@ Then $T < \infty$ almost surely.
 \begin{proof}
 First, as $(Y_n)$ is a supermartingale, $\expect{Y_n} \leq \expect{Y_0}$. 
 Therefore
-
 \begin{calculation}
 \expect{Y_n \mid T > n}
    \step[=]{rearranging terms}
@@ -182,10 +181,10 @@ If a closed SPCF term $M$ is antitone rankable, then $T_M^{\tY} < \infty$ a.s.~(
 \begin{proof}
 As in %Theorem \ref{thm:basicRankingSoundness}, 
 \Cref{thm:rankable implies termination},
-take the set $S$ of traces \lo{TODO: We should find a better name for traces $s \in S$.} as a probability space, and define the same random variables $T_n, X_n, Y_n, T_M^{\tY}$. As before, $(Y_n)_{n \in \omega}$ is a supermartingale, and because $M$ is now assumed to be antitone rankable, it is an antitone strict supermartingale with respect to the stopping time $T_M^{\tY}$. Therefore, it follows from \Cref{thm:a-c strict} that $T_M^{\tY}$ is almost-surely finite.
+take the set $S$ of traces \lo{TODO: We should find a better name for traces $s \in S$.} as a probability space, and define the same random variables $T_n, X_n, Y_n, T_M^{\tY}$. As before, $(Y_n)_{n \in \omega}$ is a supermartingale, and because $M$ is now assumed to be antitone rankable, it is an antitone strict supermartingale with respect to the stopping time $T_M^{\tY}$. Therefore, it follows from \Cref{thm:a-c strict} that $T_M^{\tY} < \infty$ a.s.
 \end{proof}
 
-\paragraph{}
+%\paragraph{}
 As before, constructing antitone ranking fuctions completely is not necessary, and there is a corresponding notion of an antitone partial ranking function.
 
 Define an \emph{antitone partial ranking function} on a closed term $M$ to be a partial function $F : Rch(M) \rightharpoonup \mathbb{R}$ such that for some antitone function $\epsilon : \mathbb{R}_{\geq 0} \to \mathbb{R}_{>0}$
@@ -211,7 +210,7 @@ Define an \emph{antitone partial ranking function} on a closed term $M$ to be a 
 
 As a corollary, any term which admits an antitone partial ranking function terminates almost surely.
 
-\paragraph{\Cref{ex:ac-ranking} revisited}
+\paragraph*{\Cref{ex:ac-ranking} revisited}
 \akr{All of these ranking functions are slightly incorrect, because $\Xi \, \underline n$ reduces to something like $\Xi \, (\underline n + 1)$ then $(\lambda z. \text{something}[\Xi/f]) (\underline n + 1)$, rather than reducing the argument first. This could be fixed by appealing to the confluent semantics version of the antitone ranking theorem, but it would be nice to have at least some examples here illustrating how antitone ranking functions work, rather than actually saving all these examples until the end.
 
 Even though the difference is quite trivial, this was actually the original motivating example for the confluent trace semantics.}
@@ -310,14 +309,18 @@ Hence this is a valid partial antitone ranking function and the term is AST.
 \, 10
 \]
 To construct an antitone ranking function, we solve the recurrence relation:
-\[
-\left\{
-\begin{array}{rll}
-z_0 &=& 0\\
-n \geq 1, \quad z_n &>& \dfrac{n}{2n + 1} \, z_{n-1} + \dfrac{n+1}{2n + 1} \, z_{n+1}.
-\end{array}
-\right.
-\]
+% \[
+% \left\{
+% \begin{array}{rll}
+% z_0 &=& 0\\
+% n \geq 1, \quad z_n &>& \dfrac{n}{2n + 1} \, z_{n-1} + \dfrac{n+1}{2n + 1} \, z_{n+1}.
+% \end{array}
+% \right.
+% \]
+\begin{align*}
+z_0 &= 0\\
+n \geq 1, \quad z_n &> \dfrac{n}{2n + 1} \, z_{n-1} + \dfrac{n+1}{2n + 1} \, z_{n+1}.
+\end{align*}
 For $n > 2$, $z_n = \log(n-1)$ works. The expected decrease is $\frac 1 2(\log(1+\frac 1 {(n-1)^2-1}) - \frac 1 {2n+1} \log(1 + \frac 2 {n-2}))$, and using the fact that $\frac x {x+1} \leq \log (1+x) \leq x$ for $x > 0$,\lo{The preceding inequality is incorrect: for $x \in (0, 1)$, $\log (1 + x) > x$.} this is at least $\frac 1 2(\frac 1 {(n-1)^2} - \frac 1 {2n + 1} \frac 2 {n-2}) = \frac {n^2}{2(n-1)^2(2n+1)(n-2)}$, which (again for $n > 2$) is positive and antitone. For $n = 0, 1, 2$, we take $\epsilon$ to be 9/40 (the same as its value at 3), then set $z_2 = 2 \log 2 - \log 3 - 1, z_1 = 3 \log 2 - 2 \log 3 - 3, z_0 = 4 \log 2 - 3 \log 3 - 6$. Some of those values are negative, but it's still bounded below, so by adding a constant offset it can be corrected, and the term is AST.
 
 \end{example}
@@ -343,7 +346,7 @@ If instead, we take the ranking function to be defined after the $\tY$-reduction
 For each $n$, $\Theta[n]$ reduces to either $0$ or $\Theta[n+1]$, with a $\tY$-reduction only in the latter case, and the condition that this is an antitone partial ranking function is that $n \geq \frac{(n-1)(n+1)}{n} + \frac{n-1}{n} \epsilon(n+1)$ and $12 \geq 11 + \epsilon(11)$. These are satisfied by setting $\epsilon(x) = \min(1, 1/x)$, therefore this term is AST.
 \end{example}
 
-\paragraph{Completeness}
+\paragraph*{Completeness}
 It seems very likely that this method is complete in the case that every reachable term is AST, but we have been unable to actually prove this. It is certainly at least capable of proving the termination of terms which terminate arbitrarily slowly (in the sense that there is no similar limitation to Theorem \ref{thm:rankable implies termination}, which can only prove termination of $\tY$-PAST terms).
 
 The following theorem does not prove completeness, but is suggestive in that direction:

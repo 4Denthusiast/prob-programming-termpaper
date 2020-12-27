@@ -2,9 +2,9 @@
 \section{Supermartingales}
 \label{sec:supermartingales}
 
-One approach to proving that a term terminates almost surely is to find some variant that is bounded below and, on average, decreases sufficiently quickly that it must eventually reach 0, similarly to the approach taken in 
+One approach to proving that a term terminates almost surely is to find some variant that is bounded below and, on average, decreases sufficiently quickly that it must eventually reach 0, similarly to the approach taken by 
 %\citep{DBLP:journals/pacmpl/McIverMKK18} 
-\cite{DBLP:conf/popl/FioritiH15} for imperative programs.
+\cite{DBLP:conf/popl/FioritiH15} and others for imperative programs.
 
 These variants are defined as functions from reachable terms (i.e.~possible states of the program's execution) to real numbers. Specifically, let the set of reachable terms from a given closed starting term $M$ be $Rch(M) := \{N \in \Lambda \mid M \to^* N \}$, with the $\sigma$-algebra induced as a subset of $\Lambda$.
 
@@ -15,6 +15,7 @@ A \emph{ranking function on $M \in \Lambda^0$} is a measurable function $f:\math
     \item $f(E[\tsample]) \geq \int_I f(E[\underline{x}]) \, \Leb(\mathrm{d}x)$
     \item $f(E[R]) \geq f(E[R'])$ for any other redex $R$, where $R \to R'$.
 \end{enumerate}
+\lo{Ranking function $f$ is not required to satisfy: $f(N) = 0$ iff $N$ is a value.}
 We say that the ranking function $f$ is \emph{strict} if there exists $\epsilon > 0$ such that $f(N) = 0$ iff $N$ is a value; and for all $E$ and $R \to R'$, $f(E[R']) \leq f(E[R]) - \epsilon$.
 
 Any closed term for which a ranking (respectively, strict ranking) function exists is called \emph{rankable} (respectively, \emph{strictly rankable}). 
@@ -37,12 +38,33 @@ A \emph{ranking supermartingale} is a $\epsilon$-ranking supermartingale for som
 \end{definition}
 
 \begin{remark}
-\changed[lo]{The original definition of ranking supermartingale, due to \citep{DBLP:conf/cav/ChakarovS13,DBLP:conf/popl/FioritiH15}, does not refer to a stopping time explicitly:
+\changed[lo]{Our notion of ranking supermartingale is a slight generalisation of the original definition, due to \citep{DBLP:conf/cav/ChakarovS13,DBLP:conf/popl/FioritiH15}, which does not refer to a stopping time explicitly:
 Fioriti and Hermanns call a supermartingale $(Y_n)_{n \in \omega}$ \emph{ranking} if $Y_n \geq 0$, and there exists $\epsilon > 0$ such that $\expect{Y_{n+1} \mid \calF_n} \leq Y_n - \epsilon \cdot 1_{\set{Y_n > 0}}$.}
 \end{remark}
 
 Intuitively $Y_n$ gives the rank of the program after $n$ steps of computation, and $T$ is the time at which it reaches a value (which may be infinite if it fails to terminate).
 In a $\epsilon$-ranking supermartingale, each computation step causes a strict decrease in rank of at least $\epsilon$, provided the term in question is not a value.
+
+\begin{lemma}%[{\citep[Lemma 5.5]{DBLP:conf/popl/FioritiH15}}]
+% \citep[Prop 1]{DBLP:conf/popl/ChatterjeeFNH16}}
+\label{lem:rank-PAST}
+Let $(Y_n)_{n \in \omega}$ be a $\epsilon$-ranking supermartingale with respect to the stopping time $T$, then $T < \infty$ almost surely, and $\expect{T} \leq \frac{\expect{Y_0}}{\epsilon}$.
+\end{lemma}
+
+\begin{proof}
+We first prove (by induction on $n$): for all $n \in \omega$
+\[
+%\forall n \in \omega \, . \, 
+\expect{Y_n} \leq \expect{Y_0} - \epsilon \cdot \big(\textstyle\sum_{i=0}^{n-1} \mathbb{P}[T > i]\big).
+\]
+It follows that $\sum_{i=0}^{\infty} \mathbb{P}[T > i]$ converges; hence we have $\lim_{i \to \infty} \mathbb{P}[T > i] = 0$ and so $\mathbb{P}[T < \infty] = 1$.
+It then remains to observe: if $T < \infty$ a.s., then $\expect{T} = \sum^\infty_{i=0} \mathbb{P}[T > i]$.
+\end{proof}
+
+\begin{remark}
+\changed[lo]{\Cref{lem:rank-PAST} is a slight extension of \citep[Lemma 5.5]{DBLP:conf/popl/FioritiH15},
+which asserts the same result for the specific stopping time $T : s \mapsto \min\set{n \mid Y_n(s) = 0}$.}
+\end{remark}
 
 Let $T$ and $T'$ be stopping times adapted to $(\calF_n)_{n \in \omega}$.
 Recall the $\sigma$-algebra (consisting of measurable subsets ``prior to $T$'')
@@ -61,26 +83,7 @@ Let $(X_n)_{n\in \omega}$ be a supermartingale, and $(T_n)_{n \in \omega}$ a seq
 \end{enumerate}
 \end{theorem}
 
-\begin{lemma}%[{\citep[Lemma 5.5]{DBLP:conf/popl/FioritiH15}}]
-% \citep[Prop 1]{DBLP:conf/popl/ChatterjeeFNH16}}
-\label{lem:rank-PAST}
-Let $(Y_n)_{n \in \omega}$ be a $\epsilon$-ranking supermartingale with respect to the stopping time $T$, then $T < \infty$ almost surely, and $\expect{T} \leq \frac{\expect{Y_0}}{\epsilon}$.
-\end{lemma}
-
-\begin{proof}
-We first prove (by induction on $n$): for all $n \in \omega$
-\[
-%\forall n \in \omega \, . \, 
-\expect{Y_n} \leq \expect{Y_0} - \epsilon \cdot \big(\textstyle\sum_{i=0}^{n-1} \mathbb{P}[T > i]\big).
-\]
-It follows that $\sum_{i=0}^{\infty} \mathbb{P}[T > i]$ converges; hence we have $\lim_{i \to \infty} \mathbb{P}[T > i] = 0$ and so $\mathbb{P}[T < \infty] = 1$.
-It then remains to observe: if $T < \infty$ a.s., then $\expect{T} = \sum^\infty_{i=0} \mathbb{P}[T > i]$.
-\end{proof}
-
-\changed[lo]{\Cref{lem:rank-PAST} is a slight extension of \citep[Lemma 5.5]{DBLP:conf/popl/FioritiH15},
-wherein the stopping time $T$ is assumed to be the random variable $s \mapsto \min\set{n \mid Y_n(s) = 0}$.}
-
-\medskip
+\subsection{Ranking functions and supermartingales}
 
 Our first result is the following theorem.
 \begin{theorem}[Rankability] 
@@ -342,7 +345,8 @@ f_{2, n+1}(M)(s) \leq \int_I f(E[\underline{r}]) \, \mu_{leb}(\textrm{d} r)
 This concludes the proof of %\Cref{thm:rankable gives supermartingale}. 
 \Cref{thm:rankable and strict rankable}. \hfill \qed
 
-\medskip
+\subsection{Soundness of rankability}
+
 As before, fix $M \in \Lambda^0$.
 Define random variables on the probability space $(S, \calF, \mu)$:
 \begin{align}
@@ -374,7 +378,7 @@ Moreover
 $T_M^\tY$ is a stopping time adapted to $(\calF_{T_n})_{n \in \omega}$.
 \end{restatable}
 
-\begin{theorem}[Soundness] \label{thm:rankable implies termination}
+\begin{theorem}[Soundness of rankability] \label{thm:rankable implies termination}
 \begin{enumerate}
 \item If a closed SPCF term $M$ is rankable, then $M$ is AST (equivalently, $T^{\tY}_M < \infty$ almost surely), and $M$ is $\tY$-positively almost-sure terminating ($\tY$-PAST) i.e.~$\expect{T^{\tY}_M} < \infty$. 
 
