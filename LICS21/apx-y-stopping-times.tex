@@ -1,19 +1,18 @@
-% !TEX root=./probabilisticProgrammingMartingales.tex
+% !TEX root=./main.tex
 
 \newcommand\transform[1]{{\ulcorner{#1}\urcorner}}
 
 %\section{$\tY$ stopping times are finite}
-
+\iffalse
 As before, fix a $M \in \Lambda^0$.
 Recall the random variables on $(S, \calF, \mu)$:
 \begin{align*}
 T_0(s) & := 0 \\
 T_{n+1}(s) & := \min \{ k \mid k>T_n(s), M_k(s) \textrm{ a value or of form } E[\tY \lambda x. N] \}
 \end{align*}
+\fi
 
-\begin{lemma}
-$T_0, T_1, T_2, \cdots$ are an increasing sequence of stopping times adapted to $(\calF_n)_{n \in \omega}$, and each $T_i$ is bounded.
-\end{lemma}
+\TnBounded*
 
 We first show that $T_1$ is bounded i.e.~$T_1 \leq n$, for some $n \in \omega$.
 
@@ -93,3 +92,21 @@ One should check that it extends to the call-by-value calculus.
   bibsource = {dblp computer science bibliography, https://dblp.org}
 }
 \fi
+
+\TMtYStoppingTime*
+\begin{proof}
+%For each $n \in \omega$, $\set{T_M^\tY = n} \in \calF_{T_n}$.
+To see $\set{T_M^\tY = n} \in \calF_{T_n}$ for a given $n$, we need to show that $\set{T_M^\tY = n} \cap \set{T_n \leq i} \in \calF_i$, for all $i \in \omega$.
+Let $\cal V$ be the measurable subset of $\Lambda^0$ given by the countable union of $\set{\alpha_j} \times \mathbb{R}^j$ where $\alpha_j$ ranges over skeletons which are values with $j$ place-holders, and $j$ ranges over $\omega$.
+Let $\cal W$ be the measurable subset of $\Lambda^0$ given by the countable union of $\set{\beta_j} \times \mathbb{R}^j$ where $\beta_j$ ranges over skeletons which are not values, and with $j$ place-holders, and $j$ ranges over $\omega$.
+%Then $\set{T_M^\tY = n} \cap \set{T_n \leq i}$ is given by
+Then, it suffices to observe that $\set{T_M^\tY = n} \cap \set{T_n \leq i}
+= \bigcup_{l=n}^i 
+\big( M_l^{-1} ({\cal V}) \cap  
+M_{l-1}^{-1} ({\cal W}) \cap 
+\set{T_n = l} \big)
+$.
+\end{proof}
+
+
+

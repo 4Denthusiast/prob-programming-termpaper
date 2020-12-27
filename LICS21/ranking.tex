@@ -1,3 +1,4 @@
+% !TEX root = main.tex
 \section{Constructing Ranking Functions}
 \label{sec:ranking}
 
@@ -21,7 +22,11 @@ terminates with only 2 $\tY$-reductions on average i.e.~$\expect{T_M^\tY} = 2$, 
 \end{example}
 
 \begin{theorem} \label{thm:minimal}
-Given a closed term $M$, the function $f:Rch(M) \to \mathbb R$ given by $f(N) = \mathbb E [\text{the number of }\tY\text{-reduction steps from }N\text{ to a value}]$, if it exists, is the least of all possible ranking functions of $M$.
+Given a closed term $M$, the function $f:Rch(M) \to \mathbb R$ given by 
+\[
+f(N) := \mathbb E [\text{number of }\tY\text{-reduction steps from }N\text{ to a value}]
+\] 
+if it exists, is the least of all possible ranking functions of $M$.
 \end{theorem}
 \begin{proof}
 Let $f$ be the candidate least ranking function defined above, and suppose $g$ is another ranking function such that $f(N) > g(N)$ for some $N \in Rch(M)$. The restrictions of $f$ and $g$ to $Rch(N)$ have the same properties assumed of $f$ and $g$, so assume w.l.o.g.~that $N=M$. The difference $g - f$ is then a supermartingale (with the same setup as in the proof of %\Cref{thm:rankable gives supermartingale}
@@ -47,8 +52,8 @@ Consider the term
 &) \, \underline{0}
 \end{align*}
 which generates a geometric distribution (let $\Theta = \lambda f, n : \tif{\tsample \underline{- 0.5} < 0}{n}{f (n\underline{+ 1})}$, then the term is $(\tY \Theta)\ \underline 0$).
-    Despite its simplicity, its $Rch$ contains all the terms
-
+    Despite its simplicity, its $Rch$ contains all the terms: see \Cref{fig:geometric distribution}.
+\begin{figure}
 \begin{tikzpicture}[node distance=0.5em, anchor=west]
     \node (1) at (0,-0) {$\tY\ \Theta\ \underline 0$};
     \node (2) at (0,-1) {$(\lambda z. (\lambda n. \tif{\tsample \underline{- 0.5} < 0}{n}{\tY\ \Theta\ (n \underline{+ 1})}) z)\ \underline i$};
@@ -71,7 +76,8 @@ which generates a geometric distribution (let $\Theta = \lambda f, n : \tif{\tsa
     \draw [->] (9.west) to [bend left=45] (2.west);
     \draw [->] (6) to (7);
 \end{tikzpicture}
-
+\caption{Some reachable terms of $\tY\ \Theta\ \underline 0$\label{fig:geometric distribution}}
+\end{figure}
 \end{example}
 
 Even in this simple case, defining a ranking function explicitly is awkward because of the number of cases, although in most cases, because the value need only be greater than or equal to that of the next term in sequence, it suffices to take the ranking function as having the same value as the next term, so that overall it takes only 3 distinct values.
@@ -79,7 +85,7 @@ Even in this simple case, defining a ranking function explicitly is awkward beca
 
 The definition of rankability is also inconvenient for syntactic sugar. It could be useful, for example, to define $M \oplus_p N = \tif{\tsample - p < 0} M N$, where $M \oplus_p N$ reduces to $M$ or $N$, depending on the first value of $s$\lo{Need a name for $s$.}, with probability $p$ resp.~$(1-p)$. Technically though, it reduces first to $\tif{\underline r - p < 0} M N$ for all $r \in I$, so those terms all need values of the ranking function too.
 
-\paragraph{}
+%\paragraph{}
 In both of these cases, there are only some values of the ranking function that are semantically important. 
 \begin{definition}
 Define a \emph{partial ranking function} on a closed term $M$ to be a partial function $f : Rch(M) \rightharpoonup \mathbb R$ such that
@@ -124,7 +130,7 @@ A partial ranking function could be defined with respect to this shortcut reduct
 
 A similar procedure would work for other forms of syntactic sugar. If a closed term $N$ eventually reduces to one of a set of other terms $\{N_i \mid i \in I\}$ with certain probabilities, a partial ranking function defined with respect to a reduction sequence that skips straight from $N$ to $N_i$ is also a valid partial ranking function for the original reduction function, and therefore its existence implies almost sure termination. There is a caveat, however, that $\tY$-reduction steps skipped over in the shortcut still need to be counted for the expected number of $\tY$-reduction steps.
 
-\paragraph{}
+%\paragraph{}
 With this abbreviation, the geometric distribution example from earlier can be written as $(\tY \lambda f n.\ n \oplus_{0.5} f(n+1)) \, \underline 0$. It is then easy to see that the following is a partial ranking function:
 \begin{align*}
 (\tY \lambda f n.\ n \oplus_{0.5} f(n+1))\ N & \mapsto 2 \\

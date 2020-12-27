@@ -4,42 +4,61 @@
 
 \subsection{Syntax of SPCF}
 
-The language SPCF is a simply-typed lambda calculus with sampling of real numbers from $[0,1]$ and unbounded scoring, following \cite{MakOPW21}. Types and terms are defined as follows, where $r$ is a real number, $x$ is a variable, $f : \mathbb{R}^n \to \mathbb{R}$ is any measurable function, and $\Gamma$ is an environment:
+The language SPCF is a simply-typed lambda calculus with sampling of real numbers from $[0,1]$ and unbounded scoring, following \cite{MakOPW21}. 
+Types and terms are defined as follows, where $r$ is a real number, $x$ is a variable, $f : \mathbb{R}^n \to \mathbb{R}$ is any measurable function, and $\Gamma$ is an environment:
 \begin{align*}
-  & \text{types } A, B ::= \textsf{R}  \mid  A \to B \\
-  & \text{values } V ::= \lambda x.M  \mid  \underline{r} \\
-  & \text{terms } M, N ::= V  \mid  x  \mid  M_1 \, M_2  \mid  \underline{f}(M_1,\dots ,M_n)  \mid  \tY M  \mid  \tif{M < 0}{N_1}{N_2}  \mid  \tsample  \mid  \tscore(M)
+  \text{types } A, B &::= \textsf{R}  \mid  A \to B \\
+  \text{values } V &::= \lambda x.M  \mid  \underline{r} \\
+  \text{terms } M, N &::= V  \mid  x  \mid  M_1 \, M_2  \mid  \underline{f}(M_1,\dots ,M_n)  \mid  \tY M \\
+   & \qquad \mid  \tif{M < 0}{N_1}{N_2}  \mid  \tsample  \mid  \tscore(M)
 \end{align*}
-\begin{align*}
-  \frac{}{\Gamma ; x:A \vdash x:A} \qquad
-  \frac{\Gamma ; x:A \vdash M : B}{\Gamma \vdash \lambda x.M : A \to B} \qquad
-  \frac{}{\underline{r} : \textsf{R}} \qquad
-  \frac{\Gamma \vdash M:A \to B \quad \Gamma \vdash N : A}{\Gamma \vdash M \, N : B} \\ \\
-  \frac{\Gamma \vdash M_1:\textsf{R} \dots \Gamma \vdash M_n:\textsf{R}}{\Gamma \vdash \underline{f}(M_1,\dots,M_n) : \textsf{R}} \ f : \mathbb{R}^n \to \mathbb{R} \qquad
-  \frac{\Gamma \vdash M : (A \to B) \to (A \to B)}{\Gamma \vdash \tY M : (A \to B)} \\ \\
-  \frac{\Gamma \vdash M : \textsf{R} \quad \Gamma \vdash N_1 : A \quad \Gamma \vdash N_2 : A}{\Gamma \vdash \tif{M < 0}{N_1}{N_2} : A} \qquad
-  \frac{}{\Gamma \vdash \tsample : \textsf{R}} \qquad
-  \frac{\Gamma \vdash s : \textsf{R}}{\Gamma \vdash \tscore (s) : \textsf{R}}
-\end{align*}
+The typing rules are presented in \Cref{fig:typing rules}.
+Terms are identified up to $\alpha$-equivalence, as usual. 
+The set of all terms is denoted $\Lambda$, and the set of closed terms is denoted $\Lambda^0$.
 
-Terms are identified up to $\alpha$-equivalence, as usual. The set of all terms is denoted $\Lambda$, and the set of closed terms is denoted $\Lambda^0$.
-
-\paragraph{}
+%\paragraph{}
 To define the reduction relation, let \emph{evaluation contexts} be of the form:
 \begin{align*}
   E ::= & \, [\,] \mid E \, M \mid V \, E \mid \underline{f}(\underline r_1,\dots ,\underline r_{k-1}, E, M_{k+1}, \dots, M_n) \\ & \mid \tY E \mid \tif{E<0}{M_1}{M_2} \mid \tscore (E)
 \end{align*}
 then a term reduces if it is formed by substituting a redex in a context i.e.
+
+\begin{figure*}
+\begin{align*}
+  \frac{}{\Gamma ; x:A \vdash x:A} 
+  \qquad
+  \frac{\Gamma ; x:A \vdash M : B}{\Gamma \vdash \lambda x.M : A \to B} 
+  \qquad
+  \frac{}{\underline{r} : \textsf{R}} 
+  \qquad
+  \frac{\Gamma \vdash M:A \to B \quad \Gamma \vdash N : A}{\Gamma \vdash M \, N : B} 
+  \\ \\
+  \qquad
+  \frac{\Gamma \vdash M : (A \to B) \to (A \to B)}{\Gamma \vdash \tY M : (A \to B)}
+  \qquad
+  \frac{\Gamma \vdash M_1:\textsf{R} \quad \dots \quad \Gamma \vdash M_n:\textsf{R}}{\Gamma \vdash \underline{f}(M_1,\dots,M_n) : \textsf{R}} \ (f : \mathbb{R}^n \to \mathbb{R})    
+  \\ \\
+  \qquad
+  \frac{\Gamma \vdash M : \textsf{R} \quad \Gamma \vdash N_1 : A \quad \Gamma \vdash N_2 : A}{\Gamma \vdash \tif{M < 0}{N_1}{N_2} : A}
+  \qquad
+  \frac{}{\Gamma \vdash \tsample : \textsf{R}} 
+  \qquad
+  \frac{\Gamma \vdash s : \textsf{R}}{\Gamma \vdash \tscore (s) : \textsf{R}}
+\end{align*}
+\caption{Typing rules of SPCF \label{fig:typing rules}}
+\end{figure*}
+
 \begin{align*}
   E[(\lambda x.M) N] & \to E[M[N/x]] \\
   E[\underline f (\underline r_1, \dots , \underline r_n)] & \to E[\underline{f(r_1,\dots,r_n)}] \\
-  E[\tY \lambda x. M] & \to E[\lambda z. M[(\tY \lambda x. M)/x] z] \text{ where $z$ is not free in $s$}\\
+  E[\tY \lambda x. M] & \to E[\lambda z. M[(\tY \lambda x. M)/x] z] \\
+  & \qquad \qquad \text{ where $z$ is not free in $s$}\\
   E[\tif{\underline r < 0}{M_1}{M_2}] & \to E[M_1] \text{ where }r < 0 \\
   E[\tif{\underline r < 0}{M_1}{M_2}] & \to E[M_2] \text{ where }r \geq 0 \\
   E[\tsample] & \to E[\underline r] \text{ where } r \in [0,1] \\
   E[\tscore(\underline r)] & \to E[\underline r].
 \end{align*}
-\changed[lo]{We write $\to^\ast$ for the reflexive, transitive closure of $\to$.}
+We write $\to^\ast$ for the reflexive, transitive closure of $\to$.
 \lo{The $\tscore$ rule should have a side condition: if $r > 0$.}
 
 Every closed well-typed term either is a value or reduces to another term.
