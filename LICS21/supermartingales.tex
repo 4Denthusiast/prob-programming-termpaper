@@ -15,7 +15,9 @@ A \emph{ranking function on $M \in \Lambda^0$} is a measurable function $f:\math
     \item $f(E[\tsample]) \geq \int_I f(E[\underline{x}]) \, \Leb(\mathrm{d}x)$
     \item $f(E[R]) \geq f(E[R'])$ for any other redex $R$, where $R \to R'$.
 \end{enumerate}
-\lo{Ranking function $f$ is not required to satisfy: $f(N) = 0$ iff $N$ is a value.}
+\lo{@Andrew: As defined, ranking function $f$ is not required to satisfy: $f(N) = 0$ iff $N$ is a value.
+But for AST analysis, we always require $f$ to satisfy this property.
+It seems cleaner to include this in the definition.}
 We say that the ranking function $f$ is \emph{strict} if there exists $\epsilon > 0$ such that $f(N) = 0$ iff $N$ is a value; and for all $E$ and $R \to R'$, $f(E[R']) \leq f(E[R]) - \epsilon$.
 
 Any closed term for which a ranking (respectively, strict ranking) function exists is called \emph{rankable} (respectively, \emph{strictly rankable}). 
@@ -27,7 +29,7 @@ It will be demonstrated later that for any rankable term $M$, if $(M_n)_{n \in \
 %\paragraph{}
 
 Fix a probability space $(\Omega, \calF, \mathbb{P})$. 
-We have in mind $\Omega = S$, and $\mathbb{P} = \mu$.
+(In subsequent applications to AST analysis, $\Omega = S$, and $\mathbb{P} = \mu$.)
 
 \begin{definition}\rm
 \begin{enumerate}
@@ -85,10 +87,14 @@ Let $(X_n)_{n\in \omega}$ be a supermartingale, and $(T_n)_{n \in \omega}$ a seq
 
 \subsection{Ranking functions and supermartingales}
 
+%\emph{Notation.}
+\changed[lo]{For the rest of this section, fix the probability space $(S, \calF, \mu)$, and a closed SPCF term $M$.
+For $n \in \omega$, define the random variables $M_n(s) := \pi_0 (\red^n(M, s))$, and the filtration $(\mathcal{F}_n)_{n \in \omega}$ where $\mathcal{F}_n := \sigma(M_1, \cdots, M_n)$.}
+
 Our first result is the following theorem.
 \begin{theorem}[Rankability] 
 \label{thm:rankable and strict rankable}
-If a closed SPCF term $M$ is rankable (respectively, strictly rankable) by $f$ satisfying $f(N) = 0$ iff $N$ is a value, then $(f(M_n))_{n \in \omega}$, where the random variable $M_n(s) := \pi_0 (\red^n(M, s))$, is a supermartingale (respectively, ranking supermartingale) adapted to the filtration $(\mathcal{F}_n)_{n \in \omega}$ where $\mathcal{F}_n = \sigma(M_1, \cdots, M_n)$.
+If a closed SPCF term $M$ is rankable (respectively, strictly rankable) by $f$ satisfying $f(N) = 0$ iff $N$ is a value, then $(f(M_n))_{n \in \omega}$ is a supermartingale (respectively, ranking supermartingale with stopping time $T_M: s \mapsto \min \set{n \mid f(M_n(s)) = 0}$) adapted to the filtration $(\mathcal{F}_n)_{n \in \omega}$. %where $\mathcal{F}_n = \sigma(M_1, \cdots, M_n)$.
 \end{theorem}
 
 
@@ -103,7 +109,7 @@ Given an $\omega$-sequence (e.g.~$s \in S$) and $m \in \omega$, we write $s_{\le
 %M_n(s) &:= \pi_0 (\red^n(M, s))\\
 %\ndraw{n}{s} &:= |\{k < n \mid \exists E: M_k(s) = E[\tsample]\}|,
 %\end{align*}
-Fix $M \in \Lambda^0$; let $n \in \omega$, set
+For $n \in \omega$, define
 \begin{align*}
 %M_n(s) &:= \pi_0 (\red^n(M, s))\\
 \ndraw{n}{s} &:= |\{k < n \mid \exists E: M_k(s) = E[\tsample]\}|,
@@ -144,7 +150,7 @@ the inequality above follows from \Cref{lem:key rankable}.
 \fi
 
 We say that a given SPCF term is: %\emph{type-1} (respectively 2, 3 and 4) if it has the shape $E[\tY \lambda x. N]$ (respectively $E[\tsample]$, $E[R]$ where $R$ is any other redex, and of a value).
-\emph{type-1} if it has the shape $E[\tY \lambda x. N]$, \emph{type-2} if it has the shape $E[\tsample]$; \emph{type-3} if it has the shape $E[R]$ where $R$ is any other redex, and \emph{type-4} if it is a value.
+\emph{type 1} if it has the shape $E[\tY \lambda x. N]$, \emph{type 2} if it has the shape $E[\tsample]$; \emph{type 3} if it has the shape $E[R]$ where $R$ is any other redex, and \emph{type 4} if it is a value.
 Henceforth fix an $n \geq 0$, and define $\mathbf{T}_i := \set{s \mid M_n(s) \hbox{ is type-$i$}}$.
 It is straightforward to see that each $\mathbf{T}_i \in \calF_n$, and $\set{\mathbf{T}_1, \mathbf{T}_2, \mathbf{T}_3, \mathbf{T}_4}$ is a partition of $S$.
 %By abuse of language, we refer to the three respective types of redexes as type-$1$, 2 and 3.
@@ -234,6 +240,9 @@ For all $i \in \set{1, 2, 3, 4}$ and $A \in \calF_n$
 \int_A \mu(\dif s) \, f(M_{n+1})[s \in \mathbf{T}_i] \leq \int_A \mu(\dif s) \, f(M_n)[s \in \mathbf{T}_i]
 \; \footnote{where (the Iverson bracket) $[P] := 1$ if the statement $P$ hold, and 0 otherwise.}
 \] 
+\changed[lo]{Thus 
+%$\int_A \mu(\dif s) \, f(M_{n+1}) \leq \int_A \mu(\dif s) \, f(M_n)$, i.e., 
+$\mathbb{E}[f(M_{n+1}) \mid \calF_n] \leq f(M_n)$ a.s.}
 \end{lemma}
 
 \begin{proof}
@@ -343,11 +352,13 @@ f_{2, n+1}(M)(s) \leq \int_I f(E[\underline{r}]) \, \mu_{leb}(\textrm{d} r)
 **]
 \fi
 This concludes the proof of %\Cref{thm:rankable gives supermartingale}. 
-\Cref{thm:rankable and strict rankable}. \hfill \qed
+\Cref{thm:rankable and strict rankable}. %\hfill \qed
 
 \subsection{Soundness of rankability}
 
-As before, fix $M \in \Lambda^0$.
+In the rest of this section we show that if $M \in \Lambda^0$ is rankable by $f$, then $M$ is AST.
+
+Let $f$ be a ranking function on $M$ satisfying $f(N) = 0$ iff $N$ is a value.
 Define random variables on the probability space $(S, \calF, \mu)$:
 \begin{align}
 T_{-1}(s) & := -1 \nonumber \\
@@ -355,7 +366,8 @@ T_{n+1}(s) & := \min \{ k \mid k>T_n(s), M_k(s) \textrm{ a value} \nonumber\\
 & \qquad\qquad\qquad\qquad\qquad \hbox{or of form } E[\tY \lambda x. N] \} \nonumber \\
 X_n(s) & := f(M_n(s)) \nonumber \\
 Y_n(s) & := X_{T_n}(s) \nonumber \\
-T_M^\tY(s) &:= \min \set{n \mid M_{T_n(s)}(s) \textrm{ is a value}} \label{eq:y stopping time}
+T_M^\tY(s) &:= \min \set{n \mid M_{T_n(s)}(s) \textrm{ is a value}} \label{eq:y stopping time} 
+%T_M(s) & := \min \set{n \mid X_n(s) = 0} \nonumber
 \end{align}
 
 %The random variable $T_0(s)$ is the least $k \geq 0$ such that $M_k(s)$ is either a value or a $\tY$-redex.
@@ -364,11 +376,14 @@ T_M^\tY(s) &:= \min \set{n \mid M_{T_n(s)}(s) \textrm{ is a value}} \label{eq:y 
 
 %Thus the random variable $T_n(s)$ is the least $k \geq 0$ such that $M_k(s)$ is either a value or the $(n+1)$-occurrence of a $\tY$-redex (in the reduction sequence $M_0(s), M_1(s), \ldots$).
 %Notice that each $T_n$ is a stopping time w.r.t.~filtration $(\calF_n)_{n \in \omega}$.
-First a useful property about the r.v.~$T_0, T_1, T_2, \cdots$.
+We first state a useful property about r.v.~$T_0, T_1, T_2, \cdots$.
 \begin{restatable}{lemma}{TnBounded}
 \label{lem:TnBounded}
-$T_0, T_1, T_2, \cdots$ are an increasing sequence of stopping times adapted to $(\calF_n)_{n \in \omega}$, and each $T_i$ is bounded.
+$(T_n)_{n \in\omega}$ is an increasing sequence of stopping times adapted to $(\calF_n)_{n \in \omega}$, and each $T_i$ is bounded.
 \end{restatable}
+
+%The random variable $T_M$ is a stopping time w.r.t.~filtration $(\calF_n)_{n \in \omega}$. 
+%Since $f(M_n(s)) = 0$ iff $M_n(s)$ is a value, $T_M$ is the \emph{runtime of $M$}.
 
 The random variable $T_M^\tY$, which we call the \emph{$\tY$-runtime of $M$}, can equivalently be defined as the number of $\tY$-reduction steps in the reduction sequence of $M$. 
 Note that, as the type system ensures that the reduction relation excluding $\tY$-reduction is strongly normalising, only finitely many reductions can occur in a row without one of them being a $\tY$-reduction, therefore $T_M^\tY < \infty$ a.s.~iff $M$ is AST. 
@@ -388,13 +403,15 @@ $T_M^\tY$ is a stopping time adapted to $(\calF_{T_n})_{n \in \omega}$.
 
 \begin{proof}
 Let $f$ be a ranking function on $M$.
-For 1, since $T_0, T_1, T_2, \cdots$ are an increasing sequence of stopping times, each is bounded and adapted to $(\calF_n)_{n \in \omega}$ (\Cref{lem:TnBounded}),
+For 1, since $(T_n)_{n \in\omega}$ is an increasing sequence of stopping times, each is bounded and adapted to $(\calF_n)_{n \in \omega}$ (\Cref{lem:TnBounded}),
 and $(f(M_n))_{n \in \omega}$ is a supermartingale also adapted to $(\calF_n)_{n \in \omega}$ (\Cref{thm:rankable and strict rankable}),
 it follows from the Optional Sampling \Cref{thm:optional sampling} that $(Y_n)_{n \in \omega}$ where $Y_n := f(M_{T_n})$ is a supermartingale adapted to the filtration $(\calF_{T_n})_{n \in \omega}$.
-Since the stopping time $T_M^\tY$ is also adapted to $(\calF_{T_n})_{n \in \omega}$ (\Cref{lem:TMtY is a stopping time}), we have that $(Y_n)_{n \in \omega}$ is a $1$-ranking supermartingale.
+Notice the stopping time $T_M^\tY$ is also adapted to $(\calF_{T_n})_{n \in \omega}$ (\Cref{lem:TMtY is a stopping time}); and we have that $(Y_n)_{n \in \omega}$ is a $1$-ranking supermartingale.
 Therefore, by \Cref{lem:rank-PAST}, $T^{\tY}_M < \infty$ a.s.~and $\expect{T^{\tY}_M} < \infty$.
 
-Statement 2 follows immediately from \Cref{lem:rank-PAST}.
+%For 2, we have that $(f(M_n))_{n \in \omega}$ is a ranking supermartingale (\Cref{thm:rankable and strict rankable}) w.r.t.~stopping time $T_M$. 
+%It follows immediately from \Cref{lem:rank-PAST} that $\expect{T_M} < \infty$.
+Statement 2 follows immediately from \Cref{thm:rankable and strict rankable} and \Cref{lem:rank-PAST}.
 \end{proof}
 
 Thus the method of (strict) ranking function is sound for proving (positive) a.s.~termination of SPCF programs.
