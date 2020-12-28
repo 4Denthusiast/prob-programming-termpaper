@@ -94,7 +94,7 @@ Let $(X_n)_{n \geq 0}$ be a supermartingale, and $(T_n)_{n \geq 0}$ a sequence o
 \subsection{Ranking functions and supermartingales}
 
 %\emph{Notation.}
-\changed[lo]{Henceforth, fix the probability space $(S, \calF, \mu_{\entrosp})$, and a closed SPCF term $M$.
+\changed[lo]{Henceforth, fix the probability space $(\entrosp, \calF, \mu_{\entrosp})$, and a closed SPCF term $M$.
 For $n \geq 0$, define the random variables $M_n(s) := \pi_0 (\red^n(M, s))$, and the filtration $(\mathcal{F}_n)_{n \geq 0}$ where $\mathcal{F}_n := \sigma(M_1, \cdots, M_n)$.}
 
 Our first result is the following theorem.
@@ -137,7 +137,7 @@ It follows that ${\set{s_{\leq l}} \cdot I^\omega} \subseteq A$.
 \mid \alpha_j\in \mathsf{Sk}_j, U_{\alpha_j} \in \mathcal{B}(\Real^j), j \geq 0}\big)
 \)
 }
-%Take $M \in \Lambda^0$ (closed SPCF terms). Define, for each $n \in \omega$, the random variable $M_n : S \to \Lambda^0$ by $M_n(s) := \pi_0 (\red^n(M, s))$.
+%Take $M \in \Lambda^0$ (closed SPCF terms). Define, for each $n \in \omega$, the random variable $M_n : \entrosp \to \Lambda^0$ by $M_n(s) := \pi_0 (\red^n(M, s))$.
 
 \iffalse
 \lo{We need to show that each $f(M_n)$ is integrable. LO claimed earlier that $0 \leq f(N) \leq f(M)$ for all $N \in \mathit{Rch}(M)$.
@@ -273,7 +273,7 @@ s \in U_i
 \;
 \hbox{for some }r \in \Real^{j_i}.
 \)
-(We use the (measurable) function $\sigma_i : S \to \Real^{j_i}$ to skolemise the existentially quantified $r$.)
+(We use the (measurable) function $\sigma_i : \entrosp \to \Real^{j_i}$ to skolemise the existentially quantified $r$.)
 Equivalently
 \[
 U_i := \#\mathrm{draw}_n^{-1}(l_i) \cap M_n^{-1}(E_i[\cdot][\tsample], \Real^{j_i}) \in \calF_n.
@@ -366,7 +366,7 @@ This concludes the proof of %\Cref{thm:rankable gives supermartingale}.
 In the rest of this section we show that if $M \in \Lambda^0$ is rankable, then $M$ is AST: in other words, the method of ranking function is sound for proving a.s.~termination of SPCF programs.
 
 Let $f$ be a ranking function on $M$ satisfying $f(N) = 0$ iff $N$ is a value.
-Define random variables on the probability space $(S, \calF, \mu)$:
+Define random variables on the probability space $(\entrosp, \calF, \mu)$:
 \begin{align}
 T_{-1}(s) & := -1 \nonumber \\
 T_{n+1}(s) & := \min \{ k \mid k>T_n(s), M_k(s) \textrm{ a value} \nonumber\\
