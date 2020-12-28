@@ -41,11 +41,11 @@ Although the stronger induction hypothesis was necessary for the induction to wo
 The other condition for $(Y_n)$ to be an antitone-strict supermartingale is
 \begin{align*}
     & \expect{Y_{n+1} \mid \mathcal F_n} \\
-    = & \expect{y_{n+1} \, 1_{\set{T \geq n+1}} \mid \mathcal F_n} \\
-    = & y_{n+1} \, \expect{1_{\set{T \geq n+1}} \mid \mathcal F_n} \\ 
-    = & y_{n+1} \, 1_{\set{T \geq n}} \frac{\mathbb P[T > n+1]}{\mathbb P[T > n]} \\
-    = & (y_n - \epsilon(y_n)) \, 1_{\set{T \geq n}} \\
-    = & Y_n - \epsilon(y_n) \, 1_{\set{T \geq n}}
+    = & \expect{y_{n+1} \, {\bf 1}_{\set{T \geq n+1}} \mid \mathcal F_n} \\
+    = & y_{n+1} \, \expect{{\bf 1}_{\set{T \geq n+1}} \mid \mathcal F_n} \\ 
+    = & y_{n+1} \, {\bf 1}_{\set{T \geq n}} \frac{\mathbb P[T > n+1]}{\mathbb P[T > n]} \\
+    = & (y_n - \epsilon(y_n)) \, {\bf 1}_{\set{T \geq n}} \\
+    = & Y_n - \epsilon(y_n) \, {\bf 1}_{\set{T \geq n}}
 \end{align*}
 therefore $(Y_n)_n$ is an antitone strict supermartingale with respect to $(T,\epsilon)$.
 \end{proof}

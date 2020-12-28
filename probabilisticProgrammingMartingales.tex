@@ -450,7 +450,7 @@ We assume $\tY f^{A \to B} \, x^A \, . \, \theta^B$ is a value.}
 \begin{definition}
 We say that a supermartingale $(Y_n)_{n \geq 0}$ and a stopping time $T$ adapted to filtration $(\calF_n)_{n \geq 0}$ are \emph{antitone strict} if $Y_n \geq 0$, and there exists an antitone function $\epsilon : \nnReal \to \pReal$ satisfying
 \[
-\expect{Y_{n+1} \mid \calF_n} \leq Y_n - \epsilon (Y_n) \cdot 1_{\set{T > n}}
+\expect{Y_{n+1} \mid \calF_n} \leq Y_n - \epsilon (Y_n) \cdot {\bf 1}_{\set{T > n}}
 \]
 \end{definition}
 
@@ -501,7 +501,7 @@ We have
   \step[=]{$\calF_n \subseteq \calF_{n+1}$, definition and linearity of conditional expectation}
 \expect{Y_n - \expect{Y_{n+1} \mid \calF_n}}
   \step[\geq]{antitone strict assumption}
-\expect{\epsilon(Y_n) \cdot 1_{\set{T > n}}}
+\expect{\epsilon(Y_n) \cdot {\bf 1}_{\set{T > n}}}
 %  \step[=]{definition of conditional expectation for a discrete variable}
 \step[=]{definition of expectation conditioning on an \emph{event}}
 \mathbb P[T > n]\ \expect{\epsilon(Y_n) \mid T > n}

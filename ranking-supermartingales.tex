@@ -17,7 +17,7 @@ A \emph{ranking supermartingale} is a $\epsilon$-ranking supermartingale for som
 
 \begin{remark}
 \changed[lo]{The original definition of ranking supermartingale, due to \citep{DBLP:conf/cav/ChakarovS13,DBLP:conf/popl/FioritiH15}, does not refer to a stopping time explicitly:
-Fioriti and Hermanns call a supermartingale $(Y_n)_{n \geq 0}$ \emph{ranking} if $Y_n \geq 0$, and there exists $\epsilon > 0$ such that $\expect{Y_{n+1} \mid \calF_n} \leq Y_n - \epsilon \cdot 1_{\set{Y_n > 0}}$.}
+Fioriti and Hermanns call a supermartingale $(Y_n)_{n \geq 0}$ \emph{ranking} if $Y_n \geq 0$, and there exists $\epsilon > 0$ such that $\expect{Y_{n+1} \mid \calF_n} \leq Y_n - \epsilon \cdot {\bf 1}_{\set{Y_n > 0}}$.}
 \end{remark}
 
 Intuitively $Y_n$ gives the rank of the program after $n$ steps of computation, and $T$ is the time at which it reaches a value (which may be infinite if it fails to terminate).
