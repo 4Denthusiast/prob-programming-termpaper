@@ -9,15 +9,16 @@ One approach to proving that a term terminates almost surely is to find some var
 These variants are defined as functions from reachable terms (i.e.~possible states of the program's execution) to real numbers. Specifically, let the set of reachable terms from a given closed starting term $M$ be $Rch(M) := \{N \in \Lambda \mid M \to^* N \}$, with the $\sigma$-algebra induced as a subset of $\Lambda$.
 
 \begin{definition}\rm
+\label{def:ranking function}
 A \emph{ranking function on $M \in \Lambda^0$} is a measurable function $f:\mathit{Rch}(M) \to \mathbb{R}$ such that $f(N) \geq 0$ for all $N$, and
 \begin{enumerate}
     \item $f(E[\tY \lambda x. N]) \geq 1+ f(E[\lambda z. N[(\tY \lambda x. N)/x] z)$ where $z$ is not free in $N$
     \item $f(E[\tsample]) \geq \int_I f(E[\underline{x}]) \, \Leb(\mathrm{d}x)$
     \item $f(E[R]) \geq f(E[R'])$ for any other redex $R$, where $R \to R'$.
 \end{enumerate}
-\lo{@Andrew: As defined, ranking function $f$ is not required to satisfy: $f(N) = 0$ iff $N$ is a value.
-But for AST analysis, we always require $f$ to satisfy this property.
-It seems cleaner to include this in the definition.}
+\lo{@Andrew: As defined, ranking function $f$ is not required to satisfy: $f(N) = 0$ iff $N$ is a value. But for AST analysis, we always require $f$ to satisfy this property. It seems cleaner to include this in the definition.} 
+\akr{The fact that the ranking function can be 0 in some cases before it reaches a value is necessary to get \Cref{thm:minimal} to work neatly.}
+\lo{OK. Let's leave \Cref{def:ranking function} as it is.}
 We say that the ranking function $f$ is \emph{strict} if there exists $\epsilon > 0$ such that $f(N) = 0$ iff $N$ is a value; and for all $E$ and $R \to R'$, $f(E[R']) \leq f(E[R]) - \epsilon$.
 
 Any closed term for which a ranking (respectively, strict ranking) function exists is called \emph{rankable} (respectively, \emph{strictly rankable}). 
@@ -95,12 +96,20 @@ Let $(X_n)_{n \geq 0}$ be a supermartingale, and $(T_n)_{n \geq 0}$ a sequence o
 
 %\emph{Notation.}
 \changed[lo]{Henceforth, fix the probability space $(\entrosp, \calF, \mu_{\entrosp})$, and a closed SPCF term $M$.
-For $n \geq 0$, define the random variables $M_n(s) := \pi_0 (\red^n(M, s))$, and the filtration $(\mathcal{F}_n)_{n \geq 0}$ where $\mathcal{F}_n := \sigma(M_1, \cdots, M_n)$.}
+For $n \geq 0$, define the random variables 
+\begin{align*}
+M_n(s) &:= \pi_0 (\red^n(M, s))\\
+T_M(s) &:= \min \set{n \mid \hbox{$M_n(s)$ is a value}}
+\end{align*} 
+and the filtration $(\mathcal{F}_n)_{n \geq 0}$ where $\mathcal{F}_n := \sigma(M_1, \cdots, M_n)$.
+Thus $T_M$ is the \emph{termination time} of $M$.}
 
 Our first result is the following theorem.
 \begin{theorem}[Rankability] 
 \label{thm:rankable and strict rankable}
-If a closed SPCF term $M$ is rankable (respectively, strictly rankable) by $f$ satisfying $f(N) = 0$ iff $N$ is a value, then $(f(M_n))_{n \geq 0}$ is a supermartingale (respectively, ranking supermartingale w.r.t.~stopping time $T_M: s \mapsto \min \set{n \mid f(M_n(s)) = 0}$) adapted to $(\mathcal{F}_n)_{n \geq 0}$. %where $\mathcal{F}_n = \sigma(M_1, \cdots, M_n)$.
+If a closed SPCF term $M$ is rankable (respectively, strictly rankable) by $f$ 
+%satisfying $f(N) = 0$ iff $N$ is a value, 
+then $(f(M_n))_{n \geq 0}$ is a supermartingale (respectively, ranking supermartingale w.r.t.~stopping time $T_M$) adapted to $(\mathcal{F}_n)_{n \geq 0}$. %where $\mathcal{F}_n = \sigma(M_1, \cdots, M_n)$.
 \end{theorem}
 
 
@@ -244,11 +253,11 @@ and (\ref{eqn:partition}) holds because $\{\mathbf{T}_1, \mathbf{T}_2, \mathbf{T
 \label{lem:key rankable}
 For all $i \in \set{1, 2, 3, 4}$ and $A \in \calF_n$
 \[
-\int_A \mu(\dif s) \, f(M_{n+1})[s \in \mathbf{T}_i] \leq \int_A \mu(\dif s) \, f(M_n)[s \in \mathbf{T}_i]
+\int_A \mu_{\entrosp}(\dif s) \, f(M_{n+1})[s \in \mathbf{T}_i] \leq \int_A \mu_{\entrosp}(\dif s) \, f(M_n)[s \in \mathbf{T}_i]
 \; \footnote{where (the Iverson bracket) $[P] := 1$ if the statement $P$ hold, and 0 otherwise.}
 \] 
 \changed[lo]{Thus 
-%$\int_A \mu(\dif s) \, f(M_{n+1}) \leq \int_A \mu(\dif s) \, f(M_n)$, i.e., 
+%$\int_A \mu_{\entrosp}(\dif s) \, f(M_{n+1}) \leq \int_A \mu_{\entrosp}(\dif s) \, f(M_n)$, i.e., 
 $\mathbb{E}[f(M_{n+1}) \mid \calF_n] \leq f(M_n)$ a.s.}
 \end{lemma}
 
@@ -286,7 +295,7 @@ in fact $(U_i)_{\leq l_i} \cdot I^\omega = U_i$.
 %Moreover, for any $A \in \calF_n$, if $s \in A$ then $\set{s_{\leq l}} \cdot I^\omega \subseteq A$.
 This means that for any measurable $g : \entrosp \to \Real_{\geq 0}$, if $g(s)$ only depends on the prefix of $s$ of length $(l_i+1)$, then, writing $\widehat{g} : I^{l_i+1} \to \Real_{\geq 0}$ where $g(s) = \widehat{g}(s_{\leq l_i+1})$, we have: for any $A \in \calF_n$ 
 \begin{equation}
-\int_{A \cap U_i}  \mu(\dif s) \, g(s) = 
+\int_{A \cap U_i}  \mu_{\entrosp}(\dif s) \, g(s) = 
 \int_{(A \cap U_i)_{\leq l_i+1}} \Leb_{l_i+1}(\dif t) \, \widehat{g}(t)
 \label{eqn:truncate}
 \end{equation}
@@ -314,25 +323,25 @@ Since $\Leb_{l+1}$ is the (unique) product measure satisfying $\Leb_{l+1}(V \tim
 \end{align*}
 and so, by (\ref{eqn:truncate})
 \begin{align}
-& \int_{A \cap U_i} \mu(\dif s) \, f(E_i[\underline{\sigma_i(s)}][\underline{\rho(s)}])) \nonumber \\
+& \int_{A \cap U_i} \mu_{\entrosp}(\dif s) \, f(E_i[\underline{\sigma_i(s)}][\underline{\rho(s)}])) \nonumber \\
 & \leq 
-\int_{A \cap U_i} \mu(\dif s) \, f(E_i[\underline{\sigma_i(s)}][\tsample])).
+\int_{A \cap U_i} \mu_{\entrosp}(\dif s) \, f(E_i[\underline{\sigma_i(s)}][\tsample])).
 \label{eqn:a u ui}
 \end{align}
 
 Now, integrating both sides of (\ref{eqn:f 2 n+1}), we have
 \begin{align*}
-& \int_A \mu(\dif s) \, f_{n+1}(M)[s \in \mathbf{T}_i] \\
+& \int_A \mu_{\entrosp}(\dif s) \, f_{n+1}(M)[s \in \mathbf{T}_i] \\
 &= 
-\int_A \mu(\dif s) \, \sum_{i \in \calI} f(E_i[\underline{\sigma_i(s)}][\underline{\rho(s)}])[s \in U_i] \\
+\int_A \mu_{\entrosp}(\dif s) \, \sum_{i \in \calI} f(E_i[\underline{\sigma_i(s)}][\underline{\rho(s)}])[s \in U_i] \\
 &= 
-\sum_{i \in \calI} \int_{A \cap U_i} \mu(\dif s) \, f(E_i[\underline{\sigma_i(s)}][\underline{\rho(s)}])\\
+\sum_{i \in \calI} \int_{A \cap U_i} \mu_{\entrosp}(\dif s) \, f(E_i[\underline{\sigma_i(s)}][\underline{\rho(s)}])\\
 &\leq 
-\sum_{i \in \calI} \int_{A \cap U_i} \mu(\dif s) \, f(E_i[\underline{\sigma_i(s)}][\tsample])
+\sum_{i \in \calI} \int_{A \cap U_i} \mu_{\entrosp}(\dif s) \, f(E_i[\underline{\sigma_i(s)}][\tsample])
 \quad \hbox{$\because$ (\ref{eqn:a u ui})}\\
 &= 
-\int_{A} \mu(\dif s) \, \sum_{i \in \calI} \, f(E_i[\underline{\sigma_i(s)}][\tsample])[s \in U_i]\\
-&= \int_{A} \mu(\dif s) f_{n}(M)[s \in \mathbf{T}_2]
+\int_{A} \mu_{\entrosp}(\dif s) \, \sum_{i \in \calI} \, f(E_i[\underline{\sigma_i(s)}][\tsample])[s \in U_i]\\
+&= \int_{A} \mu_{\entrosp}(\dif s) f_{n}(M)[s \in \mathbf{T}_2]
 %\quad \hbox{$\because$ (\ref{eqn:f 2 n+1})}
 \end{align*}
 
@@ -340,12 +349,12 @@ Now, integrating both sides of (\ref{eqn:f 2 n+1}), we have
 
 As an immediate corollary of \Cref{lem:key rankable}, each $f(M_n)$ is integrable:
 \begin{align*}
-\int_{S} \mu(\dif s) \, |f(M_n)(s)| 
+\int_{\entrosp} \mu_{\entrosp}(\dif s) \, |f(M_n)(s)| 
 &=
-\int_{S} \mu(\dif s) \, f(M_n)(s)
+\int_{\entrosp} \mu_{\entrosp}(\dif s) \, f(M_n)(s)
 \\
 &\leq
-\int_{S} \mu(\dif s) \, f(M_0)(s)
+\int_{\entrosp} \mu_{\entrosp}(\dif s) \, f(M_0)(s)
 =
 f(M).
 \end{align*}
@@ -366,7 +375,7 @@ This concludes the proof of %\Cref{thm:rankable gives supermartingale}.
 In the rest of this section we show that if $M \in \Lambda^0$ is rankable, then $M$ is AST: in other words, the method of ranking function is sound for proving a.s.~termination of SPCF programs.
 
 Let $f$ be a ranking function on $M$ satisfying $f(N) = 0$ iff $N$ is a value.
-Define random variables on the probability space $(\entrosp, \calF, \mu)$:
+Define random variables on the probability space $(\entrosp, \calF, \mu_{\entrosp})$:
 \begin{align}
 T_{-1}(s) & := -1 \nonumber \\
 T_{n+1}(s) & := \min \{ k \mid k>T_n(s), M_k(s) \textrm{ a value} \nonumber\\
