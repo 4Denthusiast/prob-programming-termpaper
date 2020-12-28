@@ -12,7 +12,7 @@ Types and terms are defined as follows, where $r$ is a real number, $x$ is a var
   \text{\em terms } M, N &::= V  \mid  x  \mid  M_1 \, M_2  \mid  \underline{f}(M_1,\dots ,M_n)  \mid  \tY M \\
    & \qquad \mid  \tif{M < 0}{N_1}{N_2}  \mid  \tsample  \mid  \tscore(M)
 \end{align*}
-The typing rules are presented in \Cref{fig:typing rules}.
+The typing rules are standard (see \Cref{fig:typing rules}).
 Terms are identified up to $\alpha$-equivalence, as usual. 
 The set of all terms is denoted $\Lambda$, and the set of closed terms is denoted $\Lambda^0$.
 
@@ -22,32 +22,6 @@ To define the reduction relation, let \emph{evaluation contexts} be of the form:
   E ::= & \, [\,] \mid E \, M \mid V \, E \mid \underline{f}(\underline r_1,\dots ,\underline r_{k-1}, E, M_{k+1}, \dots, M_n) \\ & \mid \tY E \mid \tif{E<0}{M_1}{M_2} \mid \tscore (E)
 \end{align*}
 then a term reduces if it is formed by substituting a redex in a context i.e.
-
-\begin{figure*}
-\begin{align*}
-  \frac{}{\Gamma ; x:A \vdash x:A} 
-  \qquad
-  \frac{\Gamma ; x:A \vdash M : B}{\Gamma \vdash \lambda x.M : A \to B} 
-  \qquad
-  \frac{}{\underline{r} : \textsf{R}} 
-  \qquad
-  \frac{\Gamma \vdash M:A \to B \quad \Gamma \vdash N : A}{\Gamma \vdash M \, N : B} 
-  \\ \\
-  \qquad
-  \frac{\Gamma \vdash M : (A \to B) \to (A \to B)}{\Gamma \vdash \tY M : (A \to B)}
-  \qquad
-  \frac{\Gamma \vdash M_1:\textsf{R} \quad \dots \quad \Gamma \vdash M_n:\textsf{R}}{\Gamma \vdash \underline{f}(M_1,\dots,M_n) : \textsf{R}} \ (f : \mathbb{R}^n \to \mathbb{R})    
-  \\ \\
-  \qquad
-  \frac{\Gamma \vdash M : \textsf{R} \quad \Gamma \vdash N_1 : A \quad \Gamma \vdash N_2 : A}{\Gamma \vdash \tif{M < 0}{N_1}{N_2} : A}
-  \qquad
-  \frac{}{\Gamma \vdash \tsample : \textsf{R}} 
-  \qquad
-  \frac{\Gamma \vdash s : \textsf{R}}{\Gamma \vdash \tscore (s) : \textsf{R}}
-\end{align*}
-\caption{Typing rules of SPCF \label{fig:typing rules}}
-\end{figure*}
-
 \begin{align*}
   E[(\lambda x.M) V] & \to E[M[V/x]] \\
   E[\underline f (\underline r_1, \dots , \underline r_n)] & \to E[\underline{f(r_1,\dots,r_n)}] \\
@@ -65,7 +39,8 @@ Every closed well-typed term either is a value or reduces to another term.
 
 \subsection{Sampling semantics}
 \label{sec:sampling semantics}
-This version of the reduction relation allows $\tsample$ to reduce to any number in $[0,1]$. To more precisely specify the probabilities, an additional argument is needed to determine the outcome of random samples. Let $ I = [0,1] \subset \mathbb{R} $, and let $\entrosp = I^{\mathbb{N}}$, with the \changed[lo]{Borel $\sigma$-algebra $\calF$} and the probability measure, denoted $\mu_{\entrosp}$, given by the limit of $1 \gets I \gets I^2 \gets \cdots$, where the maps are the projections that ignore the last element. Equivalently, a basis of measurable sets is $\prod_{i=0}^\infty X_i$ where $X_i$ are all Borel and all but finitely many are $I$, and $\mu_{\entrosp} (\prod_{i=0}^\infty X_i) = \prod_{i=0}^\infty \Leb(X_i)$.
+This version of the reduction relation allows $\tsample$ to reduce to any number in $[0,1]$. 
+To more precisely specify the probabilities, an additional argument is needed to determine the outcome of random samples. Let $ I := [0,1] \subset \mathbb{R} $, and define $\entrosp := I^{\mathbb{N}}$, with the \changed[lo]{Borel $\sigma$-algebra $\calF$} and the probability measure, denoted $\mu_{\entrosp}$, given by the limit of $1 \gets I \gets I^2 \gets \cdots$, where the maps are the projections that ignore the last element. Equivalently, a basis of measurable sets is $\prod_{i=0}^\infty X_i$ where $X_i$ are all Borel and all but finitely many are $I$, and $\mu_{\entrosp} (\prod_{i=0}^\infty X_i) := \prod_{i=0}^\infty \Leb(X_i)$.
 The maps $\pi_h:\entrosp \to I, \; \pi_t:\entrosp \to \entrosp$ popping the first element are then measurable.
 \changed[lo]{Following \cite{DBLP:conf/esop/CulpepperC17}, we call the probability space $(\entrosp, \calF, \mu_{\entrosp})$ the \emph{entropy space}.}
 
@@ -79,7 +54,7 @@ We fix the Borel algebra of this topology to be the $\sigma$-algebra on $\Lambda
 
 The one-step reduction is given by the function $\red : \Lambda^0 \times \entrosp \to \Lambda^0 \times \entrosp$ where
 \begin{equation*}
-\red(M,s) = \left\{
+\red(M,s) := \left\{
     \begin{array}{ll}
         (E[N],s) & \text{if } M = E[R], R \to N\\
         & \qquad \text{ and } R \neq \tsample \\
