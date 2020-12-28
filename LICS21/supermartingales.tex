@@ -30,7 +30,7 @@ It will be demonstrated later that for any rankable term $M$, if $(M_n)_{n \geq 
 
 %\paragraph{}
 
-\changed[lo]{Fix a probability space $(\Omega, \calF, \mathbb{P})$, and a filtration $(\calF_n)_{n \geq 0}$. 
+\changed[lo]{Fix a probability space $(\Omega, \calF, \mathbb{P})$ and a filtration $(\calF_n)_{n \geq 0}$. 
 (In subsequent applications to termination analysis, $\Omega = \entrosp$, and $\mathbb{P} = \mu_{\entrosp}$.)
 Let $T$ be a random variable that takes values in $\mathbb{N} \cup \set{\infty}$.
 We call $T$ a \emph{stopping time adapted to $(\calF_n)_{n \geq 0}$} just if $\set{T = n} \in \calF_n$, for all $n \geq 0$.}
@@ -41,7 +41,7 @@ We call $T$ a \emph{stopping time adapted to $(\calF_n)_{n \geq 0}$} just if $\s
 \item Let $\epsilon > 0$. 
 Given a stopping time $T$ and a supermartingale $(Y_n)_{n \geq 0}$, both adapted to filtration $(\calF_n)_{n \geq 0}$, 
 we say that $(Y_n)_{n \geq 0}$ is a \emph{$\epsilon$-ranking supermartingale w.r.t.~$T$} if for all $n$, $Y_n \geq 0$ and $\expect{Y_{n+1} \mid \calF_n} \leq Y_n - \epsilon \cdot \mathbf{1}_{\set{T > n}}$.
-{(For $A \in \calF$, we write ${\bf 1}_A$ for the \emph{indicator function} of $A$, i.e., the random variable defined by ${\bf 1}_A(\omega) := 1$ if $\omega \in A$, and $0$ otherwise.)} \lo{\LaTeX\ does not allow the preceding bracketed sentence to be typeset as a footnote. Strange!}
+\footnote{(For $A \in \calF$, we write ${\bf 1}_A$ for the \emph{indicator function} of $A$, i.e., the random variable defined by ${\bf 1}_A(\omega) := 1$ if $\omega \in A$, and $0$ otherwise.)} %\lo{\LaTeX\ does not allow the preceding bracketed sentence to be typeset as a footnote. Strange!}\lo{Now it does. Stranger.}
 A \emph{ranking supermartingale} w.r.t.~$T$ is a $\epsilon$-ranking supermartingale w.r.t.~$T$ for some $\epsilon > 0$.
 \end{enumerate}
 \end{definition}
@@ -54,21 +54,13 @@ Fioriti and Hermanns call a supermartingale $(Y_n)_{n \geq 0}$ \emph{ranking} if
 Intuitively $Y_n$ gives the rank of the program after $n$ steps of computation, and $T$ is the time at which it reaches a value (which may be infinite if it fails to terminate).
 In a $\epsilon$-ranking supermartingale, each computation step causes a strict decrease in rank of at least $\epsilon$, provided the term in question is not a value.
 
-\begin{lemma}%[{\citep[Lemma 5.5]{DBLP:conf/popl/FioritiH15}}]
+\begin{restatable}{lemma}{rankPast}
+%\begin{lemma}%[{\citep[Lemma 5.5]{DBLP:conf/popl/FioritiH15}}]
 % \citep[Prop 1]{DBLP:conf/popl/ChatterjeeFNH16}}
 \label{lem:rank-PAST}
 Let $(Y_n)_{n \geq 0}$ be a $\epsilon$-ranking supermartingale w.r.t.~the stopping time $T$, then $T < \infty$ a.s., and $\expect{T} \leq \frac{\expect{Y_0}}{\epsilon}$.
-\end{lemma}
-
-\begin{proof}
-We first prove (by induction on $n$): for all $n \geq 0$
-\[
-%\forall n \geq 0 \, . \, 
-\expect{Y_n} \leq \expect{Y_0} - \epsilon \cdot \big(\textstyle\sum_{i=0}^{n-1} \mathbb{P}[T > i]\big).
-\]
-It follows that $\sum_{i=0}^{\infty} \mathbb{P}[T > i]$ converges; hence we have $\lim_{i \to \infty} \mathbb{P}[T > i] = 0$ and so $\mathbb{P}[T < \infty] = 1$.
-It then remains to observe: if $T < \infty$ a.s., then $\expect{T} = \sum^\infty_{i=0} \mathbb{P}[T > i]$.
-\end{proof}
+%\end{lemma}
+\end{restatable}
 
 \begin{remark}
 \changed[lo]{\Cref{lem:rank-PAST} is a slight extension of \citep[Lemma 5.5]{DBLP:conf/popl/FioritiH15},

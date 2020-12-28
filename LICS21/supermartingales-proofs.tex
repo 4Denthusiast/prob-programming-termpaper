@@ -1,5 +1,18 @@
 % !TEX root=./main.tex
 
+\rankPast*
+\begin{proof}%\rankPast
+We first prove (by induction on $n$): for all $n \geq 0$
+\[
+%\forall n \geq 0 \, . \, 
+\expect{Y_n} \leq \expect{Y_0} - \epsilon \cdot \big(\textstyle\sum_{i=0}^{n-1} \mathbb{P}[T > i]\big).
+\]
+It follows that $\sum_{i=0}^{\infty} \mathbb{P}[T > i]$ converges; hence we have $\lim_{i \to \infty} \mathbb{P}[T > i] = 0$ and so $\mathbb{P}[T < \infty] = 1$.
+It then remains to observe: if $T < \infty$ a.s., then $\expect{T} = \sum^\infty_{i=0} \mathbb{P}[T > i]$.
+\end{proof}
+
+
+
 \newcommand\transform[1]{{\ulcorner{#1}\urcorner}}
 
 %\section{$\tY$ stopping times are finite}
