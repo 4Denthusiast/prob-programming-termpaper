@@ -32,11 +32,11 @@ It will be demonstrated later that for any rankable term $M$, if $(M_n)_{n \geq 
 \changed[lo]{Fix a probability space $(\Omega, \calF, \mathbb{P})$, and a filtration $(\calF_n)_{n \geq 0}$. 
 (In subsequent applications to termination analysis, $\Omega = S$, and $\mathbb{P} = \mu$.)
 Let $T$ be a random variable that takes values in $\mathbb{N} \cup \set{\infty}$.
-We call $T$ a \emph{stopping time adapted to $(\calF_n)_{n \geq 0}$} just if $\set{T = n} \in \calF_n$, for all $n \in \omega$.}
+We call $T$ a \emph{stopping time adapted to $(\calF_n)_{n \geq 0}$} just if $\set{T = n} \in \calF_n$, for all $n \geq 0$.}
 
 \begin{definition}\rm
 \begin{enumerate}
-\item A sequence of random variables $(Y_n)_{n \geq 0}$ adapted to a filtration $(\calF_n)_{n \geq 0}$ is a \emph{supermartingale} if for all $n \in \omega$, $Y_n$ is integrable (i.e.~$\expect{|Y_n|} < \infty$), and $\expect{Y_{n+1} \mid \calF_n} \leq Y_n$ a.s.~\changed[lo]{(i.e.~for all $A \in \calF_n$, $\int_A \mathbb{P}(\dif \omega) \, Y_{n+1}(\omega) \leq \int_A \mathbb{P}(\dif \omega) \,Y_n(\omega)$).}
+\item A sequence of random variables $(Y_n)_{n \geq 0}$ adapted to a filtration $(\calF_n)_{n \geq 0}$ is a \emph{supermartingale} if for all $n \geq 0$, $Y_n$ is integrable (i.e.~$\expect{|Y_n|} < \infty$), and $\expect{Y_{n+1} \mid \calF_n} \leq Y_n$ a.s.~\changed[lo]{(i.e.~for all $A \in \calF_n$, $\int_A \mathbb{P}(\dif \omega) \, Y_{n+1}(\omega) \leq \int_A \mathbb{P}(\dif \omega) \,Y_n(\omega)$).}
 \item Let $\epsilon > 0$. A stopping time $T$ and a supermartingale $(Y_n)_{n \geq 0}$, both adapted to filtration $(\calF_n)_{n \geq 0}$, are a \emph{$\epsilon$-ranking supermartingale} if for all $n$, $Y_n \geq 0$ and $\expect{Y_{n+1} \mid \calF_n} \leq Y_n - \epsilon \cdot \mathbf{1}_{\set{T > n}}$.\footnote{For $A \in \calF$, we write ${\bf 1}_A$ for the \emph{indicator function} of $A$, i.e., the random variable defined by ${\bf 1}_A(s) := 1$ if $s \in A$, and $0$ otherwise.}
 A \emph{ranking supermartingale} is a $\epsilon$-ranking supermartingale for some $\epsilon > 0$.
 \end{enumerate}
@@ -57,9 +57,9 @@ Let $(Y_n)_{n \geq 0}$ be a $\epsilon$-ranking supermartingale with respect to t
 \end{lemma}
 
 \begin{proof}
-We first prove (by induction on $n$): for all $n \in \omega$
+We first prove (by induction on $n$): for all $n \geq 0$
 \[
-%\forall n \in \omega \, . \, 
+%\forall n \geq 0 \, . \, 
 \expect{Y_n} \leq \expect{Y_0} - \epsilon \cdot \big(\textstyle\sum_{i=0}^{n-1} \mathbb{P}[T > i]\big).
 \]
 It follows that $\sum_{i=0}^{\infty} \mathbb{P}[T > i]$ converges; hence we have $\lim_{i \to \infty} \mathbb{P}[T > i] = 0$ and so $\mathbb{P}[T < \infty] = 1$.
@@ -74,7 +74,7 @@ which asserts the same result for the specific stopping time $T : s \mapsto \min
 Let $T$ and $T'$ be stopping times adapted to $(\calF_n)_{n \geq 0}$.
 Recall the $\sigma$-algebra (consisting of measurable subsets ``prior to $T$'')
 \[
-\calF_T := \set{A \in \calF \mid \forall i \in \omega \, . \, A \cap \set{T \leq i} \in \calF_i}
+\calF_T := \set{A \in \calF \mid \forall i \geq 0 \, . \, A \cap \set{T \leq i} \in \calF_i}
 \]
 and if $T \leq T'$, then $\calF_{T} \subseteq \calF_{T'}$.
 
@@ -92,7 +92,7 @@ Let $(X_n)_{n \geq 0}$ be a supermartingale, and $(T_n)_{n \geq 0}$ a sequence o
 
 %\emph{Notation.}
 \changed[lo]{For the rest of this section, fix the probability space $(S, \calF, \mu)$, and a closed SPCF term $M$.
-For $n \in \omega$, define the random variables $M_n(s) := \pi_0 (\red^n(M, s))$, and the filtration $(\mathcal{F}_n)_{n \geq 0}$ where $\mathcal{F}_n := \sigma(M_1, \cdots, M_n)$.}
+For $n \geq 0$, define the random variables $M_n(s) := \pi_0 (\red^n(M, s))$, and the filtration $(\mathcal{F}_n)_{n \geq 0}$ where $\mathcal{F}_n := \sigma(M_1, \cdots, M_n)$.}
 
 Our first result is the following theorem.
 \begin{theorem}[Rankability] 
@@ -105,14 +105,14 @@ If a closed SPCF term $M$ is rankable (respectively, strictly rankable) by $f$ s
 We shall obtain the theorem as a corollary of a technical lemma (\Cref{lem:key rankable}).
 First, some notation.
 
-Given an $\omega$-sequence (e.g.~$s \in S$) and $m \in \omega$, we write $s_{\leq m} \in I^m$ to mean the prefix of $s$ of length $m$.
+Given an $\omega$-sequence (e.g.~$s \in S$) and $m \geq 0$, we write $s_{\leq m} \in I^m$ to mean the prefix of $s$ of length $m$.
 %Fix a closed SPCF term $M \in \Lambda^0$, and a ranking function $f$ for it, satisfying $f(N) = 0$ iff $N$ is a value.
-%Let $n \in \omega$, define the following random variables on the probability space $(S, \calF, \mu)$:
+%Let $n \geq 0$, define the following random variables on the probability space $(S, \calF, \mu)$:
 %\begin{align*}
 %M_n(s) &:= \pi_0 (\red^n(M, s))\\
 %\ndraw{n}{s} &:= |\{k < n \mid \exists E: M_k(s) = E[\tsample]\}|,
 %\end{align*}
-For $n \in \omega$, define
+For $n \geq 0$, define
 \begin{align*}
 %M_n(s) &:= \pi_0 (\red^n(M, s))\\
 \ndraw{n}{s} &:= |\{k < n \mid \exists E: M_k(s) = E[\tsample]\}|,
@@ -160,7 +160,7 @@ It is straightforward to see that each $\mathbf{T}_i \in \calF_n$, and $\set{\ma
 Hence it suffices to prove the following lemma.
 
 \iffalse
-For $i \in \{1, 2, 3\}$ and $n \in \omega$, define function $f_{i, n+1}(M) : S \to \Real$ by
+For $i \in \{1, 2, 3\}$ and $n \geq 0$, define function $f_{i, n+1}(M) : S \to \Real$ by
 \[
 f_{i, n+1}(M)(s) :=
 \begin{cases}
