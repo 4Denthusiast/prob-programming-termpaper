@@ -14,12 +14,10 @@ There are, however, some restricted variations on the reduction order that do no
 \paragraph{}
 Even with this restriction, a sampling semantics in the style of the one already defined would not be entirely Church-Rosser, as, for example, $\red^3(\tsample - \tsample, (1,0,\dots))$ would be either $1$ or $-1$ depending on the order of evaluation of the $\tsample$s, as that determines which sample from the pre-selected sequence is used for each one. To fix this, rather than pre-selecting samples according to the order they'll be drawn in, select them according to the position in the term where they'll be used instead.
 
-A \emph{position} 
-%\akr{I'm not really sure how to phrase the citation, but this is adapted from \cite{Kennaway96infinitarylambda}.} 
-%\lo{The idea is common enough. I think no citation necessary.}
-is a finite sequence of steps into a term, defined inductively as
+A \emph{position} is a finite sequence of steps into a term, defined inductively as
 \begin{align*}
-\alpha ::= \cdot \mid \lambda ; \alpha \mid @_1 ; \alpha \mid @_2 ; \alpha \mid \underline f_i ; \alpha \mid \tY ; \alpha \mid \textsf{if}_1 ; \alpha \mid \textsf{if}_2 ; \alpha \mid \textsf{if}_3 ; \alpha \mid \tscore ; \alpha.
+\alpha ::= \cdot \mid \lambda ; \alpha \mid @_1 ; \alpha \mid @_2 ; \alpha \mid \underline f_i ; \alpha \\
+\mid \tY ; \alpha \mid \textsf{if}_1 ; \alpha \mid \textsf{if}_2 ; \alpha \mid \textsf{if}_3 ; \alpha \mid \tscore ; \alpha.
 \end{align*}
 The \emph{subterm of $M$ at a position $\alpha$}, denoted $M \mid \alpha$, is defined as
 \begin{align*}
@@ -60,10 +58,10 @@ The binary relation $\to$ is defined by the following rules, each is conditional
 \begin{align*}
   \text{if } M \mid \alpha = (\lambda x.N) V,\ & M \to M[N[V/x]/\alpha] \\
   \text{if } M \mid \alpha = \underline f (\underline r_1, \dots , \underline r_n),\ & M \to M[\underline{f(r_1,\dots,r_n)}/\alpha] \\
-  \text{if } M \mid \alpha = \tY \lambda x. N,\ & M \to M[\lambda z. N[(\tY \lambda x. N)/x] z/\alpha] \text{ where $z$ is not free in $N$}\\
+  \text{if } M \mid \alpha = \tY \lambda x. N,\ & M \to M[\lambda z. N[(\tY \lambda x. N)/x] z/\alpha]\\ \text{where }z&\text{ is not free in $N$}\\
   \text{if } M \mid \alpha = \tif{\underline r < 0}{N_1}{N_2},\ & M \to M[N_1/\alpha] \text{ where }r < 0 \\
   \text{if } M \mid \alpha = \tif{\underline r < 0}{N_1}{N_2},\ & M \to M[N_2/\alpha] \text{ where }r \geq 0 \\
-  \text{if } M \mid \alpha = \tsample & \text{ and $\lambda$ does not occur after $@_2$ or $\tY$ in $\alpha$},\\ & M \to M[\underline r/\alpha] \text{ where } r \in [0,1] \\
+  \text{if } M \mid \alpha = \tsample \text{ and $\lambda$ does}&\text{ not occur after $@_2$ or $\tY$ in $\alpha$},\\ & M \to M[\underline r/\alpha] \text{ where } r \in [0,1] \\
   \text{if } M \mid \alpha = \tscore(\underline r),\ & M \to M[\underline r/\alpha].
 \end{align*}
 In each of these cases, $M \mid \alpha$ is the \emph{redex}, and reduction takes place at $\alpha$.
@@ -160,7 +158,7 @@ If $(N_1,\alpha_1) \sim^* (N_2,\alpha_2)$, there is some descendants $N'_1, N'_2
 
   For any individual $\sim_\uparrow$ then $\sim_\downarrow$ pair, let $(A,\alpha) \sim_\uparrow (B,\beta) \sim_\downarrow (C,\gamma)$. The skeleton $B$ reduces to both $A$ and $C$. If these are the same reduction, then $(A,\alpha) = (C,\gamma)$ and this subsequence may be removed. If they are different, then the way they overlap corresponds to one of the cases in the definition of $\sim_c$, either case a if the reduction positions are disjoint, or one of the cases b--f if one of the reduction positions is inside the other. In any case, there is a reduction sequence from each of $A$ and $C$ to some common skeleton $D$ ($O_1$ and $O_2$ in the definition of $\sim_c$). For the same reason that $(B,\beta) \sim_\downarrow (C,\gamma)$, there is some $\delta$ such that $(A,\alpha) \sim_\downarrow^* (D,\delta)$, and similarly for the same reason that $(B,\beta) \sim_\downarrow (A,\alpha)$, for the same $\delta$, $(C,\gamma) \sim_\downarrow^* (D,\delta)$. There are a lot of cases to check for this statement, but all of them are rather simple, and similar to each other. There is therefore an alternative $\sim^*$ sequence from $(A,\alpha)$ to $(C,\gamma)$, of the form $(A,\alpha) \sim_\downarrow^* (D_1,\delta) \sim_c (D_2,\delta) \sim_\uparrow^* (C,\gamma)$, where $D_1$ and $D_2$ are the alternative reduction sequences leading to the same skeleton $D$. There are only multiple $\sim_\downarrow$ steps in the result if the position of the reduction $B \to C$ is inside the position of the reduction $B \to A$, and similarly, there are only multiple $\sim_\uparrow$ steps in the result if the position of the reduction $B \to A$ is inside the position of the reduction $B \to C$. If there are multiple $\sim_\downarrow$ steps, they are not necessarily parallel, but in the only case where they aren't (case f of $sim_c$), the subsequence of $\sim_\downarrow$ steps with the reductions at $\alpha;\lambda;@_1;\beta$ then $\alpha;\lambda;@_1;\gamma_i;\tY;\lambda;\beta$ for each $i$ where $\gamma_i \geq \beta$ (in the notation of the definition of $\sim_c$) can be replaced by $\sim_\downarrow$s with the reductions at $\alpha;\lambda;@_1;\gamma'_i;\tY;\lambda;\beta$ then $\alpha;\lambda;@_1;\beta$, then another $\sim_c$, where $(\gamma'_i)$ is the list of positions in $A$ (\emph{before} the reduction at $\beta$ to $A'$, unlike $(\gamma_i)$) where $A | \gamma'_i = x$ and $\gamma'_i > \beta$.
 
-  The effect of this rearrangement is (ignoring the $\sim_c$s) to swap the order of the $\sim_\uparrow$ and the $\sim_\downarrow$, except that if the positions of one of these reductions is inside the other, that inner $\sim_p$ may be duplicated. If the positions are disjoint, both of them are unchanged (corresponding to case a of $\sim_c$), and if one is inside the other, then the outer position is unchanged and the other resultant positions, although they aren't equal to the original inner position, are still inside the outer position. Taking the sub-sequence of one $\sim_\uparrow$ followed by a parallel sequence of $\sim_\downarrow$s, this rearrangement can be repeatedly applied to move the $\sim_\uparrow$ further along the sequence. If at some point a $\sim_\uparrow$ and $\sim_\downarrow$ match (by relating the same (skeleton, position) pairs in opposite directions), they may be removed and the process may stop early. The $\sim_\uparrow$ may be duplicated if it passes a $\sim_\downarrow$ whose position is outside of the $\sim_\uparrow$'s position, but by the assumption that the sequence of $\sim_\downarrow$s is initially parallel, no position inside of this occurs later in the sequence, therefore all of the resultant $\sim_\uparrow$s pass the remaining $\sim_\downarrow$s without changing or duplicating them. The $\sim_\uparrow$s may be further duplicated, but the number of steps left in this process is bounded by the product, for all of the remaining $\sim_\downarrow$s, of $2 + \text{the number of occurrences of the variable relevant to the reduction}$, because for each $\sim_\downarrow$, that is more than the number of duplicates it could produce for any $\sim_\uparrow$ that passes it. It is also possible (earlier) for some of the $\sim_\downarrow$s to be duplicated, but the only case where this process would not terminate, that both the $\sim_\downarrow$s and the $\sim_\uparrow$s continue being duplicated forever so that the number of switches left to do never decreases, is prevented by the parallelness condition, as all of the duplications of $\sim_\downarrow$s occur before all of the duplications of $\sim_\uparrow$s.
+  The effect of this rearrangement is (ignoring the $\sim_c$s) to swap the order of the $\sim_\uparrow$ and the $\sim_\downarrow$, except that if the positions of one of these reductions is inside the other, that inner $\sim_p$ may be duplicated. If the positions are disjoint, both of them are unchanged (corresponding to case a of $\sim_c$), and if one is inside the other, then the outer position is unchanged and the other resultant positions, although they aren't equal to the original inner position, are still inside the outer position. Taking the sub-sequence of one $\sim_\uparrow$ followed by a parallel sequence of $\sim_\downarrow$s, this rearrangement can be repeatedly applied to move the $\sim_\uparrow$ further along the sequence. If at some point a $\sim_\uparrow$ and $\sim_\downarrow$ match (by relating the same (skeleton, position) pairs in opposite directions), they may be removed and the process may stop early. The $\sim_\uparrow$ may be duplicated if it passes a $\sim_\downarrow$ whose position is outside of the $\sim_\uparrow$'s position, but by the assumption that the sequence of $\sim_\downarrow$s is initially parallel, no position inside of this occurs later in the sequence, therefore all of the resultant $\sim_\uparrow$s pass the remaining $\sim_\downarrow$s without changing or duplicating them. The $\sim_\uparrow$s may be further duplicated, but the number of steps left in this process is bounded by the product, for all of the remaining $\sim_\downarrow$s, of $2 +$ the number of occurrences of the variable relevant to the reduction, because for each $\sim_\downarrow$, that is more than the number of duplicates it could produce for any $\sim_\uparrow$ that passes it. It is also possible (earlier) for some of the $\sim_\downarrow$s to be duplicated, but the only case where this process would not terminate, that both the $\sim_\downarrow$s and the $\sim_\uparrow$s continue being duplicated forever so that the number of switches left to do never decreases, is prevented by the parallelness condition, as all of the duplications of $\sim_\downarrow$s occur before all of the duplications of $\sim_\uparrow$s.
 
   It still remains to be shown that the sequence of $\sim_\downarrow$s left at the end of this can be made parallel. The changes that may have occurred since the previous version of this sequence (which was known to be parrallel already), are that some of the $\sim_\downarrow$s may have been duplicated by passing the $\sim_\uparrow$, and if that $\sim_\uparrow$ matches one of the $\sim_\downarrow$s, that $\sim_\downarrow$ is removed. The position of the $\sim_\uparrow$'s reduction is the same for all of these duplications, because it is not changed until later in the sequence, when the $\sim_\downarrow$s with positions outside of that may occur. The resultant positions after a duplication are in the same position relative to each other, and therefore the order of the remaining $\sim_\downarrow$s is automatically parallel, except that (letting the position of the $\sim_\uparrow$'s reduction be $\alpha$) if there are $\sim_\downarrow$s with reductions at positions $\alpha;@_1;\lambda;\beta$ and $\alpha;@_2;\gamma$, or $\alpha;\tY;\lambda;\beta$ and $\alpha;\tY;\lambda;\gamma$, some of the resultant $\sim_\downarrow$s' positions may be inside each other where they were originally not. Similarly to the case where a $\tY$ reduction and a reduction at a position inside it are swapped though, the order can be fixed by swapping some of the $\sim_\downarrow$ steps with each other. In the first case, the reduction at position $\alpha;@_1;\lambda;\beta$ ends up at $\alpha;\beta$, and the reduction at position $\alpha;@_2;\gamma$ ends up at the positions $\alpha;\delta_i;\gamma$, where $(\delta_i)$ is the positions of the variable relevant to the $\sim_\uparrow$'s reduction inside its lambda. The positions of the variable in the lambda may be different before the reduction at $\beta$, but the positions of the redexes corresponding to the original redex at $\alpha;@_2;\gamma$ are changed similarly. Rather than reducing at $\alpha;\beta$ then at $\alpha;\delta_i;\gamma$, it is therefore possible to reach the same point by reducing at $\alpha;\delta'_i;\gamma$ then at $\alpha;\beta$, where $(\delta'_i)$ is the positions of the relevant variable within the lambda before the reduction at $\alpha;@_1;\lambda;\beta$ (and again, a $\sim_c$ of some sort must also be introduced). The other case, that the $\sim_\uparrow$'s reduction is a $\tY$-reduction, is similar. Each reduction which is duplicated has one image at $\alpha;\lambda;@_1;$its original relative position, and one for each occurrence of the variable. Those corresponding to variable occurrences may need to be moved to before those at $\lambda;@_1$.
 
@@ -252,9 +250,9 @@ The corresponding map $L_s(N) \to L_s(M)$ is then denoted $i(M \to N)$.
 Unlike in the purely call-by-value case, the version of the reduction relation that takes into account samples is still a general relation rather than a function, so it is denoted ``$\Rightarrow$'' instead of ``$\red$'', and it relates $\biguplus_{M \in \Lambda_0} I^{L_s(M)}$ to itself.
 \changed[lo]{We write an element of $\biguplus_{M \in \Lambda_0} I^{L_s(M)}$ as $(M', s)$ where the \emph{term} $M' \in \Lambda^0$ and $s \in  I^{L_s(M')}$.}
 \begin{align*}
-& (M,s) \Rightarrow (N,s \circ i(M \to N)) \text{ if either} \\
-& \qquad \text{$M \to N$ and the redex is not $\tsample$, or} \\
-& \qquad \text{$M \mid \alpha = \tsample$, $N = M[\underline{s(Sk(M),\alpha)}/\alpha]$ and $\lambda$ does not occur after $@_2$ or $\tY$ in $\alpha$}
+& (M,s) \Rightarrow (N,s \circ i(M \to N)) \text{ if $M \to N$ at $\alpha$ and either} \\
+& \qquad \text{the redex is not $\tsample$, or} \\
+& \qquad \text{$M \mid \alpha = \tsample$ and $N = M[\underline{s(Sk(M),\alpha)}/\alpha]$}
 \end{align*}
 
 \paragraph{}
@@ -331,18 +329,15 @@ For any initial term $M$, reduction strategy $f$ on $M$, natural number $n$, ske
 Suppose, to begin with, that $n = 0$. Either $\exists r \in T : N[r] = M$, in which case both sides of the equation are $\mu(S)$, or there is no such $r$, in which case both sides of the equation are 0.
 
 For $n > 0$, suppose for induction that the lemma is true for $n - 1$, for all $N, T$ and $S$. If $\exists r \in T, s' \in S : (M,s) \Rightarrow_f^n (N[r], s')$, the $r$ and $s'$ are necessarily unique, therefore we may assume that $T$ is the product of $k$ measurable setsets of $\mathbb R$, $(T_j)_{0 \leq j < k}$, as all of the other cases follow by taking unions and limits of these rectangles. Let\begin{align*}
-R_s & = \{\text{the skeleton of } O \mid O \in Rch(M), r \in \mathbb R^k, O | f(O) = \tsample, O \to N[r]\} \\
-R_d & = \{\text{the skeleton of } O \mid O \in Rch(M), r \in \mathbb R^k, O | f(O) \neq \tsample, O \to N[r]\}.
+R_s & = \{Sk(O) \mid O \in Rch(M), r \in \mathbb R^k, O | f(O) = \tsample, O \to N[r]\} \\
+R_d & = \{Sk(O) \mid O \in Rch(M), r \in \mathbb R^k, O | f(O) \neq \tsample, O \to N[r]\}.
 \end{align*}
 Together, $R_s$ and $R_d$ contain all of the skeletons of terms that can reduce to $N$, and they're disjoint. For each of these skeletons, there is a map $g_O$ from the reals in $O$ to the reals in $N$, i.e. $g_O(r) = r'$ if $O[r] \to N[r']$ for $O \in R_d$, and $g_O(s, r) = r'$ if $O[r] \to N[r']$ with $s$ as the value the sample takes in the reduction. All of these functions are measurable, as they are just rearrangements of vector components, or in the case that $O|f(O) = \underline x(\skeletonPlaceholder, \dots, \skeletonPlaceholder)$, a combination fo the measurable function $x$ with a rearrangement of vector components. In the case that $O \in R_s$, the function $g_O$ simply inserts the sample into the vector of reals at a certain index, call it $h_O$.
+\clearpage
 \begin{align*}
 & \mu(\{s \in I^{L_s(M)} \mid \exists r \in T, s' \in S : (M,s) \Rightarrow_f^n (N[r], s')\}) \\
-= & \mu(\{s \in I^{L_s(M)} \mid \exists O \in R_s, r \in \mathbb R^{k-1}, s' \in I^{L_s(O)}, r' \in T, s'' \in S :\\
-    & (M,s) \Rightarrow_f^{n-1} (O[r], s') \Rightarrow_f (N[r'], s'')\})\\
-    + & \mu(\{s \in I^{L_s(M)} \mid \exists O \in R_d, r \in \bigcup_l \mathbb R^l, s' \in I^{L_s(O)}, r' \in T, s'' \in S :\\
-    & (M,s) \Rightarrow_f^{n-1} (O[r], s') \Rightarrow_f (N[r'], s'')\}) \\
-\end{align*}
-\begin{align*}
+= & \mu(\{s \in I^{L_s(M)} \mid \exists O \in R_s, r \in \mathbb R^{k-1}, s' \in I^{L_s(O)}, r' \in T, s'' \in S : (M,s) \Rightarrow_f^{n-1} (O[r], s') \Rightarrow_f (N[r'], s'')\})\\
+    + & \mu(\{s \in I^{L_s(M)} \mid \exists O \in R_d, r \in \bigcup_l \mathbb R^l, s' \in I^{L_s(O)}, r' \in T, s'' \in S : (M,s) \Rightarrow_f^{n-1} (O[r], s') \Rightarrow_f (N[r'], s'')\}) \\
 = & \sum_{O \in R_s} \mu(\{s \in I^{L_s(M)} \mid \exists r \in \mathbb R^{k-1}, s' \in I^{L_s(O)}:\\
     & g_O(r,s'(O,f(O))) \in T, s' \circ i(O[r] \to N[g_O(r,s'(O,f(O)))]) \in S, (M,s) \Rightarrow_f^{n-1} (O[r], s')\})\\
      + & \sum_{O \in R_d} \mu(\{s \in I^{L_s(M)} \mid \exists r \in \bigcup_l \mathbb R^l, s' \in I^{L_s(O)}:\\
@@ -361,13 +356,14 @@ Together, $R_s$ and $R_d$ contain all of the skeletons of terms that can reduce 
     + & \sum_{O \in R_d} \mu(\{s \in I^{L_s(M)} \mid \exists r \in \bigcup_l \mathbb R^l, s' \in I^{L_s(O)}: g_O(r) \in T, (M,s) \Rightarrow_f^{n-1} (O[r], s')\}) \mu(S) \\
 = & \sum_{O \in R_s} \mu(\{s \in I^{L_s(M)} \mid \exists r \in \mathbb R^{k-1}, s' \in I^{L_s(O)} : g_O(r,s'(O,f(O))) \in T, (M,s) \Rightarrow_f^{n-1} (O[r], s')\}) \mu(S)\\
     + & \sum_{O \in R_d} \mu(\{s \in I^{L_s(M)} \mid \exists r \in \bigcup_l \mathbb R^l, s' \in I^{L_s(O)}: g_O(r) \in T, (M,s) \Rightarrow_f^{n-1} (O[r], s')\}) \mu(S) \\
-= & \mu(\{s \in I^{L_s(M)} \mid \exists O \in R_s, r \in \mathbb R^{k-1}, s' \in I^{L_s(O)}, r' \in T, s'' \in I^{L_s(N)} :\\
-    & (M,s) \Rightarrow_f^{n-1} (O[r], s') \Rightarrow_f (N[r'], s'')\}) \mu(S)\\
-    + & \mu(\{s \in I^{L_s(M)} \mid \exists O \in R_d, r \in \bigcup_l \mathbb R^l, s' \in I^{L_s(O)}, r' \in T, s'' \in I^{L_s(N)} :\\
-    & (M,s) \Rightarrow_f^{n-1} (O[r], s') \Rightarrow_f (N[r'], s'')\}) \mu(S) \\
+= & \mu(\{s \in I^{L_s(M)} \mid \exists O \in R_s, r \in \mathbb R^{k-1}, s' \in I^{L_s(O)}, r' \in T, s'' \in I^{L_s(N)} : (M,s) \Rightarrow_f^{n-1} (O[r], s') \Rightarrow_f (N[r'], s'')\}) \mu(S)\\
+    + & \mu(\{s \in I^{L_s(M)} \mid \exists O \in R_d, r \in \bigcup_l \mathbb R^l, s' \in I^{L_s(O)}, r' \in T, s'' \in I^{L_s(N)} : (M,s) \Rightarrow_f^{n-1} (O[r], s') \Rightarrow_f (N[r'], s'')\}) \mu(S) \\
 = & \mu(\{s \in I^{L_s(M)} \mid \exists r \in T, s' \in I^{L_s(N)} : (M,s) \Rightarrow_f^n (N[r], s')\}) \mu(S)
 \end{align*}
 \end{proof}
+\clearpage
+
+
 
 The usual call-by-value semantics can be implemented as one of these reduction strategies, given by (with $V$ a value and $T$ a term that isn't a value and $M$ a general term)
 \begin{align*}
@@ -425,9 +421,9 @@ Suppose $M$ is AST with respect to $f$. Let the set of samples with which it ter
 All of the theorems on the termination of rankable terms therefore extend to other reduction strategies too. The proofs of Theorems \ref{thm:rankable implies termination}, \ref{thm:partial implies rankable}, \ref{thm:antitone rankable implies termination} and \ref{thm:antitone partial implies rankable} are all sufficiently generic with respect to what the reduction relation actually is that they can be directly applied to other reduction strategies. They only require that the number of reductions that can occur without any of them being a $\tY$-reduction is bounded for any starting term (which is true, because Theorem \ref{thm:de groote} applies equally to any reduction strategy). For a reduction strategy $r$ and term $M$, just substitute $N[r(N)]$ being a $\tY$-redex for $N$ being of the form $E[\tY \lambda x. O]$, and $r(N)$ being undefined for $N$ being a value.
 
 The domain of definition of the ranking functions also needs to be changed from the reachable terms $Rch(M)$ to the \emph{reachable terms with respect to the reduction strategy $r$},
-\[
-Rch_r(M) = \{N \mid \exists n, N_0, \dots, N_n: N_0 = M, N_n = N, N_i \to N_{i+1} \text{ at } r(N_i)\}.
-\]
+\begin{align*}
+& Rch_r(M) = \\ & \{N \mid \exists n, (N_i)_{0 \leq i \leq n}: N_0 = M, N_n = N, N_i \to N_{i+1} \text{ at } r(N_i)\}.
+\end{align*}
 
 To be more explicit, the modified forms of the theorems are:
 \begin{definition}\rm
