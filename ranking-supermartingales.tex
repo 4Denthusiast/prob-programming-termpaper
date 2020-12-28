@@ -6,8 +6,8 @@ We have in mind $\Omega = S$, and $\mathbb{P} = \mu$.
 
 \begin{definition}\rm
 \begin{enumerate}
-\item A sequence of random variables $(Y_n)_{n \in \omega}$ adapted to a filtration $(\calF_n)_{n \in \omega}$ is a \emph{supermartingale} if for all $n \in \omega$, $Y_n$ is integrable (i.e.~$\expect{|Y_n|} < \infty$), and $\expect{Y_{n+1} \mid \calF_n} \leq Y_n$ a.s.~\changed[lo]{(i.e.~$\forall A \in \calF_n$, $\int_A \dif \mu \, Y_{n+1} \leq \int_A \dif \mu \,Y_n$).}
-\item Let $\epsilon > 0$. A stopping time $T$ and a supermartingale $(Y_n)_{n \in \omega}$, both adapted to filtration $(\calF_n)_{n \in \omega}$, are a \emph{$\epsilon$-ranking supermartingale} if for all $n$, $Y_n \geq 0$ and $\expect{Y_{n+1} \mid \calF_n} \leq Y_n - \epsilon \cdot \mathbf{1}_{\set{T > n}}$.\footnote{For $A \in \calF$, we write ${\bf 1}_A$ for the \emph{indicator function} of $A$, i.e., the random variable $s \mapsto \begin{cases}
+\item A sequence of random variables $(Y_n)_{n \geq 0}$ adapted to a filtration $(\calF_n)_{n \geq 0}$ is a \emph{supermartingale} if for all $n \in \omega$, $Y_n$ is integrable (i.e.~$\expect{|Y_n|} < \infty$), and $\expect{Y_{n+1} \mid \calF_n} \leq Y_n$ a.s.~\changed[lo]{(i.e.~$\forall A \in \calF_n$, $\int_A \dif \mu \, Y_{n+1} \leq \int_A \dif \mu \,Y_n$).}
+\item Let $\epsilon > 0$. A stopping time $T$ and a supermartingale $(Y_n)_{n \geq 0}$, both adapted to filtration $(\calF_n)_{n \geq 0}$, are a \emph{$\epsilon$-ranking supermartingale} if for all $n$, $Y_n \geq 0$ and $\expect{Y_{n+1} \mid \calF_n} \leq Y_n - \epsilon \cdot \mathbf{1}_{\set{T > n}}$.\footnote{For $A \in \calF$, we write ${\bf 1}_A$ for the \emph{indicator function} of $A$, i.e., the random variable $s \mapsto \begin{cases}
 1 & \hbox{if $s \in A$}\\
 0 & \hbox{otherwise}
 \end{cases}$.}
@@ -17,13 +17,13 @@ A \emph{ranking supermartingale} is a $\epsilon$-ranking supermartingale for som
 
 \begin{remark}
 \changed[lo]{The original definition of ranking supermartingale, due to \citep{DBLP:conf/cav/ChakarovS13,DBLP:conf/popl/FioritiH15}, does not refer to a stopping time explicitly:
-Fioriti and Hermanns call a supermartingale $(Y_n)_{n \in \omega}$ \emph{ranking} if $Y_n \geq 0$, and there exists $\epsilon > 0$ such that $\expect{Y_{n+1} \mid \calF_n} \leq Y_n - \epsilon \cdot 1_{\set{Y_n > 0}}$.}
+Fioriti and Hermanns call a supermartingale $(Y_n)_{n \geq 0}$ \emph{ranking} if $Y_n \geq 0$, and there exists $\epsilon > 0$ such that $\expect{Y_{n+1} \mid \calF_n} \leq Y_n - \epsilon \cdot 1_{\set{Y_n > 0}}$.}
 \end{remark}
 
 Intuitively $Y_n$ gives the rank of the program after $n$ steps of computation, and $T$ is the time at which it reaches a value (which may be infinite if it fails to terminate).
 In a $\epsilon$-ranking supermartingale, each computation step causes a strict decrease in rank of at least $\epsilon$, provided the term in question is not a value.
 
-Let $T$ and $T'$ be stopping times adapted to $(\calF_n)_{n \in \omega}$.
+Let $T$ and $T'$ be stopping times adapted to $(\calF_n)_{n \geq 0}$.
 Recall the $\sigma$-algebra (consisting of measurable subsets ``prior to $T$'')
 \[
 \calF_T := \set{A \in \calF \mid \forall i \in \omega \, . \, A \cap \set{T \leq i} \in \calF_i}
@@ -33,17 +33,17 @@ and if $T \leq T'$, then $\calF_{T} \subseteq \calF_{T'}$.
 The following is an iterated version of Doob's well-known Optional Sampling Theorem (see, e.g., \cite[\S 6.7]{AshDD00} and \cite[Theorem 7.2]{DBLP:conf/popl/FioritiH15}).
 \begin{theorem}[Optional Sampling]
 \label{thm:optional sampling}
-Let $(X_n)_{n\in \omega}$ be a supermartingale, and $(T_n)_{n \in \omega}$ a sequence of increasing stopping times, both adapted to filtration $(\calF_n)_{n \in \omega}$, then $(X_{T_n})_{n \in \omega}$ is a supermartingale adapted to $(\calF_{T_n})_{n \in \omega}$ if one of the following conditions holds:
+Let $(X_n)_{n \geq 0}$ be a supermartingale, and $(T_n)_{n \geq 0}$ a sequence of increasing stopping times, both adapted to filtration $(\calF_n)_{n \geq 0}$, then $(X_{T_n})_{n \geq 0}$ is a supermartingale adapted to $(\calF_{T_n})_{n \geq 0}$ if one of the following conditions holds:
 \begin{enumerate}
 \item each $T_n$ is bounded i.e.~$T_n < c_n$ where $c_n$ is a constant
-\item $(X_n)_{n\in \omega}$ is uniformly integrable.
+\item $(X_n)_{n \geq 0}$ is uniformly integrable.
 \end{enumerate}
 \end{theorem}
 
 \begin{lemma}%[{\citep[Lemma 5.5]{DBLP:conf/popl/FioritiH15}}]
 % \citep[Prop 1]{DBLP:conf/popl/ChatterjeeFNH16}}
 \label{lem:rank-PAST}
-Let $(Y_n)_{n \in \omega}$ be a $\epsilon$-ranking supermartingale with respect to the stopping time $T$, then $T < \infty$ almost surely, and $\expect{T} \leq \dfrac{\expect{Y_0}}{\epsilon}$.
+Let $(Y_n)_{n \geq 0}$ be a $\epsilon$-ranking supermartingale with respect to the stopping time $T$, then $T < \infty$ almost surely, and $\expect{T} \leq \dfrac{\expect{Y_0}}{\epsilon}$.
 \end{lemma}
 
 \begin{proof}
@@ -63,8 +63,8 @@ In Lemma 5.5 of op.~cit., the stopping time $T$ is assumed to be the random vari
 Our first result is the following theorem.
 \begin{theorem}[Rankability] 
 \label{thm:rankable and strict rankable}
-If a closed SPCF term is rankable (respectively, strictly rankable) by $f$, then $(f(M_n))_{n \in \omega}$ is a 
-supermartingale (respectively, ranking supermartingale) adapted to the filtration $(\mathcal{F}_n)_{n \in \omega}$ where $\mathcal{F}_n = \sigma(M_1, \cdots, M_n)$.
+If a closed SPCF term is rankable (respectively, strictly rankable) by $f$, then $(f(M_n))_{n \geq 0}$ is a 
+supermartingale (respectively, ranking supermartingale) adapted to the filtration $(\mathcal{F}_n)_{n \geq 0}$ where $\mathcal{F}_n = \sigma(M_1, \cdots, M_n)$.
 \end{theorem}
 
 
@@ -326,7 +326,7 @@ T_M^\tY(s) &:= \min \set{n \mid M_{T_n(s)}(s) \textrm{ is a value}} \label{eq:y 
 The random variable $T_M^\tY$, which we call the \emph{$\tY$-runtime of $M$}, can equivalently be defined as the number of $\tY$-reduction steps in the reduction sequence of $M$. 
 Note that, as the type system ensures that the reduction relation excluding $\tY$-reduction is strongly normalising, only finitely many reductions can occur in a row without one of them being a $\tY$-reduction, therefore $T_M^\tY < \infty$ a.s.~iff $M$ is AST.
 
-The r.v.~$T_M^\tY$ is a stopping time adapted to the filtration $(\calF_{T_n})_{n \in \omega}$.
+The r.v.~$T_M^\tY$ is a stopping time adapted to the filtration $(\calF_{T_n})_{n \geq 0}$.
 
 
 \begin{theorem}[Soundness] \label{thm:rankable implies termination}
@@ -339,10 +339,10 @@ The r.v.~$T_M^\tY$ is a stopping time adapted to the filtration $(\calF_{T_n})_{
 
 \begin{proof}
 Let $f$ be a ranking function on $M$.
-For 1, observe that $T_0, T_1, T_2, \cdots$ are an increasing sequence of stopping times, each is bounded \lo{Prove it.} and adapted to $(\calF_n)_{n \in \omega}$.
-Then, since $(f(M_n))_{n \in \omega}$ is a supermartingale also adapted to $(\calF_n)_{n \in \omega}$ (\Cref{thm:rankable and strict rankable}),
-it follows from the Optional Sampling \Cref{thm:optional sampling} that $(Y_n)_{n \in \omega}$ where $Y_n := f(M_{T_n})$ is a supermartingale adapted to the filtration $(\calF_{T_n})_{n \in \omega}$.
-Since $T_M^\tY$ is a stopping time also adapted to $(\calF_{T_n})_{n \in \omega}$, we have that $(Y_n)_{n \in \omega}$ is a $1$-ranking supermartingale.
+For 1, observe that $T_0, T_1, T_2, \cdots$ are an increasing sequence of stopping times, each is bounded \lo{Prove it.} and adapted to $(\calF_n)_{n \geq 0}$.
+Then, since $(f(M_n))_{n \geq 0}$ is a supermartingale also adapted to $(\calF_n)_{n \geq 0}$ (\Cref{thm:rankable and strict rankable}),
+it follows from the Optional Sampling \Cref{thm:optional sampling} that $(Y_n)_{n \geq 0}$ where $Y_n := f(M_{T_n})$ is a supermartingale adapted to the filtration $(\calF_{T_n})_{n \geq 0}$.
+Since $T_M^\tY$ is a stopping time also adapted to $(\calF_{T_n})_{n \geq 0}$, we have that $(Y_n)_{n \geq 0}$ is a $1$-ranking supermartingale.
 Therefore, by \Cref{lem:rank-PAST}, $T^{\tY}_M < \infty$ a.s.~and $\expect{T^{\tY}_M} < \infty$.
 
 Statement 2 follows immediately from \Cref{lem:rank-PAST}.

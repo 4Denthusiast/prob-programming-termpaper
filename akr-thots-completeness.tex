@@ -17,7 +17,7 @@ Define $\rho_N : \mathbb{N} \to \nnReal$ by setting
 \]
 I.e.~$\rho_N(n)$ is the probability that $N$ is not yet terminated after $n$ more reduction steps.
 \lo{E.g.~writing $I^{m+1} := I^m \, I$ where $I^1 := I$, we have $\rho_{I^m}(n) = 1$ if $n < m - 1$, and 0 otherwise.}
-Let $|\rho_N| := \sum_{n \in \omega} \rho_N(n)$.
+Let $|\rho_N| := \sum_{n \geq 0} \rho_N(n)$.
 
 \begin{conjecture}
 $|\rho_N|$ is finite.
@@ -27,7 +27,7 @@ Define $\widehat{\rho}_N (n):= \frac{\rho_N(n)}{|\rho_N|}$.
 Assuming the conjecture, $\widehat{\rho}_N$ is a probability mass function (or subprobability mass function if we set $\widehat{\rho_N}$ to be 0 in case $N$ is a value). 
 
 \lo{Define r.v.~$Z_n(s) := \widehat{\rho}_N$ where $\red^n(M, s) = (N, {-})$. 
-Then $(Z_n)_{n \in \omega}$ is a (generalised) supermartingale.
+Then $(Z_n)_{n \geq 0}$ is a (generalised) supermartingale.
 I am not sure if we need this.}
 
 We want to map functions $\widehat{\rho}_N$ where $N$ ranges over $\mathit{Rch}(M)$ to real numbers.
