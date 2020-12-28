@@ -245,7 +245,7 @@ Now
   &>  \frac 1 {4n(n+2)} \\
   &>  \frac 1 2 \frac 1 {5(n+1)^2} + \frac 1 2 \frac 1 {5(n+3)^2}
 \end{align*}
-\changed[lo]{(The first inequality follows from the fact that for all $x \in (0, 1)$, $\log (1 + x) > x$.)}
+\changed[lo]{(The first inequality follows from the fact that for all $x \in (0, 1)$, $\log_2 (1 + x) > x$.)}
 Moreover $\Theta_2 \, 0$ reduces to $0$ with one $\tY$-reduction with a reduction in $g_2$ of $1$.
 Therefore by setting $\epsilon_2(x) = \frac 1 {5(e^{x-1}+1)^2}$, the condition on how much $g_2$ must decrease is met. It is also defined at $M_2 = \Theta_2 \, 10$, and is non-negative, therefore it is an antitone partial ranking function, and $M_2$ is AST.
 
@@ -321,7 +321,8 @@ To construct an antitone ranking function, we solve the recurrence relation:
 z_0 &= 0\\
 n \geq 1, \quad z_n &> \dfrac{n}{2n + 1} \, z_{n-1} + \dfrac{n+1}{2n + 1} \, z_{n+1}.
 \end{align*}
-For $n > 2$, $z_n = \log(n-1)$ works. The expected decrease is $\frac 1 2(\log(1+\frac 1 {(n-1)^2-1}) - \frac 1 {2n+1} \log(1 + \frac 2 {n-2}))$, and using the fact that $\frac x {x+1} \leq \log (1+x) \leq x$ for $x > 0$,\lo{The preceding inequality is incorrect: for $x \in (0, 1)$, $\log (1 + x) > x$.} this is at least $\frac 1 2(\frac 1 {(n-1)^2} - \frac 1 {2n + 1} \frac 2 {n-2}) = \frac {n^2}{2(n-1)^2(2n+1)(n-2)}$, which (again for $n > 2$) is positive and antitone. For $n = 0, 1, 2$, we take $\epsilon$ to be 9/40 (the same as its value at 3), then set $z_2 = 2 \log 2 - \log 3 - 1, z_1 = 3 \log 2 - 2 \log 3 - 3, z_0 = 4 \log 2 - 3 \log 3 - 6$. Some of those values are negative, but it's still bounded below, so by adding a constant offset it can be corrected, and the term is AST.
+For $n > 2$, $z_n = \log(n-1)$ works. The expected decrease is $\frac 1 2(\log(1+\frac 1 {(n-1)^2-1}) - \frac 1 {2n+1} \log(1 + \frac 2 {n-2}))$, and using the fact that $\frac x {x+1} \leq \log (1+x) \leq x$ for $x > 0$,\lo{The preceding inequality is incorrect: for $x \in (0, 1)$, $\log (1 + x) > x$.}
+\lo{OK. You mean $\ln$ rather than $\log_2$.} this is at least $\frac 1 2(\frac 1 {(n-1)^2} - \frac 1 {2n + 1} \frac 2 {n-2}) = \frac {n^2}{2(n-1)^2(2n+1)(n-2)}$, which (again for $n > 2$) is positive and antitone. For $n = 0, 1, 2$, we take $\epsilon$ to be 9/40 (the same as its value at 3), then set $z_2 = 2 \log 2 - \log 3 - 1, z_1 = 3 \log 2 - 2 \log 3 - 3, z_0 = 4 \log 2 - 3 \log 3 - 6$. Some of those values are negative, but it's still bounded below, so by adding a constant offset it can be corrected, and the term is AST.
 
 \end{example}
 
