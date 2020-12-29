@@ -458,8 +458,8 @@ A standard partial ranking function (i.e.~one that doesn't depend on the conflue
 
 \lo{This is a genuine (and simple) \emph{non-affine recursive program}, i.e., recursive programs that can, during the evaluation of the recursive body, make multiple recursive
 calls (of a first-order function) from distinct call sites. 
-We can use this example to motivate the confluent semantics, though it is perhaps not the most compelling possible.
-Reason: one could use a more restrictive but equally expressive recursion \emph{operator} (as opposed to a $\tY$-\emph{combinator}, which has the status of a constant) to implement general recursion which would make it unnecessary to consider an alternative reduction strategy when applying the partial ranking function theorem. 
+We can use this example to motivate the confluent trace semantics, though it is perhaps not the most compelling possible.
+Reason: one could use a more restrictive but equally expressive recursion \emph{operator} (as opposed to a $\tY$-\emph{combinator}, which is a constant) to implement general recursion which would make it unnecessary to consider an alternative reduction strategy when applying the partial ranking function theorem. 
 E.g.~define letrec-terms, $\mathsf{letrec} \, f^{A \to B} \, x^A . M$, as values, via the formation rule
 \[{\Gamma, f: A \to B, x:A  \vdash M : B} \over
 \Gamma \vdash \mathsf{letrec} \, f^{A \to B} \, x^A . M : A \to B
@@ -490,7 +490,7 @@ where
 \(
 X = \big( f^3(x+1) \oplus_e f^2(x+1) \big) \oplus_{\mathit{sig}(x)} f^2(x+1) 
 \)
-and $\mathit{sig}(x)$ is the Sigmoid function.
+and $\mathit{sig}(x)$ is the sigmoid function.
 
 Not only is this program non-affine recursive,
 note also the use of a random sample, $e$, as a first-class value, and the subsequent use as a probability in the binary choice $\oplus_e$.
@@ -521,8 +521,8 @@ DRAFT. Motivation: higher-order recursion. This could be placed in \Cref{sec:int
 There is an obvious source of deterministic (i.e.~non-probabilistic) higher-order functions defined by recursion, viz., \emph{higher-order recursion schemes} (HORS) (see e.g.~\citep{DBLP:conf/lics/Ong06,DBLP:conf/lics/Ong15}).
 (Incidentally the (sparse) ranking function method is just as applicable to the termination analysis of \emph{deterministic} SPCF programs.)
 Recently \cite{DBLP:conf/lics/KobayashiLG19} have extended HORS to \emph{probabilistic higher-order recursion schemes} (PHORS), which are HORS augmented with probabilistic (binary) branching $\oplus_p$.
-As HORS are in essence the $\lambda \tY$-calculus \cite{DBLP:conf/lics/Statman02} (i.e.~pure simply-typed lambda calculus with recursion, generated from a finite base type), PHORS are definable in SPCF:
-(order-$n$) PHORS is encodable as (order-$n$) CbN SPCF, but the former is strictly less expressive (because the underlying recursion schemes are not Turing complete). 
+As HORS are in essence the $\lambda \tY$-calculus \citep{DBLP:conf/lics/Statman02} (i.e.~pure simply-typed lambda calculus with recursion, generated from a finite base type), PHORS are definable in SPCF:
+(order-$n$) PHORS is encodable as (order-$n$) (call-by-name) SPCF, but the former is strictly less expressive (because the underlying recursion schemes are not Turing complete). 
 Some interesting SPCF terms such as \Cref{ex:non-affine with continuous distribution} %\refExample{complexExample} 
 cannot be expressed as PHORS.
 A relevant result here is that the AST problem is decidable for order-1 PHORS (by reduction to the PSPACE-hard solvability of finite systems of polynomial equations with real coefficients; see \citep{DBLP:journals/jacm/EtessamiY09}), but undecidable for order-2 PHORS.

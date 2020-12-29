@@ -11,6 +11,120 @@ It follows that $\sum_{i=0}^{\infty} \mathbb{P}[T > i]$ converges; hence we have
 It then remains to observe: if $T < \infty$ a.s., then $\expect{T} = \sum^\infty_{i=0} \mathbb{P}[T > i]$.
 \end{proof}
 
+\TechnicalRankingSupermartingale*
+
+First, some notation.
+
+Given an $\omega$-sequence (e.g.~$s \in \entrosp$) and $m \geq 0$, we write $s_{\leq m} \in I^m$ to mean the prefix of $s$ of length $m$.
+For $n \geq 0$, define
+\begin{align*}
+%M_n(s) &:= \pi_0 (\red^n(M, s))\\
+\ndraw{n}{s} &:= |\{k < n \mid \exists E: M_k(s) = E[\tsample]\}|
+\end{align*}
+so that $\pi_1 (\red^n(M, s)) = %\overbrace{\pi_t( \cdots (\pi_t}^{\ndraw n s}(s))$. 
+\pi_t( \cdots (\pi_t (s))$, with $\pi_t$ applied ${\ndraw n s}$ times.
+%and the filtration $\mathcal{F}_n := \sigma(M_1, \cdots, M_n)$.
+The $\calF_n$-measurability of $M_n$ (and hence of $\#\mathrm{draw}_n$) follows from \citep{DBLP:conf/icfp/BorgstromLGS16}.
+%$\#\mathrm{draw}_n$ is a stopping time (bounded by $n$). 
+\iffalse
+\akr{$\#\mathrm{draw}_n$ is not a stopping time. It doesn't look like you actually use this claim anyway, so it should just be fine to remove, but did you mean something different?} \lo{I agree, and I don't actually use this claim.}
+\fi
+Take $s \in A \in \calF_n$ with $\ndraw{n}{s} = l$.
+For any $s'\in \entrosp$, if $s_{\leq l} = s_{\leq l}'$ then $s' \in A$.
+It follows that ${\set{s_{\leq l}} \cdot I^\omega} \subseteq A$.
+\lo{NOTE. To fix notation:
+\(
+\sigma(M_{n}) = \sigma\big(\set{M_{n}^{-1}(\alpha_j, U_{\alpha_j})
+\mid \alpha_j\in \mathsf{Sk}_j, U_{\alpha_j} \in \mathcal{B}(\Real^j), j \geq 0}\big)
+\)
+}
+%Take $M \in \Lambda^0$ (closed SPCF terms). Define, for each $n \in \omega$, the random variable $M_n : \entrosp \to \Lambda^0$ by $M_n(s) := \pi_0 (\red^n(M, s))$.
+
+\begin{proof}
+We show the non-trivial case of $i = 2$.
+First we express 
+\begin{equation}
+f(M_{n+1})[s \in \mathbf{T}_2] = \sum_{i \in \calI} 
+f(E_i[\underline{\sigma_i(s)}][\underline{\rho(s)}])[s \in U_i]
+\label{eqn:f 2 n+1}
+\end{equation}
+where 
+\begin{itemize}
+\item $\calI$ is a countable indexing set
+\item $E_i[\cdot][\tsample] \in \mathsf{Sk}_{j_i}$, and $\sigma_i : \entrosp \to \Real^{j_i}$, and $\rho(s) := \pi_h(\pi_1(\red^n(M, s))) = \pi_h(\pi_t^{l_i}(s)) \in \Real$ 
+\item $\set{U_i}_{i \in \calI}$ is a partition of $\mathbf{T}_2$, 
+where each $U_i$ is determined by a skeletal term $E_i[\cdot][\tsample]$ and a number (of draws) $l_i \leq n$, satisfying
+\(
+s \in U_i
+\iff
+(E_i[\underline{r}][{\tsample}], \pi_t^{l_i}(s)) = \red^n(M, s),
+\;
+\hbox{for some }r \in \Real^{j_i}.
+\)
+(We use the (measurable) function $\sigma_i : \entrosp \to \Real^{j_i}$ to skolemise the existentially quantified $r$.)
+Equivalently
+\[
+U_i := \#\mathrm{draw}_n^{-1}(l_i) \cap M_n^{-1}(E_i[\cdot][\tsample], \Real^{j_i}) \in \calF_n.
+\]
+%\lo{I.e.~$(E_i[\underline{\sigma_i(s)}][{\tsample}], \pi_t^{l_i}(s)) = \red^n(M, s)$ iff $s \in U_i$.}
+\end{itemize}
+
+Observe that if $s \in U_i$ then $\set{s_{\leq l_i}} \cdot I^\omega \subseteq U_i$;
+in fact $(U_i)_{\leq l_i} \cdot I^\omega = U_i$.
+%Moreover, for any $A \in \calF_n$, if $s \in A$ then $\set{s_{\leq l}} \cdot I^\omega \subseteq A$.
+This means that for any measurable $g : \entrosp \to \Real_{\geq 0}$, if $g(s)$ only depends on the prefix of $s$ of length $(l_i+1)$, then, writing $\widehat{g} : I^{l_i+1} \to \Real_{\geq 0}$ where $g(s) = \widehat{g}(s_{\leq l_i+1})$, we have: for any $A \in \calF_n$ 
+\begin{equation}
+\int_{A \cap U_i}  \mu_{\entrosp}(\dif s) \, g(s) = 
+\int_{(A \cap U_i)_{\leq l_i+1}} \Leb_{l_i+1}(\dif t) \, \widehat{g}(t)
+\label{eqn:truncate}
+\end{equation}
+%(For simplicity, we will write $g' = g$ in the following.)
+%where $A_{\leq m} := \set{s_{\leq m} \mid s \in A}$. 
+
+Take $s \in U_i$, and set $l = l_i$.
+Plainly $\sigma_i(s)$ depends on $s_{\leq l}$, and $\rho(s)$ depends on $s_{\leq l +1}$.
+Take $u \in (U_i)_{\leq l}$.
+It then follows from the definition of ranking function that
+\[%\textstyle
+\int_I \Leb(\dif r) \, f(E_i[\underline{\widehat{\sigma_i}(u)}][\underline{r}])) \leq f(E_i[\underline{\widehat{\sigma_i}(u)}][\tsample])).
+\]
+Take $A \in \calF_n$, and integrating both sides, we get
+\begin{align*}
+& \int_{(A \cap U_i)_{\leq l}} \Leb_l(\dif u) \, \int_I \textrm{Leb}(\dif r) \, f(E_i[\underline{\widehat{\sigma_i}(u)}][\underline{r}])) \\
+& \leq \int_{(A \cap U_i)_{\leq l}} \Leb_l(\dif u) \, f(E_i[\underline{\widehat{\sigma_i}(u)}][\tsample])).
+\end{align*}
+Since $\Leb_{l+1}$ is the (unique) product measure satisfying $\Leb_{l+1}(V \times B) = \Leb_l(V) \cdot \Leb(B)$, and $(U_i)_{\leq l_i} \cdot I^\omega = U_i$, we have
+%it follows from the preceding observation that
+\begin{align*}
+& \int_{(A \cap U_i)_{\leq l+1}} \Leb_{l+1}(\dif u') \, f(E_i[\underline{\widehat{\sigma_i}(u')}][\underline{\widehat{\rho}(u')}])) \\
+& \leq 
+\int_{(A \cap U_i)_{\leq l+1}} \Leb_{l+1}(\dif u') \, f(E_i[\underline{\widehat{\sigma_i}(u')}][\tsample]))
+\end{align*}
+and so, by (\ref{eqn:truncate})
+\begin{align}
+& \int_{A \cap U_i} \mu_{\entrosp}(\dif s) \, f(E_i[\underline{\sigma_i(s)}][\underline{\rho(s)}])) \nonumber \\
+& \leq 
+\int_{A \cap U_i} \mu_{\entrosp}(\dif s) \, f(E_i[\underline{\sigma_i(s)}][\tsample])).
+\label{eqn:a u ui}
+\end{align}
+
+Now, integrating both sides of (\ref{eqn:f 2 n+1}), we have
+\begin{align*}
+& \int_A \mu_{\entrosp}(\dif s) \, f_{n+1}(M)[s \in \mathbf{T}_i] \\
+&= 
+\int_A \mu_{\entrosp}(\dif s) \, \sum_{i \in \calI} f(E_i[\underline{\sigma_i(s)}][\underline{\rho(s)}])[s \in U_i] \\
+&= 
+\sum_{i \in \calI} \int_{A \cap U_i} \mu_{\entrosp}(\dif s) \, f(E_i[\underline{\sigma_i(s)}][\underline{\rho(s)}])\\
+&\leq 
+\sum_{i \in \calI} \int_{A \cap U_i} \mu_{\entrosp}(\dif s) \, f(E_i[\underline{\sigma_i(s)}][\tsample])
+\quad \hbox{$\because$ (\ref{eqn:a u ui})}\\
+&= 
+\int_{A} \mu_{\entrosp}(\dif s) \, \sum_{i \in \calI} \, f(E_i[\underline{\sigma_i(s)}][\tsample])[s \in U_i]\\
+&= \int_{A} \mu_{\entrosp}(\dif s) f_{n}(M)[s \in \mathbf{T}_2]
+%\quad \hbox{$\because$ (\ref{eqn:f 2 n+1})}
+\end{align*}
+
+\end{proof}
 
 
 \newcommand\transform[1]{{\ulcorner{#1}\urcorner}}
