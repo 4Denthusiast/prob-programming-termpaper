@@ -41,7 +41,7 @@ We call $T$ a \emph{stopping time adapted to $(\calF_n)_{n \geq 0}$} just if $\s
 \item Let $\epsilon > 0$. 
 Given a stopping time $T$ and a supermartingale $(Y_n)_{n \geq 0}$, both adapted to filtration $(\calF_n)_{n \geq 0}$, 
 we say that $(Y_n)_{n \geq 0}$ is a \emph{$\epsilon$-ranking supermartingale w.r.t.~$T$} if for all $n$, $Y_n \geq 0$ and $\expect{Y_{n+1} \mid \calF_n} \leq Y_n - \epsilon \cdot \mathbf{1}_{\set{T > n}}$.
-\footnote{(For $A \in \calF$, we write ${\bf 1}_A$ for the \emph{indicator function} of $A$, i.e., the random variable defined by ${\bf 1}_A(\omega) := 1$ if $\omega \in A$, and $0$ otherwise.)} %\lo{\LaTeX\ does not allow the preceding bracketed sentence to be typeset as a footnote. Strange!}\lo{Now it does. Stranger.}
+\footnote{For $A \in \calF$, we write ${\bf 1}_A$ for the \emph{indicator function} of $A$, i.e., the random variable defined by ${\bf 1}_A(\omega) := 1$ if $\omega \in A$, and $0$ otherwise.} %\lo{\LaTeX\ does not allow the preceding bracketed sentence to be typeset as a footnote. Strange!}\lo{Now it does. Stranger.}
 A \emph{ranking supermartingale} w.r.t.~$T$ is a $\epsilon$-ranking supermartingale w.r.t.~$T$ for some $\epsilon > 0$.
 \end{enumerate}
 \end{definition}
@@ -94,7 +94,7 @@ M_n(s) &:= \pi_0 (\red^n(M, s))\\
 T_M(s) &:= \min \set{n \mid \hbox{$M_n(s)$ is a value}}
 \end{align*} 
 and the filtration $(\mathcal{F}_n)_{n \geq 0}$ where $\mathcal{F}_n := \sigma(M_1, \cdots, M_n)$.
-Thus $T_M$ is the \emph{termination time} of $M$.}
+Thus $T_M$ is the \emph{runtime} of $M$ (and $M$ is AST iff $\mu_{\entrosp}(T_M < \infty) = 1$).}
 
 Our first result is the following theorem.
 \begin{theorem}[Rankability] 
@@ -103,7 +103,7 @@ If a closed SPCF term $M$ is rankable (respectively, strictly rankable) by $f$
 %satisfying $f(N) = 0$ iff $N$ is a value, 
 then $(f(M_n))_{n \geq 0}$ is a supermartingale (respectively, ranking supermartingale w.r.t.~stopping time $T_M$) adapted to $(\mathcal{F}_n)_{n \geq 0}$. %where $\mathcal{F}_n = \sigma(M_1, \cdots, M_n)$.
 \end{theorem}
-
+\lo{A better name for this theorem: ``Ranking function'', ``Supermartingale'', ``(Ranking) supermartingale''?}
 
 %\subsection{Proof of \Cref{thm:rankable and strict rankable}.}
 We shall obtain the theorem as a corollary of a technical lemma (\Cref{lem:key rankable}).
@@ -411,15 +411,16 @@ $T_M^\tY$ is a stopping time adapted to $(\calF_{T_n})_{n \geq 0}$.
 
 \begin{proof}
 Let $f$ be a ranking function on $M$.
-For 1, since $(T_n)_{n \geq 0}$ is an increasing sequence of stopping times, each is bounded and adapted to $(\calF_n)_{n \geq 0}$ (\Cref{lem:TnBounded}),
+For 1, since $(T_n)_{n \geq 0}$ is an increasing sequence of stopping times, each is adapted to $(\calF_n)_{n \geq 0}$ (\Cref{lem:TnBounded}) and bounded,
 and $(f(M_n))_{n \geq 0}$ is a supermartingale also adapted to $(\calF_n)_{n \geq 0}$ (\Cref{thm:rankable and strict rankable}),
-it follows from the Optional Sampling \Cref{thm:optional sampling} that $(Y_n)_{n \geq 0}$ where $Y_n := f(M_{T_n})$ is a supermartingale adapted to the filtration $(\calF_{T_n})_{n \geq 0}$.
+it follows from the Optional Sampling \Cref{thm:optional sampling} that $(Y_n)_{n \geq 0}$ %where $Y_n := f(M_{T_n})$ 
+is a supermartingale adapted to $(\calF_{T_n})_{n \geq 0}$.
 Notice the stopping time $T_M^\tY$ is also adapted to $(\calF_{T_n})_{n \geq 0}$ (\Cref{lem:TMtY is a stopping time}); and we have that $(Y_n)_{n \geq 0}$ is a $1$-ranking supermartingale.
 Therefore, by \Cref{lem:rank-PAST}, $T^{\tY}_M < \infty$ a.s.~and $\expect{T^{\tY}_M} < \infty$.
 
 %For 2, we have that $(f(M_n))_{n \geq 0}$ is a ranking supermartingale (\Cref{thm:rankable and strict rankable}) w.r.t.~stopping time $T_M$. 
 %It follows immediately from \Cref{lem:rank-PAST} that $\expect{T_M} < \infty$.
-Statement 2 follows immediately from \Cref{thm:rankable and strict rankable} and \Cref{lem:rank-PAST}.
+Statement 2 follows at once from \Cref{thm:rankable and strict rankable} and \Cref{lem:rank-PAST}.
 \end{proof}
 
 Thus the method of (strict) ranking function is sound for proving (positive) a.s.~termination of SPCF programs.

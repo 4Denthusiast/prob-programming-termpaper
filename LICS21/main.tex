@@ -84,7 +84,7 @@
 \usepackage{enumitem}
 \newcommand{\tY}{\mathsf{Y}}
 %\newcommand{\tif}[3]{\textsf{if }#1\textsf{ then }#2\textsf{ else }#3}
-\newcommand{\tif}[3]{\mathsf{if}(#1, #2, #3)} % space-saving concrete syntax
+\newcommand{\tif}[3]{\mathsf{if}\boldsymbol{(}#1, #2, #3\boldsymbol{)}} % space-saving concrete syntax
 \newcommand{\tsample}{\mathsf{sample}}
 \newcommand{\tscore}{\mathsf{score}}
 \newcommand{\skeletonPlaceholder}{\mathsf{X}} % I'm not sure what the best notation here is.
@@ -166,7 +166,7 @@
 \input{confluent-proofs}
 
 \bibliographystyle{apalike}
-\bibliography{../references}
+\bibliography{references-Beutner,../references}
 
 \tableofcontents
 
