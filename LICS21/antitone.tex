@@ -429,6 +429,22 @@ therefore $(Y_n)_n$ is an antitone strict supermartingale with respect to $(T,\e
 
 The assumption that $(\mathcal F_n)_{n \geq 0}$ is the coarsest filtration to which $T$ is adapted is used in the equality between the third and fourth lines here. This condition is the main reason that this proof does not extend directly to a completeness result for antitone ranking functions.
 
+\medskip
+
+\lo{
+Motivation: Non-affine recursion. This could be placed in \Cref{sec:intro}.
+}
+Many of the recent advances in the development of AST verification methods \citep{DBLP:conf/pldi/ChenH20,DBLP:conf/cav/ChakarovS13,DBLP:conf/popl/FioritiH15,DBLP:journals/pacmpl/McIverMKK18,DBLP:conf/aplas/HuangFC18,DBLP:conf/popl/ChatterjeeNZ17,DBLP:journals/pacmpl/AgrawalC018,DBLP:conf/cav/ChatterjeeFG16,DBLP:conf/lics/OlmedoKKM16,DBLP:journals/pacmpl/Huang0CG19} are concerned with loop-based programs.
+We can view such loops as tail-recursive programs that are, in particular, \emph{affine recursive}, i.e., 
+in each evaluation (or run) of the body of the recursion, recursive calls are made from at most one call site \citep[\S 4.1]{DBLP:journals/toplas/LagoG19}.
+(Note that whether a program is affine recursive cannot be checked by just counting textual occurrences of variables.)
+Termination analysis of \emph{non-affine recursive} probabilistic programs does not seem to have received much attention.
+Methods such as those presented in \citep{DBLP:journals/toplas/LagoG19} are explicitly restricted to affine programs, and are unsound otherwise.
+By contrast, many probabilistic programming languages allow for richer recursive structures \citep{DBLP:conf/pkdd/TolpinMW15,DBLP:conf/uai/GoodmanMRBT08,DBLP:journals/corr/MansinghkaSP14}.
+
+\medskip
+
+
 \begin{example}[Non-affine recursion]
 \changed[akr]{Let 
 \[
@@ -440,7 +456,8 @@ For other values of $p > 1/2$, $n/(2p-1)$ works, and for $p = 1/2$, something mu
 
 A standard partial ranking function (i.e.~one that doesn't depend on the confluent semantics) would have a slightly more verbose definition, as the functions that accumulate would not be $\Xi$, but what $\Xi$ reduces to after one step.}
 
-\lo{This is a genuine (and simple) non-affine recursive program. 
+\lo{This is a genuine (and simple) \emph{non-affine recursive program}, i.e., recursive programs that can, during the evaluation of the recursive body, make multiple recursive
+calls (of a first-order function) from distinct call sites. 
 We can use this example to motivate the confluent semantics, though it is perhaps not the most compelling possible.
 Reason: one could use a more restrictive but equally expressive recursion \emph{operator} (as opposed to a $\tY$-\emph{combinator}, which has the status of a constant) to implement general recursion which would make it unnecessary to consider an alternative reduction strategy when applying the partial ranking function theorem. 
 E.g.~define letrec-terms, $\mathsf{letrec} \, f^{A \to B} \, x^A . M$, as values, via the formation rule
@@ -454,25 +471,13 @@ with the redex rule
 \end{example}
 
 \lo{
-Motivation: Non-affine recursion. This could be placed in \Cref{sec:intro}.
-}
-Many of the recent advances in the development of AST verification methods \citep{DBLP:conf/pldi/ChenH20,DBLP:conf/cav/ChakarovS13,DBLP:conf/popl/FioritiH15,DBLP:journals/pacmpl/McIverMKK18,DBLP:conf/aplas/HuangFC18,DBLP:conf/popl/ChatterjeeNZ17,DBLP:journals/pacmpl/AgrawalC018,DBLP:conf/cav/ChatterjeeFG16,DBLP:conf/lics/OlmedoKKM16,DBLP:journals/pacmpl/Huang0CG19} are concerned with loop-based programs.
-We can view such loops as tail-recursive programs that are, in particular, \emph{affine recursive}, i.e., 
-in each evaluation (or run) of the body of the recursion, recursive calls are made from at most one call site \citep[\S 4.1]{DBLP:journals/toplas/LagoG19}.
-Termination analysis of \emph{non-affine recursive} probabilistic programs does not seem to have received much attention.
-Methods such as those presented in \citep{DBLP:journals/toplas/LagoG19} are explicitly restricted to affine programs, and are unsound otherwise.
-By contrast, many probabilistic programming languages allow for richer recursive structures \cite{DBLP:conf/pkdd/TolpinMW15,DBLP:conf/uai/GoodmanMRBT08,DBLP:journals/corr/MansinghkaSP14}.
-
-\medskip
-
-\lo{
 DRAFT. Motivation: Continuous distributions. This could be placed in \Cref{sec:intro}.
 }
 Sampling from continuous distributions is an essential feature of probabilistic programming languages. (See e.g.~Church \citep{DBLP:conf/uai/GoodmanMRBT08}, Stan \citep{carpenter2017stan}, Anglican \citep{DBLP:conf/pkdd/TolpinMW15}, Gen \citep{cusumano-towner2019Gen}, Pyro \citep{bingham2019Pyro}, Edward \citep{tran2016edward} and Turing \citep{ge2018Turing}.)
-To our knowledge, methods of proving AST of probabilistic computation have been developed for probabilistic programs with discrete districutions only.
-The problem of proving AST of programs with continuous distribution is new.
+Methods of proving AST of probabilistic computation have been developed for probabilistic programs with discrete districutions (see e.g.~\citep{DBLP:journals/toplas/LagoG19,DBLP:journals/jacm/KaminskiKMO18,DBLP:conf/lics/OlmedoKKM16,DBLP:conf/lics/KobayashiLG19,DBLP:conf/mfcs/KaminskiK15,DBLP:series/mcs/McIverM05}).
+To our knowledge, the problem of proving AST of programs with continuous distribution is new.
 
-\lo{The following examples are for our discussion at 5:30. Details to be checked.}
+\lo{The following examples are for our discussion at 5:30. Details yet to be checked.}
 
 \begin{example}[Non-affine recursion with continuous distribution]
 \label{ex:non-affine with continuous distribution}
