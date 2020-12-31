@@ -35,14 +35,19 @@ M_3 =
 
 The term $M_1$ is rankable, terminating in 31 $\tY$-steps on average, and $M_3$ only has a $1/1024$ chance of terminating, but in between, $M_2$ is AST, but isn't $\tY$-PAST, therefore it isn't rankable and \Cref{thm:rankable implies termination} is insufficient to prove its termination. We therefore want to find a generalised notion of ranking function so that $M_2$ becomes rankable, and then prove it sound i.e.~rankable in this generalised sense implies AST.
 
-\paragraph*{Idea} 
+%\paragraph*{Idea} 
 
-The definition of antitone-convex ranking function $f$ (say) for $M \in \Lambda^0$ is the same as that of ranking function except that in the case of $\tY$-redex, 
-we require the existence of an antitone (meaning: $r < r'$ implies $\epsilon(r) \geq \epsilon(r')$) function $\epsilon : \nnReal \to \pReal$ such that the ranking function $f :\mathit{Rch}(M) \to \nnReal$ satisfies
+\changed[lo]{
+\begin{definition}
+%The definition of antitone ranking function $f$ for $M \in \Lambda^0$ is the same as that of ranking function except that in the case of $\tY$-redex, 
+%we require the existence of an antitone (meaning: $r < r'$ implies $\epsilon(r) \geq \epsilon(r')$) function $\epsilon : \nnReal \to \pReal$ such that the ranking function $f :\mathit{Rch}(M) \to \nnReal$ satisfies
+%\[f(E[R']) \leq f(E[R]) - \epsilon(f(E[R])) \] where $R \to R'$ is the $\tY$-redex rule.
+Given a ranking function $f$ on $M \in \Lambda^0$, we say that $f$ is \emph{antitone} if there exists an antitone function\footnote{i.e.~$r < r'$ implies $\epsilon(r) \geq \epsilon(r')$} $\epsilon : \nnReal \to \pReal$ such that %the ranking function $f$ satisfies
 \[
 f(E[R']) \leq f(E[R]) - \epsilon(f(E[R])) 
 \]
-where $R \to R'$ is the $\tY$-redex rule.
+for all $E[R'] \in \mathit{Rch}(M)$ where $R \to R'$ is the $\tY$-redex rule.
+\end{definition}
 
 \iffalse
 \lo{An aside: This CBV $\tY$-rule seems cleaner:
@@ -53,17 +58,19 @@ We assume $\tY f^{A \to B} \, x^A \, . \, \theta^B$ is a value.}
 \fi
 
 \begin{definition}
-We say that a supermartingale $(Y_n)_{n \geq 0}$ and a stopping time $T$ adapted to filtration $(\calF_n)_{n \geq 0}$ are \emph{antitone strict} if for all $n \geq 0$, we have $Y_n \geq 0$, and there exists an antitone function $\epsilon : \nnReal \to \pReal$ satisfying
+Given a probability space $(\Omega, \calF, \mathbb{P})$, and a supermartingale $(Y_n)_{n \geq 0}$ and a stopping time $T$ adapted to filtration $(\calF_n)_{n \geq 0}$,
+we say that $(Y_n)_{n \geq 0}$ is an \emph{antitone strict supermartingale w.r.t.~$T$} if for all $n \geq 0$, we have $Y_n \geq 0$, and there exists an antitone function $\epsilon : \nnReal \to \pReal$ satisfying
 \(
 \expect{Y_{n+1} \mid \calF_n} \leq Y_n - \epsilon (Y_n) \cdot {\bf 1}_{\set{T > n}}
 \).
+Any closed term for which an antitone ranking function exists is called \emph{antitone rankable}.
 \end{definition}
-
+}
 %\lo{The preceding definition does not place any constraint on the stopping time $T$ (other than that it is w.r.t.~the filtration $(\calF_n)_{n \geq 0}$). However for the definition to make sense, $T$ must be the stopping time $T(s) := \min \set{n \mid Y_n(s) = 0}$.}
 
 \begin{theorem}
 \label{thm:a-c strict}
-Let $(Y_n)_{n \geq 0}$ be an antitone strict supermartingale via $\epsilon : \nnReal \to \pReal$ and stopping time $T$. 
+Let $(Y_n)_{n \geq 0}$ be an antitone strict supermartingale w.r.t.~stopping time $T$. 
 Then $T < \infty$ a.s.
 \end{theorem}
 
@@ -100,7 +107,7 @@ Therefore
 \(
 \mathbb P[T > B_x] \leq x,
 \)
-where $B_x = \left \lceil \dfrac{\expect{Y_0}+1}{x \; \epsilon(\expect{Y_0} \, x^{-1})} \right \rceil$. 
+where $B_x = \left \lceil \dfrac{\expect{Y_0}+1}{x \; \epsilon(\expect{Y_0} \, x^{-1})} \right \rceil$ and $\epsilon : \nnReal \to \pReal$ is the antitone function. 
 
 \smallskip
 
@@ -172,9 +179,7 @@ With respect to the antitone function $\epsilon(x) = \frac{4-x}{4}$ and stopping
 %\lo{@Andrew: I refer to the preceding highlighted claim. Did you mean: for all $n, s$, $\epsilon(Y_n(s)) > Y_n(s)$?} \akr{No. This phrasing should be clearer.}
 \end{example}
 
-\changed[lo]{Let $f$ be a ranking function on a closed SPCF term $M$.
-%Recall that $(f(M_n))_{n \geq 0}$ is a supermartingale.
-We say that $M$ is \emph{antitone rankable} by $f$ if the supermartingale $(f(M_n))_{n \geq 0}$ and the stopping time $T_M^{\tY}$, both adapted to the fitration $(\calF_n)_{n \geq 0}$ where $\calF_n := \sigma(M_1, \ldots, M_n)$, are antitone strict.}
+%\changed[lo]{Let $f$ be a ranking function on a closed SPCF term $M$. We say that $M$ is \emph{antitone rankable} by $f$ if the supermartingale $(f(M_n))_{n \geq 0}$ and the stopping time $T_M^{\tY}$, both adapted to the fitration $(\calF_n)_{n \geq 0}$ where $\calF_n := \sigma(M_1, \ldots, M_n)$, are antitone strict.}
 
 \begin{theorem}[Antitone ranking function soundness] \label{thm:antitone rankable implies termination}
 If a closed SPCF term $M$ is antitone rankable, then $T_M^{\tY} < \infty$ a.s.~(equivalently, $M$ is AST).
@@ -183,7 +188,8 @@ If a closed SPCF term $M$ is antitone rankable, then $T_M^{\tY} < \infty$ a.s.~(
 As in %Theorem \ref{thm:basicRankingSoundness}, 
 \Cref{thm:rankable implies termination},
 take the probability space $(\entrosp, \Sigma_\entrosp, \mu_\entrosp)$, and define the same random variables $T_n, X_n, Y_n, T_M^{\tY}$. 
-As before, $(Y_n)_{n \geq 0}$ is a supermartingale, and because $M$ is now assumed to be antitone rankable, it is an antitone strict supermartingale with respect to the stopping time $T_M^{\tY}$. Thus, by \Cref{thm:a-c strict}, $T_M^{\tY} < \infty$ a.s.
+Thanks to \Cref{thm:rankable and strict rankable}, $(Y_n)_{n \geq 0}$ is a supermartingale; and because $M$ is now assumed to be antitone rankable, it is an antitone strict supermartingale w.r.t.~stopping time $T_M^{\tY}$. 
+Thus, by \Cref{thm:a-c strict}, $T_M^{\tY} < \infty$ a.s.
 \end{proof}
 
 %\paragraph{}
