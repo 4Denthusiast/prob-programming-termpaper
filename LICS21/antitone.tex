@@ -465,9 +465,11 @@ E.g.~define letrec-terms, $\mathsf{letrec} \, f^{A \to B} \, x^A . M$, as values
 \Gamma \vdash \mathsf{letrec} \, f^{A \to B} \, x^A . M : A \to B
 \]
 with the redex rule 
-\[
+\begin{equation}
 (\mathsf{letrec} \, f^{A \to B} \, x^A . M^B) \, V \to M[\mathsf{letrec} \, f \, x . M / f, V / x].
-\]}
+\label{eq:letrec redex}
+\end{equation}
+}
 \end{example}
 
 \lo{

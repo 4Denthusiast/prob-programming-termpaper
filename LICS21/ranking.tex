@@ -61,8 +61,17 @@ Let
 \Theta := \lambda f, n. \tif{\tsample - 0.5 < 0}{n}{f (n+1)}. 
 \]
 The term  $(\tY \, \Theta) \, \underline 0$ generates a geometric distribution.
-Despite its simplicity, its $Rch$ contains all the terms in \Cref{fig:geometric distribution}.
-\lo{\Cref{fig:geometric distribution} is confusing: the arrow means either one-step reduction, or its reflexive transitive closure, or ``has the same syntactic shape''. I think \Cref{fig:geometric distribution 1} is not confusing (arrow does mean one-step reduction; note $r'$), and it would be correct to say that $\mathit{Rch}(\tY \, \Theta \, \underline 0)$ contains all the terms in \Cref{fig:geometric distribution 1}, for each $i \geq 0$.}
+\changed[akr]{Despite its simplicity, its $Rch$ contains all the terms in \Cref{fig:geometric distribution}.}
+\lo{\Cref{fig:geometric distribution} is confusing: the arrow means either one-step reduction, or its reflexive transitive closure, or ``has the same syntactic shape''.}
+
+\lo{Perhaps you have in mind an informal, schematic interpretation, reading a term $C[i, r]$ as ``there exists a term $C[i, r]$, for appropriate $i, r \in \mathbb{R}$''.
+One way to make this precise is to consider the graph obtained by quotienting the one-step reduction relation by an appropriate equivalence relation over terms (that specifies this scheme reading).}
+
+\lo{\Cref{fig:geometric distribution 1} is less ambitious, but it is not confusing in that arrow does mean one-step reduction (also note $r'$), and it would be correct to say (cf.~the preceding blue-highlighted phrase): ``Despite its simplicity, $\mathit{Rch}(\tY \, \Theta \, \underline 0)$ contains all the terms in \Cref{fig:geometric distribution 1}, for each $i \geq 0$''.}
+
+\lo{The graph can be simplified if we redefine general recursion using a fixpoint operator as per \Cref{eq:letrec redex}.
+But (especially in view of the vast investment in the confluent trace semantics) it is perhaps too late to change things now?}
+
 \begin{figure}
 \begin{tikzpicture}[node distance=0.5em, anchor=west]
     \node (1) at (0,-0) {$\tY\, \Theta\, \underline 0$};
@@ -91,7 +100,7 @@ Despite its simplicity, its $Rch$ contains all the terms in \Cref{fig:geometric 
 \begin{figure}
 \centering
 \begin{tikzpicture}[node distance=0.5em, anchor=west]
-    \node (1) at (0,-0) {$\tY\, \Theta\, \underline i$};
+    \node (1) at (0,-0) {$\tY\, \Theta\, \underline i$ \quad [provided $i = 0$]};
     \node (2) at (0,-1) {$(\lambda z. (\lambda n. \tif{\tsample \underline{- 0.5} < 0}{n}{\tY\, \Theta\, (n \underline{+ 1})}) z)\, \underline i$};
     \node (3) at (0,-2) {$(\lambda n. \tif{\tsample \underline{- 0.5} < 0}{n}{\tY\, \Theta\, (n \underline{+ 1})})\, \underline i$};
     \node (4) at (0,-3) {$\tif{\tsample \underline{- 0.5} < 0}{\underline i}{\tY\, \Theta\, (\underline i\, \underline{+ 1})}$};
@@ -99,16 +108,17 @@ Despite its simplicity, its $Rch$ contains all the terms in \Cref{fig:geometric 
     \node (6) at (0,-5) {$\tif{\underline r' < 0}{\underline i}{\tY\, \Theta\, (\underline i\, \underline{+ 1})}$};
     \node (7) at (2,-6) [text width=] {$\underline i$};
     \node (8) at (0,-7) {$\tY\, \Theta\, (\underline i\, \underline{+ 1})$};
-    %\node (9) at (0,-8) {$(\lambda z. (\lambda n. \tif{\tsample \underline{- 0.5} < 0}{n}{\tY\, \Theta\, (n \underline{+ 1})}) z)\, (\underline i\, \underline{+ 1})$};
-    
+    \node (9) at (0,-8) {$(\lambda z. (\lambda n. \tif{\tsample \underline{- 0.5} < 0}{n}{\tY\, \Theta\, (n \underline{+ 1})}) z)\, (\underline i\, \underline{+ 1})$};
+    \node (10) at (0,-9) {$(\lambda z. (\lambda n. \tif{\tsample \underline{- 0.5} < 0}{n}{\tY\, \Theta\, (n \underline{+ 1})}) z)\, \underline{i + 1}$};
+
     \draw [->] (1.south west) to [bend right=45] (2.north west);
     \draw [->] (2.south west) to [bend right=45] (3.north west);
     \draw [->] (3.south west) to [bend right=45] (4.north west);
     \draw [->] (4.south west) to [bend right=45] (5.north west);
     \draw [->] (5.south west) to [bend right=45] (6.north west);
     \draw [->] (6.south west) to [bend right=45] (8.north west);
-    %\draw [->] (8.south west) to [bend right=45] (9.north west);
-    %\draw [->] (9.west) to [bend left=45] (2.west);
+    \draw [->] (8.south west) to [bend right=45] (9.north west);
+    \draw [->] (9.south west) to [bend right=45] (10.north west);
     \draw [->] (6) to (7);
 \end{tikzpicture}
 \caption{Some reachable terms of $\tY \, \Theta \, \underline 0$\label{fig:geometric distribution 1}}
