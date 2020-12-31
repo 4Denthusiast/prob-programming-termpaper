@@ -88,7 +88,7 @@ Let $(X_n)_{n \geq 0}$ be a supermartingale, and $(T_n)_{n \geq 0}$ a sequence o
 
 \subsection{Ranking functions and supermartingales}
 
-Henceforth, fix the probability space $(\entrosp, \calF, \mu_{\entrosp})$, and a closed SPCF term $M$.
+Henceforth, fix the probability space $(\entrosp, \Sigma_\entrosp, \mu_{\entrosp})$, and a closed SPCF term $M$.
 For $n \geq 0$, define the random variables 
 \begin{align*}
 M_n(s) &:= \pi_0 (\red^n(M, s))\\
@@ -247,7 +247,7 @@ This concludes the proof of \Cref{thm:rankable and strict rankable}.
 In the rest of this section we show that if $M \in \Lambda^0$ is rankable, then $M$ is AST: in other words, the method of ranking function is sound for proving a.s.~termination of SPCF programs.
 
 Let $f$ be a ranking function on $M$ satisfying $f(N) = 0$ iff $N$ is a value.
-Define random variables on the probability space $(\entrosp, \calF, \mu_{\entrosp})$:
+Define random variables on the probability space $(\entrosp, \Sigma_\entrosp, \mu_{\entrosp})$:
 \begin{align}
 T_{-1}(s) & := -1 \nonumber \\
 T_{n+1}(s) & := \min \{ k \mid k>T_n(s), M_k(s) \textrm{ a value} \nonumber\\

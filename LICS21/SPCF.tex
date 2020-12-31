@@ -40,9 +40,9 @@ Every closed well-typed term either is a value or reduces to another term.
 \subsection{Sampling semantics}
 \label{sec:sampling semantics}
 This version of the reduction relation allows $\tsample$ to reduce to any number in $[0,1]$. 
-To more precisely specify the probabilities, an additional argument is needed to determine the outcome of random samples. Let $ I := [0,1] \subset \mathbb{R} $, and define $\entrosp := I^{\mathbb{N}}$, with the \changed[lo]{Borel $\sigma$-algebra $\calF$} and the probability measure, denoted $\mu_{\entrosp}$, given by the limit of $1 \gets I \gets I^2 \gets \cdots$, where the maps are the projections that ignore the last element. Equivalently, a basis of measurable sets is $\prod_{i=0}^\infty X_i$ where $X_i$ are all Borel and all but finitely many are $I$, and $\mu_{\entrosp} (\prod_{i=0}^\infty X_i) := \prod_{i=0}^\infty \Leb(X_i)$.
+To more precisely specify the probabilities, an additional argument is needed to determine the outcome of random samples. Let $ I := [0,1] \subset \mathbb{R} $, and define $\entrosp := I^{\mathbb{N}}$, with the \changed[lo]{Borel $\sigma$-algebra $\Sigma_\entrosp$} and the probability measure, denoted $\mu_{\entrosp}$, given by the limit of $1 \gets I \gets I^2 \gets \cdots$, where the maps are the projections that ignore the last element. Equivalently, a basis of measurable sets is $\prod_{i=0}^\infty X_i$ where $X_i$ are all Borel and all but finitely many are $I$, and $\mu_{\entrosp} (\prod_{i=0}^\infty X_i) := \prod_{i=0}^\infty \Leb(X_i)$.
 The maps $\pi_h:\entrosp \to I, \; \pi_t:\entrosp \to \entrosp$ popping the first element are then measurable.
-\changed[lo]{Following \cite{DBLP:conf/esop/CulpepperC17}, we call the probability space $(\entrosp, \calF, \mu_{\entrosp})$ the \emph{entropy space}.}
+\changed[lo]{Following \cite{DBLP:conf/esop/CulpepperC17}, we call the probability space $(\entrosp, \Sigma_\entrosp, \mu_{\entrosp})$ the \emph{entropy space}.}
 
 The $\sigma$-algebra and measure on $\Lambda$ are defined by considering it as a disjoint union of equivalence classes under replacing all the real constants by a placeholder, where the measure on each class is that of $\mathbb{R}^n$, where $n$ is the number of real constants.
 \changed[lo]{Precisely, following \cite{DBLP:conf/icfp/BorgstromLGS16},
