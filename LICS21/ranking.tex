@@ -10,15 +10,17 @@ Although rankability implies almost-sure termination, the converse does not hold
 terminates in 3 steps with probability 1, but isn't rankable because $(\tY \lambda x. x) \, \underline 0$ is reachable, although that has probability 0. 
 Not only is this counterexample AST, it's PAST. %positively almost surely terminating i.e.~the expected time to termination is finite.
 
-A ranking function can be constructed under the stronger assumptions that, for every $N$ reachable from $M$, the expected number of $\tY$-reduction steps from $N$ to a value is finite. In particular, the expected number of $\tY$-reduction steps from each reachable term is a ranking function. Note that a finite number of expected $\tY$-reduction steps does not necessarily imply a finite number of expected total reduction steps.
+A ranking function can be constructed under the stronger assumptions that, for every $N$ reachable from $M$, the expected number of $\tY$-reduction steps from $N$ to a value is finite. 
+In particular, the expected number of $\tY$-reduction steps from each reachable term is a ranking function. 
+However, note that a finite number of expected $\tY$-reduction steps does not necessarily imply a finite number of expected total reduction steps.
 
 \begin{example}
 \label{ex:tY finite does not imply t finite}
-The term
+The term $M = \Xi \, (\lambda x. x+1)$ where
 \[
-M = \big(\tY \lambda f n. \tif{\tsample - 0.5 < 0}{n \, \underline 0}{f (\lambda x. n (n x))}\big) (\lambda x. x+1)
+\Xi := \tY \lambda f n. \tif{\tsample - 0.5 < 0}{n \, \underline 0}{f (\lambda x. n (n x))}
 \] 
-terminates with only 2 $\tY$-reductions on average i.e.~$\expect{T_M^\tY} = 2$, but applies the increment function $2^n$ times with probability $2^{-1-n}$ for $n \geq 0$, which diverges i.e.~$\expect{T_M} = \infty$.
+terminates with only 2 $\tY$-reductions on average, i.e.,~$\expect{T_M^\tY} = 2$, but applies the increment function $2^n$ times with probability $2^{-n-1}$ for $n \geq 0$, which diverges, i.e.,~$\expect{T_M} = \infty$.
 \end{example}
 
 \begin{theorem} \label{thm:minimal}
@@ -33,8 +35,7 @@ Let $f$ be the candidate least ranking function defined above, and suppose $g$ i
 %Theorem \ref{rankable implies ast}) 
 \Cref{thm:rankable and strict rankable});
 therefore $\mathbb E[g(M_n)] \leq \mathbb E[f(M_n)] + g(M)-f(M)$, for all $n$.
-
-We have $\mathbb E[f(M_n)] = \sum_{k=n}^\infty \mathbb P[M_k = E[\tY N] \text{ for some }E, N] \to 0 \text{ as } n \to \infty$; 
+Now $\mathbb E[f(M_n)] = \sum_{k=n}^\infty \mathbb P[M_k = E[\tY N] \text{ for some }E, N] \to 0 \text{ as } n \to \infty$; 
 therefore as $g(M) - f(M) < 0$, eventually $\mathbb E[g(M_n)] < 0$, which is impossible. 
 It follows that $g \geq f$ as required.
 
@@ -45,25 +46,34 @@ In order for $f$ to be the least ranking function of $M$, it also has to actuall
 Even in the case of reasonable simple terms, explicitly constructing a ranking function would be a lot of work, and \Cref{thm:minimal} makes even stronger assumptions than almost-sure termination, so it isn't useful for proving it.
 
 \begin{example}[Geometric distribution]
-Consider the term
-\begin{align*}
-&(\tY \lambda f, n. \\
-&\quad \tif{\tsample - 0.5 < 0}{n}{f (n+1)} \\
-&) \, \underline{0}
-\end{align*}
-which generates a geometric distribution (let $\Theta = \lambda f, n : \tif{\tsample \underline{- 0.5} < 0}{n}{f (n\underline{+ 1})}$, then the term is $(\tY \Theta)\ \underline 0$).
-    Despite its simplicity, its $Rch$ contains all the terms: see \Cref{fig:geometric distribution}.
+% Consider the term
+% \begin{align*}
+% &(\tY \lambda f, n. \\
+% &\quad \tif{\tsample - 0.5 < 0}{n}{f (n+1)} \\
+% &) \, \underline{0}
+% \end{align*}
+%\[
+%\big(\tY \lambda f, n. \tif{\tsample - 0.5 < 0}{n}{f (n+1)} \\
+%\big) \, \underline{0}
+%\]
+Let
+\[
+\Theta := \lambda f, n. \tif{\tsample - 0.5 < 0}{n}{f (n+1)}. 
+\]
+The term  $(\tY \, \Theta) \, \underline 0$ generates a geometric distribution.
+Despite its simplicity, its $Rch$ contains all the terms in \Cref{fig:geometric distribution}.
+\lo{\Cref{fig:geometric distribution} is confusing: the arrow means either one-step reduction, or its reflexive transitive closure, or ``has the same syntactic shape''. I think \Cref{fig:geometric distribution 1} is not confusing (arrow does mean one-step reduction; note $r'$), and it would be correct to say that $\mathit{Rch}(\tY \, \Theta \, \underline 0)$ contains all the terms in \Cref{fig:geometric distribution 1}, for each $i \geq 0$.}
 \begin{figure}
 \begin{tikzpicture}[node distance=0.5em, anchor=west]
-    \node (1) at (0,-0) {$\tY\ \Theta\ \underline 0$};
-    \node (2) at (0,-1) {$(\lambda z. (\lambda n. \tif{\tsample \underline{- 0.5} < 0}{n}{\tY\ \Theta\ (n \underline{+ 1})}) z)\ \underline i$};
-    \node (3) at (0,-2) {$(\lambda n. \tif{\tsample \underline{- 0.5} < 0}{n}{\tY\ \Theta\ (n \underline{+ 1})})\ \underline i$};
-    \node (4) at (0,-3) {$\tif{\tsample \underline{- 0.5} < 0}{\underline i}{\tY\ \Theta\ (\underline i\ \underline{+ 1})}$};
-    \node (5) at (0,-4) {$\tif{\underline r\ \underline{- 0.5} < 0}{\underline i}{\tY\ \Theta\ (\underline i\ \underline{+ 1})}$};
-    \node (6) at (0,-5) {$\tif{\underline r < 0}{\underline i}{\tY\ \Theta\ (\underline i\ \underline{+ 1})}$};
+    \node (1) at (0,-0) {$\tY\, \Theta\, \underline 0$};
+    \node (2) at (0,-1) {$(\lambda z. (\lambda n. \tif{\tsample \underline{- 0.5} < 0}{n}{\tY\, \Theta\, (n \underline{+ 1})}) z)\, \underline i$};
+    \node (3) at (0,-2) {$(\lambda n. \tif{\tsample \underline{- 0.5} < 0}{n}{\tY\, \Theta\, (n \underline{+ 1})})\, \underline i$};
+    \node (4) at (0,-3) {$\tif{\tsample \underline{- 0.5} < 0}{\underline i}{\tY\, \Theta\, (\underline i\, \underline{+ 1})}$};
+    \node (5) at (0,-4) {$\tif{\underline r\, \underline{- 0.5} < 0}{\underline i}{\tY\, \Theta\, (\underline i\, \underline{+ 1})}$};
+    \node (6) at (0,-5) {$\tif{\underline r < 0}{\underline i}{\tY\, \Theta\, (\underline i\, \underline{+ 1})}$};
     \node (7) at (2,-6) [text width=] {$\underline i$};
-    \node (8) at (0,-7) {$\tY\ \Theta\ (\underline i\ \underline{+ 1})$};
-    \node (9) at (0,-8) {$(\lambda z. (\lambda n. \tif{\tsample \underline{- 0.5} < 0}{n}{\tY\ \Theta\ (n \underline{+ 1})}) z)\ (\underline i\ \underline{+ 1})$};
+    \node (8) at (0,-7) {$\tY\, \Theta\, (\underline i\, \underline{+ 1})$};
+    \node (9) at (0,-8) {$(\lambda z. (\lambda n. \tif{\tsample \underline{- 0.5} < 0}{n}{\tY\, \Theta\, (n \underline{+ 1})}) z)\, (\underline i\, \underline{+ 1})$};
     
     \draw [->] (1.south west) to [bend right=45] (2.north west);
     \draw [->] (2.south west) to [bend right=45] (3.north west);
@@ -76,14 +86,39 @@ which generates a geometric distribution (let $\Theta = \lambda f, n : \tif{\tsa
     \draw [->] (9.west) to [bend left=45] (2.west);
     \draw [->] (6) to (7);
 \end{tikzpicture}
-\caption{Some reachable terms of $\tY\ \Theta\ \underline 0$\label{fig:geometric distribution}}
+\caption{Some reachable terms of $\tY \, \Theta \, \underline 0$\label{fig:geometric distribution}}
+\end{figure}
+\begin{figure}
+\centering
+\begin{tikzpicture}[node distance=0.5em, anchor=west]
+    \node (1) at (0,-0) {$\tY\, \Theta\, \underline i$};
+    \node (2) at (0,-1) {$(\lambda z. (\lambda n. \tif{\tsample \underline{- 0.5} < 0}{n}{\tY\, \Theta\, (n \underline{+ 1})}) z)\, \underline i$};
+    \node (3) at (0,-2) {$(\lambda n. \tif{\tsample \underline{- 0.5} < 0}{n}{\tY\, \Theta\, (n \underline{+ 1})})\, \underline i$};
+    \node (4) at (0,-3) {$\tif{\tsample \underline{- 0.5} < 0}{\underline i}{\tY\, \Theta\, (\underline i\, \underline{+ 1})}$};
+    \node (5) at (0,-4) {$\tif{\underline r\, \underline{- 0.5} < 0}{\underline i}{\tY\, \Theta\, (\underline i\, \underline{+ 1})}$};
+    \node (6) at (0,-5) {$\tif{\underline r' < 0}{\underline i}{\tY\, \Theta\, (\underline i\, \underline{+ 1})}$};
+    \node (7) at (2,-6) [text width=] {$\underline i$};
+    \node (8) at (0,-7) {$\tY\, \Theta\, (\underline i\, \underline{+ 1})$};
+    %\node (9) at (0,-8) {$(\lambda z. (\lambda n. \tif{\tsample \underline{- 0.5} < 0}{n}{\tY\, \Theta\, (n \underline{+ 1})}) z)\, (\underline i\, \underline{+ 1})$};
+    
+    \draw [->] (1.south west) to [bend right=45] (2.north west);
+    \draw [->] (2.south west) to [bend right=45] (3.north west);
+    \draw [->] (3.south west) to [bend right=45] (4.north west);
+    \draw [->] (4.south west) to [bend right=45] (5.north west);
+    \draw [->] (5.south west) to [bend right=45] (6.north west);
+    \draw [->] (6.south west) to [bend right=45] (8.north west);
+    %\draw [->] (8.south west) to [bend right=45] (9.north west);
+    %\draw [->] (9.west) to [bend left=45] (2.west);
+    \draw [->] (6) to (7);
+\end{tikzpicture}
+\caption{Some reachable terms of $\tY \, \Theta \, \underline 0$\label{fig:geometric distribution 1}}
 \end{figure}
 \end{example}
 
 Even in this simple case, defining a ranking function explicitly is awkward because of the number of cases, although in most cases, because the value need only be greater than or equal to that of the next term in sequence, it suffices to take the ranking function as having the same value as the next term, so that overall it takes only 3 distinct values.
 (We will explain why later.)
 
-The definition of rankability is also inconvenient for syntactic sugar. It could be useful, for example, to define $M \oplus_p N = \tif{\tsample - p < 0} M N$, where $M \oplus_p N$ reduces to $M$ or $N$, depending on the first value of $s$\lo{Need a name for $s$.}, with probability $p$ resp.~$(1-p)$. Technically though, it reduces first to $\tif{\underline r - p < 0} M N$ for all $r \in I$, so those terms all need values of the ranking function too.
+The definition of rankability is also inconvenient for syntactic sugar. It could be useful, for example, to define $M \oplus_p N = \tif{\tsample - p < 0} M N$, where $M \oplus_p N$ reduces to $M$ or $N$, depending on the first value of $s \in \entrosp$\lo{Need a name for $s$.}, with probability $p$ resp.~$(1-p)$. Technically though, it reduces first to $\tif{\underline r - p < 0} M N$ for all $r \in I$, so those terms all need values of the ranking function too.
 
 %\paragraph{}
 In both of these cases, there are only some values of the ranking function that are semantically important. 
