@@ -53,7 +53,7 @@ We assume $\tY f^{A \to B} \, x^A \, . \, \theta^B$ is a value.}
 \fi
 
 \begin{definition}
-We say that a supermartingale $(Y_n)_{n \geq 0}$ and a stopping time $T$ adapted to filtration $(\calF_n)_{n \geq 0}$ are \emph{antitone strict} if $Y_n \geq 0$, and there exists an antitone function $\epsilon : \nnReal \to \pReal$ satisfying
+We say that a supermartingale $(Y_n)_{n \geq 0}$ and a stopping time $T$ adapted to filtration $(\calF_n)_{n \geq 0}$ are \emph{antitone strict} if for all $n \geq 0$, we have $Y_n \geq 0$, and there exists an antitone function $\epsilon : \nnReal \to \pReal$ satisfying
 \(
 \expect{Y_{n+1} \mid \calF_n} \leq Y_n - \epsilon (Y_n) \cdot {\bf 1}_{\set{T > n}}
 \).
@@ -139,6 +139,7 @@ which is a contradiction, therefore the claim must be true, therefore $P[T > n]$
 Note that it is essential in this proof that $\epsilon$ be defined for all $\mathbb R_{\geq 0}$, not just the values that $(Y_n)_{n \geq 0}$ actually takes (or at least if $(Y_n)_{n \geq 0}$ is uniformly bounded, $\epsilon$ must be positive at the supremum as well as the actual values). 
 
 \begin{example}
+\iffalse
 \akr{Consider a random variable $X$, uniformly distributed in the interval $[-1,1]$, $T := \min \set{n \mid 2^{-n} < X}$, 
 \[
 Y_k := 
@@ -148,7 +149,7 @@ Y_k :=
 \end{cases} 
 \]
 } \lo{The following reformulation defines $T$ and $Y_k$ directly as a measurable function on a probability space (rather than via a r.v.~$X$).}
-
+\fi
 Take the probability space $(\Omega, \calF, \mathbb{P})$ where $\Omega$ is the closed interval of reals $[-1, 1]$, $\calF$ the Borel $\sigma$-algebra, and $\mathbb{P}$ the corresponding Lebesgue probability measure.
 Let $\omega \in [-1, 1]$. Define random variables $T$ and $(Y_k)_{k \in \omega}$:
 \begin{align*}
