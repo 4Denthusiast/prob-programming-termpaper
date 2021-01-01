@@ -44,13 +44,9 @@ To more precisely specify the probabilities, an additional argument is needed to
 The maps $\pi_h:\entrosp \to I, \; \pi_t:\entrosp \to \entrosp$ popping the first element are then measurable.
 \changed[lo]{Following \cite{DBLP:conf/esop/CulpepperC17}, we call the probability space $(\entrosp, \calF, \mu_{\entrosp})$ the \emph{entropy space}.}
 
-The $\sigma$-algebra and measure on $\Lambda$ are defined by considering it as a disjoint union of equivalence classes under replacing all the real constants by a placeholder, where the measure on each class is that of $\mathbb{R}^n$, where $n$ is the number of real constants.
-\changed[lo]{Precisely, following \cite{DBLP:conf/icfp/BorgstromLGS16},
-we view $\Lambda$ as $\bigcup_{m\geq 0} \big(\mathsf{Sk}_m \times \Real^m \big)$,
-where $\mathsf{Sk}_m$ is the set of SPCF terms with exactly $m$ place-holders (a.k.a.~\emph{skeleton terms}) for numerals.
-Thus identified, we give $\Lambda$ the countable disjoint union topology of the product topology of the discrete topology on $\mathsf{Sk}_m$ and the standard topology on $\Real^m$.
-Note that the connected components of $\Lambda$ have the form $\{M\} \times \Real^m$, with $M$ ranging over $\mathsf{Sk}_m$, and $m$ over $\mathbb{N}$. 
-We fix the Borel algebra of this topology to be the $\sigma$-algebra on $\Lambda$.}
+Define a \emph{skeleton} to be a term but, instead of having real constants $\underline r$, it has a placeholder $\skeletonPlaceholder$, so that each term $M$ has a skeleton $Sk(M)$, and each skeleton $S$ can be converted to a term $S[r]$ given a vector $r$ of $n$ real numbers to substitute in, where $n$ is the number of occurrences of $\skeletonPlaceholder$ in $S$. Following \cite{DBLP:conf/icfp/BorgstromLGS16}, the $\sigma$-algebra on $\Lambda$ is defined by identifying $\Lambda$ with $\bigcup_{m\geq 0} \big(\mathsf{Sk}_m \times \Real^m \big)$, where $\mathsf{Sk}_m$ is the set of skeletons containing $m$ occurrences of $\skeletonPlaceholder$.
+Thus identified, we give $\Lambda$ the countable disjoint union topology of the product topology of the discrete topology on $\mathsf{Sk}_m$ and the standard topology on $\Real^m$, and take the corresponding Borel $\sigma$-algebra.
+Note that the connected components of $\Lambda$ have the form $\{S\} \times \Real^m$, with $S$ ranging over $\mathsf{Sk}_m$, and $m$ over $\mathbb{N}$.
 
 The one-step reduction is given by the function $\red : \Lambda^0 \times \entrosp \to \Lambda^0 \times \entrosp$ where
 \begin{equation*}
