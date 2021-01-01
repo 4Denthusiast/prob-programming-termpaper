@@ -61,8 +61,10 @@ Let
 \Theta := \lambda f, n. \tif{\tsample - 0.5 < 0}{n}{f (n+1)}. 
 \]
 The term  $(\tY \, \Theta) \, \underline 0$ generates a geometric distribution.
-\changed[akr]{Despite its simplicity, its $Rch$ contains all the terms in \Cref{fig:geometric distribution}.}
+\changed[akr]{Despite its simplicity, its $Rch$ contains all the terms in \Cref{fig:geometric distribution}, for each $i \in \mathbb N, r \in I$.}
 \lo{\Cref{fig:geometric distribution} is confusing: the arrow means either one-step reduction, or its reflexive transitive closure, or ``has the same syntactic shape''.}
+
+\akr{The arrows all mean the one-step reduction $\to$, I just didn't intend for the values of $i$ and $r$ to be consistent between the terms. I would much rather have the diagram be complete (with all the reductions and all the terms).}
 
 \lo{Perhaps you have in mind an informal, schematic interpretation, reading a term $C[i, r]$ as ``there exists a term $C[i, r]$, for appropriate $i, r \in \mathbb{R}$''.
 One way to make this precise is to consider the graph obtained by quotienting the one-step reduction relation by an appropriate equivalence relation over terms (that specifies this scheme reading).}
@@ -79,23 +81,23 @@ But (especially in view of the vast investment in the confluent trace semantics)
     \node (3) at (0,-2) {$(\lambda n. \tif{\tsample \underline{- 0.5} < 0}{n}{\tY\, \Theta\, (n \underline{+ 1})})\, \underline i$};
     \node (4) at (0,-3) {$\tif{\tsample \underline{- 0.5} < 0}{\underline i}{\tY\, \Theta\, (\underline i\, \underline{+ 1})}$};
     \node (5) at (0,-4) {$\tif{\underline r\, \underline{- 0.5} < 0}{\underline i}{\tY\, \Theta\, (\underline i\, \underline{+ 1})}$};
-    \node (6) at (0,-5) {$\tif{\underline r < 0}{\underline i}{\tY\, \Theta\, (\underline i\, \underline{+ 1})}$};
-    \node (7) at (2,-6) [text width=] {$\underline i$};
+    \node (6) at (0,-5) {$\tif{\underline {r - 0.5} < 0}{\underline i}{\tY\, \Theta\, (\underline i\, \underline{+ 1})}$};
+    \node (7) at (2,-6.3) [text width=] {$\underline i$};
     \node (8) at (0,-7) {$\tY\, \Theta\, (\underline i\, \underline{+ 1})$};
     \node (9) at (0,-8) {$(\lambda z. (\lambda n. \tif{\tsample \underline{- 0.5} < 0}{n}{\tY\, \Theta\, (n \underline{+ 1})}) z)\, (\underline i\, \underline{+ 1})$};
     
-    \draw [->] (1.south west) to [bend right=45] (2.north west);
+    \draw [->] (1.south west) to [bend right=45, "$i := 0$"'] (2.north west);
     \draw [->] (2.south west) to [bend right=45] (3.north west);
     \draw [->] (3.south west) to [bend right=45] (4.north west);
     \draw [->] (4.south west) to [bend right=45] (5.north west);
     \draw [->] (5.south west) to [bend right=45] (6.north west);
-    \draw [->] (6.south west) to [bend right=45] (8.north west);
+    \draw [->] (6.south west) to [bend right=45, "$r \geq 0.5$"] (8.north west);
     \draw [->] (8.south west) to [bend right=45] (9.north west);
     
-    \draw [->] (9.west) to [bend left=45] (2.west);
-    \draw [->] (6) to (7);
+    \draw [->] (9.west) to [bend left=45, "$i := i + 1$" {above,sloped}] (2.west);
+    \draw [->] (6) to ["$r < 0.5$"] (7);
 \end{tikzpicture}
-\caption{Some reachable terms of $\tY \, \Theta \, \underline 0$\label{fig:geometric distribution}}
+\caption{The reachable terms of $\tY \, \Theta \, \underline 0$\label{fig:geometric distribution}}
 \end{figure}
 \begin{figure}
 \centering
