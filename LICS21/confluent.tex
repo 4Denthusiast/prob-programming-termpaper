@@ -235,7 +235,7 @@ Any closed term for which a ranking function with respect to a reduction strateg
 \end{definition}
 
 \begin{definition}
-A \emph{partial ranking function on $M$ with respect to a reduction strategy $r$} is a partial function $f : Rch_r(M) \rightharpoonup \mathbb R$ such that
+A \emph{sparse ranking function on $M$ with respect to a reduction strategy $r$} is a partial function $f : Rch_r(M) \rightharpoonup \mathbb R$ such that
 \begin{itemize}
     \item $f(N) \geq 0$ for all $N$ where $f$ is defined.
     \item $f$ is defined at $M$.
@@ -255,7 +255,7 @@ Any closed term for which an antitone ranking function with respect to a reducti
 \end{definition}
 
 \begin{definition}
-An \emph{antitone partial ranking function on $M$ with respect to a reduction strategy $r$} is a partial function $f : Rch_r(M) \rightharpoonup \mathbb R$ such that there exists some antitone function $\epsilon : \nnReal \to \pReal$ such that
+An \emph{antitone sparse ranking function on $M$ with respect to a reduction strategy $r$} is a partial function $f : Rch_r(M) \rightharpoonup \mathbb R$ such that there exists some antitone function $\epsilon : \nnReal \to \pReal$ such that
 \begin{itemize}
     \item $f(N) \geq 0$ for all $N$ where $f$ is defined.
     \item $f$ is defined at $M$.
@@ -264,7 +264,7 @@ An \emph{antitone partial ranking function on $M$ with respect to a reduction st
 \end{definition}
 
 \begin{theorem}
-If a closed SPCF term $M$ has a ranking function, partial ranking function, antitone ranking function or antitone partial ranking function with respect to a reduction strategy $r$, then $M$ is AST with respect to $r$, and AST.
+If a closed SPCF term $M$ has a ranking function, sparse ranking function, antitone ranking function or antitone sparse ranking function with respect to a reduction strategy $r$, then $M$ is AST with respect to $r$, and AST.
 \end{theorem}
 \lo{Give an example or two of a reduction strategy (for $\Rightarrow$) that is not $\cbv$.}
 
