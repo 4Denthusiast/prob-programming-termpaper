@@ -42,7 +42,7 @@ It follows that $g \geq f$ as required.
 In order for $f$ to be the least ranking function of $M$, it also has to actually be a ranking function itself. Each of the conditions on a ranking function is easily verified from the definition of $f$.
 \end{proof}
 
-\subsection{Partial ranking functions}
+\subsection{Sparse ranking functions}
 Even in the case of reasonable simple terms, explicitly constructing a ranking function would be a lot of work, and \Cref{thm:minimal} makes even stronger assumptions than almost-sure termination, so it isn't useful for proving it.
 
 \begin{example}[Geometric distribution]
@@ -162,32 +162,32 @@ The definition of rankability is also inconvenient for syntactic sugar. It could
 %\paragraph{}
 In both of these cases, there are only some values of the ranking function that are semantically important. 
 \begin{definition}
-Define a \emph{partial ranking function} on a closed term $M$ to be a partial function $f : Rch(M) \rightharpoonup \mathbb R$ such that
+Define a \emph{sparse ranking function} on a closed term $M$ to be a partial function $f : Rch(M) \rightharpoonup \mathbb R$ such that
 \begin{itemize}
     \item $f(N) \geq 0$ for all $N$ where $f$ is defined.
     \item $f$ is defined at $M$.
-    \item For any $N$ in the domain of definition of $f$, evaluation of $N$ will eventually \akr{It would be nicer for this to be only almost certain, to make this more neatly in-between rankability and ast, but that doesn't actually work because of terms reachable with 0 probability. Of course, astness doesn't imply rankability, so any definition of partial ranking function that includes all Y-past terms wouldn't always extend to a total ranking function.} reach some $O$ which is either a value or in the domain of definition of $f$, and $f(N) \geq \mathbb E[f(O) + \text{ the number of $\tY$-reduction steps from $N$ to $O$}]$ (where $f(O)$ is taken to be 0 if $O$ is a value outside of the domain of $f$).
+    \item For any $N$ in the domain of definition of $f$, evaluation of $N$ will eventually \akr{It would be nicer for this to be only almost certain, to make this more neatly in-between rankability and ast, but that doesn't actually work because of terms reachable with 0 probability. Of course, astness doesn't imply rankability, so any definition of sparse ranking function that includes all Y-past terms wouldn't always extend to a total ranking function.} reach some $O$ which is either a value or in the domain of definition of $f$, and $f(N) \geq \mathbb E[f(O) + \text{ the number of $\tY$-reduction steps from $N$ to $O$}]$ (where $f(O)$ is taken to be 0 if $O$ is a value outside of the domain of $f$).
 \end{itemize}
 \end{definition}
-A partial ranking function that is total is just a ranking function. Providing a partial ranking function is essentially part way between providing a ranking function and directly proving almost sure termination.
+A sparse ranking function that is total is just a ranking function. Providing a sparse ranking function is essentially part way between providing a ranking function and directly proving almost sure termination.
 
 \begin{theorem} \label{thm:partial implies rankable}
-Every partial ranking function is a restriction of a ranking function.
+Every sparse ranking function is a restriction of a ranking function.
 \end{theorem}
 \begin{proof}
-Take a closed term $M$ and partial ranking function $f$ on $M$. Define $f_1 : Rch(M) \rightharpoonup \mathbb R$ by
+Take a closed term $M$ and sparse ranking function $f$ on $M$. Define $f_1 : Rch(M) \rightharpoonup \mathbb R$ by
 \begin{align*}
     f_1(N) & := f(N) \text{ whenever $f(N)$ is defined,} \\
     f_1(V) & := 0 \text{ for values $V$ not in the domain of $f$.}
 \end{align*}
 
 Define $(\nnext(N,s),\_) = \red^n(N,s)$ for the least $n \geq 0$ such that it's in the domain of $f_1$, and $g(N,s) := \left | \{m < n \mid \red^m(N,s) \text{ is of the form } (E[\tY N'],s') \} \right |$. 
-The function $\nnext$ is well-defined (i.e.~$n$ is finite) for all $N \in Rch(M)$ by induction on the path from $M$ to $N$, by the third condition on partial ranking functions. Define $f_2(N) = \int_\entrosp f_1(\nnext(N,s)) + g(N,s) \, \mu_{\entrosp}(\mathrm d s)$. The (total) function $f_2$ agrees with $f$ on $f$'s domain, and it is a ranking function on $M$ (in fact, the least ranking function of which $f$ is a restriction).
+The function $\nnext$ is well-defined (i.e.~$n$ is finite) for all $N \in Rch(M)$ by induction on the path from $M$ to $N$, by the third condition on sparse ranking functions. Define $f_2(N) = \int_\entrosp f_1(\nnext(N,s)) + g(N,s) \, \mu_{\entrosp}(\mathrm d s)$. The (total) function $f_2$ agrees with $f$ on $f$'s domain, and it is a ranking function on $M$ (in fact, the least ranking function of which $f$ is a restriction).
 \lo{TODO. The preceding sentence deserves a proof.}
 \end{proof}
 
 
-As a corollary, any term which admits a partial ranking function terminates almost surely.
+As a corollary, any term which admits a sparse ranking function terminates almost surely.
 
 \subsection{Examples}
 Let $M \oplus_p N = \tif{\tsample - p < 0} M N$, for $p \in (0,1]$, then there are the pseudo-reduction relations
@@ -200,16 +200,16 @@ E[M \oplus_p N] \to^3 & E[N] & \\
         (E[N],\pi_t(s)) & \text{if } \pi_h(s) \geq p. \\
     \end{array} \right .
 \end{align*}
-A partial ranking function could be defined with respect to this shortcut reduction simply by replacing $\to$ and $\red$ in the definition of a partial ranking function by a version that goes straight from $N \oplus_p O$ to $N$ or $O$. Such a pseudo-partial ranking function would then be a partial function from a subset of $Rch(M)$, so it could also be considered as a partial function from all of $Rch(M)$, and it would in fact also be an actual partial ranking function. It is therefore possible to prove rankability directly using the shortcutted reductions.
+A sparse ranking function could be defined with respect to this shortcut reduction simply by replacing $\to$ and $\red$ in the definition of a sparse ranking function by a version that goes straight from $N \oplus_p O$ to $N$ or $O$. Such a pseudo-sparse ranking function would then be a partial function from a subset of $Rch(M)$, so it could also be considered as a partial function from all of $Rch(M)$, and it would in fact also be an actual sparse ranking function. It is therefore possible to prove rankability directly using the shortcutted reductions.
 
-A similar procedure would work for other forms of syntactic sugar. If a closed term $N$ eventually reduces to one of a set of other terms $\{N_i \mid i \in I\}$ with certain probabilities, a partial ranking function defined with respect to a reduction sequence that skips straight from $N$ to $N_i$ is also a valid partial ranking function for the original reduction function, and therefore its existence implies almost sure termination. There is a caveat, however, that $\tY$-reduction steps skipped over in the shortcut still need to be counted for the expected number of $\tY$-reduction steps.
+A similar procedure would work for other forms of syntactic sugar. If a closed term $N$ eventually reduces to one of a set of other terms $\{N_i \mid i \in I\}$ with certain probabilities, a sparse ranking function defined with respect to a reduction sequence that skips straight from $N$ to $N_i$ is also a valid sparse ranking function for the original reduction function, and therefore its existence implies almost sure termination. There is a caveat, however, that $\tY$-reduction steps skipped over in the shortcut still need to be counted for the expected number of $\tY$-reduction steps.
 
 %\paragraph{}
-With this abbreviation, the geometric distribution example from earlier can be written as $(\tY \lambda f n.\ n \oplus_{0.5} f(n+1)) \, \underline 0$. It is then easy to see that the following is a partial ranking function:
+With this abbreviation, the geometric distribution example from earlier can be written as $(\tY \lambda f n.\ n \oplus_{0.5} f(n+1)) \, \underline 0$. It is then easy to see that the following is a sparse ranking function:
 \begin{align*}
 (\tY \lambda f n.\ n \oplus_{0.5} f(n+1))\ N & \mapsto 2 \\
 \underline i \oplus_{0.5} (\tY \lambda f n.\ n \oplus_{0.5} f(n+1))\ (\underline i + 1) & \mapsto 1 \\
 \underline i & \mapsto 0.
 \end{align*}
 
-In fact, even the partial function $\tY \Theta N \mapsto 2$ alone is a partial ranking function for this term.
+In fact, even the partial function $\tY \Theta N \mapsto 2$ alone is a sparse ranking function for this term.

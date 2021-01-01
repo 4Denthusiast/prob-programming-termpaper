@@ -193,9 +193,9 @@ Thus, by \Cref{thm:a-c strict}, $T_M^{\tY} < \infty$ a.s.
 \end{proof}
 
 %\paragraph{}
-As before, constructing antitone ranking fuctions completely is not necessary, and there is a corresponding notion of an antitone partial ranking function.
+As before, constructing antitone ranking fuctions completely is not necessary, and there is a corresponding notion of an antitone sparse ranking function.
 
-Define an \emph{antitone partial ranking function} on a closed term $M$ to be a partial function $F : Rch(M) \rightharpoonup \mathbb{R}$ such that for some antitone function $\epsilon : \mathbb{R}_{\geq 0} \to \mathbb{R}_{>0}$
+Define an \emph{antitone sparse ranking function} on a closed term $M$ to be a partial function $F : Rch(M) \rightharpoonup \mathbb{R}$ such that for some antitone function $\epsilon : \mathbb{R}_{\geq 0} \to \mathbb{R}_{>0}$
 \begin{itemize}
 \item $f(N) \geq 0$ for all $N$ where $f$ is defined.
 \item $f$ is defined at $M$.
@@ -203,31 +203,32 @@ Define an \emph{antitone partial ranking function} on a closed term $M$ to be a 
 \end{itemize}
 
 \begin{theorem}  \label{thm:antitone partial implies rankable}
-  Every antitone partial ranking function is a restriction of an antitone ranking function.
+  Every antitone sparse ranking function is a restriction of an antitone ranking function.
 \end{theorem}
 \begin{proof}
-  Take a closed term $M$ and an antitone partial ranking function $f$ on $M$, with a corresponding antitone function $\epsilon$. Assume wlog that $\epsilon$ is convex (as if it isn't, we can just take its convex hull instead). As in Theorem \ref{thm:partial implies rankable}, define $f_1 : Rch(M) \rightharpoonup \mathbb R$ by
+  Take a closed term $M$ and an antitone sparse ranking function $f$ on $M$, with a corresponding antitone function $\epsilon$. Assume wlog that $\epsilon$ is convex (as if it isn't, we can just take its convex hull instead). As in Theorem \ref{thm:partial implies rankable}, define $f_1 : Rch(M) \rightharpoonup \mathbb R$ by
   \begin{align*}
     f_1(N) &= f(N) \text{ whenever $f(N)$ is defined},\\
     f_1(V) &= 0 \text{ for values $V$ not in the domain of $f$.}
   \end{align*}
 
+
   Define $(\nnext(N,s),\_) = \red^n(N,s)$ for the least $n \geq 0$ such that it's in the domain of $f_1$, and $g(N,s) := \left | \{m < n \mid \red^m(N,s) \text{ is of the form } (E[\tY N'],s') \} \right |$. 
   The function $\nnext$ is well-defined (i.e.~$n$ is finite) for all $N \in Rch(M)$ by induction on the path from $M$ to $N$, by the third condition on antitone partial ranking functions. Define $f_2(N) := \int_\entrosp f_1(\nnext(N,s)) + \epsilon(f_1(\nnext(N,s))) g(N,s) \, \mu_{\entrosp}(\mathrm d s)$. For any term $N$ where $f$ is defined, $f_2(N) = f(N)$, and the value that $f_2$ would have at $N$ if $f$ were not defined at $N$ is $\leq f(N)$, by the third condition on antitone partial ranking functions. In order to show that $f_2$ is an antitone partial ranking function, it therefore suffices to show that the value that $f_2$ would have had at each term if $f$ were not defined at that term is at least the expectation of $f_2$ after one reduction step (plus $\epsilon(f_2(N))$ if the reduction step is a $tY$-reduction). For any term $N$ which is not of the form $E[R]$ for some $\tY$-redex $R$, this is trivial. If $R$ is a $\tY$-redex, then $\epsilon(f_2(N)) \leq \int_\entrosp \epsilon(f_1(\nnext(N,s)))\, \mu_{\entrosp}(\mathrm d s)$ by the convexity of $\epsilon$, because $n$ is bounded. Therefore, the (total) function $f_2$, which agrees with $f$ on $f$'s domain, is an antitone ranking function on $M$ (with the same function $\epsilon$ if it's convex).
 \end{proof}
 
-As a corollary, any term which admits an antitone partial ranking function terminates almost surely.
+As a corollary, any term which admits an antitone sparse ranking function terminates almost surely.
 
 \paragraph*{\Cref{ex:ac-ranking} revisited}
 \akr{All of these ranking functions are slightly incorrect, because $\Xi \, \underline n$ reduces to something like $\Xi \, (\underline n + 1)$ then $(\lambda z. \text{something}[\Xi/f]) (\underline n + 1)$, rather than reducing the argument first. This could be fixed by appealing to the confluent semantics version of the antitone ranking theorem, but it would be nice to have at least some examples here illustrating how antitone ranking functions work, rather than actually saving all these examples until the end.
 
 Even though the difference is quite trivial, this was actually the original motivating example for the confluent trace semantics.}
 
-Programs $M_1$ and $M_2$ are AST. For $M_1$, the partial ranking function 
+Programs $M_1$ and $M_2$ are AST. For $M_1$, the sparse ranking function 
 \[
 \big(\tY \, \lambda f n . \, \tif{n=0}{0}{f \, (n-1) \oplus_{3/2} f \, (n+1)}\big) \, \underline x \mapsto 3x + 1
 \] 
-suffices to prove its termination (and could equivalently be considered an antitone partial ranking function with the constant antitone function $\epsilon_1(x) = 1$).
+suffices to prove its termination (and could equivalently be considered an antitone sparse ranking function with the constant antitone function $\epsilon_1(x) = 1$).
 
 \begin{example}[Unbiased random walk]
 \label{ex:unbiased random walk}
@@ -235,7 +236,7 @@ For $M_2$, define the function $g_1 : \nnReal \to \nnReal$ by $g_1(x) = \log(x+1
 Using shorthand 
 $\Theta_2 = \tY \, \lambda f n . \, 
 \tif{n = 0}{0}{f \, (n - 1) \oplus_{1/2} f \, (n + 1)}$, 
-we can define an antitone partial ranking function $f_2 : \mathit{Rch}(M_2) \rightharpoonup \nnReal$ 
+we can define an antitone sparse ranking function $f_2 : \mathit{Rch}(M_2) \rightharpoonup \nnReal$ 
 %with antitone function $\epsilon_2$ defined as follows (for $n \in \mathbb N$):
 by
 \[
@@ -264,7 +265,7 @@ Now
 \end{align*}
 \changed[lo]{(The first inequality follows from the fact that for all $x \in (0, 1)$, $\log_2 (1 + x) > x$.)}
 Moreover $\Theta_2 \, 0$ reduces to $0$ with one $\tY$-reduction with a reduction in $g_2$ of $1$.
-Therefore by setting $\epsilon_2(x) = \frac 1 {5(e^{x-1}+1)^2}$, the condition on how much $g_2$ must decrease is met. It is also defined at $M_2 = \Theta_2 \, 10$, and is non-negative, therefore it is an antitone partial ranking function, and $M_2$ is AST.
+Therefore by setting $\epsilon_2(x) = \frac 1 {5(e^{x-1}+1)^2}$, the condition on how much $g_2$ must decrease is met. It is also defined at $M_2 = \Theta_2 \, 10$, and is non-negative, therefore it is an antitone sparse ranking function, and $M_2$ is AST.
 \end{example}
 
 \begin{example}[Continuous random walk]\label{ex:raven complex}
@@ -274,7 +275,7 @@ In SPCF we can construct a function whose argument changes by a random amount at
 \Theta := \tY \, \lambda f x . \tif{x \leq 0}{0}{f(x - \tsample)}
 %}_{\Theta} \, 10
 \]
-We can construct a partial ranking function $f$ as follows:
+We can construct a sparse ranking function $f$ as follows:
 \begin{align*}
 \Theta \, \underline l 
 &\mapsto 
@@ -299,7 +300,7 @@ Let $g(x) := 2 + \log(x + 1)$, and let $\epsilon$ be the function specified by
 \]
 The limit of this as $x \to \infty$ and $g(x+1/2) \to \infty$ is 0, and $\frac {\mathrm d}{\mathrm dx} \epsilon(g(x+1/2)) = \frac 1 {x+1} + \log(1 - \frac 1 {x + 1/2}) < 0$, and $g$ is monotonic increasing; 
 therefore $\epsilon$ is antitone and bounded below by 0.
-We define a partial antitone ranking function by:
+We define an antitone sparse ranking function by:
 \[
 \Xi \, l 
 \mapsto 
@@ -324,7 +325,7 @@ g(\Xi \, l) \geq 2 + \log(1/2) > \log(\frac{3 \sqrt 3} 2) - 1 = \epsilon(g(0-1/2
 \) 
 as well.
 \end{itemize}
-Hence this is a valid partial antitone ranking function and the term is AST.
+Hence this is a valid antitone sparse ranking function and the term is AST.
 \end{example}
 
 \begin{example}[Fair-in-the-limit random walk]
@@ -362,7 +363,7 @@ For $n > 2$, $z_n = \log(n-1)$ works. The expected decrease is $\frac 1 2(\log(1
 \, 10
 \]
 
-In this case, the fact that the ranking function must decrease at each $\tY$-step (in an antitone partial ranking function) by the expected value of $\epsilon$ not at the current term, but at the next term where the ranking function is defined, is a little harder to deal with, because the variable $x$ can change all the way to $0$ in one step, therefore simply adding a small offset doesn't suffice to compensate for this fact.
+In this case, the fact that the ranking function must decrease at each $\tY$-step (in an antitone sparse ranking function) by the expected value of $\epsilon$ not at the current term, but at the next term where the ranking function is defined, is a little harder to deal with, because the variable $x$ can change all the way to $0$ in one step, therefore simply adding a small offset doesn't suffice to compensate for this fact.
 
 Consider the candidate ranking function $\Xi \, n \mapsto n + 1$. For each $n$, $\Xi \, n$ reduces to either $0$ (with probability $\frac 1 {n + 1}$) or $\Xi \, (n + 1)$, therefore the expected value of the ranking function is $\frac{n(n+2)}{n+1} = n + 1 - \frac 1 {(n+1)^2}$, and the required decrease is $\frac{\epsilon(0) + n \epsilon(n + 2)}{n + 1}$, therefore eventually, the expected decrease isn't enough, whatever the value of $\epsilon(0)$ is.
 
@@ -371,7 +372,7 @@ If instead, we take the ranking function to be defined after the $\tY$-reduction
 \Theta[n] &\mapsto n \\
 \Xi \, 10 & \mapsto 12.
 \end{align*}
-For each $n$, $\Theta[n]$ reduces to either $0$ or $\Theta[n+1]$, with a $\tY$-reduction only in the latter case, and the condition that this is an antitone partial ranking function is that $n \geq \frac{(n-1)(n+1)}{n} + \frac{n-1}{n} \epsilon(n+1)$ and $12 \geq 11 + \epsilon(11)$. These are satisfied by setting $\epsilon(x) = \min(1, 1/x)$, therefore this term is AST.
+For each $n$, $\Theta[n]$ reduces to either $0$ or $\Theta[n+1]$, with a $\tY$-reduction only in the latter case, and the condition that this is an antitone sparse ranking function is that $n \geq \frac{(n-1)(n+1)}{n} + \frac{n-1}{n} \epsilon(n+1)$ and $12 \geq 11 + \epsilon(11)$. These are satisfied by setting $\epsilon(x) = \min(1, 1/x)$, therefore this term is AST.
 \end{example}
 
 \paragraph*{Completeness}
@@ -457,16 +458,16 @@ By contrast, many probabilistic programming languages allow for richer recursive
 \[
 \Xi := \tY \lambda f x. x \oplus_{2/3} f (f (x + 1))
 \] 
-A partial ranking function for $\Xi \, 1$ would be $\Xi^n \, i \mapsto 3 \, n$ (for $n \geq 0$), but w.r.t.~the reduction strategy that first reduces the argument of an application to a value, then the function, then the application itself.
+A sparse ranking function for $\Xi \, 1$ would be $\Xi^n \, i \mapsto 3 \, n$ (for $n \geq 0$), but w.r.t.~the reduction strategy that first reduces the argument of an application to a value, then the function, then the application itself.
 
 For other values of $p > 1/2$, $n/(2p-1)$ works, and for $p = 1/2$, something much like the antitone ranking function for \Cref{ex:unbiased random walk} would work.
 
-A standard partial ranking function (i.e.~one that doesn't depend on the confluent semantics) would have a slightly more verbose definition, as the functions that accumulate would not be $\Xi$, but what $\Xi$ reduces to after one step.}
+A standard sparse ranking function (i.e.~one that doesn't depend on the confluent semantics) would have a slightly more verbose definition, as the functions that accumulate would not be $\Xi$, but what $\Xi$ reduces to after one step.}
 
 \lo{This is a genuine (and simple) \emph{non-affine recursive program}, i.e., recursive programs that can, during the evaluation of the recursive body, make multiple recursive
 calls (of a first-order function) from distinct call sites. 
 We can use this example to motivate the confluent trace semantics, though it is perhaps not the most compelling possible.
-Reason: one could use a more restrictive but equally expressive recursion \emph{operator} (as opposed to a $\tY$-\emph{combinator}, which is a constant) to implement general recursion which would make it unnecessary to consider an alternative reduction strategy when applying the partial ranking function theorem. 
+Reason: one could use a more restrictive but equally expressive recursion \emph{operator} (as opposed to a $\tY$-\emph{combinator}, which is a constant) to implement general recursion which would make it unnecessary to consider an alternative reduction strategy when applying the sparse ranking function theorem. 
 E.g.~define letrec-terms, $\mathsf{letrec} \, f^{A \to B} \, x^A . M$, as values, via the formation rule
 \[{\Gamma, f: A \to B, x:A  \vdash M : B} \over
 \Gamma \vdash \mathsf{letrec} \, f^{A \to B} \, x^A . M : A \to B
