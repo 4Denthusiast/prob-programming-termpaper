@@ -86,7 +86,7 @@ For example, we have
 \skeletonPlaceholder
 \).
 
-Given a closed term $M$, let $L_0(M)$ be the set of pairs, the first element of which is a $\to$-reduction sequence of skeletons starting at $Sk(M)$, and the second of which is a position in the final skeleton of the reduction sequence. As with the traces from $I^{\mathbb N}$ used to pre-select samples to use in the usual linear sampling semantics,\lo{I assume by linear sampling semantics, you mean the standard sampling semantics. If so, I would drop linear.} there will be (with one more caveat introduced later) a sample from $I$ pre-selected for each element of $L_0(M)$, which will then be used if a $\tsample$ reduction is ever performed at that position.
+Given a closed term $M$, let $L_0(M)$ be the set of pairs, the first element of which is a $\to$-reduction sequence of skeletons starting at $\mathit{Sk}(M)$, and the second of which is a position in the final skeleton of the reduction sequence. As with the traces from $I^{\mathbb N}$ used to pre-select samples to use in the usual linear sampling semantics,\lo{I assume by linear sampling semantics, you mean the standard sampling semantics. If so, I would drop linear.} there will be (with one more caveat introduced later) a sample from $I$ pre-selected for each element of $L_0(M)$, which will then be used if a $\tsample$ reduction is ever performed at that position.
 
 \begin{example}[Labelling samples by terms]
 Consider the terms
@@ -106,13 +106,14 @@ If terms rather than skeletons were used to label samples, the set of traces whe
 
 \lo{The $\mathsf{if}_1$ in the line above (and in the set comprehension below) should be $\mathsf{if}_1 ; \underline{-}_1$.}
 
+\lo{I think we should write ``$[A[\tsample], A[\underline r], \ldots, B$'' in the line above as ``$A[\tsample] \to A[\underline r] \to^\ast B$''; similarly $\mathit{Sk}(A[\tsample]) \to \mathit{Sk}(A[\underline 0]) \to^\ast \mathit{Sk}(B)$ below.}
 This is a rather unwieldy expression, but the crucial part is that $r$ occurs twice in the conditions on $s$: once as the value a sample must take, and once in the location of a sample. 
 This set is unmeasurable, therefore the termination probability would not even be well-defined. 
 Labelling samples by skeletons instead, this problem does not occur because there are only countably many skeleton, and at each step in a reduction sequence, only finitely many could have occurred yet. 
-For this particular term, $Sk(A[\underline r])$ does not depend on the value of $r$, therefore the set where it terminates becomes simply
+For this particular term, $\mathit{Sk}(A[\underline r])$ does not depend on the value of $r$, therefore the set where it terminates becomes simply
 \begin{align*}
 &\{s \in I^{L_s(A[\tsample])} \mid \\
-&\qquad s(Sk(A[\tsample]), Sk(A[\underline 0]), \ldots, Sk(B), \mathsf{if}_1) > 0.5 \},
+&\qquad s(\mathit{Sk}(A[\tsample]), \mathit{Sk}(A[\underline 0]), \ldots, \mathit{Sk}(B), \mathsf{if}_1) > 0.5 \},
 \end{align*}
 which is measurable. Skeletal reduction sequences still contain just as much information as reduction sequences of terms, however, on which reductions took place.
 \qed
@@ -172,7 +173,7 @@ The relation $\sim$ is defined on $L_0(M)$ with reference to a particular starti
 
 
 At each reduction step $M \to N$, the sample space must be restricted from $I^{L_s(M)}$ to $I^{L_s(N)}$. 
-The injection $L_0(N) \to L_0(M)$ is trivial to define by appending $Sk(M) \to Sk(N)$ to each path, and using Lemma~\ref{lem:sim-M-N}, this induces a corresponding injection on the quotient, $L(N) \to L(M)$. 
+The injection $L_0(N) \to L_0(M)$ is trivial to define by appending $\mathit{Sk}(M) \to \mathit{Sk}(N)$ to each path, and using Lemma~\ref{lem:sim-M-N}, this induces a corresponding injection on the quotient, $L(N) \to L(M)$. 
 The corresponding map $L_s(N) \to L_s(M)$ is then denoted $i(M \to N)$.
 
 Unlike in the purely call-by-value case, the version of the reduction relation that takes into account samples is still a general relation rather than a function, so it is denoted ``$\Rightarrow$'' instead of ``$\red$'', and it relates $\biguplus_{M \in \Lambda_0} I^{L_s(M)}$ to itself.
@@ -180,7 +181,7 @@ Unlike in the purely call-by-value case, the version of the reduction relation t
 \begin{align*}
 & (M,s) \Rightarrow (N,s \circ i(M \to N)) \text{ if $M \to N$ at $\alpha$ and either} \\
 & \qquad \text{the redex is not $\tsample$, or} \\
-& \qquad \text{$M \mid \alpha = \tsample$ and $N = M[\underline{s(Sk(M),\alpha)}/\alpha]$}
+& \qquad \text{$M \mid \alpha = \tsample$ and $N = M[\underline{s(\mathit{Sk}(M),\alpha)}/\alpha]$}
 \end{align*}
 
 \paragraph{}
