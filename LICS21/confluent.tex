@@ -100,7 +100,7 @@ If terms rather than skeletons were used to label samples, the set of traces whe
 \qquad\qquad\qquad\quad s([A[\tsample]], \mathsf{if}_1;\underline{-}_1;@_1;\mathsf{if}_1) = r, \\
 \qquad\qquad\qquad\quad s([A[\tsample], A[\underline r], \ldots, B, \mathsf{if}_1) > 0.5 \}.
 \end{array}\] 
-\lo{We have just defined $L_0(M)$, but what is $L_s(\cdot)$ (subscript $s$)? I assume it is the version of $L_0(M)$ that labels samples by term.} 
+\lo{We have just defined $L_0(M)$, but what is $L_s(\cdot)$ (subscript $s$)? I assume it is the version of $L_0(M)$ that labels samples by terms.} 
 
 \lo{The occurrence of $L_s(M)$ in the set comprehension below should be $L_0(M)$?}
 
@@ -127,7 +127,13 @@ Reduction sequences are used rather than reachable skeletons because if the same
 The reduction sequences of skeletons will often be discussed as though they were just skeletons, identifying them with their final skeletons. With this abuse of notation, a reduction sequence $N$ (actually $N_1 \to \dots \to N_n = N$) may be said to reduce to a reduction sequence $O$, where the reduction sequence implicitly associated with the final skeleton $O$ is $N_1 \to \dots \to N_n \to O$.
 
 \paragraph{}
-This is still not quite sufficient because sometimes the same samples must be used at corresponding positions in different reduction sequences. For example, the term $M = \tsample + \tsample$ has the reachable skeletons $N_1 = \skeletonPlaceholder + \tsample, N_2 = \tsample + \skeletonPlaceholder, O = \skeletonPlaceholder + \skeletonPlaceholder$ and $\skeletonPlaceholder$, with reductions $M \to N_1 \to O \to \skeletonPlaceholder$ and $M \to N_2 \to O \to \skeletonPlaceholder$. In the reduction $M \to N_1$, the sample labelled $(M, \underline{+}_2)$ is used, and in the reduction $N_2 \to O$, the sample labelled $(M \to N_2, \underline{+}_2)$ is used. Each of these samples becomes the value of the second numeral in $O$ in their respective reduction sequences, therefore in order for Church-Rosserness to be attained, they must be the same. Which elements of $L_0(M)$ must match can be described by the relation $\sim^*$:
+This is still not quite sufficient because sometimes the same samples must be used at corresponding positions in different reduction sequences. 
+
+\begin{example} \label{ex:cousin sim} The term $M = \tsample + \tsample$ has the reachable skeletons $N_1 = \skeletonPlaceholder + \tsample, N_2 = \tsample + \skeletonPlaceholder, O = \skeletonPlaceholder + \skeletonPlaceholder$ and $\skeletonPlaceholder$, with reductions $M \to N_1 \to O \to \skeletonPlaceholder$ and $M \to N_2 \to O \to \skeletonPlaceholder$. 
+In the reduction $M \to N_1$, the sample labelled $(M, \underline{+}_2)$ is used, and in the reduction $N_2 \to O$, the sample labelled %$(M \to N_2, \underline{+}_2)$
+\changed[lo]{$(M \to N_2, \underline{+}_1)$} is used. 
+Each of these samples becomes the value of the second numeral in $O$ in their respective reduction sequences, therefore in order for Church-Rosserness to be attained, they must be the same. Which elements of $L_0(M)$ must match can be described by the relation $\sim^*$:
+\end{example}
 
 \begin{definition}
 The relation $\sim$ is defined as the union of the minimal symmetric relations $\sim_p$ (``$p$'' for parent-child) and $\sim_c$ (``$c$'' for cousin) satisfying
@@ -155,6 +161,7 @@ The relation $\sim$ is defined as the union of the minimal symmetric relations $
     (in which case $O_1$ and $O_2$ are equal as skeletons, but with different reduction sequences), $O_1'$ and $O_2'$ are the results of applying some reduction sequence to each of $O_1$ and $O_2$ (the same reductions in each case, which is always possible because they're equal terms), and $\delta$ is a position in $O_1'$ (or equivalently $O_2'$), then $(O_1',\delta) \sim_c (O_2',\delta)$.
 \end{enumerate}
 The $\sim_c$-rules are illustrated in Figure \ref{sim-diagram}.
+\lo{TODO. Use \Cref{ex:cousin sim} to give an example of $\sim_c$.}
 \end{definition}
 
 The reflexive transitive closure $\sim^*$ of this relation is used to define the set of \emph{potential positions} $L(M) = L_0(M) / \sim^*$, and each equivalence class can be considered as the same position as it may occur across multiple reachable skeletons. 

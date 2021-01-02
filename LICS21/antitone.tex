@@ -223,7 +223,6 @@ As a corollary, any term which admits an antitone sparse ranking function termin
 \akr{All of these ranking functions are slightly incorrect, because $\Xi \, \underline n$ reduces to something like $\Xi \, (\underline n + 1)$ then $(\lambda z. \text{something}[\Xi/f]) (\underline n + 1)$, rather than reducing the argument first. This could be fixed by appealing to the confluent semantics version of the antitone ranking theorem, but it would be nice to have at least some examples here illustrating how antitone ranking functions work, rather than actually saving all these examples until the end.
 
 Even though the difference is quite trivial, this was actually the original motivating example for the confluent trace semantics.}
-
 Programs $M_1$ and $M_2$ are AST. For $M_1$, the sparse ranking function 
 \[
 \big(\tY \, \lambda f n . \, \tif{n=0}{0}{f \, (n-1) \oplus_{3/2} f \, (n+1)}\big) \, \underline x \mapsto 3x + 1
