@@ -6,10 +6,17 @@
 
 The language SPCF is a simply-typed lambda calculus with sampling of real numbers from the closed interval $[0,1]$ and unbounded scoring, following \cite{MakOPW21}. 
 Types and terms are defined as follows, where $r$ is a real number, $x$ is a variable, $f : \mathbb{R}^n \to \mathbb{R}$ is any measurable function, and $\Gamma$ is an environment:
-\begin{align*}
+\akr{\begin{align*}
   \text{\em types } A, B &::= \textsf{R}  \mid  A \to B \\
   \text{\em values } V &::= \lambda x.M  \mid  \underline{r} \\
-  \text{\em terms } M, N &::= V  \mid  x  \mid  M_1 \, M_2  \mid  \underline{f}(M_1,\dots ,M_n)  \mid  \tY M \\
+  \text{\em terms } M, N &::= V  \mid  x  \mid  M_1 \, M_2  \mid  \underline{f}(M_1,\dots ,M_n)  \mid  \tY \, M \\
+   & \qquad \mid  \tif{M < 0}{N_1}{N_2}  \mid  \tsample  \mid  \tscore(M)
+\end{align*}}
+\lo{Currently $\tY$ is not a legal term. This is unnatural: there is no reason to so restrict $\tY$. Following \citep[p.~376]{DBLP:conf/fsttcs/Sieber90}, we should define $\tY$ as a value (and so a proper term); it follows that $\tY \, M$ is redundant as a clause.}
+\begin{align*}
+  \text{\em types } A, B &::= \textsf{R}  \mid  A \to B \\
+  \text{\em values } V &::= \lambda x.M  \mid  \underline{r} \mid \tY \\
+  \text{\em terms } M, N &::= V  \mid  x  \mid  M_1 \, M_2  \mid  \underline{f}(M_1,\dots ,M_n) \\
    & \qquad \mid  \tif{M < 0}{N_1}{N_2}  \mid  \tsample  \mid  \tscore(M)
 \end{align*}
 The typing rules are standard (see \Cref{fig:typing rules}).
