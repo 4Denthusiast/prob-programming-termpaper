@@ -179,7 +179,7 @@ In transforming $\tscore (N)$, we set aside the requirement that $\tscore$ is un
 
 The idea is that $\transform{M}$ captures the initial, non-recursive operational behaviour of $M$, so that $\transform{M}$ simulates the reduction of $M$ until the latter reaches a value, or a term of the form $E[\tY \lambda x. N]$.
 
-It is straightforward to see that for every trace $s \in S$, there is a reduction sequence of $\transform{M}$ that simulates (an initial subsequene of) the reduction of $M$ under $s$;
+It is straightforward to see that for every trace $s \in \entrosp$, there is a reduction sequence of $\transform{M}$ that simulates (an initial subsequene of) the reduction of $M$ under $s$;
 and the simulation can be made lockstep.
 
 Finally thanks to the following

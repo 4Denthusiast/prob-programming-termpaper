@@ -67,7 +67,7 @@ The result after $n$ steps is then simply
 and the limit $\red^\infty$ can then be defined as a partial function as $\lim_{n \to \infty} \red^n(M,s)$ whenever that sequence becomes constant by reaching a value. A term $M$ terminates for a sample sequence $s$ if the limit $\red^\infty(M,s)$ is defined.
 
 The reduction function is measurable, and the set of values is measurable, therefore the set of $s$ such that $M$ terminates at $s$ within $n$ steps is measurable for any $n$, therefore $\{s \mid M \text{ terminates at } s \}$ is measurable. 
-We say that a term $M$ is \emph{almost-surely terminating} (AST) just if $\mu_{\entrosp}(\{s \mid M \text{ terminates at } s\}) = 1$.
+We say that a term $M$ is \emph{almost surely terminating} (AST) just if $\mu_{\entrosp}(\{s \mid M \text{ terminates at } s\}) = 1$.
 
 \iffalse
 \lo{Alternatively, define the \emph{runtime of $M$} to be the random variable 
@@ -78,8 +78,8 @@ T_M(s) :=
 \infty & \hbox{otherwise}
 \end{cases}
 \]
-Equivalently, we say that $M$ is \emph{almost-surely terminating} (AST) if $T_M < \infty$ a.s.; 
-and $M$ is \emph{positively almost-surely terminating} (PAST) if $\expect{T_M} < \infty$.}
+Equivalently, we say that $M$ is \emph{almost surely terminating} (AST) if $T_M < \infty$ a.s.; 
+and $M$ is \emph{positively almost surely terminating} (PAST) if $\expect{T_M} < \infty$.}
 \fi
 For example, the term 
 \[
@@ -95,7 +95,7 @@ which terminates on the set $\pi_h^{-1}[[0,0.5]]$, has probability 0.5 of failin
 Note that the requirement that $M$ be closed is not important for the proofs of the theorems, but is simply required to ensure that $M$ reaches a value, rather than a general normal form like $x \, y$.
 
 %\paragraph{}
-This definition of almost-sure termination is equivalent to that given in \citep{MakOPW21}, although the program semantics is stated in a slightly different way. In particular, the argument to $\tscore$ is not relevant to termination (except for the possibility that its argument's evaluation wouldn't terminate).
+This definition of almost sure termination is equivalent to that given in \citep{MakOPW21}, although the program semantics is stated in a slightly different way. In particular, the argument to $\tscore$ is not relevant to termination (except for the possibility that its argument's evaluation wouldn't terminate).
 
 \iffalse
 \lo{Your operational semantics does not maintain a record of the current weight of the reduction.

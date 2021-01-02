@@ -380,7 +380,7 @@ It seems very likely that this method is complete in the case that every reachab
 
 The following theorem does not prove completeness, but is suggestive in that direction:
 \begin{restatable}{theorem}{antitoneSeemsComplete}
-For any stopping time $T$ which is almost-surely finite, if $(\calF_n)_n$ is the coarsest filtration to which $T$ is adapted, then there is a supermartingale $(Y_n)_n$ adapted to $(\calF_n)_n$ and an antitone function $\epsilon$ such that $(Y_n)_n$ is an antitone ranking supermartingale with respect to $T$ and $\epsilon$.
+For any stopping time $T$ which is almost surely finite, if $(\calF_n)_n$ is the coarsest filtration to which $T$ is adapted, then there is a supermartingale $(Y_n)_n$ adapted to $(\calF_n)_n$ and an antitone function $\epsilon$ such that $(Y_n)_n$ is an antitone ranking supermartingale with respect to $T$ and $\epsilon$.
 \end{restatable}
 
 \medskip
@@ -499,5 +499,13 @@ f \; (n+1) \; (\varphi \; f \; s \; n)
 \]
 \lo{QUESTION: Let $g : \textsf{R} \to \textsf{R} \to \textsf{R}$ be a function that terminates on all arguments.
 Then $\Xi \, g$ is AST for $p \geq 1/2$.}
-\akr{In order to actually construct a ranking function, it will be necessary to assume a bound on the number of $\tY$-reduction steps in the reduction of $g \underline n \underline m$ too.}
+\akr{In order to actually construct a ranking function, it will be necessary to assume a bound on the number of $\tY$-reduction steps in the reduction of $g \, \underline n \, \underline m$ too.}
+
+\akr{I suspect that the term you actually had in mind for the higher-order recursion example was different from what you wrote, because you said that it terminates for $p \geq 1/2$, but it actually terminates for all $p > 0$. Passing $n+1$ as an argument to $f$ doesn't actually make the recursion any longer. Did you mean 
+\[
+\begin{array}{l}
+\tY \lambda \varphi f s n. \\
+\qquad \tif{n \leq 0}{s}{ f \, n \, (\varphi \, f \, s \, (n - 1)) \oplus_p f \, n \, (\varphi \, f \, s \, (n+1))}
+\end{array}
+\]}
 \end{example}

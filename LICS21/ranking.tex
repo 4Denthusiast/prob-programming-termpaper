@@ -2,7 +2,7 @@
 \section{Constructing ranking functions}
 \label{sec:ranking}
 
-Although rankability implies almost-sure termination, the converse does not hold in general. For example,
+Although rankability implies almost sure termination, the converse does not hold in general. For example,
 \begin{equation}
 \tif{{-}\tsample < 0}{\underline{0}}{(\tY \lambda x. x) \, \underline 0}
 \label{ex:0 probability reachable}
@@ -43,7 +43,7 @@ In order for $f$ to be the least ranking function of $M$, it also has to actuall
 \end{proof}
 
 \subsection{Sparse ranking functions}
-Even in the case of reasonable simple terms, explicitly constructing a ranking function would be a lot of work, and \Cref{thm:minimal} makes even stronger assumptions than almost-sure termination, so it isn't useful for proving it.
+Even in the case of reasonable simple terms, explicitly constructing a ranking function would be a lot of work, and \Cref{thm:minimal} makes even stronger assumptions than almost sure termination, so it isn't useful for proving it.
 
 \begin{example}[Geometric distribution]
 % Consider the term
@@ -74,7 +74,7 @@ One way to make this precise is to consider the graph obtained by quotienting th
 \lo{The graph can be simplified somewhat if we redefine general recursion using a fixpoint operator $\tY_{f, n}\Theta$ with redex rule as per \Cref{eq:letrec redex}: see \Cref{fig:geometric distribution 2}.
 But (especially in view of the vast investment in the confluent trace semantics) it is perhaps too late to change things now?}
 \fi
-Despite its simplicity, its $Rch$ contains all the terms in \Cref{fig:geometric distribution}, for each $i \in \mathbb N, r \in I$. The meanings of the substitutions and conditions that label some of the reductions in the diagram should be self-explanatory.
+Despite its simplicity, its $Rch$ contains all the terms in \Cref{fig:geometric distribution}, for each $i \in \mathbb N, r \in I$. The meanings of the substitutions \changed[lo]{(to be applied to the contractum)} and conditions that label some of the reductions in the diagram should be self-explanatory.
 
 \begin{figure}
 \begin{tikzpicture}[node distance=0.5em, anchor=west]

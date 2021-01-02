@@ -2,7 +2,7 @@
 \section{Confluent trace semantics}
 \label{sec:confluent}
 
-When proving almost sure termination in this way, it is necessary to consider which terms a given term may reduce to. Sometimes however, the reduction that the programmer has in mind may not be strictly the call-by-value order defined so far, or considering an alternative reduction order may be simpler or more intuitive.
+When proving almost sure termination in this way, it is necessary to consider which terms a given term may reduce to. Sometimes however, the reduction that the programmer has in mind may not be strictly the call-by-value order defined so far; or considering an alternative reduction order may be simpler or more intuitive.
 
 Non-probabilistic lambda calculi generally have the Church-Rosser property, that if a term $A$ reduces to both $B_1$ and $B_2$, there is some $C$ 
 %with reduction sequences $B_1 \to^* C$ and $B_2 \to^* C$, 
@@ -47,8 +47,8 @@ M[\tsample / \alpha] = \lambda x \, y. y \, (\tif{x < 0}{y \, \tsample}{\underli
 
 Two subterms $N_1$ and $N_2$ of a term $M$, corresponding to positions $\alpha_1$ and $\alpha_2$, can overlap in a few different ways. 
 If $\alpha_1$ is an initial segment (i.e.~prefix) of $\alpha_2$ (written as $\alpha_1 \leq \alpha_2$), then $N_2$ is also a subterm of $N_1$. If neither $\alpha_1 \leq \alpha_2$ nor $\alpha_1 \geq \alpha_2$, the positions are said to be \emph{disjoint}. 
-The notion of disjointness is mostly relevant in that if $\alpha_1$ and $\alpha_2$ are disjoint, performing a substitution at $\alpha_1$ will leave the subterm at $\alpha_2$ inaffected.
-\lo{The preceding sentence is unclear. Typo?} \akr{It wasn't a typo, but I've made it a little more explicit now. Is this clearer?} 
+The notion of disjointness is mostly relevant in that if $\alpha_1$ and $\alpha_2$ are disjoint, performing a substitution at $\alpha_1$ will leave the subterm at $\alpha_2$ unaffected.
+\lo{The preceding sentence is unclear. Typo?} \akr{It wasn't a typo, but I've made it a little more explicit now. Is this clearer?} \lo{Yes, it's clear now.}
 
 With this notation, a more general reduction relation $\to$ can be defined. \akr{It would almost work to have one of the neater versions of $\tY$-reduction here.}
 %\lo{On first reading, I struggled to parse the following clauses.}
@@ -64,7 +64,7 @@ The binary relation $\to$ is defined by the following rules, each is conditional
   \text{if } M \mid \alpha = \tsample \text{ and $\lambda$ does}&\text{ not occur after $@_2$ or $\tY$ in $\alpha$},\\ & M \to M[\underline r/\alpha] \text{ where } r \in [0,1] \\
   \text{if } M \mid \alpha = \tscore(\underline r),\ & M \to M[\underline r/\alpha].
 \end{align*}
-In each of these cases, $M \mid \alpha$ is the \emph{redex}, and reduction takes place at $\alpha$.
+In each of these cases, $M \mid \alpha$ is the \emph{redex}, and the reduction takes place at $\alpha$.
 \end{definition}
 
 \paragraph{}
@@ -95,8 +95,8 @@ B &= \tif{\tsample - 0.5 > 0}{0}{\Omega}
 If terms rather than skeletons were used to label samples, the set of traces where $A[\tsample]$ terminates would be
 \[\begin{array}{l}
 \bigcup_{r \in [0,1]} \{s \in I^{L_s(A[\tsample])} \mid \\
-\qquad s([A[\tsample]], \mathsf{if}_1;\underline{-}_1;@_1;\mathsf{if}_1) = r, \\
-\qquad s([A[\tsample], A[\underline r], \ldots, B, \mathsf{if}_1) > 0.5 \}.
+\qquad\qquad\qquad\quad s([A[\tsample]], \mathsf{if}_1;\underline{-}_1;@_1;\mathsf{if}_1) = r, \\
+\qquad\qquad\qquad\quad s([A[\tsample], A[\underline r], \ldots, B, \mathsf{if}_1) > 0.5 \}.
 \end{array}\] 
 This is a rather unwieldy expression, but the crucial part is that $r$ occurs twice in the conditions on $s$: once as the value a sample must take, and once in the location of a sample. This set is unmeasurable, therefore the termination probability would not even be well-defined. Labelling samples by skeletons instead, this problem does not occur because there are only countably many skeleton, and at each step in a reduction sequence, only finitely many could have occurred yet. For this particular term, $Sk(A[\underline r])$ does not depend on the value of $r$, therefore the set where it terminates becomes simply
 \begin{align*}
@@ -104,6 +104,7 @@ This is a rather unwieldy expression, but the crucial part is that $r$ occurs tw
 &\qquad s(Sk(A[\tsample]), Sk(A[\underline 0]), \ldots, Sk(B), \mathsf{if}_1) > 0.5 \},
 \end{align*}
 which is measurable. Skeletal reduction sequences still contain just as much informationas reduction sequences of terms, however, on which reductions took place.
+\qed
 \end{example}
 
 Reduction sequences are used rather than reachable skeletons because if the same skeleton is reached twice, different samples may be needed. For example, consider the term $M = \tY (\lambda f x.\ \tif{\tsample - \underline{0.5} < 0}{f \, x}{x}) \, \underline 0$, which reduces after a few steps to $N = \tif{\tsample - \underline{0.5}  < 0}{M}{\underline 0}$. If the pre-selected sample for $(N,\textsf{if}_1;\underline{-}_1)$ is less than 0.5, $N$ reduces back to $M$, then $N$ again, then the same sample is used the next time, therefore it's an infinite loop, whereas if samples are labelled by reduction sequences, the samples for $M \to \dots \to N$ are independent from the samples for $M \to \dots \to N \to M \to \dots \to N$, and so on.

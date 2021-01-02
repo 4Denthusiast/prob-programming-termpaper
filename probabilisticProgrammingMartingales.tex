@@ -202,7 +202,7 @@ The one-step reduction is given by the function $\red : \Lambda^0 \times S \to \
 The result after $n$ steps is then simply $\red^n(M,s) = \overbrace{\red(...\red(}^n M,s)...)$, and the limit $\red^\infty$ can then be defined as a partial function as $\lim_{n \to \infty} \red^n(M,s)$ whenever that sequence becomes constant by reaching a value. A term $M$ terminates for a sample sequence $s$ if the limit $\red^\infty(M,s)$ is defined.
 
 The reduction function is measurable, and the set of values is measurable, therefore the set of $s$ such that $M$ terminates at $s$ within $n$ steps is measurable for any $n$, therefore $\{s \mid M \text{ terminates at } s \}$ is measurable. 
-We say that a term $M$ is \emph{almost-surely terminating} (AST) just if $\mu(\{s \mid M \text{ terminates at } s\}) = 1$.
+We say that a term $M$ is \emph{almost surely terminating} (AST) just if $\mu(\{s \mid M \text{ terminates at } s\}) = 1$.
 
 \lo{Alternatively, define the \emph{runtime of $M$} to be the random variable 
 \[
@@ -212,8 +212,8 @@ T_M(s) :=
 \infty & \hbox{otherwise}
 \end{cases}
 \]
-Equivalently, we say that $M$ is \emph{almost-surely terminating} (AST) if $T_M < \infty$ a.s.; 
-and $M$ is \emph{positively almost-surely terminating} (PAST) if $\expect{T_M} < \infty$.}
+Equivalently, we say that $M$ is \emph{almost surely terminating} (AST) if $T_M < \infty$ a.s.; 
+and $M$ is \emph{positively almost surely terminating} (PAST) if $\expect{T_M} < \infty$.}
 
 For example, the term 
 \[
@@ -229,7 +229,7 @@ which terminates on the set $\pi_h^{-1}[[0,0.5]]$, has probability 0.5 of failin
 Note that the requirement that $M$ be closed is not important for the proofs of the theorems, but is simply required to ensure that $M$ reaches a value, rather than a general normal form like $x \, y$.
 
 \paragraph{}
-This definition of almost-sure termination is equivalent to that given in \citep{MakOPW21}, although the program semantics is stated in a slightly different way. In particular, the argument to $\tscore$ is not relevant to termination (except for the possibility that its argument's evaluation wouldn't terminate).
+This definition of almost sure termination is equivalent to that given in \citep{MakOPW21}, although the program semantics is stated in a slightly different way. In particular, the argument to $\tscore$ is not relevant to termination (except for the possibility that its argument's evaluation wouldn't terminate).
 
 \iffalse
 \lo{Your operational semantics does not maintain a record of the current weight of the reduction.
@@ -263,7 +263,7 @@ It will be demonstrated later that for any rankable term $M$, if $(M_n)_{n \geq 
 \input{ranking-supermartingales}
 
 \section{Constructing Ranking Functions}
-Although rankability implies almost-sure termination, the converse does not hold in general. For example,
+Although rankability implies almost sure termination, the converse does not hold in general. For example,
 \begin{equation}
 \tif{{-}\tsample < 0}{\underline{0}}{(\tY \lambda x. x) \, \underline 0}
 \label{ex:0 probability reachable}
@@ -299,7 +299,7 @@ In order for $f$ to be the least ranking function of $M$, it also has to actuall
 \end{proof}
 
 \subsection{Partial ranking functions}
-Even in the case of reasonable simple terms, explicitly constructing a ranking function would be a lot of work, and \Cref{thm:minimal} makes even stronger assumptions than almost-sure termination, so it isn't useful for proving it.
+Even in the case of reasonable simple terms, explicitly constructing a ranking function would be a lot of work, and \Cref{thm:minimal} makes even stronger assumptions than almost sure termination, so it isn't useful for proving it.
 
 \begin{example}[Geometric distribution]
 Consider the term
@@ -565,7 +565,7 @@ If a closed SPCF term $M$ is antitone rankable, then $T_M^{\tY} < \infty$ a.s.~(
 \begin{proof}
 As in %Theorem \ref{thm:basicRankingSoundness}, 
 \Cref{thm:rankable implies termination},
-take the set $S$ of traces \lo{TODO: We should find a better name for traces $s \in S$.} as a probability space, and define the same random variables $T_n, X_n, Y_n, T_M^{\tY}$. As before, $(Y_n)_{n \geq 0}$ is a supermartingale, and because $M$ is now assumed to be antitone rankable, it is an antitone strict supermartingale with respect to the stopping time $T_M^{\tY}$. Therefore, it follows from \Cref{thm:a-c strict} that $T_M^{\tY}$ is almost-surely finite.
+take the set $S$ of traces \lo{TODO: We should find a better name for traces $s \in S$.} as a probability space, and define the same random variables $T_n, X_n, Y_n, T_M^{\tY}$. As before, $(Y_n)_{n \geq 0}$ is a supermartingale, and because $M$ is now assumed to be antitone rankable, it is an antitone strict supermartingale with respect to the stopping time $T_M^{\tY}$. Therefore, it follows from \Cref{thm:a-c strict} that $T_M^{\tY}$ is almost surely finite.
 \end{proof}
 
 \paragraph{}
@@ -731,7 +731,7 @@ It seems very likely that this method is complete in the case that every reachab
 
 The following theorem does not prove completeness, but is suggestive in that direction:
 \begin{theorem}
-For any stopping time $T$ which is almost-surely finite, if $(\calF_n)_n$ is the coarsest filtration to which $T$ is adapted, then there is a supermartingale $(Y_n)_n$ adapted to $(\calF_n)_n$ and an antitone function $\epsilon$ such that $(Y_n)_n$ is an antitone ranking supermartingale with respect to $T$ and $\epsilon$.
+For any stopping time $T$ which is almost surely finite, if $(\calF_n)_n$ is the coarsest filtration to which $T$ is adapted, then there is a supermartingale $(Y_n)_n$ adapted to $(\calF_n)_n$ and an antitone function $\epsilon$ such that $(Y_n)_n$ is an antitone ranking supermartingale with respect to $T$ and $\epsilon$.
 \end{theorem}
 
 \input{relativised-completeness}
