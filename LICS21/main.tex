@@ -122,9 +122,14 @@
 \maketitle
 
 \begin{abstract}
-We introduce a method for proving almost sure termination in the context of lambda calculus with continuous random sampling and explicit recursion, based on ranking supermartingales. This result is extended in three ways. Antitone ranking functions have weaker restrictions on how fast they must decrease, and are applicable to a wider range of programs. Sparse ranking functions take values only at a subset of the program's reachable states, so they are simpler to define and more flexible. Ranking functions with respect to alternative reduction strategies can be used to prove almost sure termination in the usual sense, thanks to a restricted confluence result.
+We introduce a method for proving almost sure termination in the context of lambda calculus with continuous random sampling and explicit recursion, based on ranking supermartingales. This result is extended in three ways. Antitone ranking functions have weaker restrictions on how fast they must decrease, and are applicable to a wider range of programs. Sparse ranking functions take values only at a subset of the program's reachable states, so they are simpler to define and more flexible. Ranking functions with respect to alternative reduction strategies can be used to prove almost sure termination in the usual sense \lo{It's not clear what usual means. I guess it refers to a sense in which antitone and sparse ranking are not?}, thanks to a restricted confluence result.
 \akr{TODO: Mention prior work that this builds on, and the ways that this goes beyond it.}
+\lo{Assuming we can justify it, we should say: Our methods can be used to prove almost sure termination of programs that are beyond the reach of methods in the literature.}
 \end{abstract}
+
+\lo{``Ranking functions with respect to alternative reduction strategies'' is a bit of a mouthful. How about calling it ``(reduction) strategy-insensitive ranking function''?}
+
+\lo{There are some niggling (but inconsequential) issues about $\tscore$ that reviewers may pick on. Since $\tscore$ does not really affect termination, we don't lose much at all by restricting ourselves to Probabilistic PCF (i.e.~by omitting $\tscore$ altogether). What do you think? (We could add a remark to say our analysis extends straightforwardly to $\tscore$.)}
 
 \IEEEpeerreviewmaketitle
 
