@@ -131,10 +131,15 @@ The reduction sequences of skeletons will often be discussed as though they were
 \paragraph{}
 This is still not quite sufficient because sometimes the same samples must be used at corresponding positions in different reduction sequences. 
 
-\begin{example} \label{ex:cousin sim} The term $M = \tsample + \tsample$ has the reachable skeletons $N_1 = \skeletonPlaceholder + \tsample, N_2 = \tsample + \skeletonPlaceholder, O = \skeletonPlaceholder + \skeletonPlaceholder$ and $\skeletonPlaceholder$, with reductions $M \to N_1 \to O \to \skeletonPlaceholder$ and $M \to N_2 \to O \to \skeletonPlaceholder$. 
-In the reduction $M \to N_1$, the sample labelled $(M, \underline{+}_2)$ is used, and in the reduction $N_2 \to O$, the sample labelled %$(M \to N_2, \underline{+}_2)$
-\changed[lo]{$(M \to N_2, \underline{+}_1)$} is used. 
+\begin{example} \label{ex:cousin sim} 
+The term $M = \tsample + \tsample$ has the reachable skeletons $N_1 = \skeletonPlaceholder + \tsample, N_2 = \tsample + \skeletonPlaceholder, O = \skeletonPlaceholder + \skeletonPlaceholder$ and $\skeletonPlaceholder$, with reductions $M \to N_1 \to O \to \skeletonPlaceholder$ and $M \to N_2 \to O \to \skeletonPlaceholder$. 
+In the reduction $M \to N_1$, the sample labelled $(M, \underline{+}_2)$ is used, and in the reduction $N_2 \to O$, the sample labelled $(M \to N_2, \underline{+}_2)$ is used. 
 Each of these samples becomes the value of the second numeral in $O$ in their respective reduction sequences, therefore in order for Church-Rosserness to be attained, they must be the same. Which elements of $L_0(M)$ must match can be described by the relation $\sim^*$:
+
+\lo{I think there are typos above: see the corrected(?) version below.}[The term $M = \tsample + \tsample$ has the reachable skeletons $N_1 = \skeletonPlaceholder + \tsample, N_2 = \tsample + \skeletonPlaceholder, O = \skeletonPlaceholder + \skeletonPlaceholder$ and $\skeletonPlaceholder$, with reductions $M \to N_1 \to O \to \skeletonPlaceholder$ and $M \to N_2 \to O \to \skeletonPlaceholder$. 
+In the reduction $M \to N_1$, the sample labelled \changed[lo]{$(M, \underline{+}_1)$} is used, and in the reduction $N_2 \to O$, the sample labelled %$(M \to N_2, \underline{+}_2)$
+\changed[lo]{$(M \to N_2, \underline{+}_1)$} is used. 
+Each of these samples becomes the value of the \changed[lo]{first} \lo{left?} numeral in $O$ in their respective reduction sequences, therefore in order for Church-Rosserness to be attained, they must be the same. Which elements of $L_0(M)$ must match can be described by the relation $\sim^*$:]
 \end{example}
 
 \begin{definition}
