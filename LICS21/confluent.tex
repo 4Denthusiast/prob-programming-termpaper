@@ -72,7 +72,7 @@ Labelling the pre-chosen samples by the positions in the term would also not wor
 It is therefore necessary to consider possible positions that may occur in other terms reachable from the original term. 
 Even this is itself inadequate because some of the positions in different reachable terms need to be considered the same, and the number of reachable terms is in general uncountable, which leads to measure-theoretic issues.
 
-\changed[lo]{We are thus lead to consider the reduction relation on skeletons (and positions in a skeleton), which can be extended from the definitions on terms in the obvious way,} 
+\changed[lo]{We are thus led to consider the reduction relation on skeletons (and positions in a skeleton), which can be extended from the definitions on terms in the obvious way,} 
 %The positions in a skeleton and the reduction relation on skeletons can be extended from the definitions on terms in the obvious way, 
 with $\tif{\skeletonPlaceholder < 0}{A}{B}$ reducing nondeterministically to both $A$ and $B$, and $\tsample$ reducing to $\skeletonPlaceholder$.
 For example, we have 
@@ -96,10 +96,12 @@ B &= \tif{\tsample - 0.5 > 0}{0}{\Omega}
 \end{align*}
 If terms rather than skeletons were used to label samples, the set of traces where $A[\tsample]$ terminates would be
 \[\begin{array}{l}
-\bigcup_{r \in [0,1]} \{s \in I^{L_s(A[\tsample])} \mid \\
+\bigcup_{r \in [0,1]} \Big\{s \in I^{L_s(A[\tsample])} \mid \\
 \qquad\qquad\qquad\quad s([A[\tsample]], \mathsf{if}_1;\underline{-}_1;@_1;\mathsf{if}_1) = r, \\
-\qquad\qquad\qquad\quad s([A[\tsample], A[\underline r], \ldots, B, \mathsf{if}_1) > 0.5 \}.
+\qquad\qquad\qquad\quad s([A[\tsample], A[\underline r], \ldots, B, \mathsf{if}_1) > 0.5 \Big\}.
 \end{array}\] 
+\lo{There are a number of spurious square bracket in the predicate of the set comprehension above.}
+
 \lo{We have just defined $L_0(M)$, but what is $L_s(\cdot)$ (subscript $s$)? I assume it is the version of $L_0(M)$ that labels samples by terms.} 
 
 \lo{The occurrence of $L_s(M)$ in the set comprehension below should be $L_0(M)$?}
