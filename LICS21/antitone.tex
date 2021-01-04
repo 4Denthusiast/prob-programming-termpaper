@@ -185,10 +185,10 @@ With respect to the antitone function $\epsilon(x) = \frac{4-x}{4}$ and stopping
 %\lo{@Andrew: I refer to the preceding highlighted claim. Did you mean: for all $n, s$, $\epsilon(Y_n(s)) > Y_n(s)$?} \akr{No. This phrasing should be clearer.}
 \end{example}
 
-%\changed[lo]{Let $f$ be a ranking function on a closed SPCF term $M$. We say that $M$ is \emph{antitone rankable} by $f$ if the supermartingale $(f(M_n))_{n \geq 0}$ and the stopping time $T_M^{\tY}$, both adapted to the fitration $(\calF_n)_{n \geq 0}$ where $\calF_n := \sigma(M_1, \ldots, M_n)$, are antitone strict.}
+%\changed[lo]{Let $f$ be a ranking function on a closed PPCF term $M$. We say that $M$ is \emph{antitone rankable} by $f$ if the supermartingale $(f(M_n))_{n \geq 0}$ and the stopping time $T_M^{\tY}$, both adapted to the fitration $(\calF_n)_{n \geq 0}$ where $\calF_n := \sigma(M_1, \ldots, M_n)$, are antitone strict.}
 
 \begin{theorem}[Antitone ranking function soundness] \label{thm:antitone rankable implies termination}
-If a closed SPCF term $M$ is antitone rankable, then $T_M^{\tY} < \infty$ a.s.~(equivalently, $M$ is AST).
+If a closed PPCF term $M$ is antitone rankable, then $T_M^{\tY} < \infty$ a.s.~(equivalently, $M$ is AST).
 \end{theorem}
 \begin{proof}
 As in %Theorem \ref{thm:basicRankingSoundness}, 
@@ -274,7 +274,7 @@ Therefore by setting $\epsilon_2(x) = \frac 1 {5(e^{x-1}+1)^2}$, the condition o
 \end{example}
 
 \begin{example}[Continuous random walk]\label{ex:raven complex}
-In SPCF we can construct a function whose argument changes by a random amount at each recursive call: $\Theta \, 10$ where
+In PPCF we can construct a function whose argument changes by a random amount at each recursive call: $\Theta \, 10$ where
 \[
 %\underbrace{\big
 \Theta := \tY \, \lambda f x . \tif{x \leq 0}{0}{f(x - \tsample)}
@@ -463,7 +463,7 @@ We can use the ranking function method (coupled with the solution of linear recu
 This paper is as yet unpublished, and effectively uncitable for the time being (because of strict double-blind submission rules).}
 \end{example}
 
-\lo{I believe the ranking function method can be used to prove soundness of the Beutner-Ong counting-based method (which reduces the AST problem of first-order (possibly non-affine) recursive SPCF programs to random walk on $\mathbb{N}$), based on Theorem 5.9 and Lemma 5.10 in \emph{op.~cit.}}
+\lo{I believe the ranking function method can be used to prove soundness of the Beutner-Ong counting-based method (which reduces the AST problem of first-order (possibly non-affine) recursive PPCF programs to random walk on $\mathbb{N}$), based on Theorem 5.9 and Lemma 5.10 in \emph{op.~cit.}}
 
 \iffalse
 \[\begin{array}{l}
@@ -478,11 +478,11 @@ This paper is as yet unpublished, and effectively uncitable for the time being (
 DRAFT. Motivation: higher-order recursion. This could be placed in \Cref{sec:intro} or \Cref{sec:related}.
 }
 There is an obvious source of deterministic (i.e.~non-probabilistic) higher-order functions defined by recursion, viz., \emph{higher-order recursion schemes} (HORS) (see e.g.~\citep{DBLP:conf/lics/Ong06,DBLP:conf/lics/Ong15}).
-(Incidentally the (sparse) ranking function method is just as applicable to the termination analysis of \emph{deterministic} SPCF programs.)
+(Incidentally the (sparse) ranking function method is just as applicable to the termination analysis of \emph{deterministic} PPCF programs.)
 Recently \cite{DBLP:conf/lics/KobayashiLG19} have extended HORS to \emph{probabilistic higher-order recursion schemes} (PHORS), which are HORS augmented with probabilistic (binary) branching $\oplus_p$.
-As HORS are in essence the $\lambda \tY$-calculus \citep{DBLP:conf/lics/Statman02} (i.e.~pure simply-typed lambda calculus with recursion, generated from a finite base type), PHORS are definable in SPCF:
-(order-$n$) PHORS is encodable as (order-$n$) (call-by-name) SPCF, but the former is strictly less expressive (because the underlying recursion schemes are not Turing complete). 
-Some interesting SPCF terms such as \Cref{ex:non-affine with continuous distribution} %\refExample{complexExample} 
+As HORS are in essence the $\lambda \tY$-calculus \citep{DBLP:conf/lics/Statman02} (i.e.~pure simply-typed lambda calculus with recursion, generated from a finite base type), PHORS are definable in PPCF:
+(order-$n$) PHORS is encodable as (order-$n$) (call-by-name) PPCF, but the former is strictly less expressive (because the underlying recursion schemes are not Turing complete). 
+Some interesting PPCF terms such as \Cref{ex:non-affine with continuous distribution} %\refExample{complexExample} 
 cannot be expressed as PHORS.
 A relevant result here is that the AST problem is decidable for order-1 PHORS (by reduction to the PSPACE-hard solvability of finite systems of polynomial equations with real coefficients; see \citep{DBLP:journals/jacm/EtessamiY09}), but undecidable for order-2 PHORS.
 

@@ -38,7 +38,7 @@ It follows that ${\set{s_{\leq l}} \cdot I^\omega} \subseteq A$.
 \mid \alpha_j\in \mathsf{Sk}_j, U_{\alpha_j} \in \mathcal{B}(\Real^j), j \geq 0}\big)
 \)
 }
-%Take $M \in \Lambda^0$ (closed SPCF terms). Define, for each $n \in \omega$, the random variable $M_n : \entrosp \to \Lambda^0$ by $M_n(s) := \pi_0 (\red^n(M, s))$.
+%Take $M \in \Lambda^0$ (closed PPCF terms). Define, for each $n \in \omega$, the random variable $M_n : \entrosp \to \Lambda^0$ by $M_n(s) := \pi_0 (\red^n(M, s))$.
 
 \begin{proof}
 We show the non-trivial case of $i = 2$.
@@ -147,7 +147,7 @@ A first proof idea is to construct a reduction argument to the strong normalisat
  There is a classical transform of conditionals into the pure lambda-calculus.
 However, each evaluation of $\tsample$ (almost surely) returns a different number, which complicates such a transform.
 
-Given a closed SPCF term $M$, we transform it to a term $\transform{M}$ of the nondeterministic simply-typed lambda-calculus as follows.
+Given a closed PPCF term $M$, we transform it to a term $\transform{M}$ of the nondeterministic simply-typed lambda-calculus as follows.
 (We may assume that the nondeterministic calculus is generated from a base type $\iota$ with a $\iota$-type constant symbol $r$, and a function symbol $\bot : A$  for each function type $A$.)
 \iffalse
 \begin{enumerate}

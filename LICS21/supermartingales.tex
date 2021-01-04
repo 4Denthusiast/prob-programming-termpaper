@@ -89,7 +89,7 @@ Let $(X_n)_{n \geq 0}$ be a supermartingale, and $(T_n)_{n \geq 0}$ a sequence o
 
 \subsection{Ranking functions and supermartingales}
 
-Henceforth, fix the probability space $(\entrosp, \Sigma_\entrosp, \mu_{\entrosp})$, and a closed SPCF term $M$.
+Henceforth, fix the probability space $(\entrosp, \Sigma_\entrosp, \mu_{\entrosp})$, and a closed PPCF term $M$.
 For $n \geq 0$, define the random variables 
 \begin{align*}
 M_n(s) &:= \pi_0 (\red^n(M, s))\\
@@ -101,7 +101,7 @@ Thus $T_M$ is the \emph{runtime} of $M$ (and $M$ is AST iff $\mu_{\entrosp}(T_M 
 Our first result is the following theorem.
 \begin{theorem}[Rankability] 
 \label{thm:rankable and strict rankable}
-If a closed SPCF term $M$ is rankable (respectively, strictly rankable) by $f$ 
+If a closed PPCF term $M$ is rankable (respectively, strictly rankable) by $f$ 
 then $(f(M_n))_{n \geq 0}$ is a supermartingale (respectively, ranking supermartingale w.r.t.~stopping time $T_M$) adapted to $(\mathcal{F}_n)_{n \geq 0}$. %where $\mathcal{F}_n = \sigma(M_1, \cdots, M_n)$.
 \end{theorem}
 \lo{@Andrew: A better name for this theorem: ``Ranking function'', ``Supermartingale'', ``(Ranking) supermartingale''?}
@@ -126,7 +126,7 @@ the inequality above follows from \Cref{lem:key rankable}.
 }
 \fi
 
-We say that a given SPCF term is: %\emph{type-1} (respectively 2, 3 and 4) if it has the shape $E[\tY \lambda x. N]$ (respectively $E[\tsample]$, $E[R]$ where $R$ is any other redex, and of a value).
+We say that a given PPCF term is: %\emph{type-1} (respectively 2, 3 and 4) if it has the shape $E[\tY \lambda x. N]$ (respectively $E[\tsample]$, $E[R]$ where $R$ is any other redex, and of a value).
 \emph{type 1} if it has the shape $E[\tY \lambda x. N]$, \emph{type 2} if it has the shape $E[\tsample]$; \emph{type 3} if it has the shape $E[R]$ where $R$ is any other redex, and \emph{type 4} if it is a value.
 Henceforth fix an $n \geq 0$, and define $\mathbf{T}_i := \set{s \mid M_n(s) \hbox{ is type $i$}}$.
 It is straightforward to see that each $\mathbf{T}_i \in \calF_n$, and $\set{\mathbf{T}_1, \mathbf{T}_2, \mathbf{T}_3, \mathbf{T}_4}$ is a partition of $\entrosp$.
@@ -244,7 +244,7 @@ This concludes the proof of \Cref{thm:rankable and strict rankable}.
 
 \subsection{Soundness of rankability}
 
-In the rest of this section we show that if $M \in \Lambda^0$ is rankable, then $M$ is AST: in other words, the method of ranking function is sound for proving a.s.~termination of SPCF programs.
+In the rest of this section we show that if $M \in \Lambda^0$ is rankable, then $M$ is AST: in other words, the method of ranking function is sound for proving a.s.~termination of PPCF programs.
 
 Let $f$ be a ranking function on $M$.
 Define random variables on the probability space $(\entrosp, \Sigma_\entrosp, \mu_{\entrosp})$:
@@ -283,9 +283,9 @@ $T_M^\tY$ is a stopping time adapted to $(\calF_{T_n})_{n \geq 0}$.
 
 \begin{theorem}[Soundness of rankability] \label{thm:rankable implies termination}
 \begin{enumerate}
-\item If a closed SPCF term $M$ is rankable, then $M$ is AST (equivalently, $T^{\tY}_M < \infty$ almost surely), and $M$ is $\tY$-positively almost sure terminating ($\tY$-PAST) i.e.~$\expect{T^{\tY}_M} < \infty$. 
+\item If a closed PPCF term $M$ is rankable, then $M$ is AST (equivalently, $T^{\tY}_M < \infty$ almost surely), and $M$ is $\tY$-positively almost sure terminating ($\tY$-PAST) i.e.~$\expect{T^{\tY}_M} < \infty$. 
 
-\item If a closed SPCF term $M$ is strictly rankable, then $\expect{T_M} < \infty$ i.e.~$M$ is positively almost sure terminating (PAST).
+\item If a closed PPCF term $M$ is strictly rankable, then $\expect{T_M} < \infty$ i.e.~$M$ is positively almost sure terminating (PAST).
 \end{enumerate}
 \end{theorem}
 
@@ -303,5 +303,5 @@ Therefore, by \Cref{lem:rank-PAST}, $T^{\tY}_M < \infty$ a.s.~and $\expect{T^{\t
 Statement 2 follows at once from \Cref{thm:rankable and strict rankable} and \Cref{lem:rank-PAST}.
 \end{proof}
 
-Thus the method of (strict) ranking function is sound for proving (positive) a.s.~termination of SPCF programs.
+Thus the method of (strict) ranking function is sound for proving (positive) a.s.~termination of PPCF programs.
 It is in fact also complete in a sense: if $\expect{T^\tY_N} < \infty$ for all $N \in \mathit{Rch}(M)$ then $M$ is rankable (\Cref{thm:minimal}).
