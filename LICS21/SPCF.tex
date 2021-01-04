@@ -10,7 +10,7 @@ Types and terms are defined as follows, where $r$ is a real number, $x$ is a var
   \text{\em types } A, B &::= \textsf{R}  \mid  A \to B \\
   \text{\em values } V &::= \lambda x.M  \mid  \underline{r} \\
   \text{\em terms } M, N &::= V  \mid  x  \mid  M_1 \, M_2  \mid  \underline{f}(M_1,\dots ,M_n)  \mid  \tY \, M \\
-   & \qquad \mid  \tif{M < 0}{N_1}{N_2}  \mid  \tsample  \mid  \tscore(M)
+   & \qquad \mid  \tif{M < 0}{N_1}{N_2}  \mid  \tsample
 \end{align*}}
 \lo{Currently $\tY$ is not a legal term. This is unnatural: there is no reason to so restrict $\tY$. Following \citep[p.~376]{DBLP:conf/fsttcs/Sieber90}, we should define $\tY$ as a value (and so a proper term); it follows that $\tY \, M$ is redundant as a clause.}
 \lo{N.B. It is also standard to regard variables as values in a CBV language.}
@@ -20,7 +20,7 @@ Types and terms are defined as follows, where $r$ is a real number, $x$ is a var
   \text{\em types } A, B &::= \textsf{R}  \mid  A \to B \\
   \text{\em values } V &::= x \mid \lambda x.M  \mid  \underline{r} \mid \tY \\
   \text{\em terms } M, N &::= V  \mid  M_1 \, M_2  \mid  \underline{f}(M_1,\dots ,M_n) \\
-   & \qquad \mid  \tif{M < 0}{N_1}{N_2}  \mid  \tsample  \mid  \tscore(M)
+   & \qquad \mid  \tif{M < 0}{N_1}{N_2}  \mid  \tsample
 \end{align*}
 The typing rules are standard (see \Cref{fig:typing rules}).
 Terms are identified up to $\alpha$-equivalence, as usual. 
@@ -29,7 +29,7 @@ The set of all terms is denoted $\Lambda$, and the set of closed terms is denote
 %\paragraph{}
 To define the reduction relation, let \emph{evaluation contexts} be of the form:
 \begin{align*}
-  E ::= & \, [\,] \mid E \, M \mid V \, E \mid \underline{f}(\underline r_1,\dots ,\underline r_{k-1}, E, M_{k+1}, \dots, M_n) \\ & \mid \tY E \mid \tif{E<0}{M_1}{M_2} \mid \tscore (E)
+  E ::= & \, [\,] \mid E \, M \mid V \, E \mid \underline{f}(\underline r_1,\dots ,\underline r_{k-1}, E, M_{k+1}, \dots, M_n) \\ & \mid \tY E \mid \tif{E<0}{M_1}{M_2}
 \end{align*}
 then a term reduces if it is formed by substituting a redex in a context i.e.
 \begin{align*}
@@ -39,11 +39,9 @@ then a term reduces if it is formed by substituting a redex in a context i.e.
   & \qquad \qquad \text{ where $z$ is not free in $s$}\\
   E[\tif{\underline r < 0}{M_1}{M_2}] & \to E[M_1] \text{ where }r < 0 \\
   E[\tif{\underline r < 0}{M_1}{M_2}] & \to E[M_2] \text{ where }r \geq 0 \\
-  E[\tsample] & \to E[\underline r] \text{ where } r \in [0,1] \\
-  E[\tscore(\underline r)] & \to E[\underline r].
+  E[\tsample] & \to E[\underline r] \text{ where } r \in [0,1].
 \end{align*}
 We write $\to^\ast$ for the reflexive, transitive closure of $\to$.
-\lo{The $\tscore$ rule should have a side condition: if $r > 0$.}
 
 Every closed well-typed term either is a value or reduces to another term.
 
@@ -106,7 +104,7 @@ which terminates on the set $\pi_h^{-1}[[0,0.5]]$, has probability 0.5 of failin
 Note that the requirement that $M$ be closed is not important for the proofs of the theorems, but is simply required to ensure that $M$ reaches a value, rather than a general normal form like $x \, y$.
 
 %\paragraph{}
-This definition of almost sure termination is equivalent to that given in \citep{MakOPW21}, although the program semantics is stated in a slightly different way. In particular, the argument to $\tscore$ is not relevant to termination (except for the possibility that its argument's evaluation wouldn't terminate).
+This definition of almost sure termination is equivalent to that given in \citep{MakOPW21} (although the program semantics is stated in a slightly different way), except for the presence of a $\tscore(r)$ construct for soft conditioning. The $\tscore(r)$ construct is not relevant to termination except that it fails if its argument is less than or equal to zero, which allows computations to fail after finitely many steps. If such a thing were added, it would merely require an additional side condition to our main theorems, that no failing term was reachable (or, in the case of the confluent semantics based results, no term where the reduction stragegy is not defined is reachable via the reduction strategy unless it's a value).
 
 \iffalse
 \lo{Your operational semantics does not maintain a record of the current weight of the reduction.

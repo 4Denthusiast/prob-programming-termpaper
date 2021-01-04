@@ -21,7 +21,7 @@ A \emph{ranking function on $M \in \Lambda^0$} is a measurable function $f:\math
 \akr{The fact that the ranking function can be 0 in some cases before it reaches a value is necessary to get \Cref{thm:minimal} to work neatly.}
 \lo{OK. Let's leave \Cref{def:ranking function} as it is.}
 \fi
-We say that the ranking function $f$ is \emph{strict} if there exists $\epsilon > 0$ such that $f(N) = 0$ iff $N$ is a value; and for all $E$ and $R \to R'$, $f(E[R']) \leq f(E[R]) - \epsilon$.
+We say that the ranking function $f$ is \emph{strict} if there exists $\epsilon > 0$ such that for all $E$ and $R \to R'$, $f(E[R']) \leq f(E[R]) - \epsilon$.
 
 Any closed term for which a ranking (respectively, strict ranking) function exists is called \emph{rankable} (respectively, \emph{strictly rankable}). 
 For example, the term $(\tY \lambda x.x) \, \underline 0$ is not rankable.
@@ -102,7 +102,6 @@ Our first result is the following theorem.
 \begin{theorem}[Rankability] 
 \label{thm:rankable and strict rankable}
 If a closed SPCF term $M$ is rankable (respectively, strictly rankable) by $f$ 
-%satisfying $f(N) = 0$ iff $N$ is a value, 
 then $(f(M_n))_{n \geq 0}$ is a supermartingale (respectively, ranking supermartingale w.r.t.~stopping time $T_M$) adapted to $(\mathcal{F}_n)_{n \geq 0}$. %where $\mathcal{F}_n = \sigma(M_1, \cdots, M_n)$.
 \end{theorem}
 \lo{@Andrew: A better name for this theorem: ``Ranking function'', ``Supermartingale'', ``(Ranking) supermartingale''?}
@@ -247,7 +246,7 @@ This concludes the proof of \Cref{thm:rankable and strict rankable}.
 
 In the rest of this section we show that if $M \in \Lambda^0$ is rankable, then $M$ is AST: in other words, the method of ranking function is sound for proving a.s.~termination of SPCF programs.
 
-Let $f$ be a ranking function on $M$ satisfying $f(N) = 0$ iff $N$ is a value.
+Let $f$ be a ranking function on $M$.
 Define random variables on the probability space $(\entrosp, \Sigma_\entrosp, \mu_{\entrosp})$:
 \begin{align}
 T_{-1}(s) & := -1 \nonumber \\

@@ -63,7 +63,7 @@ In Lemma 5.5 of op.~cit., the stopping time $T$ is assumed to be the random vari
 Our first result is the following theorem.
 \begin{theorem}[Rankability] 
 \label{thm:rankable and strict rankable}
-If a closed SPCF term is rankable (respectively, strictly rankable) by $f$, then $(f(M_n))_{n \in \omega}$ is a 
+If a closed SPCF term is rankable (respectively, strictly rankable) by $f$ and $Rch(M)$ contains no failing terms, then $(f(M_n))_{n \in \omega}$ is a 
 supermartingale (respectively, ranking supermartingale) adapted to the filtration $(\mathcal{F}_n)_{n \in \omega}$ where $\mathcal{F}_n = \sigma(M_1, \cdots, M_n)$.
 \end{theorem}
 
@@ -112,7 +112,7 @@ the inequality above follows from \Cref{lem:key rankable}.
 \fi
 
 We say that a given SPCF term is: %\emph{type-1} (respectively 2, 3 and 4) if it has the shape $E[\tY \lambda x. N]$ (respectively $E[\tsample]$, $E[R]$ where $R$ is any other redex, and of a value).
-\emph{type-1} if it has the shape $E[\tY \lambda x. N]$, \emph{type-2} if it has the shape $E[\tsample]$; \emph{type-3} if it has the shape $E[R]$ where $R$ is any other redex, and \emph{type-4} if it is a value.
+\emph{type-1} if it has the shape $E[\tY \lambda x. N]$, \emph{type-2} if it has the shape $E[\tsample]$; \emph{type-3} if it has the shape $E[R]$ where $R$ is any other redex, and \emph{type-4} if it is a value. Failing terms are not included because it is assumed that no failing term is reachable from $M$.
 Henceforth fix an $n \geq 0$, and define $\mathbf{T}_i := \set{s \mid M_n(s) \hbox{ is type-$i$}}$.
 It is straightforward to see that each $\mathbf{T}_i \in \calF_n$, and $\set{\mathbf{T}_1, \mathbf{T}_2, \mathbf{T}_3, \mathbf{T}_4}$ is a partition of $S$.
 %By abuse of language, we refer to the three respective types of redexes as type-$1$, 2 and 3.

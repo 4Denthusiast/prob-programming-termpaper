@@ -17,7 +17,7 @@ Even with this restriction, a sampling semantics in the style of the one already
 A \emph{position} is a finite sequence of steps into a term, defined inductively as
 \begin{align*}
 \alpha ::= & \; {\cdot} \mid \lambda ; \alpha \mid @_1 ; \alpha \mid @_2 ; \alpha \mid \underline f_i ; \alpha \\
-& {} \mid \tY ; \alpha \mid \textsf{if}_1 ; \alpha \mid \textsf{if}_2 ; \alpha \mid \textsf{if}_3 ; \alpha \mid \tscore ; \alpha.
+& {} \mid \tY ; \alpha \mid \textsf{if}_1 ; \alpha \mid \textsf{if}_2 ; \alpha \mid \textsf{if}_3 ; \alpha.
 \end{align*}
 The \emph{subterm of $M$ at a position $\alpha$}, denoted $M \mid \alpha$, is defined as
 \begin{align*}
@@ -26,8 +26,7 @@ M \mid \cdot & = M \\
 M_1 M_2 \mid @_i ; \alpha & = M_i \mid \alpha \quad \text{for } i = 1,2 \\
 \underline f(M_1,\dots,M_n) \mid \underline f_i ; \alpha & = M_i \mid \alpha \quad \text{for }i \leq n \\
 \tY M \mid \tY ; \alpha & = M \mid \alpha \\
-\tif{M_1 < 0}{M_2}{M_3} \mid \textsf{if}_i ; \alpha & = M_i \mid \alpha \quad \text{for } i = 1,2,3 \\
-\tscore(M) \mid \tscore ; \alpha & = M \mid \alpha
+\tif{M_1 < 0}{M_2}{M_3} \mid \textsf{if}_i ; \alpha & = M_i \mid \alpha \quad \text{for } i = 1,2,3
 \end{align*}
 so that every subterm is located at a unique position, but not every position corresponds to a subterm (e.g. $x \, y \mid \lambda$ is undefined). 
 A position such that $M\mid \alpha$ does exist is said to \emph{occur} in $M$. 
@@ -59,8 +58,7 @@ The binary relation $\to$ is defined by the following rules, each is conditional
   \text{if } M \mid \alpha = \tY \lambda x. N,\ & M \to M[\lambda z. N[(\tY \lambda x. N)/x] z/\alpha]\\ \text{where }z&\text{ is not free in $N$}\\
   \text{if } M \mid \alpha = \tif{\underline r < 0}{N_1}{N_2},\ & M \to M[N_1/\alpha] \text{ where }r < 0 \\
   \text{if } M \mid \alpha = \tif{\underline r < 0}{N_1}{N_2},\ & M \to M[N_2/\alpha] \text{ where }r \geq 0 \\
-  \text{if } M \mid \alpha = \tsample \text{ and $\lambda$ does}&\text{ not occur after $@_2$ or $\tY$ in $\alpha$},\\ & M \to M[\underline r/\alpha] \text{ where } r \in [0,1] \\
-  \text{if } M \mid \alpha = \tscore(\underline r),\ & M \to M[\underline r/\alpha].
+  \text{if } M \mid \alpha = \tsample \text{ and $\lambda$ does}&\text{ not occur after $@_2$ or $\tY$ in $\alpha$},\\ & M \to M[\underline r/\alpha] \text{ where } r \in [0,1].
 \end{align*}
 In each of these cases, $M \mid \alpha$ is the \emph{redex}, and the reduction takes place at $\alpha$.
 \end{definition}
@@ -210,7 +208,6 @@ The usual call-by-value semantics can be implemented as one of these reduction s
 \cbv(\underline f(V_1, \dots, V_{k-1}, T, M_{k+1}, \dots, M_n)) & = \underline f_k ; \cbv(T) \\
 \cbv(\tY T) & = \tY ; \cbv(T) \\
 \cbv(\tif{T < 0}{M_1}{M_2}) & = \textsf{if}_1 ; \cbv(T) \\
-\cbv(\tscore(T)) & = \tscore ; \cbv(T) \\
 \cbv(V) & \text{ is undefined} \\
 \cbv(T) & = \cdot \text{ otherwise}
 \end{align*}

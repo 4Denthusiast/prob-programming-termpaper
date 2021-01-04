@@ -159,8 +159,6 @@ Given a closed SPCF term $M$, we transform it to a term $\transform{M}$ of the n
 $(\lambda x . \transform{M_1} + \transform{M_2}) \, \transform{B}$, for a fresh $x$
 
 \item replace every $\tY \, f \, x . N$ by $\lambda x . \transform{N}[\bot / f]$
-
-\item replace every $\tscore (N)$ by $\transform{N}$ (we set aside the requirement that $\tscore$ is undefined on negative numbers)
 \end{enumerate}
 \lo{The above rules can be defined formally.}
 \fi
@@ -171,11 +169,9 @@ $(\lambda x . \transform{M_1} + \transform{M_2}) \, \transform{B}$, for a fresh 
 \transform{M_1 \, M_2} &:= \transform{M_1} \, \transform{M_2} \\
 n \geq 0, \; \transform{f \, M_1 \cdots M_n} &:= (\lambda z_1 \cdots z_n . r) \, \transform{M_1} \cdots \transform{M_n} \\
 \transform{\tif{B}{M_1}{M_2}} &:= \big(\lambda z . (\transform{M_1} + \transform{M_2})\big) \, \transform{B} \\
-\transform{\tY \, f \, y . N} &:= \lambda y . \transform{N}[\bot / f]\\
-\transform{\tscore (N)} &:= \transform{N}
+\transform{\tY \, f \, y . N} &:= \lambda y . \transform{N}[\bot / f]
 \end{align*}
 In the above, variables $z, z_1, \cdots, z_n$ are assumed to be fresh; $f$ ranges over primitive functions and numerals.
-In transforming $\tscore (N)$, we set aside the requirement that $\tscore$ is undefined on negative numbers.
 
 The idea is that $\transform{M}$ captures the initial, non-recursive operational behaviour of $M$, so that $\transform{M}$ simulates the reduction of $M$ until the latter reaches a value, or a term of the form $E[\tY \lambda x. N]$.
 

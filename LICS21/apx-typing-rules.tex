@@ -4,21 +4,19 @@
   \qquad
   \frac{\Gamma ; x:A \vdash M : B}{\Gamma \vdash \lambda x.M : A \to B} 
   \qquad
-  \frac{}{\underline{r} : \textsf{R}} 
-  \qquad
   \frac{\Gamma \vdash M:A \to B \quad \Gamma \vdash N : A}{\Gamma \vdash M \, N : B} 
   \\ \\
   \qquad
   \frac{\Gamma \vdash M : (A \to B) \to (A \to B)}{\Gamma \vdash \tY M : (A \to B)}
   \qquad
-  \frac{\Gamma \vdash M_1:\textsf{R} \quad \dots \quad \Gamma \vdash M_n:\textsf{R}}{\Gamma \vdash \underline{f}(M_1,\dots,M_n) : \textsf{R}} \ (f : \mathbb{R}^n \to \mathbb{R})    
+  \frac{\Gamma \vdash M : \textsf{R} \quad \Gamma \vdash N_1 : A \quad \Gamma \vdash N_2 : A}{\Gamma \vdash \tif{M < 0}{N_1}{N_2} : A}    
   \\ \\
   \qquad
-  \frac{\Gamma \vdash M : \textsf{R} \quad \Gamma \vdash N_1 : A \quad \Gamma \vdash N_2 : A}{\Gamma \vdash \tif{M < 0}{N_1}{N_2} : A}
+  \frac{}{\underline{r} : \textsf{R}} 
   \qquad
-  \frac{}{\Gamma \vdash \tsample : \textsf{R}} 
+  \frac{}{\Gamma \vdash \tsample : \textsf{R}}
   \qquad
-  \frac{\Gamma \vdash s : \textsf{R}}{\Gamma \vdash \tscore (s) : \textsf{R}}
+  \frac{\Gamma \vdash M_1:\textsf{R} \quad \dots \quad \Gamma \vdash M_n:\textsf{R}}{\Gamma \vdash \underline{f}(M_1,\dots,M_n) : \textsf{R}} \ (f : \mathbb{R}^n \to \mathbb{R})
 \end{align*}
 \caption{Typing rules of SPCF \label{fig:typing rules}}
 \end{figure*}
