@@ -163,7 +163,7 @@ Despite its simplicity, its $Rch$ contains all the terms in \Cref{fig:geometric 
 Even in this simple case, defining a ranking function explicitly is awkward because of the number of cases, although in most cases, because the value need only be greater than or equal to that of the next term in sequence, it suffices to take the ranking function as having the same value as the next term, so that overall it takes only 3 distinct values.
 (We will explain why later.)
 
-The definition of rankability is also inconvenient for syntactic sugar. It could be useful, for example, to define $M \oplus_p N = \tif{\tsample - p < 0} M N$, where $M \oplus_p N$ reduces to $M$ or $N$, depending on the first value of $s \in \entrosp$\lo{Need a name for $s$.}, with probability $p$ resp.~$(1-p)$. Technically though, it reduces first to $\tif{\underline r - p < 0} M N$ for all $r \in I$, so those terms all need values of the ranking function too.
+The definition of rankability is also inconvenient for syntactic sugar. It could be useful, for example, to define $M \oplus_p N = \tif{\tsample - p < 0} M N$, where $M \oplus_p N$ reduces to $M$ or $N$, depending on the first value of $s \in \entrosp$, with probability $p$ resp.~$(1-p)$. Technically though, it reduces first to $\tif{\underline r - p < 0} M N$ for all $r \in I$, so those terms all need values of the ranking function too.
 
 %\paragraph{}
 In both of these cases, there are only some values of the ranking function that are semantically important. 

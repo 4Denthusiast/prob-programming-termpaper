@@ -4,7 +4,8 @@
 
 \subsection{Syntax of PPCF}
 
-The language PPCF is a simply-typed lambda calculus with sampling of real numbers from the closed interval $[0,1]$, \changed[lo]{following \cite{MakOPW21} except the score function (\Cref{rem:score})}. 
+The language PPCF is a simply-typed lambda calculus with sampling of real numbers from the closed interval $[0,1]$. 
+%\changed[lo]{following \cite{MakOPW21} except the score function (\Cref{rem:score})}. 
 Types and terms are defined as follows, where $r$ is a real number, $x$ is a variable, $f : \mathbb{R}^n \to \mathbb{R}$ is any measurable function, and $\Gamma$ is an environment:
 \akr{\begin{align*}
   \text{\em types } A, B &::= \textsf{R}  \mid  A \to B \\
@@ -27,7 +28,7 @@ Terms are identified up to $\alpha$-equivalence, as usual.
 The set of all terms is denoted $\Lambda$, and the set of closed terms is denoted $\Lambda^0$.
 
 %\paragraph{}
-To define the reduction relation, let \emph{evaluation contexts} be of the form:
+To define the call-by-value reduction relation, let \emph{evaluation contexts} be of the form:
 \begin{align*}
   E ::= & \, [\,] \mid E \, M \mid V \, E \mid \underline{f}(\underline r_1,\dots ,\underline r_{k-1}, E, M_{k+1}, \dots, M_n) \\ & \mid \tY E \mid \tif{E<0}{M_1}{M_2}
 \end{align*}
