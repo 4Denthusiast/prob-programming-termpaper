@@ -37,17 +37,22 @@ The term $M_1$ is rankable, terminating in 31 $\tY$-steps on average, and $M_3$ 
 
 %\paragraph*{Idea} 
 
-\changed[lo]{
 \begin{definition}
-%The definition of antitone ranking function $f$ for $M \in \Lambda^0$ is the same as that of ranking function except that in the case of $\tY$-redex, 
-%we require the existence of an antitone (meaning: $r < r'$ implies $\epsilon(r) \geq \epsilon(r')$) function $\epsilon : \nnReal \to \pReal$ such that the ranking function $f :\mathit{Rch}(M) \to \nnReal$ satisfies
-%\[f(E[R']) \leq f(E[R]) - \epsilon(f(E[R])) \] where $R \to R'$ is the $\tY$-redex rule.
+\changed[akr]{The definition of \emph{antitone ranking function} $f$ for $M \in \Lambda^0$ is the same as that of ranking function except that in the case of $\tY$-redex, 
+we require the existence of an antitone (meaning: $r < r'$ implies $\epsilon(r) \geq \epsilon(r')$) function $\epsilon : \nnReal \to \pReal$ such that the ranking function $f :\mathit{Rch}(M) \to \nnReal$ satisfies
+\[f(E[R']) \leq f(E[R]) - \epsilon(f(E[R])) \] 
+where $R \to R'$ is the $\tY$-redex rule.}
+Any closed term for which an antitone ranking function exists is called \emph{antitone rankable}.
+\iffalse
 Given a ranking function $f$ on $M \in \Lambda^0$, we say that $f$ is \emph{antitone} if there exists an antitone function\footnote{i.e.~$r < r'$ implies $\epsilon(r) \geq \epsilon(r')$} $\epsilon : \nnReal \to \pReal$ such that %the ranking function $f$ satisfies
 \[
 f(E[R']) \leq f(E[R]) - \epsilon(f(E[R])) 
 \]
 for all $E[R'] \in \mathit{Rch}(M)$ where $R \to R'$ is the $\tY$-redex rule.
+\fi
 \end{definition}
+
+\changed[akr]{Note that antitone ranking functions are actually a generalisation of ranking functions, even though their name may suggest that they are a type of ranking functions.}
 
 \iffalse
 \lo{An aside: This CBV $\tY$-rule seems cleaner:
@@ -63,9 +68,9 @@ we say that $(Y_n)_{n \geq 0}$ is an \emph{antitone strict supermartingale w.r.t
 \(
 \expect{Y_{n+1} \mid \calF_n} \leq Y_n - \epsilon (Y_n) \cdot {\bf 1}_{\set{T > n}}
 \).
-Any closed term for which an antitone ranking function exists is called \emph{antitone rankable}.
+%Any closed term for which an antitone ranking function exists is called \emph{antitone rankable}.
 \end{definition}
-}
+
 %\lo{The preceding definition does not place any constraint on the stopping time $T$ (other than that it is w.r.t.~the filtration $(\calF_n)_{n \geq 0}$). However for the definition to make sense, $T$ must be the stopping time $T(s) := \min \set{n \mid Y_n(s) = 0}$.}
 \akr{The definition you gave for an antitone ranking function is incorrect, because the antitone ranking functions are a proper subset of ranking functions. Although we may have been referring to antitone ranking functions as a type of ranking function, they're a generalisation, so they don't actually meet the definition of a ranking function in general.}
 

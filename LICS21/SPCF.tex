@@ -104,7 +104,11 @@ which terminates on the set $\pi_h^{-1}[[0,0.5]]$, has probability 0.5 of failin
 Note that the requirement that $M$ be closed is not important for the proofs of the theorems, but is simply required to ensure that $M$ reaches a value, rather than a general normal form like $x \, y$.
 
 %\paragraph{}
-This definition of almost sure termination is equivalent to that given in \citep{MakOPW21} (although the program semantics is stated in a slightly different way), except for the presence of a $\tscore(r)$ construct for soft conditioning. The $\tscore(r)$ construct is not relevant to termination except that it fails if its argument is less than or equal to zero, which allows computations to fail after finitely many steps. If such a thing were added, it would merely require an additional side condition to our main theorems, that no failing term was reachable (or, in the case of the confluent semantics based results, no term where the reduction stragegy is not defined is reachable via the reduction strategy unless it's a value).
+\begin{remark}
+This definition of almost sure termination is equivalent to that given in \citep{MakOPW21} (although the program semantics is stated in a slightly different way), except for the presence of a $\tscore(r)$ construct for soft conditioning. 
+The $\tscore(r)$ construct is not relevant to termination except that it fails if its argument is less than or equal to zero, which allows computations to fail after finitely many steps. 
+If such a thing were added, it would merely require an additional side condition to our main theorems, that no failing term was reachable (or, in the case of the confluent semantics based results, no term where the reduction stragegy is not defined is reachable via the reduction strategy unless it's a value).
+\end{remark}
 
 \iffalse
 \lo{Your operational semantics does not maintain a record of the current weight of the reduction.
