@@ -48,10 +48,8 @@ M[\tsample / \alpha] = \lambda x \, y. y \, (\tif{x < 0}{y \, \tsample}{\underli
 Two subterms $N_1$ and $N_2$ of a term $M$, corresponding to positions $\alpha_1$ and $\alpha_2$, can overlap in a few different ways. 
 If $\alpha_1$ is an initial segment (i.e.~prefix) of $\alpha_2$ (written as $\alpha_1 \leq \alpha_2$), then $N_2$ is also a subterm of $N_1$. If neither $\alpha_1 \leq \alpha_2$ nor $\alpha_1 \geq \alpha_2$, the positions are said to be \emph{disjoint}. 
 The notion of disjointness is mostly relevant in that if $\alpha_1$ and $\alpha_2$ are disjoint, performing a substitution at $\alpha_1$ will leave the subterm at $\alpha_2$ unaffected.
-\lo{The preceding sentence is unclear. Typo?} \akr{It wasn't a typo, but I've made it a little more explicit now. Is this clearer?} \lo{Yes, it's clear now.}
 
-With this notation, a more general reduction relation $\to$ can be defined. \akr{It would almost work to have one of the neater versions of $\tY$-reduction here.}
-%\lo{On first reading, I struggled to parse the following clauses.}
+With this notation, a more general reduction relation $\to$ can be defined.
 \begin{definition}
 \label{def:more general red}
 The binary relation $\to$ is defined by the following rules, each is conditional on a redex occurring at position $\alpha$ in the term $M$:
@@ -72,9 +70,7 @@ Labelling the pre-chosen samples by the positions in the term would also not wor
 It is therefore necessary to consider possible positions that may occur in other terms reachable from the original term. 
 Even this is itself inadequate because some of the positions in different reachable terms need to be considered the same, and the number of reachable terms is in general uncountable, which leads to measure-theoretic issues.
 
-\changed[lo]{We are thus led to consider the reduction relation on skeletons (and positions in a skeleton), which can be extended from the definitions on terms in the obvious way,} 
-%The positions in a skeleton and the reduction relation on skeletons can be extended from the definitions on terms in the obvious way, 
-with $\tif{\skeletonPlaceholder < 0}{A}{B}$ reducing nondeterministically to both $A$ and $B$, and $\tsample$ reducing to $\skeletonPlaceholder$.
+We are thus led to consider the reduction relation on skeletons (and positions in a skeleton), which can be extended from the definitions on terms in the obvious way, with $\tif{\skeletonPlaceholder < 0}{A}{B}$ reducing nondeterministically to both $A$ and $B$, and $\tsample$ reducing to $\skeletonPlaceholder$.
 For example, we have 
 \(
 (\lambda x . \tif{x < 0}{x}{\skeletonPlaceholder}) \, \tsample
@@ -86,7 +82,9 @@ For example, we have
 \skeletonPlaceholder
 \).
 
-Given a closed term $M$, let $L_0(M)$ be the set of pairs, the first element of which is a $\to$-reduction sequence of skeletons starting at $\mathit{Sk}(M)$, and the second of which is a position in the final skeleton of the reduction sequence. As with the traces from $I^{\mathbb N}$ used to pre-select samples to use in the usual linear sampling semantics,\lo{I assume by linear sampling semantics, you mean the standard sampling semantics. If so, I would drop linear.} there will be (with one more caveat introduced later) a sample from $I$ pre-selected for each element of $L_0(M)$, which will then be used if a $\tsample$ reduction is ever performed at that position.
+Given a closed term $M$, let $L_0(M)$ be the set of pairs, the first element of which is a $\to$-reduction sequence of skeletons starting at $\mathit{Sk}(M)$, and the second of which is a position in the final skeleton of the reduction sequence. As with the traces from $I^{\mathbb N}$ used to pre-select samples to use in the standard sampling semantics, there will be (with one more caveat introduced later) a sample from $I$ pre-selected for each element of $L_0(M)$, which will then be used if a $\tsample$ reduction is ever performed at that position.
+
+A (skeletal) reduction sequence is assumed to contain the information on the locations of all of the redexes as well as the actual sequence of skeletons that occurs. For example, $(\lambda x. x) ((\lambda x. x) \skeletonPlaceholder)$ could reduce to $(\lambda x. x) \skeletonPlaceholder$ with the redex at either $\cdot$ or $@_2$, and these give different reduction sequences.
 
 \begin{example}[Labelling samples by terms]
 Consider the terms
@@ -95,29 +93,27 @@ A[x] &= \tif{\tif{x>0}{I}{I} \, \tsample - 0.5 > 0}{0}{\Omega}\\
 B &= \tif{\tsample - 0.5 > 0}{0}{\Omega}
 \end{align*}
 If terms rather than skeletons were used to label samples, the set of traces where $A[\tsample]$ terminates would be
-\[\begin{array}{l}
-\bigcup_{r \in [0,1]} \Big\{s \in I^{L_s(A[\tsample])} \mid \\
-\qquad\qquad\qquad\quad s([A[\tsample]], \mathsf{if}_1;\underline{-}_1;@_1;\mathsf{if}_1) = r, \\
-\qquad\qquad\qquad\quad s([A[\tsample], A[\underline r], \ldots, B, \mathsf{if}_1) > 0.5 \Big\}.
-\end{array}\] 
-\lo{There are a number of spurious square bracket in the predicate of the set comprehension above.}
+\begin{align*}
+\bigcup_{r \in [0,1]} \Big\{s \mid\ & s(A[\tsample], \mathsf{if}_1;\underline{-}_1;@_1;\mathsf{if}_1) = r, \\
+& s(A[\tsample] \to A[\underline r] \to^* B, \mathsf{if}_1 ; \underline{-}_1) > 0.5 \Big\}.
+\end{align*}
 
 \lo{We have just defined $L_0(M)$, but what is $L_s(\cdot)$ (subscript $s$)? I assume it is the version of $L_0(M)$ that labels samples by terms.} 
 
-\lo{The occurrence of $L_s(M)$ in the set comprehension below should be $L_0(M)$?}
+\akr{$L_s(M)$ is the set of potential positions (quotiented by $\sim^*$) where there is a $\tsample$. I don't want to move this example until after $L_s(M)$ has actually been defined, but also I don't want to imply that $I^{L_0(M)}$ is the actual entropy space too explicitly, so I'll just leave the set $s$ is restricted to implicit for now.}
 
-\lo{The $\mathsf{if}_1$ in the line above (and in the set comprehension below) should be $\mathsf{if}_1 ; \underline{-}_1$.}
+\lo{The occurrence of $L_s(M)$ in the set comprehension below should be $L_0(M)$?}
 
 \lo{I think we should write ``$[A[\tsample], A[\underline r], \ldots, B$'' in the line above as ``$A[\tsample] \to A[\underline r] \to^\ast B$''; similarly $\mathit{Sk}(A[\tsample]) \to \mathit{Sk}(A[\underline 0]) \to^\ast \mathit{Sk}(B)$ below.}
 This is a rather unwieldy expression, but the crucial part is that $r$ occurs twice in the conditions on $s$: once as the value a sample must take, and once in the location of a sample. 
 This set is unmeasurable, therefore the termination probability would not even be well-defined. 
-Labelling samples by skeletons instead, this problem does not occur because there are only countably many skeleton, and at each step in a reduction sequence, only finitely many could have occurred yet. 
+Labelling samples by skeletons instead, this problem does not occur because there are only countably many skeleton, and at each step in a reduction sequence, only finitely many could have occurred yet. Although skeletal reduction sequences omit the information on what the results of sampling were, they still contain all the necessary information on how many, and which, reductions took place.
+
 For this particular term, $\mathit{Sk}(A[\underline r])$ does not depend on the value of $r$, therefore the set where it terminates becomes simply
 \begin{align*}
-&\{s \in I^{L_s(A[\tsample])} \mid \\
-&\qquad s(\mathit{Sk}(A[\tsample]), \mathit{Sk}(A[\underline 0]), \ldots, \mathit{Sk}(B), \mathsf{if}_1) > 0.5 \},
+\{s \mid s(\mathit{Sk}(A[\tsample]) \to \mathit{Sk}(A[\underline 0]) \to^* \mathit{Sk}(B), \mathsf{if}_1 ; \underline{-}_1) > 0.5 \},
 \end{align*}
-which is measurable. Skeletal reduction sequences still contain just as much information as reduction sequences of terms, however, on which reductions took place.
+which is measurable.
 \qed
 \end{example}
 
@@ -133,13 +129,8 @@ This is still not quite sufficient because sometimes the same samples must be us
 
 \begin{example} \label{ex:cousin sim} 
 The term $M = \tsample + \tsample$ has the reachable skeletons $N_1 = \skeletonPlaceholder + \tsample, N_2 = \tsample + \skeletonPlaceholder, O = \skeletonPlaceholder + \skeletonPlaceholder$ and $\skeletonPlaceholder$, with reductions $M \to N_1 \to O \to \skeletonPlaceholder$ and $M \to N_2 \to O \to \skeletonPlaceholder$. 
-In the reduction $M \to N_1$, the sample labelled $(M, \underline{+}_2)$ is used, and in the reduction $N_2 \to O$, the sample labelled $(M \to N_2, \underline{+}_2)$ is used. 
-Each of these samples becomes the value of the second numeral in $O$ in their respective reduction sequences, therefore in order for Church-Rosserness to be attained, they must be the same. Which elements of $L_0(M)$ must match can be described by the relation $\sim^*$:
-
-\lo{I think there are typos above: see the corrected(?) version below.}[The term $M = \tsample + \tsample$ has the reachable skeletons $N_1 = \skeletonPlaceholder + \tsample, N_2 = \tsample + \skeletonPlaceholder, O = \skeletonPlaceholder + \skeletonPlaceholder$ and $\skeletonPlaceholder$, with reductions $M \to N_1 \to O \to \skeletonPlaceholder$ and $M \to N_2 \to O \to \skeletonPlaceholder$. 
-In the reduction $M \to N_1$, the sample labelled \changed[lo]{$(M, \underline{+}_1)$} is used, and in the reduction $N_2 \to O$, the sample labelled %$(M \to N_2, \underline{+}_2)$
-\changed[lo]{$(M \to N_2, \underline{+}_1)$} is used. 
-Each of these samples becomes the value of the \changed[lo]{first} \lo{left?} numeral in $O$ in their respective reduction sequences, therefore in order for Church-Rosserness to be attained, they must be the same. Which elements of $L_0(M)$ must match can be described by the relation $\sim^*$:]
+In the reduction $M \to N_1$, the sample labelled $(M, \underline{+}_1)$ is used, and in the reduction $N_2 \to O$, the sample labelled $(M \to N_2, \underline{+}_1)$ is used. 
+Each of these samples becomes the value of the first numeral in $O$ in their respective reduction sequences, therefore in order for Church-Rosserness to be attained, they must be the same. Which elements of $L_0(M)$ must match can be described by the relation $\sim^*$:
 \end{example}
 
 \begin{definition}
@@ -168,8 +159,11 @@ The relation $\sim$ is defined as the union of the minimal symmetric relations $
     (in which case $O_1$ and $O_2$ are equal as skeletons, but with different reduction sequences), $O_1'$ and $O_2'$ are the results of applying some reduction sequence to each of $O_1$ and $O_2$ (the same reductions in each case, which is always possible because they're equal terms), and $\delta$ is a position in $O_1'$ (or equivalently $O_2'$), then $(O_1',\delta) \sim_c (O_2',\delta)$.
 \end{enumerate}
 The $\sim_c$-rules are illustrated in Figure \ref{sim-diagram}.
-\lo{TODO. Use \Cref{ex:cousin sim} to give an example of $\sim_c$.}
 \end{definition}
+
+In \Cref{ex:cousin sim}, $(M,\underline{+}_1) \sim_p (M \to N_2,\underline{+}_1)$ by case i of $\sim_p$ (because the reduction $M \to N_2$ occurs at $\underline{+}_2$, which is disjoint from $\underline{+}_1$), and similarly, $(M,\underline{+}_2) \sim_p (M \to N_1,\underline{+}_2)$.
+
+If we extend it to have three $\tsample$s, $\sim_c$ becomes necessary as well: Let $M_{sss} = \tsample + \tsample + \tsample$ (taking the three-way addition to be a single primitive function), $M_{Xss} = \skeletonPlaceholder + \tsample + \tsample$, and so on. There are then reduction sequences $M_{sss} \to M_{Xss} \to M_{XXs} \to M_{XXX} \to \skeletonPlaceholder$ and $M_{sss} \to M_{sXs} \to M_{XXs} \to M_{XXX} \to \skeletonPlaceholder$. For the first two reductions, these reduction sequences take the same samples by $\sim_p$, case i, as in \Cref{ex:cousin sim}~. The next reduction uses the samples labelled by $(M_{sss} \to M_{Xss} \to M_{XXs}, \underline{+}_3)$ and $(M_{sss} \to M_{sXs} \to M_{XXs}, \underline{+}_3)$, which are related by $\sim_c$, case a, therefore when these reduction sequences reach $M_{XXX}$, they still contain all the same numbers, as desired.
 
 The reflexive transitive closure $\sim^*$ of this relation is used to define the set of \emph{potential positions} $L(M) = L_0(M) / \sim^*$, and each equivalence class can be considered as the same position as it may occur across multiple reachable skeletons. 
 If $(N,\alpha) \sim^* (O,\beta)$, then $N \mid \alpha$ and $O \mid \beta$ both have the same shape (i.e.~they're either both the placeholder $\skeletonPlaceholder$, both variables, both applications, both $\tsample$s etc.), therefore it's well-defined to talk of the set of potential positions where there is a $\tsample$, $L_s(M)$. 
@@ -199,7 +193,7 @@ Unlike in the purely call-by-value case, the version of the reduction relation t
 \end{align*}
 
 \paragraph{}
-This reduction relation now has all of the properties required of it. In particular, it can be considered an extension of the usual linear trace semantics (as will be seen later in Theorem \ref{thm:AstEquivalence}), and also:
+This reduction relation now has all of the properties required of it. In particular, it can be considered an extension of the standard trace semantics (as will be seen later in Theorem \ref{thm:AstEquivalence}), and also:
 \begin{restatable}{lemma}{churchRosser} \label{churchRosser}
 The relation $\Rightarrow$ is Church-Rosser.
 \end{restatable}
@@ -224,19 +218,19 @@ The usual call-by-value semantics can be implemented as one of these reduction s
 
 A closed term $M$ terminates with a given reduction strategy $f$ and samples $s$ if there is some natural number $n$ such that $(M,s) \Rightarrow_f^n (N,s')$ where $f$ gives no reduction at $N$. The term terminates almost surely with respect to $f$ if it terminates with $f$ for almost all $s$.
 
-With these definitions, it is now possible to relate the confluent sampling semantics back to the linear sampling semantics.
+With these definitions, it is now possible to relate the confluent sampling semantics back to the standard sampling semantics.
 
 \begin{restatable}{theorem}{AstEquivalence} \label{thm:AstEquivalence}
 A closed term $M$ is AST with respect to $\cbv$ iff it is AST.
 \end{restatable}
 
-It is also true that the distributions of terms produced by the linear semantics and by the reduction strategy $\cbv$ are the same, for much the same reason, although that is not relevant to our main results.
+It is also true that the distributions of terms produced by the standard semantics and by the reduction strategy $\cbv$ are the same, for much the same reason, although that is not relevant to our main results.
 
 \begin{restatable}{theorem}{CbvIsTerminatingest} \label{thm:CbvIsTerminatingest}
 If $M$ terminates with some reduction strategy $f$ and trace $s$, it terminates with $\cbv$ and $s$.
 \end{restatable}
 
-It is not quite true, however, that all reduction strategies produce the same values (barring some reduction strategies terminating where others don't), because it is possible for a reduction strategy to overshoot the value that the linear semantics produces by, for example, performing reductions inside of a lambda. Even for the same value of the samples, the final values may be different. A more restricted result is true, however, that if a term terminates with some reduction strategy $f$ and samples $s$, the value that $\Rightarrow_{\cbv}$ terminates with can reduce via $\Rightarrow$ to the value that $\Rightarrow_f$ terminates with (as a corollary to the proof of Theorem \ref{thm:CbvIsTerminatingest}).
+It is not quite true, however, that all reduction strategies produce the same values (barring some reduction strategies terminating where others don't), because it is possible for a reduction strategy to overshoot the value that the standard semantics produces by, for example, performing reductions inside of a lambda. Even for the same value of the samples, the final values may be different. A more restricted result is true, however, that if a term terminates with some reduction strategy $f$ and samples $s$, the value that $\Rightarrow_{\cbv}$ terminates with can reduce via $\Rightarrow$ to the value that $\Rightarrow_f$ terminates with (as a corollary to the proof of Theorem \ref{thm:CbvIsTerminatingest}).
 
 \begin{corollary}
 If $M$ is AST with respect to any reduction strategy, it is AST.
