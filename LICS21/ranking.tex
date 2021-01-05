@@ -18,7 +18,7 @@ However, note that a finite number of expected $\tY$-reduction steps does not ne
 \label{ex:tY finite does not imply t finite}
 The term $M = \Xi \, (\lambda x. x+1)$ where
 \[
-\Xi := \tY \lambda f n. \tif{\tsample - 0.5 < 0}{n \, \underline 0}{f (\lambda x. n (n x))}
+\Xi := \tY \lambda f \, n. \tif{\tsample - 0.5 < 0}{n \, \underline 0}{f (\lambda x. n (n \, x))}
 \] 
 terminates with only 2 $\tY$-reductions on average, i.e.,~$\expect{T_M^\tY} = 2$, but applies the increment function $2^n$ times with probability $2^{-n-1}$ for $n \geq 0$, which diverges, i.e.,~$\expect{T_M} = \infty$.
 \end{example}
@@ -163,7 +163,7 @@ Despite its simplicity, its $Rch$ contains all the terms in \Cref{fig:geometric 
 Even in this simple case, defining a ranking function explicitly is awkward because of the number of cases, although in most cases, because the value need only be greater than or equal to that of the next term in sequence, it suffices to take the ranking function as having the same value as the next term, so that overall it takes only 3 distinct values.
 (We will explain why later.)
 
-The definition of rankability is also inconvenient for syntactic sugar. It could be useful, for example, to define $M \oplus_p N = \tif{\tsample - p < 0} M N$, where $M \oplus_p N$ reduces to $M$ or $N$, depending on the first value of $s \in \entrosp$, with probability $p$ resp.~$(1-p)$. Technically though, it reduces first to $\tif{\underline r - p < 0} M N$ for all $r \in I$, so those terms all need values of the ranking function too.
+The definition of rankability is also inconvenient for syntactic sugar. It could be useful, for example, to define $M \oplus_p N := \tif{\tsample - p < 0} M N$, where $M \oplus_p N$ reduces to $M$ or $N$, depending on the first value of $s \in \entrosp$, with probability $p$ resp.~$(1-p)$. Technically though, it reduces first to $\tif{\underline r - p < 0} M N$ for all $r \in I$, so those terms all need values of the ranking function too.
 
 %\paragraph{}
 In both of these cases, there are only some values of the ranking function that are semantically important. 
@@ -172,7 +172,7 @@ Define a \emph{sparse ranking function} on a closed term $M$ to be a partial fun
 \begin{itemize}
     \item $f(N) \geq 0$ for all $N$ where $f$ is defined.
     \item $f$ is defined at $M$.
-    \item For any $N$ in the domain of definition of $f$, evaluation of $N$ will eventually \akr{It would be nicer for this to be only almost certain, to make this more neatly in-between rankability and ast, but that doesn't actually work because of terms reachable with 0 probability. Of course, astness doesn't imply rankability, so any definition of sparse ranking function that includes all Y-past terms wouldn't always extend to a total ranking function.} reach some $O$ which is either a value or in the domain of definition of $f$, and $f(N) \geq \mathbb E[f(O) + \text{ the number of $\tY$-reduction steps from $N$ to $O$}]$ (where $f(O)$ is taken to be 0 if $O$ is a value outside of the domain of $f$).
+    \item For any $N$ in the domain of definition of $f$, evaluation of $N$ will eventually \akr{It would be nicer for this to be only almost certain, to make this more neatly in-between rankability and AST, but that doesn't actually work because of terms reachable with 0 probability. Of course, ASTness doesn't imply rankability, so any definition of sparse ranking function that includes all Y-PAST terms wouldn't always extend to a total ranking function.} reach some $O$ which is either a value or in the domain of definition of $f$, and $f(N) \geq \mathbb E[f(O) + \text{ the number of $\tY$-reduction steps from $N$ to $O$}]$ (where $f(O)$ is taken to be 0 if $O$ is a value outside of the domain of $f$).
 \end{itemize}
 \end{definition}
 A sparse ranking function that is total is just a ranking function. Providing a sparse ranking function is essentially part way between providing a ranking function and directly proving almost sure termination.
@@ -213,8 +213,8 @@ A similar procedure would work for other forms of syntactic sugar. If a closed t
 %\paragraph{}
 With this abbreviation, the geometric distribution example from earlier can be written as $(\tY \lambda f n.\ n \oplus_{0.5} f(n+1)) \, \underline 0$. It is then easy to see that the following is a sparse ranking function:
 \begin{align*}
-(\tY \lambda f n.\ n \oplus_{0.5} f(n+1))\ N & \mapsto 2 \\
-\underline i \oplus_{0.5} (\tY \lambda f n.\ n \oplus_{0.5} f(n+1))\ (\underline i + 1) & \mapsto 1 \\
+(\tY \lambda f n.\ n \oplus_{0.5} f(n+1))\, N & \mapsto 2 \\
+\underline i \oplus_{0.5} (\tY \lambda f n.\ n \oplus_{0.5} f(n+1))\, (\underline i + 1) & \mapsto 1 \\
 \underline i & \mapsto 0.
 \end{align*}
 
