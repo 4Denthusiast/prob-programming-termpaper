@@ -1,0 +1,13 @@
+% !TEX root = main.tex
+
+\begin{align*}
+  \text{\em types } A, B &::= \textsf{R}  \mid  A \to B \\
+  \text{\em values } V &::= x \mid \lambda x.M  \mid  \underline{r} \mid \tY \\
+  \text{\em terms } M, N &::= V  \mid  M_1 \, M_2  \mid  \underline{f}(M_1,\dots ,M_n) \\
+   & \qquad \mid  \tif{M < 0}{N_1}{N_2}  \mid  \tsample
+\end{align*}
+Currently $\tY$ is not a legal term. This is unnatural: there is no reason to so restrict $\tY$. Following \citep[p.~376]{DBLP:conf/fsttcs/Sieber90}, we should define $\tY$ as a value (and so a proper term); it follows that $\tY \, M$ is redundant as a clause.
+
+It is also standard to regard variables as values in a CBV language.
+
+Problem: $\tY \, \tY$ is then a ``stuck'' term: neither value nor redex. A possible solution is to redefine the $\tY$-redex rule as $\tY \, V \to \lambda z . V \, (\tY \, V) \, z$, but I expect this would affect many proofs in the confluent semantics section, and there may not be time for such a change.
