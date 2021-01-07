@@ -226,9 +226,6 @@ Define an \emph{antitone sparse ranking function} on a closed term $M$ to be a p
 As a corollary, any term which admits an antitone sparse ranking function terminates almost surely.
 
 \paragraph*{\Cref{ex:ac-ranking} revisited}
-\akr{All of these ranking functions are slightly incorrect, because $\Xi \, \underline n$ reduces to something like $\Xi \, (\underline n + 1)$ then $(\lambda z. \text{something}[\Xi/f]) (\underline n + 1)$, rather than reducing the argument first. This could be fixed by appealing to the confluent semantics version of the antitone ranking theorem, but it would be nice to have at least some examples here illustrating how antitone ranking functions work, rather than actually saving all these examples until the end.
-
-Even though the difference is quite trivial, this was actually the original motivating example for the confluent trace semantics.}
 Programs $M_1$ and $M_2$ are AST. For $M_1$, the sparse ranking function 
 \[
 \big(\tY \, \lambda f n . \, \tif{n=0}{0}{f \, (n-1) \oplus_{3/2} f \, (n+1)}\big) \, \underline x \mapsto 3x + 1
@@ -258,7 +255,7 @@ for $n \in \mathbb N$.
 % \\
 % 0 &\mapsto 0.
 % \end{align*}
-For $n \geq 1$, $\Theta_2 \, n$ reduces in several steps to either $\Theta_2 \, (n-1)$ or $\Theta_2 \, (n+1)$, each with probability $1/2$, with one $\tY$-reduction.
+For $n \geq 1$, $\Theta_2 \, n$ reduces in several steps to either $\Theta_2 \, (n-1)$ or $\Theta_2 \, (n+1)$,\footnote{Technically this is not quite correct, because of the distinction between $\underline n + 1$ and $\underline{n + 1}$, but this ranking function can still be made to work by appealing to \Cref{thm:confluent ranking}, as can the others in this section with similar issues.} each with probability $1/2$, with one $\tY$-reduction.
 Now
 \begin{align*}
 & g_2(n) - \frac{g_2(n-1) + g_2(n+1)} 2 \\

@@ -286,8 +286,59 @@ An \emph{antitone sparse ranking function on $M$ with respect to a reduction str
 \end{itemize}
 \end{definition}
 
-\begin{theorem}
+\begin{theorem} \label{thm:confluent ranking}
 If a closed PPCF term $M$ has a ranking function, sparse ranking function, antitone ranking function or antitone sparse ranking function with respect to a reduction strategy $r$, then $M$ is AST with respect to $r$, and AST.
 \end{theorem}
-\lo{Give an example or two of a reduction strategy (for $\Rightarrow$) that is not $\cbv$.}
 
+\paragraph{}
+If, as seems likely, \Cref{thm:antitone rankable implies termination} is complete for terms from which every reachable term is AST, then by the following theorem, \Cref{thm:confluent ranking} can't actually prove the termination of any terms not already provable by \Cref{thm:antitone rankable implies termination} and \Cref{thm:antitone partial implies rankable}.
+
+\begin{restatable}{theorem}{confluentNoStronger}
+For any closed term $M$ and reduction strategy $r$ on $M$, if every term in $Rch_r(M)$ is AST, then every term in $Rch(M)$ is AST.
+\end{restatable}
+
+However, there are some terms which terminate more simply and directly via some alternative reduction strategy. For these examples, a custom reduction strategy is specified for each term under consideration.
+
+\begin{example}
+The following term picks a random natural number $n$, then computes $\sum_{k=0}^n k^n$.
+\begin{align*}
+M =&\ (\lambda n. P[n]) \lfloor \tsample^{-1/2} \rfloor \\
+P[n] =&\ (\lambda p. \Xi[p] n) (\lambda x. \Theta[x] n)) \\
+\Xi[p] =&\ \tY \lambda f n. \tif{n = 0}{\underline 0}{p n + f (n-1)} \\
+\Theta[x] =&\ \tY \lambda f n. \tif{n = 0}{\underline 1}{x \times f (n-1)}.
+\end{align*}
+
+Let $r$ be the reduction strategy which reduces $M$ in the order
+\begin{align*}
+&\ M \\
+\to^* &\ P[\underline n] \\
+\to^* &\ (\lambda p.\ \Xi[p]\ \underline n)\ (\lambda x. \underbrace{x \times \dots \times x \times}_n \underline 1) \\
+\to^{\phantom *} &\ \Xi[\lambda x. \underbrace{x \times \dots \times x \times}_n \underline 1]\ \underline n \\
+\to^{\phantom *} &\ \tif{\underline n = 0}{\underline 0}{\underline{n^n} + \Xi[\lambda x. x \times \dots \underline 1]\ \underline{n-1}} \\
+\to^* &\ \underline{n^n} + \underline{(n-1)^n} + \dots + \underline 0 \\
+\to^* &\ \underline{\sum_{k=0}^n k^n}
+\end{align*}
+(this is a little underspecified, but the details are not important). A suitable sparse ranking function for it is
+\begin{align*}
+M \mapsto & \frac{\pi^2}{3} \\
+P[\underline n] \mapsto & 2n+2 \\
+(\lambda p.\ \Xi[p]\ \underline n)\ (\lambda x. \underbrace{x \times \dots \times x \times}_{n-k} (\Theta[x]\ \underline k)) \mapsto & n + k + 2 \\
+\Xi[\lambda x. \underbrace{x \times \dots \times x \times}_n \underline 1]\ \underline n \mapsto & n + 1 \\
+\underline{n^n} + \dots + \underline{(n-k+1)^n} + \Xi[\lambda x. x \times \dots \underline 1]\ \underline k \mapsto & k + 1 \\
+\underline{\sum_{k=0}^n k^n} \mapsto & 0.
+\end{align*}
+
+The first step is justified because the probability of reaching $P[\underline n]$ for any specific $n \geq 0$ is $(n+1)^{-2} - (n+2)^{-2} = \frac{2n + 3}{(n+1)^2(n+2)^2}$, therefore the expected next value of the ranking function is $\sum_{n=0}^{\infty} \frac{(2n+2)(2n + 3)}{(n+1)^2(n+2)^2} = \frac{\pi^2}{3}$. The other steps are deterministic, and involve 1 or 0 $\tY$-reductions each. Given that all of the reduction steps after the first are deterministic, and the number of $\tY$ reduction steps is not that hard to count, defining the sparse ranking function's values only at $M$ and $P[\underline n]$ would also have been reasonable, although in a similar term which had more random samples throughout, that would not have been so simple.
+
+Providing a ranking function of some sort for this term in a similar level of detail would have been rather more complicated using only the standard reduction strategy. The recursion in $\Theta$ would have had to be evaluated separately for every time it was used, so there would have been more (and more complex) terms to consider in the reduction sequence. Also, the number of $\tY$-reductions from $P[\underline n]$ would have been $n^2 + 2n + 1$ instead of $2n + 2$, therefore the expected number of $\tY$ reductions starting from $M$ would be infinite, i.e.~$M$ is not $\tY$-PAST, therefore it is not even rankable. It would be possible to define an antitone sparse ranking function for it, but it would have to include terms such as
+\begin{align*}
+& \underline{n^n} + \dots + \underline{(n-k_1+1)^n} + \\
+& (\underbrace{\underline{n-k_1} \times \dots \times \underline{n-k_1} \times}_{n-k_2-1} (\Theta[\underline{n-k_1}] (\underline{k_2} - 1))) + \\
+& \Xi[\lambda x. \Theta[x] \underline n] (\underline{n-k_1} - 1) \mapsto \log((n+1)k_1 + k_2)
+\end{align*}
+as only one of the several cases, which is significantly more complicated and difficult to use.
+
+It wouldn't even be possible in this case to give a sparser version of the ranking function defined only at $M$ and $P[\underline n]$, because the amount that an antitone sparse ranking function must decrease at each $\tY$-reduction step depends on the value of the ranking function at the next term where it is defined, therefore it is necessary to have these intermediate steps in order for the ranking function to be able to change sufficiently slowly.
+\end{example}
+
+Even some of the examples given earlier implicitly use slightly non-standard reduction strategies to make the definitions of their ranking functions slightly similar. For example, the antitone sparse ranking function in \Cref{ex:unbiased random walk} was defined at $\Theta_2\ \underline n$ (where $\Theta_2 = \tY \, \lambda f n . \, \tif{n = 0}{0}{f \, (n - 1) \oplus_{1/2} f \, (n + 1)}$), but $\Theta_2\ \underline{10}$ actually reduces to $\Theta_2\ (\underline{10} - 1)$ or $\Theta_2\ (\underline{10} + 1)$, and (taking the second of these), it then reduces to $(\lambda z. (\lambda n. \, \tif{n = 0}{0}{\Theta_2 \, (n - 1) \oplus_{1/2} \Theta_2 \, (n + 1)}) z) \, (\underline{10} + 1)$, then $(\lambda z. (\lambda n. \, \tif{n = 0}{0}{\Theta_2 \, (n - 1) \oplus_{1/2} \Theta_2 \, (n + 1)}) z) \, \underline{11}$, bypassing $\Theta_2\ \underline{11}$ entirely. The antitone sparse ranking function in the form given can be justified anyway, by considering it to be using a reduction strategy which is the same as $\cbv$ except that in $\Theta_2\ (\underline f \underline n)$, it evaluates the redex at $@_2$ first.
