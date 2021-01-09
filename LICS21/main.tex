@@ -128,8 +128,9 @@ Antitone ranking functions have weaker restrictions on how fast they must decrea
 Sparse ranking functions take values only at a subset of the program's reachable states, so they are simpler to define and more flexible. 
 Ranking functions with respect to alternative reduction strategies can be used to prove almost sure termination,
 thanks to a restricted confluence result.
-\akr{TODO: Mention prior work that this builds on, and the ways that this goes beyond it.}
-\lo{Our methods can be used to prove almost sure termination of programs that are beyond the reach of methods in the literature.}
+This is based on similar work by Mciver, Morgan, Kaminski and Katoen in the setting of a first-order imperative language, but adapted to a higher-order language.
+The sparse ranking function and confluent semantics extensions are unique to the higher-order setting.
+Our methods can be used to prove almost sure termination of programs that are beyond the reach of methods in the literature, including higher-order and non-affine recursion.
 \end{abstract}
 
 %\lo{``Ranking functions with respect to alternative reduction strategies'' is a bit of a mouthful. How about calling it ``(reduction) strategy-insensitive ranking function''?}
@@ -174,9 +175,9 @@ thanks to a restricted confluence result.
 
 \input{confluent-proofs}
 
-\section{Notes (not for submission)}
+%\section{Notes (not for submission)}
 
-\input{notes}
+%\input{notes}
 
 \bibliographystyle{apalike}
 \bibliography{references-Beutner,../references}

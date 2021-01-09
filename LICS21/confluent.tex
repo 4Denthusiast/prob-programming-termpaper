@@ -246,27 +246,7 @@ The domain of definition of the ranking functions also needs to be changed from 
 \end{align*}
 
 To be more explicit, the modified forms of the theorems are:
-\begin{definition}\rm
-A \emph{ranking function on $M$ with respect to a reduction strategy $r$} is a measurable function $f:\mathit{Rch}_r(M) \to \mathbb{R}$ such that $f(N) \geq 0$ for all $N$, and
-\begin{itemize}
-    \item $f(N) \geq 1+ f(N')$ if $N[r(N)]$ is a $\tY$-redex and $N$ reduces to $N'$ at $r(N)$
-    \item $f(N) \geq \int_I f(N[\underline{x}/r(N)]) \, \Leb(\mathrm{d}x)$ if $N[r(N)] = \tsample$
-
-    \item $f(N) \geq f(N')$ if $r(N)$ is any other redex, where $N \to N'$ at $r(N)$.
-\end{itemize}
-Any closed term for which a ranking function with respect to a reduction strategy $r$ exists is called \emph{rankable} with respect to $r$. 
-\end{definition}
-
 \begin{definition}
-A \emph{sparse ranking function on $M$ with respect to a reduction strategy $r$} is a partial function $f : Rch_r(M) \rightharpoonup \mathbb R$ such that
-\begin{itemize}
-    \item $f(N) \geq 0$ for all $N$ where $f$ is defined.
-    \item $f$ is defined at $M$.
-    \item For any $N$ in the domain of definition of $f$, evaluation of $N$ at the positions specified by $r$ will eventually reach some $O$ such that either $r(O)$ isn't defined or $f(O)$ is, and $f(N) \geq \mathbb E[f(O) + \text{ the number of $\tY$-reduction steps from $N$ to $O$}]$ (where $f(O)$ is taken to be 0 if $O$ is a value outside of the domain of $f$).
-\end{itemize}
-\end{definition}
-
-\begin{definition}\rm
 An \emph{antitone ranking function on $M$ with respect to a reduction strategy $r$} is a measurable function $f:\mathit{Rch}_r(M) \to \mathbb{R}$ such that $f(N) \geq 0$ for all $N$, and there exists an antitone function $\epsilon : \nnReal \to \pReal$ such that
 \begin{itemize}
     \item $f(N) \geq \epsilon(f(N)) + f(N')$ if $N[r(N)]$ is a $\tY$-redex and $N$ reduces to $N'$ at $r(N)$
@@ -286,6 +266,8 @@ An \emph{antitone sparse ranking function on $M$ with respect to a reduction str
 \end{itemize}
 \end{definition}
 
+If the antitone function is just the constant function $1$ instead, then it is called a \emph{(sparse) ranking function on $M$ with respect to $r$} instead, and the term is called \emph{rankable} with respect to $r$.
+
 \begin{theorem} \label{thm:confluent ranking}
 If a closed PPCF term $M$ has a ranking function, sparse ranking function, antitone ranking function or antitone sparse ranking function with respect to a reduction strategy $r$, then $M$ is AST with respect to $r$, and AST.
 \end{theorem}
@@ -299,7 +281,7 @@ For any closed term $M$ and reduction strategy $r$ on $M$, if every term in $Rch
 
 However, there are some terms which terminate more simply and directly via some alternative reduction strategy. For these examples, a custom reduction strategy is specified for each term under consideration.
 
-\begin{example}
+\begin{example} \label{ex:sum of powers}
 The following term picks a random natural number $n$, then computes $\sum_{k=0}^n k^n$.
 \begin{align*}
 M =&\ (\lambda n. P[n]) \lfloor \tsample^{-1/2} \rfloor \\
@@ -308,37 +290,9 @@ P[n] =&\ (\lambda p. \Xi[p] n) (\lambda x. \Theta[x] n)) \\
 \Theta[x] =&\ \tY \lambda f n. \tif{n = 0}{\underline 1}{x \times f (n-1)}.
 \end{align*}
 
-Let $r$ be the reduction strategy which reduces $M$ in the order
-\begin{align*}
-&\ M \\
-\to^* &\ P[\underline n] \\
-\to^* &\ (\lambda p.\ \Xi[p]\ \underline n)\ (\lambda x. \underbrace{x \times \dots \times x \times}_n \underline 1) \\
-\to^{\phantom *} &\ \Xi[\lambda x. \underbrace{x \times \dots \times x \times}_n \underline 1]\ \underline n \\
-\to^{\phantom *} &\ \tif{\underline n = 0}{\underline 0}{\underline{n^n} + \Xi[\lambda x. x \times \dots \underline 1]\ \underline{n-1}} \\
-\to^* &\ \underline{n^n} + \underline{(n-1)^n} + \dots + \underline 0 \\
-\to^* &\ \underline{\sum_{k=0}^n k^n}
-\end{align*}
-(this is a little underspecified, but the details are not important). A suitable sparse ranking function for it is
-\begin{align*}
-M \mapsto & \frac{\pi^2}{3} \\
-P[\underline n] \mapsto & 2n+2 \\
-(\lambda p.\ \Xi[p]\ \underline n)\ (\lambda x. \underbrace{x \times \dots \times x \times}_{n-k} (\Theta[x]\ \underline k)) \mapsto & n + k + 2 \\
-\Xi[\lambda x. \underbrace{x \times \dots \times x \times}_n \underline 1]\ \underline n \mapsto & n + 1 \\
-\underline{n^n} + \dots + \underline{(n-k+1)^n} + \Xi[\lambda x. x \times \dots \underline 1]\ \underline k \mapsto & k + 1 \\
-\underline{\sum_{k=0}^n k^n} \mapsto & 0.
-\end{align*}
-
-The first step is justified because the probability of reaching $P[\underline n]$ for any specific $n \geq 0$ is $(n+1)^{-2} - (n+2)^{-2} = \frac{2n + 3}{(n+1)^2(n+2)^2}$, therefore the expected next value of the ranking function is $\sum_{n=0}^{\infty} \frac{(2n+2)(2n + 3)}{(n+1)^2(n+2)^2} = \frac{\pi^2}{3}$. The other steps are deterministic, and involve 1 or 0 $\tY$-reductions each. Given that all of the reduction steps after the first are deterministic, and the number of $\tY$ reduction steps is not that hard to count, defining the sparse ranking function's values only at $M$ and $P[\underline n]$ would also have been reasonable, although in a similar term which had more random samples throughout, that would not have been so simple.
-
-Providing a ranking function of some sort for this term in a similar level of detail would have been rather more complicated using only the standard reduction strategy. The recursion in $\Theta$ would have had to be evaluated separately for every time it was used, so there would have been more (and more complex) terms to consider in the reduction sequence. Also, the number of $\tY$-reductions from $P[\underline n]$ would have been $n^2 + 2n + 1$ instead of $2n + 2$, therefore the expected number of $\tY$ reductions starting from $M$ would be infinite, i.e.~$M$ is not $\tY$-PAST, therefore it is not even rankable. It would be possible to define an antitone sparse ranking function for it, but it would have to include terms such as
-\begin{align*}
-& \underline{n^n} + \dots + \underline{(n-k_1+1)^n} + \\
-& (\underbrace{\underline{n-k_1} \times \dots \times \underline{n-k_1} \times}_{n-k_2-1} (\Theta[\underline{n-k_1}] (\underline{k_2} - 1))) + \\
-& \Xi[\lambda x. \Theta[x] \underline n] (\underline{n-k_1} - 1) \mapsto \log((n+1)k_1 + k_2)
-\end{align*}
-as only one of the several cases, which is significantly more complicated and difficult to use.
-
-It wouldn't even be possible in this case to give a sparser version of the ranking function defined only at $M$ and $P[\underline n]$, because the amount that an antitone sparse ranking function must decrease at each $\tY$-reduction step depends on the value of the ranking function at the next term where it is defined, therefore it is necessary to have these intermediate steps in order for the ranking function to be able to change sufficiently slowly.
+With the CBV reduction strategy, the recursion in $\Theta[x]$ (that defines the function $k \mapsto k^x$) is executed separately for every term in the sum in $\Xi$. Not only is this much more complicated than simplifying $\Theta[x] \underline n$ first, it requires considerably more $\tY$-reduction steps, so many so that $M$ is $\tY$-PAST with respect to a reduction strategy that simplifies $\Theta[x] \underline n$ first (call it ``$r$''), but isn't $\tY$-PAST with respect to the standard reduction strategy, so that $M$ is rankable with respect to $r$, but isn't rankable. It is still antitone rankable, but this is much more complicated. Details of the ranking function construction with and without using the confluent semantics are given in Appendix \ref{apx:confluent}.
 \end{example}
 
-Even some of the examples given earlier implicitly use slightly non-standard reduction strategies to make the definitions of their ranking functions slightly similar. For example, the antitone sparse ranking function in \Cref{ex:unbiased random walk} was defined at $\Theta_2\ \underline n$ (where $\Theta_2 = \tY \, \lambda f n . \, \tif{n = 0}{0}{f \, (n - 1) \oplus_{1/2} f \, (n + 1)}$), but $\Theta_2\ \underline{10}$ actually reduces to $\Theta_2\ (\underline{10} - 1)$ or $\Theta_2\ (\underline{10} + 1)$, and (taking the second of these), it then reduces to $(\lambda z. (\lambda n. \, \tif{n = 0}{0}{\Theta_2 \, (n - 1) \oplus_{1/2} \Theta_2 \, (n + 1)}) z) \, (\underline{10} + 1)$, then $(\lambda z. (\lambda n. \, \tif{n = 0}{0}{\Theta_2 \, (n - 1) \oplus_{1/2} \Theta_2 \, (n + 1)}) z) \, \underline{11}$, bypassing $\Theta_2\ \underline{11}$ entirely. The antitone sparse ranking function in the form given can be justified anyway, by considering it to be using a reduction strategy which is the same as $\cbv$ except that in $\Theta_2\ (\underline f \underline n)$, it evaluates the redex at $@_2$ first.
+Even some of the examples given earlier implicitly use slightly non-standard reduction strategies to make the definitions of their ranking functions slightly simpler. For example, the antitone sparse ranking function in \Cref{ex:unbiased random walk} was defined at $\Theta_2\ \underline n$ (where $\Theta_2 = \tY \, \lambda f n . \, \tif{n = 0}{0}{f \, (n - 1) \oplus_{1/2} f \, (n + 1)}$), but $\Theta_2\ \underline{10}$ actually reduces to $\Theta_2\ (\underline{10} - 1)$ or $\Theta_2\ (\underline{10} + 1)$, and (taking the second of these), it then reduces to $(\lambda z. (\lambda n. \, \tif{n = 0}{0}{\Theta_2 \, (n - 1) \oplus_{1/2} \Theta_2 \, (n + 1)}) z) \, (\underline{10} + 1)$, then $(\lambda z. (\lambda n. \, \tif{n = 0}{0}{\Theta_2 \, (n - 1) \oplus_{1/2} \Theta_2 \, (n + 1)}) z) \, \underline{11}$, bypassing $\Theta_2\ \underline{11}$ entirely. The antitone sparse ranking function in the form given can be justified anyway, by considering it to be using a reduction strategy which is the same as $\cbv$ except that in $\Theta_2\ (\underline f \underline n)$, it evaluates the redex at $@_2$ first.
+
+\Cref{ex:higher-order recursion} also makes use of an alternative reduction strategy. In this case, it is to allow the antitone sparse ranking function to skip over all of those terms where the unknown function $F$ is part way through evaluation.

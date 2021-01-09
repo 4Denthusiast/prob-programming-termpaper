@@ -1,4 +1,168 @@
 % !TEX root = main.tex
+\label{apx:antitone}
+\AntitonePartial*
+\begin{proof}
+  Take a closed term $M$ and an antitone sparse ranking function $f$ on $M$, with a corresponding antitone function $\epsilon$. Assume wlog that $\epsilon$ is convex (as if it isn't, we can just take its convex hull instead). As in Theorem \ref{thm:partial implies rankable}, define $f_1 : Rch(M) \rightharpoonup \mathbb R$ by
+  \begin{align*}
+    f_1(N) &= f(N) \text{ whenever $f(N)$ is defined},\\
+    f_1(V) &= 0 \text{ for values $V$ not in the domain of $f$.}
+  \end{align*}
+
+
+  Define $(\nnext(N,s),\_) = \red^n(N,s)$ for the least $n \geq 0$ such that it's in the domain of $f_1$, and $g(N,s) := \left | \{m < n \mid \red^m(N,s) \text{ is of the form } (E[\tY N'],s') \} \right |$. 
+  The function $\nnext$ is well-defined (i.e.~$n$ is finite) for all $N \in Rch(M)$ by induction on the path from $M$ to $N$, by the third condition on antitone partial ranking functions. Define $f_2(N) := \int_\entrosp f_1(\nnext(N,s)) + \epsilon(f_1(\nnext(N,s))) g(N,s) \, \mu_{\entrosp}(\mathrm d s)$. For any term $N$ where $f$ is defined, $f_2(N) = f(N)$, and the value that $f_2$ would have at $N$ if $f$ were not defined at $N$ is $\leq f(N)$, by the third condition on antitone partial ranking functions. In order to show that $f_2$ is an antitone partial ranking function, it therefore suffices to show that the value that $f_2$ would have had at each term if $f$ were not defined at that term is at least the expectation of $f_2$ after one reduction step (plus $\epsilon(f_2(N))$ if the reduction step is a $tY$-reduction). For any term $N$ which is not of the form $E[R]$ for some $\tY$-redex $R$, this is trivial. If $R$ is a $\tY$-redex, then $\epsilon(f_2(N)) \leq \int_\entrosp \epsilon(f_1(\nnext(N,s)))\, \mu_{\entrosp}(\mathrm d s)$ by the convexity of $\epsilon$, because $n$ is bounded. Therefore, the (total) function $f_2$, which agrees with $f$ on $f$'s domain, is an antitone ranking function on $M$ (with the same function $\epsilon$ if it's convex).
+\end{proof}
+
+
+\Cref{ex:raven complex}
+Let $\Theta := \tY \, \lambda f x . \tif{x \leq 0}{0}{f(x - \tsample)}$. 
+We can construct a sparse ranking function $f$ for $\Theta \, 10$ as follows:
+\begin{align*}
+\Theta \, \underline l 
+&\mapsto 
+l + 2
+\\
+\tif{l \leq 0}{0}{\Theta \, (l - \tsample)}
+&\mapsto
+l + 1
+\\
+0 &\mapsto 0.
+\end{align*}
+
+For a more complex (not $\tY$-PAST) example, consider the following ``continuous random walk'': $\Xi \, 10$ where
+\[
+%\underbrace{\big(
+\Xi := \tY \, f \, x . \tif{x \leq 0}{0}{f(x - \tsample + 1/2)} 
+%\big)}_{\Xi} \, 10
+\]
+Let $g(x) := 2 + \ln(x + 1)$, and let $\epsilon$ be the function specified by
+\[
+\epsilon(g(x-1/2)) = g(x) - \int_{x-1/2}^{x+1/2}g(y) \, \mathrm d y.
+\]
+The limit of this as $x \to \infty$ and $g(x+1/2) \to \infty$ is 0, and $\frac {\mathrm d}{\mathrm dx} \epsilon(g(x+1/2)) = \frac 1 {x+1} + \ln(1 - \frac 1 {x + 1/2}) < 0$, and $g$ is monotonic increasing; 
+therefore $\epsilon$ is antitone and bounded below by 0.
+We define an antitone sparse ranking function by:
+\[
+\Xi \, l 
+\mapsto 
+g(l), \qquad 
+0 \mapsto 0
+\]
+
+% \begin{align*}
+% \Xi \, l 
+% &\mapsto 
+% g(l)
+% \\
+% 0 &\mapsto 0
+% \end{align*}
+The value of $g$ after one $\tY$-reduction step is at least $g(l-1/2)$, therefore the expectation of $\epsilon$ after one $\tY$-reduction step is at most $\epsilon(g(l-1/2)) = g(x) - \int_{x-1/2}^{x+1/2}g(y) \, \mathrm d y$. 
+Thus 
+\begin{itemize}
+\item in case $l > 0$, $g$ decreases by the required amount
+\item in case $l \leq 0$, 
+\(
+g(\Xi \, l) \geq 2 + \ln(1/2) > \ln(\frac{3 \sqrt 3} 2) - 1 = \epsilon(g(0-1/2))
+\) 
+as well.
+\end{itemize}
+Hence this is a valid antitone sparse ranking function and the term is AST.
+
+
+\Cref{ex:Fair-in-the-limit random walk}
+\[
+\underbrace{\big
+(\tY \, f \, x . 
+\tif{x \leq 0}{0}{f(x - 1) \oplus_{\frac{x}{2x+1}} f(x + 1)} \big)}_{\Xi} 
+\, 10
+\]
+To construct an antitone ranking function, we solve the recurrence relation:
+% \[
+% \left\{
+% \begin{array}{rll}
+% z_0 &=& 0\\
+% n \geq 1, \quad z_n &>& \dfrac{n}{2n + 1} \, z_{n-1} + \dfrac{n+1}{2n + 1} \, z_{n+1}.
+% \end{array}
+% \right.
+% \]
+\begin{align*}
+z_0 &= 0\\
+n \geq 1, \quad z_n &> \textstyle \frac{n}{2n + 1} \, z_{n-1} + \frac{n+1}{2n + 1} \, z_{n+1}.
+\end{align*}
+For $n > 2$, $z_n = \ln(n-1)$ works. The expected decrease is $\frac 1 2(\ln(1+\frac 1 {(n-1)^2-1}) - \frac 1 {2n+1} \ln(1 + \frac 2 {n-2}))$, and using the fact that $\frac x {x+1} \leq \ln (1+x) \leq x$ for $x > 0$, this is at least $\frac 1 2(\frac 1 {(n-1)^2} - \frac 1 {2n + 1} \frac 2 {n-2}) = \frac {n^2}{2(n-1)^2(2n+1)(n-2)}$, which (again for $n > 2$) is positive and antitone. For $n = 0, 1, 2$, we take $\epsilon$ to be 9/40 (the same as its value at 3), then set $z_2 = 2 \ln 2 - \ln 3 - 1, z_1 = 3 \ln 2 - 2 \ln 3 - 3, z_0 = 4 \ln 2 - 3 \ln 3 - 6$. Some of those values are negative, but it's still bounded below, so by adding a constant offset it can be corrected, and the term is AST.
+
+
+
+\Cref{ex:escaping spline}
+\[
+\underbrace{\big
+(\tY \, f \, x . \,
+0 \oplus_{\frac{1}{x+1}} f(x + 1) \big)}_{\Xi} 
+\, 10
+\]
+
+In this case, the fact that the ranking function must decrease at each $\tY$-step (in an antitone sparse ranking function) by the expected value of $\epsilon$ not at the current term, but at the next term where the ranking function is defined, is a little harder to deal with, because the variable $x$ can change all the way to $0$ in one step, therefore simply adding a small offset doesn't suffice to compensate for this fact.
+
+Consider the candidate ranking function $\Xi \, n \mapsto n + 1$. For each $n$, $\Xi \, n$ reduces to either $0$ (with probability $\frac 1 {n + 1}$) or $\Xi \, (n + 1)$, therefore the expected value of the ranking function is $\frac{n(n+2)}{n+1} = n + 1 - \frac 1 {(n+1)^2}$, and the required decrease is $\frac{\epsilon(0) + n \epsilon(n + 2)}{n + 1}$, therefore eventually, the expected decrease isn't enough, whatever the value of $\epsilon(0)$ is.
+
+If instead, we take the ranking function to be defined after the $\tY$-reduction but before the $\tsample$-reduction as well, this can be resolved. Letting $\Theta[n] = \underline 0 \oplus_{\frac 1 n} \Xi \, n$:
+\begin{align*}
+\Theta[n] &\mapsto n \\
+\Xi \, 10 & \mapsto 12.
+\end{align*}
+For each $n$, $\Theta[n]$ reduces to either $0$ or $\Theta[n+1]$, with a $\tY$-reduction only in the latter case, and the condition that this is an antitone sparse ranking function is that $n \geq \frac{(n-1)(n+1)}{n} + \frac{n-1}{n} \epsilon(n+1)$ and $12 \geq 11 + \epsilon(11)$. These are satisfied by setting $\epsilon(x) = \min(1, 1/x)$, therefore this term is AST.
+
+\medskip
+
+Many of the recent advances in the development of AST verification methods \citep{DBLP:conf/pldi/ChenH20,DBLP:conf/cav/ChakarovS13,DBLP:conf/popl/FioritiH15,DBLP:journals/pacmpl/McIverMKK18,DBLP:conf/aplas/HuangFC18,DBLP:conf/popl/ChatterjeeNZ17,DBLP:journals/pacmpl/AgrawalC018,DBLP:conf/cav/ChatterjeeFG16,DBLP:conf/lics/OlmedoKKM16,DBLP:journals/pacmpl/Huang0CG19} are concerned with loop-based programs.
+We can view such loops as tail-recursive programs that are, in particular, \emph{affine recursive}, i.e., 
+in each evaluation (or run) of the body of the recursion, recursive calls are made from at most one call site \citep[\S 4.1]{DBLP:journals/toplas/LagoG19}.
+(Note that whether a program is affine recursive cannot be checked by just counting textual occurrences of variables.)
+Termination analysis of \emph{non-affine recursive} probabilistic programs does not seem to have received much attention.
+Methods such as those presented in \citep{DBLP:journals/toplas/LagoG19} are explicitly restricted to affine programs, and are unsound otherwise.
+By contrast, many probabilistic programming languages allow for richer recursive structures \citep{DBLP:conf/pkdd/TolpinMW15,DBLP:conf/uai/GoodmanMRBT08,DBLP:journals/corr/MansinghkaSP14}.
+
+\medskip
+
+
+\Cref{ex:non-affine recursion}
+Let 
+\[
+\Xi := \tY \lambda f x. x \oplus_{2/3} f (f (x + 1))
+\] 
+A suitable sparse ranking function for $\Xi \, \underline 1$ would be $\Xi^n \, \underline i \mapsto 3 \, n$ (for $n \geq 0$), because $\Xi^n \, \underline i$ reduces to either $\Xi^{n+1} \, \underline{i+1}$ or $\Xi^{n-1} \, \underline{i+1}$, with probabilities $1/3$ and $2/3$. The value of $i$ does not actually matter for the progress of this recursion. It is basically another variant of the biased random walk, except that the relevant variable is the number of copies of $\Xi$, instead of a real number in the term.
+
+
+There is an obvious source of deterministic (i.e.~non-probabilistic) higher-order functions defined by recursion, viz., \emph{higher-order recursion schemes} (HORS) (see e.g.~\citep{DBLP:conf/lics/Ong06,DBLP:conf/lics/Ong15}).
+(Incidentally the (sparse) ranking function method is just as applicable to the termination analysis of \emph{deterministic} PPCF programs.)
+Recently \cite{DBLP:conf/lics/KobayashiLG19} have extended HORS to \emph{probabilistic higher-order recursion schemes} (PHORS), which are HORS augmented with probabilistic (binary) branching $\oplus_p$.
+As HORS are in essence the $\lambda \tY$-calculus \citep{DBLP:conf/lics/Statman02} (i.e.~pure simply-typed lambda calculus with recursion, generated from a finite base type), PHORS are definable in PPCF:
+(order-$n$) PHORS is encodable as (order-$n$) (call-by-name) PPCF, but the former is strictly less expressive (because the underlying recursion schemes are not Turing complete). 
+%Some interesting PPCF terms such as \Cref{ex:non-affine with continuous distribution} %\refExample{complexExample} 
+%cannot be expressed as PHORS.
+%\akr{As I removed the referenced example, and I don't even know what a PHORS is, I've just removed this comment too.}
+A relevant result here is that the AST problem is decidable for order-1 PHORS (by reduction to the PSPACE-hard solvability of finite systems of polynomial equations with real coefficients; see \citep{DBLP:journals/jacm/EtessamiY09}), but undecidable for order-2 PHORS.
+
+\Cref{ex:higher-order recursion}
+Consider the higher-order function
+$\Xi : (\textsf{R} \to \textsf{R} \to \textsf{R}) \to \textsf{R} \to \textsf{R} \to \textsf{R}$
+recursively defined by
+\[
+\begin{array}{l}
+\Xi := \tY \lambda \varphi \, f^{\textsf{R} \to \textsf{R} \to \textsf{R}} \, s^\textsf{R} \, n^\textsf{R} . \\
+\quad\tif{n \leq 0}{s}{
+f \, n \, (\varphi \, f \, s \, (n - 1))
+\oplus_p
+f \, n \, (\varphi \, f \, s \, (n + 1))
+}
+\end{array}
+\]
+Let $F : \textsf{R} \to \textsf{R} \to \textsf{R}$ be a function such that $F\ \underline n\ \underline m$ terminates with no $\tY$ reductions for all $m$ and $n$. Then $\Xi\ F\ \underline x\ \underline y$ has the antitone sparse ranking function $F \underline{n_0} (F \underline{n_1} (\dots(\Xi\ F\ \underline x\ \underline n)\dots) \mapsto g_1(n)$, where $g_1$ is as in \Cref{ex:unbiased random walk}, using the same antitone function too. (Again, this is not actually the correct reduction order, in that $F$ should be applied to its argument $n_i$ and reduced to a value before its second argument is expanded, but this would complicate the presentation, and this version can be justified by \Cref{thm:confluent ranking} instead.)
+
+The inequalities required for this to be an antitone partial supermartingale are satisfied with just the same reasoning as in \Cref{ex:unbiased random walk}, therefore this term too is antitone rankable.
+
+
+
 \antitoneSeemsComplete*
 
 \begin{proof}
@@ -16,7 +180,6 @@ This ensures that
 \item $\epsilon$ is weakly decreasing. 
 \item $\epsilon$ is bounded below by 0.
 \item For $x \geq 2^k$, $\epsilon(x) \leq \frac{2^k}{t_{k+1}-t_k}$. 
-\lo{This would imply $\frac{2^k}{t_{k+1}-t_k} \geq \epsilon(2^{k-1})$. Why?} \akr{Corrected: it should have been min, not max.}
 \end{itemize}
 
 The sequence $(y_n)_{n \geq 0}$ is then defined recursively by
@@ -30,6 +193,9 @@ The fact $y_{t_k} \geq 2^{k+1}$ is proven by induction on $k$. For base case, $2
     y_n & = y_{t_k} \frac{\mathbb P[T > t_k]}{\mathbb P[T > n]} - \sum_{m=t_k}^{n-1} \epsilon(y_m) \frac{\mathbb P[T > m+1]}{\mathbb P[T > n]} \\
     & \geq \frac{\mathbb P[T > t_k]}{\mathbb P[T > n]} (y_{t_k} - \sum_{m=t_k}^{n-1} \epsilon(y_m)) \\
     & \geq \frac{\mathbb P[T > t_k]}{\mathbb P[T > n]} (y_{t_k} - \sum_{m=t_k}^{n-1} \frac{2^k}{t_{k+1}-t_k}) \\
+\end{align*}
+%Allow a page break so that the sim-diagram lines up neatly.
+\begin{align*}
     & = \frac{\mathbb P[T > t_k]}{\mathbb P[T > n]} (y_{t_k} - \frac{2^k (n - t_k)}{t_{k+1}-t_k}) \\
     & \geq \frac{\mathbb P[T > t_k]}{\mathbb P[T > n]} (y_{t_k} - 2^k) \\
     & \geq \frac{\mathbb P[T > t_k]}{\mathbb P[T > n]} (2^{k+1} - 2^k) \\

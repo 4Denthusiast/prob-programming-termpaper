@@ -11,7 +11,25 @@ It follows that $\sum_{i=0}^{\infty} \mathbb{P}[T > i]$ converges; hence we have
 It then remains to observe: if $T < \infty$ a.s., then $\expect{T} = \sum^\infty_{i=0} \mathbb{P}[T > i]$.
 \end{proof}
 
-\TechnicalRankingSupermartingale*
+\rankableAndStrictRankable*
+We shall obtain the theorem as a corollary of a technical lemma (\Cref{lem:key rankable}).
+
+We say that a given PPCF term is: 
+\emph{type 1} if it has the shape $E[\tY \lambda x. N]$, \emph{type 2} if it has the shape $E[\tsample]$; \emph{type 3} if it has the shape $E[R]$ where $R$ is any other redex, and \emph{type 4} if it is a value.
+Henceforth fix an $n \geq 0$, and define $\mathbf{T}_i := \set{s \mid M_n(s) \hbox{ is type $i$}}$.
+It is straightforward to see that each $\mathbf{T}_i \in \calF_n$, and $\set{\mathbf{T}_1, \mathbf{T}_2, \mathbf{T}_3, \mathbf{T}_4}$ is a partition of $\entrosp$.
+Hence it suffices to prove the following lemma.
+
+\begin{restatable}[Technical]{lemma}{TechnicalRankingSupermartingale}
+\label{lem:key rankable}
+For all $i \in \set{1, 2, 3, 4}$ and $A \in \calF_n$
+\[
+\int_A \mu_{\entrosp}(\dif s) \, f(M_{n+1})[s \in \mathbf{T}_i] \leq \int_A \mu_{\entrosp}(\dif s) \, f(M_n)[s \in \mathbf{T}_i]
+\; \footnote{where (the Iverson bracket) $[P] := 1$ if the statement $P$ hold, and 0 otherwise.}
+\] 
+%$\int_A \mu_{\entrosp}(\dif s) \, f(M_{n+1}) \leq \int_A \mu_{\entrosp}(\dif s) \, f(M_n)$, i.e., 
+Hence $\mathbb{E}[f(M_{n+1}) \mid \calF_n] \leq f(M_n)$ a.s.
+\end{restatable}
 
 First, some notation.
 
@@ -126,6 +144,8 @@ Now, integrating both sides of (\ref{eqn:f 2 n+1}), we have
 
 \end{proof}
 
+As an immediate corollary of \Cref{lem:key rankable}, each $f(M_n)$ is integrable.
+This concludes the proof of \Cref{thm:rankable and strict rankable}. 
 
 \newcommand\transform[1]{{\ulcorner{#1}\urcorner}}
 
@@ -190,10 +210,6 @@ we have:
 
 \item Further there is a finite bound (say $l$) on the length of such $\transform{M}$-reduction sequences; and $l$ bounds the stopping time $T_1$.
 \end{enumerate}
-
-\lo{Note: \cite{DBLP:conf/lfcs/Groote94} considered a call-by-name version of a simply-typed nondeterministic lambda-calculus, and proved it strongly normalising, using a reducibility argument \`a la Tait.
-One should check that it extends to the call-by-value calculus.
-}
 
 \iffalse
 @inproceedings{DBLP:conf/lfcs/Groote94,
