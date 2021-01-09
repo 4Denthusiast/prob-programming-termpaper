@@ -28,8 +28,8 @@ For example, the term $(\tY \lambda x.x) \, \underline 0$ is not rankable.
 \end{definition}
 
 It will be demonstrated later that for any rankable term $M$, if $(M_n)_{n \geq 0}$ is the reduction sequence starting from $M$, then $(f(M_n))_{n \geq 0}$ is a supermartingale, and $M$ terminates almost surely, but first, some preliminaries about supermartingales.
-\lo{It is confusing (strictly speaking, incorrect) to say that $(M_n)_{n \geq 0}$ is a reduction sequence from $M$. Formally $M_n$ is the random variable $M_n: s \mapsto \pi_0 (\red^n(M, s))$.}
-\akr{I guess it's implicitly identifying a sequence of functions ($(M_n)_{n \geq 0}$), and a function producing sequences (a reduction-sequence-valued random variable), but this sort of thing seems very standard in dealing with random variables (e.g.~applying a function to some random variables, which is really a sort of concatenation).}
+%\lo{It is confusing (strictly speaking, incorrect) to say that $(M_n)_{n \geq 0}$ is a reduction sequence from $M$. Formally $M_n$ is the random variable $M_n: s \mapsto \pi_0 (\red^n(M, s))$.}
+%\akr{I guess it's implicitly identifying a sequence of functions ($(M_n)_{n \geq 0}$), and a function producing sequences (a reduction-sequence-valued random variable), but this sort of thing seems very standard in dealing with random variables (e.g.~applying a function to some random variables, which is really a sort of concatenation).}
 
 %\paragraph{}
 
@@ -99,148 +99,15 @@ and the filtration $(\mathcal{F}_n)_{n \geq 0}$ where $\mathcal{F}_n := \sigma(M
 Thus $T_M$ is the \emph{runtime} of $M$ (and $M$ is AST iff $\mu_{\entrosp}(T_M < \infty) = 1$).
 
 Our first result is the following theorem.
-\begin{theorem}[Rankability] 
+\begin{restatable}{theorem}{rankableAndStrictRankable}[Deriving supermartingales] 
 \label{thm:rankable and strict rankable}
 If a closed PPCF term $M$ is rankable (respectively, strictly rankable) by $f$ 
 then $(f(M_n))_{n \geq 0}$ is a supermartingale (respectively, ranking supermartingale w.r.t.~stopping time $T_M$) adapted to $(\mathcal{F}_n)_{n \geq 0}$. %where $\mathcal{F}_n = \sigma(M_1, \cdots, M_n)$.
-\end{theorem}
-\lo{@Andrew: A better name for this theorem: ``Ranking function'', ``Supermartingale'', ``(Ranking) supermartingale''?}
+\end{restatable}
+%\lo{@Andrew: A better name for this theorem: ``Ranking function'', ``Supermartingale'', ``(Ranking) supermartingale''?}
 
 %\subsection{Proof of \Cref{thm:rankable and strict rankable}.}
-We shall obtain the theorem as a corollary of a technical lemma (\Cref{lem:key rankable}).
-
-\iffalse
-\lo{We need to show that each $f(M_n)$ is integrable. LO claimed earlier that $0 \leq f(N) \leq f(M)$ for all $N \in \mathit{Rch}(M)$.
-This is of false: take $f$ with $v \, \tsample \mapsto 1$ and $v \, \underline{r} \mapsto 2\, r$ for some value $v$. 
-However, it is true that
-\[
-\int_{S} \mu(\dif s) \, |f(M_n)(s)| 
-=
-\int_{S} \mu(\dif s) \, f(M_n)(s)
-\leq
-\int_{S} \mu(\dif s) \, f(M_0)(s)
-=
-f(M)
-\]
-the inequality above follows from \Cref{lem:key rankable}.
-}
-\fi
-
-We say that a given PPCF term is: %\emph{type-1} (respectively 2, 3 and 4) if it has the shape $E[\tY \lambda x. N]$ (respectively $E[\tsample]$, $E[R]$ where $R$ is any other redex, and of a value).
-\emph{type 1} if it has the shape $E[\tY \lambda x. N]$, \emph{type 2} if it has the shape $E[\tsample]$; \emph{type 3} if it has the shape $E[R]$ where $R$ is any other redex, and \emph{type 4} if it is a value.
-Henceforth fix an $n \geq 0$, and define $\mathbf{T}_i := \set{s \mid M_n(s) \hbox{ is type $i$}}$.
-It is straightforward to see that each $\mathbf{T}_i \in \calF_n$, and $\set{\mathbf{T}_1, \mathbf{T}_2, \mathbf{T}_3, \mathbf{T}_4}$ is a partition of $\entrosp$.
-%By abuse of language, we refer to the three respective types of redexes as type-$1$, 2 and 3.
-Hence it suffices to prove the following lemma.
-
-\iffalse
-For $i \in \{1, 2, 3\}$ and $n \geq 0$, define function $f_{i, n+1}(M) : \entrosp \to \Real$ by
-\[
-f_{i, n+1}(M)(s) :=
-\begin{cases}
-f(M_{n+1}(s)) & \hbox{if }s \in \mathbf{T}_i := 
-\set{s \mid M_n(s) \textrm{ is type-$i$}}\\
-0 & \textrm{otherwise}
-\end{cases}
-\]
-\begin{lemma}
-\label{lem:inde}
-For each $i$ and $n$, $f_{i, n+1}(M)$ is %not just $\mathcal{F}_{n+1}$-measurable but also 
-$\mathcal{F}_{n}$-measurable.
-\end{lemma}
-
-\begin{proof} First fix notation
-\begin{align*}
-\sigma(M_{n+1}) &= \sigma\big(\set{M_{n+1}^{-1}(U_{\beta_k})
-\mid \beta_k\in \mathsf{Sk}_k, U_{\beta_k} \in \mathcal{B}(\Real^k), k \geq 0}\big)\\
-\sigma(M_{n}) &= \sigma\big(\set{M_{n}^{-1}(U_{\alpha_j})
-\mid \alpha_j\in \mathsf{Sk}_j, U_{\alpha_j} \in \mathcal{B}(\Real^j), j \geq 0}\big);
-\end{align*}
-and for $\beta_k \in \mathsf{Sk}_i$, we write $\beta_k[\dagger]$ to mean the instantiation of $\beta_k$ by a $k$-vector of numerals $\dagger$; $\alpha_j[\dagger']$ has the same meaning.
-Now for each $\beta_k[\dagger] = E[R']$ where $R'$ is the contractum of a type-$i$ redex $R$, there exist $\alpha_j \in \mathsf{Sk}_j$ and $j$-vector $\dagger'$ such that $\alpha_j[\dagger'] = E[R]$ of type $i$.
-Moreover, for each $U_{\beta_k}$, there exists $U_{\alpha_j}$ such that $M_{n+1}^{-1}(U_{\beta_k}) = M_{n}^{-1}(U_{\alpha_j}) \in \sigma(M_n)$.
-\end{proof}
-
-Plainly
-\(
-f(M_{n+1}) = %\sum_{i=1}^3 f_{i, n+1}(M).
-f_{1, n+1}(M) + f_{2, n+1}(M) + f_{3, n+1}(M),
-\)
-$\mu$-almost surely.
-%(Unless otherwise stated, all equations and inequations between random variables are assumed to hold only $\mu$-a.s.)
-Therefore 
-\[
-\expect{f(M_{n+1}) \mid \mathcal{F}_n} \nonumber \\
-= 
-\expect{f_{1, n+1}(M) \mid \mathcal{F}_n} + \expect{f_{2, n+1}(M) \mid \mathcal{F}_n} + \expect{f_{3, n+1}(M) \mid \mathcal{F}_n} 
-\]
-\begin{align}
-& \expect{f(M_{n+1}) \mid \mathcal{F}_n} \nonumber \\
-& = \expect{f_{1, n+1}(M) + f_{2, n+1}(M) + f_{3, n+1}(M)  \mid \mathcal{F}_n} 
-\nonumber \\
-& = \expect{f_{1, n+1}(M) \mid \mathcal{F}_n} + \expect{f_{2, n+1}(M) \mid \mathcal{F}_n} + \expect{f_{3, n+1}(M) \mid \mathcal{F}_n} 
-\label{eqn:linear cond ex} 
-& = f_{1, n+1}(M) + f_{2, n+1}(M) + f_{3, n+1}(M)
-\label{eqn:inde cond exp}
-& = f_{1, n+1}(M) + \int_I f() + f_{3, n+1}(M) \label{eqn:inde cond exp} \\
-\end{align}
-\Cref{eqn:linear cond ex} follows from the linearity of conditional expectation. 
-%\Cref{eqn:inde cond exp} is justified because $f_{i, n+1}(M)$ is $\mathcal{F}_n$-measurable (\Cref{lem:inde}).
-
-It remains to show: for all $A \in \calF_n$
-\begin{align}
-& \int_A \dif \mu \, \expect{f(M_{n+1}) \mid \mathcal{F}_n} \nonumber \\
-& \leq  \int_A \mu (\dif s) \, \big(f(M_{n})[s \in \mathbf{T}_1] + f(M_{n})[s \in \mathbf{T}_2] + f(M_{n})[s \in \mathbf{T}_3]\big)
-\label{eqn:ts} \\
-& = \int_A \dif \mu \, f(M_n). 
-\label{eqn:partition} 
-\end{align}
-where $[s \in \mathbf{T}_i]$ is the Iverson bracket.
-
-Here we use the notation: given function $g : \entrosp \to \Real$ and $U \subseteq \entrosp$, $g[U] : \entrosp \to \Real$ denotes the function
-\[
-g[U](x) :=
-\begin{cases}
-g(x) & \textrm{$x \in U$}\\
-0 & \textrm{otherwise}
-\end{cases}
-\]
-
-The inequality (\ref{eqn:ts}) follows immediately from the lemma below; 
-and (\ref{eqn:partition}) holds because $\{\mathbf{T}_1, \mathbf{T}_2, \mathbf{T}_3, \mathbf{T}_4\}$ is a partition of $\entrosp$.
-\fi
-
-\begin{restatable}[Technical]{lemma}{TechnicalRankingSupermartingale}
-\label{lem:key rankable}
-For all $i \in \set{1, 2, 3, 4}$ and $A \in \calF_n$
-\[
-\int_A \mu_{\entrosp}(\dif s) \, f(M_{n+1})[s \in \mathbf{T}_i] \leq \int_A \mu_{\entrosp}(\dif s) \, f(M_n)[s \in \mathbf{T}_i]
-\; \footnote{where (the Iverson bracket) $[P] := 1$ if the statement $P$ hold, and 0 otherwise.}
-\] 
-%$\int_A \mu_{\entrosp}(\dif s) \, f(M_{n+1}) \leq \int_A \mu_{\entrosp}(\dif s) \, f(M_n)$, i.e., 
-Hence $\mathbb{E}[f(M_{n+1}) \mid \calF_n] \leq f(M_n)$ a.s.
-\end{restatable}
-As an immediate corollary of \Cref{lem:key rankable}, each $f(M_n)$ is integrable
-\iffalse
-\begin{align*}
-\int_{\entrosp} \mu_{\entrosp}(\dif s) \, |f(M_n)(s)| 
-&=
-\int_{\entrosp} \mu_{\entrosp}(\dif s) \, f(M_n)(s)
-\\
-&\leq
-\int_{\entrosp} \mu_{\entrosp}(\dif s) \, f(M_0)(s)
-=
-f(M).
-\end{align*}
-
-[** To see $f_{2, n+1}(M) \leq f(M_n)[T_2]$, take $s \in T_2$. Then $f_{2, n+1}(M)(s) = f(E[\underline{a}])$ and $M_n = E[\tsample]$, for some $a \in [0, 1]$ and evaluation context $E$. Hence 
-\[
-f_{2, n+1}(M)(s) \leq \int_I f(E[\underline{r}]) \, \mu_{leb}(\textrm{d} r)
-\leq f(E[\tsample]) = f(M_n)[T_2](s).
-\]
-**]
-\fi
-This concludes the proof of \Cref{thm:rankable and strict rankable}. 
+The ranking supermartingale condition is satisfied essentially by a case analysis on the type of redex (\Cref{lem:key rankable}).
 
 \subsection{Soundness of rankability}
 
@@ -252,18 +119,10 @@ Define random variables on the probability space $(\entrosp, \Sigma_\entrosp, \m
 T_{-1}(s) & := -1 \nonumber \\
 T_{n+1}(s) & := \min \{ k \mid k>T_n(s), M_k(s) \textrm{ a value} \nonumber\\
 & \qquad\qquad\qquad\qquad\qquad \hbox{or of form } E[\tY \lambda x. N] \} \nonumber \\
-X_n(s) & := f(M_n(s)) \nonumber \\
-Y_n(s) & := X_{T_n}(s) \nonumber \\
+Y_n(s) & := f(M_{T_n}(s)) \nonumber \\
 T_M^\tY(s) &:= \min \set{n \mid M_{T_n(s)}(s) \textrm{ is a value}} \label{eq:y stopping time} 
-%T_M(s) & := \min \set{n \mid X_n(s) = 0} \nonumber
 \end{align}
 
-%The random variable $T_0(s)$ is the least $k \geq 0$ such that $M_k(s)$ is either a value or a $\tY$-redex.
-
-%$T_1(s)$ is the least $k \geq 0$ such that $M_k(s)$ is either a value or the second occurrence of a $\tY$-redex.
-
-%Thus the random variable $T_n(s)$ is the least $k \geq 0$ such that $M_k(s)$ is either a value or the $(n+1)$-occurrence of a $\tY$-redex (in the reduction sequence $M_0(s), M_1(s), \ldots$).
-%Notice that each $T_n$ is a stopping time w.r.t.~filtration $(\calF_n)_{n \geq 0}$.
 We first state a useful property about r.v.~$T_0, T_1, T_2, \cdots$.
 \begin{restatable}{lemma}{TnBounded}
 \label{lem:TnBounded}

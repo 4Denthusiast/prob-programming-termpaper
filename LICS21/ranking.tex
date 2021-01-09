@@ -23,24 +23,13 @@ The term $M = \Xi \, (\lambda x. x+1)$ where
 terminates with only 2 $\tY$-reductions on average, i.e.,~$\expect{T_M^\tY} = 2$, but applies the increment function $2^n$ times with probability $2^{-n-1}$ for $n \geq 0$, which diverges, i.e.,~$\expect{T_M} = \infty$.
 \end{example}
 
-\begin{theorem} \label{thm:minimal}
+\begin{restatable}{theorem}{ThmMinimal} \label{thm:minimal}
 Given a closed term $M$, the function $f:Rch(M) \to \mathbb R$ given by 
 \[
 f(N) := \mathbb E [\text{number of }\tY\text{-reduction steps from }N\text{ to a value}]
 \] 
 if it exists, is the least of all possible ranking functions of $M$.
-\end{theorem}
-\begin{proof}
-Let $f$ be the candidate least ranking function defined above, and suppose $g$ is another ranking function such that $f(N) > g(N)$ for some $N \in Rch(M)$. The restrictions of $f$ and $g$ to $Rch(N)$ have the same properties assumed of $f$ and $g$, so assume w.l.o.g.~that $N=M$. The difference $g - f$ is then a supermartingale (with the same setup as in the proof of %\Cref{thm:rankable gives supermartingale}
-%Theorem \ref{rankable implies ast}) 
-\Cref{thm:rankable and strict rankable});
-therefore $\mathbb E[g(M_n)] \leq \mathbb E[f(M_n)] + g(M)-f(M)$, for all $n$.
-Now $\mathbb E[f(M_n)] = \sum_{k=n}^\infty \mathbb P[M_k = E[\tY N] \text{ for some }E, N] \to 0 \text{ as } n \to \infty$; 
-therefore as $g(M) - f(M) < 0$, eventually $\mathbb E[g(M_n)] < 0$, which is impossible. 
-It follows that $g \geq f$ as required.
-
-In order for $f$ to be the least ranking function of $M$, it also has to actually be a ranking function itself. Each of the conditions on a ranking function is easily verified from the definition of $f$.
-\end{proof}
+\end{restatable}
 
 \subsection{Sparse ranking functions}
 Even in the case of reasonable simple terms, explicitly constructing a ranking function would be a lot of work, and \Cref{thm:minimal} makes even stronger assumptions than almost sure termination, so it isn't useful for proving it.
@@ -61,105 +50,10 @@ Let
 \Theta := \lambda f, n. \tif{\tsample - 0.5 < 0}{n}{f (n+1)}. 
 \]
 The term  $(\tY \, \Theta) \, \underline 0$ generates a geometric distribution.
-\iffalse
-\lo{\Cref{fig:geometric distribution} is confusing: the arrow means either one-step reduction, or its reflexive transitive closure, or ``has the same syntactic shape''.}
-
-\akr{The arrows all mean the one-step reduction $\to$, I just didn't intend for the values of $i$ and $r$ to be consistent between the terms. I would much rather have the diagram be complete (with all the reductions and all the terms).}
-
-\lo{Perhaps you have in mind an informal, schematic interpretation, reading a term $C[i, r]$ as ``there exists a term $C[i, r]$, for appropriate $i, r \in \mathbb{R}$''.
-One way to make this precise is to consider the graph obtained by quotienting the one-step reduction relation by an appropriate equivalence relation over terms (that specifies this scheme reading).}
-
-\lo{\Cref{fig:geometric distribution 1} is less ambitious, but it is not confusing in that arrow does mean one-step reduction (also note $r'$), and it would be correct to say (cf.~the preceding blue-highlighted phrase): ``Despite its simplicity, $\mathit{Rch}(\tY \, \Theta \, \underline 0)$ contains all the terms in \Cref{fig:geometric distribution 1}, for each $i \geq 0$''.}
-
-\lo{The graph can be simplified somewhat if we redefine general recursion using a fixpoint operator $\tY_{f, n}\Theta$ with redex rule as per \Cref{eq:letrec redex}: see \Cref{fig:geometric distribution 2}.
-But (especially in view of the vast investment in the confluent trace semantics) it is perhaps too late to change things now?}
-\fi
 Despite its simplicity, its $\mathit{Rch}$ contains all the terms in \Cref{fig:geometric distribution}, for each $i \in \mathbb N, r \in I$.
 %\lo{TODO: reduce the figure to avoid overflow.}\akr{It still overflows the gutter, but not the actual text of the other column.}\lo{OK. Thanks.} 
 The meanings of the substitutions (to be applied to the contractum) and conditions that label some of the reductions in the diagram should be self-explanatory.
 
-\begin{figure}
-\begin{tikzpicture}[node distance=0.5em, anchor=west]
-    \node (1) at (0,-0) {$\tY\, \Theta\, \underline 0$};
-    \node (2) at (0,-1) {$(\lambda z. (\lambda n. \tif{\tsample \underline{- 0.5} < 0}{n}{\tY\, \Theta\, (n \underline{+ 1})}) z)\, \underline i$};
-    \node (3) at (0,-2) {$(\lambda n. \tif{\tsample \underline{- 0.5} < 0}{n}{\tY\, \Theta\, (n \underline{+ 1})})\, \underline i$};
-    \node (4) at (0,-3) {$\tif{\tsample \underline{- 0.5} < 0}{\underline i}{\tY\, \Theta\, (\underline i\, \underline{+ 1})}$};
-    \node (5) at (0,-4) {$\tif{\underline r\, \underline{- 0.5} < 0}{\underline i}{\tY\, \Theta\, (\underline i\, \underline{+ 1})}$};
-    \node (6) at (0,-5) {$\tif{\underline {r - 0.5} < 0}{\underline i}{\tY\, \Theta\, (\underline i\, \underline{+ 1})}$};
-    \node (7) at (2,-6.3) [text width=] {$\underline i$};
-    \node (8) at (0,-7) {$\tY\, \Theta\, (\underline i\, \underline{+ 1})$};
-    \node (9) at (0,-8) {$(\lambda z. (\lambda n. \tif{\tsample \underline{- 0.5} < 0}{n}{\tY\, \Theta\, (n \underline{+ 1})}) z)\, (\underline i\, \underline{+ 1})$};
-    
-    \draw [->] (1.south west) to [bend right=45, "$i := 0$"'] (2.north west);
-    \draw [->] (2.south west) to [bend right=45] (3.north west);
-    \draw [->] (3.south west) to [bend right=45] (4.north west);
-    \draw [->] (4.south west) to [bend right=45] (5.north west);
-    \draw [->] (5.south west) to [bend right=45] (6.north west);
-    \draw [->] (6.south west) to [bend right=45, "$r \geq 0.5$"] (8.north west);
-    \draw [->] (8.south west) to [bend right=45] (9.north west);
-    
-    \draw [->] (9.west) to [bend left=30, "$i := i + 1$" {below,sloped}] (2.west);
-    \draw [->] (6) to ["$r < 0.5$"] (7);
-\end{tikzpicture}
-\caption{The reachable terms of $\tY \, \Theta \, \underline 0$\label{fig:geometric distribution}}
-\end{figure}
-
-\iffalse
-\begin{figure}
-\centering
-\begin{tikzpicture}[node distance=0.5em, anchor=west]
-    \node (1) at (0,-0) {$\tY\, \Theta\, \underline i$ \quad [provided $i = 0$]};
-    \node (2) at (0,-1) {$(\lambda z. (\lambda n. \tif{\tsample \underline{- 0.5} < 0}{n}{\tY\, \Theta\, (n \underline{+ 1})}) z)\, \underline i$};
-    \node (3) at (0,-2) {$(\lambda n. \tif{\tsample \underline{- 0.5} < 0}{n}{\tY\, \Theta\, (n \underline{+ 1})})\, \underline i$};
-    \node (4) at (0,-3) {$\tif{\tsample \underline{- 0.5} < 0}{\underline i}{\tY\, \Theta\, (\underline i\, \underline{+ 1})}$};
-    \node (5) at (0,-4) {$\tif{\underline r\, \underline{- 0.5} < 0}{\underline i}{\tY\, \Theta\, (\underline i\, \underline{+ 1})}$};
-    \node (6) at (0,-5) {$\tif{\underline r' < 0}{\underline i}{\tY\, \Theta\, (\underline i\, \underline{+ 1})}$};
-    \node (7) at (2,-6) [text width=] {$\underline i$};
-    \node (8) at (0,-7) {$\tY\, \Theta\, (\underline i\, \underline{+ 1})$};
-    \node (9) at (0,-8) {$(\lambda z. (\lambda n. \tif{\tsample \underline{- 0.5} < 0}{n}{\tY\, \Theta\, (n \underline{+ 1})}) z)\, (\underline i\, \underline{+ 1})$};
-    \node (10) at (0,-9) {$(\lambda z. (\lambda n. \tif{\tsample \underline{- 0.5} < 0}{n}{\tY\, \Theta\, (n \underline{+ 1})}) z)\, \underline{i + 1}$};
-
-    \draw [->] (1.south west) to [bend right=45] (2.north west);
-    \draw [->] (2.south west) to [bend right=45] (3.north west);
-    \draw [->] (3.south west) to [bend right=45] (4.north west);
-    \draw [->] (4.south west) to [bend right=45] (5.north west);
-    \draw [->] (5.south west) to [bend right=45] (6.north west);
-    \draw [->] (6.south west) to [bend right=45] (8.north west);
-    \draw [->] (8.south west) to [bend right=45] (9.north west);
-    \draw [->] (9.south west) to [bend right=45] (10.north west);
-    \draw [->] (6) to (7);
-\end{tikzpicture}
-\caption{Some reachable terms of $\tY \, \Theta \, \underline 0$\label{fig:geometric distribution 1}}
-\end{figure}
-
-\begin{figure}
-\centering
-\begin{tikzpicture}[node distance=0.5em, anchor=west]
-    \node (1) at (0,-0) {$\tY_{f, n}\Theta\, \underline i$};
-    %\node (2) at (0,-1) {$(\lambda z. (\lambda n. \tif{\tsample \underline{- 0.5} < 0}{n}{\tY_{f, n}\Theta\, (n \underline{+ 1})}) z)\, \underline i$};
-    \node (3) at (0,-2) {$(\lambda n. \tif{\tsample \underline{- 0.5} < 0}{n}{\tY_{f, n}\Theta\, (n \underline{+ 1})})\, \underline i$};
-    \node (4) at (0,-3) {$\tif{\tsample \underline{- 0.5} < 0}{\underline i}{\tY_{f, n}\Theta\, (\underline i\, \underline{+ 1})}$};
-    \node (5) at (0,-4) {$\tif{\underline r\, \underline{- 0.5} < 0}{\underline i}{\tY_{f, n}\Theta\, (\underline i\, \underline{+ 1})}$};
-    \node (6) at (0,-5) {$\tif{\underline r' < 0}{\underline i}{\tY_{f, n}\Theta\, (\underline i\, \underline{+ 1})}$};
-    \node (7) at (2,-6) [text width=] {$\underline i$};
-    \node (8) at (0,-7) {$\tY_{f, n}\Theta\, (\underline i\, \underline{+ 1})$};
-    \node (9) at (0,-8) {$\tY_{f, n}\Theta\, \underline{i + 1}$};
-    %\node (9) at (0,-8) {$(\lambda z. (\lambda n. \tif{\tsample \underline{- 0.5} < 0}{n}{\tY_{f, n}\Theta\, (n \underline{+ 1})}) z)\, (\underline i\, \underline{+ 1})$};
-    %\node (10) at (0,-9) {$(\lambda z. (\lambda n. \tif{\tsample \underline{- 0.5} < 0}{n}{\tY_{f, n}\Theta\, (n \underline{+ 1})}) z)\, \underline{i + 1}$};
-
-    \draw [->] (1.south west) to [bend right=45] (3.north west);
-    %\draw [->] (2.south west) to [bend right=45] (3.north west);
-    \draw [->] (3.south west) to [bend right=45] (4.north west);
-    \draw [->] (4.south west) to [bend right=45] (5.north west);
-    \draw [->] (5.south west) to [bend right=45] (6.north west);
-    \draw [->] (6.south west) to [bend right=45] (8.north west);
-    \draw [->] (8.south west) to [bend right=45] (9.north west);
-    %\draw [->] (9.south west) to [bend right=45] (10.north west);
-    \draw [->] (6) to (7);
-\end{tikzpicture}
-\caption{Some reachable terms of $\tY_{f, n}\Theta \, \underline 0$\label{fig:geometric distribution 2}}
-\end{figure}
-\fi
 \end{example}
 
 Even in this simple case, defining a ranking function explicitly is awkward because of the number of cases, although in most cases, because the value need only be greater than or equal to that of the next term in sequence, it suffices to take the ranking function as having the same value as the next term, so that overall it takes only 3 distinct values.
@@ -174,25 +68,16 @@ Define a \emph{sparse ranking function} on a closed term $M$ to be a partial fun
 \begin{itemize}
     \item $f(N) \geq 0$ for all $N$ where $f$ is defined.
     \item $f$ is defined at $M$.
-    \item For any $N$ in the domain of definition of $f$, evaluation of $N$ will eventually \akr{It would be nicer for this to be only almost certain, to make this more neatly in-between rankability and AST, but that doesn't actually work because of terms reachable with 0 probability. Of course, ASTness doesn't imply rankability, so any definition of sparse ranking function that includes all Y-PAST terms wouldn't always extend to a total ranking function.} reach some $O$ which is either a value or in the domain of definition of $f$, and $f(N) \geq \mathbb E[f(O) + \text{ the number of $\tY$-reduction steps from $N$ to $O$}]$ (where $f(O)$ is taken to be 0 if $O$ is a value outside of the domain of $f$).
+    \item For any $N$ in the domain of definition of $f$, evaluation of $N$ will eventually 
+    %\akr{It would be nicer for this to be only almost certain, to make this more neatly in-between rankability and AST, but that doesn't actually work because of terms reachable with 0 probability. Of course, ASTness doesn't imply rankability, so any definition of sparse ranking function that includes all Y-PAST terms wouldn't always extend to a total ranking function.}
+     reach some $O$ which is either a value or in the domain of definition of $f$, and $f(N) \geq \mathbb E[f(O) + \text{ the number of $\tY$-reduction steps from $N$ to $O$}]$ (where $f(O)$ is taken to be 0 if $O$ is a value outside of the domain of $f$).
 \end{itemize}
 \end{definition}
 A sparse ranking function that is total is just a ranking function. Providing a sparse ranking function is essentially part way between providing a ranking function and directly proving almost sure termination.
 
-\begin{theorem} \label{thm:partial implies rankable}
+\begin{restatable}{theorem}{PartialImpliesRankable} \label{thm:partial implies rankable}
 Every sparse ranking function is a restriction of a ranking function.
-\end{theorem}
-\begin{proof}
-Take a closed term $M$ and sparse ranking function $f$ on $M$. Define $f_1 : Rch(M) \rightharpoonup \mathbb R$ by
-\begin{align*}
-    f_1(N) & := f(N) \text{ whenever $f(N)$ is defined,} \\
-    f_1(V) & := 0 \text{ for values $V$ not in the domain of $f$.}
-\end{align*}
-
-Define $(\nnext(N,s),\_) = \red^n(N,s)$ for the least $n \geq 0$ such that it's in the domain of $f_1$, and $g(N,s) := \left | \{m < n \mid \red^m(N,s) \text{ is of the form } (E[\tY N'],s') \} \right |$. 
-The function $\nnext$ is well-defined (i.e.~$n$ is finite) for all $N \in Rch(M)$ by induction on the path from $M$ to $N$, by the third condition on sparse ranking functions. Define $f_2(N) = \int_\entrosp f_1(\nnext(N,s)) + g(N,s) \, \mu_{\entrosp}(\mathrm d s)$. The (total) function $f_2$ agrees with $f$ on $f$'s domain, and it is a ranking function on $M$ (in fact, the least ranking function of which $f$ is a restriction).
-\lo{TODO. The preceding sentence deserves a proof.}
-\end{proof}
+\end{restatable}
 
 
 As a corollary, any term which admits a sparse ranking function terminates almost surely.

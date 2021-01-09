@@ -1,2 +1,51 @@
 % !TEX root = main.tex
+\ThmMinimal*
+\begin{proof}
+Let $f$ be the candidate least ranking function defined above, and suppose $g$ is another ranking function such that $f(N) > g(N)$ for some $N \in Rch(M)$. The restrictions of $f$ and $g$ to $Rch(N)$ have the same properties assumed of $f$ and $g$, so assume w.l.o.g.~that $N=M$. The difference $g - f$ is then a supermartingale (with the same setup as in the proof of %\Cref{thm:rankable gives supermartingale}
+%Theorem \ref{rankable implies ast}) 
+\Cref{thm:rankable and strict rankable});
+therefore $\mathbb E[g(M_n)] \leq \mathbb E[f(M_n)] + g(M)-f(M)$, for all $n$.
+Now $\mathbb E[f(M_n)] = \sum_{k=n}^\infty \mathbb P[M_k = E[\tY N] \text{ for some }E, N] \to 0 \text{ as } n \to \infty$; 
+therefore as $g(M) - f(M) < 0$, eventually $\mathbb E[g(M_n)] < 0$, which is impossible. 
+It follows that $g \geq f$ as required.
 
+In order for $f$ to be the least ranking function of $M$, it also has to actually be a ranking function itself. Each of the conditions on a ranking function is easily verified from the definition of $f$.
+\end{proof}
+
+\begin{figure}
+\begin{tikzpicture}[node distance=0.5em, anchor=west]
+    \node (1) at (0,-0) {$\tY\, \Theta\, \underline 0$};
+    \node (2) at (0,-1) {$(\lambda z. (\lambda n. \tif{\tsample \underline{- 0.5} < 0}{n}{\tY\, \Theta\, (n \underline{+ 1})}) z)\, \underline i$};
+    \node (3) at (0,-2) {$(\lambda n. \tif{\tsample \underline{- 0.5} < 0}{n}{\tY\, \Theta\, (n \underline{+ 1})})\, \underline i$};
+    \node (4) at (0,-3) {$\tif{\tsample \underline{- 0.5} < 0}{\underline i}{\tY\, \Theta\, (\underline i\, \underline{+ 1})}$};
+    \node (5) at (0,-4) {$\tif{\underline r\, \underline{- 0.5} < 0}{\underline i}{\tY\, \Theta\, (\underline i\, \underline{+ 1})}$};
+    \node (6) at (0,-5) {$\tif{\underline {r - 0.5} < 0}{\underline i}{\tY\, \Theta\, (\underline i\, \underline{+ 1})}$};
+    \node (7) at (2,-6.3) [text width=] {$\underline i$};
+    \node (8) at (0,-7) {$\tY\, \Theta\, (\underline i\, \underline{+ 1})$};
+    \node (9) at (0,-8) {$(\lambda z. (\lambda n. \tif{\tsample \underline{- 0.5} < 0}{n}{\tY\, \Theta\, (n \underline{+ 1})}) z)\, (\underline i\, \underline{+ 1})$};
+    
+    \draw [->] (1.south west) to [bend right=45, "$i := 0$"'] (2.north west);
+    \draw [->] (2.south west) to [bend right=45] (3.north west);
+    \draw [->] (3.south west) to [bend right=45] (4.north west);
+    \draw [->] (4.south west) to [bend right=45] (5.north west);
+    \draw [->] (5.south west) to [bend right=45] (6.north west);
+    \draw [->] (6.south west) to [bend right=45, "$r \geq 0.5$"] (8.north west);
+    \draw [->] (8.south west) to [bend right=45] (9.north west);
+    
+    \draw [->] (9.west) to [bend left=30, "$i := i + 1$" {below,sloped}] (2.west);
+    \draw [->] (6) to ["$r < 0.5$"] (7);
+\end{tikzpicture}
+\caption{The reachable terms of $\tY \, \Theta \, \underline 0$\label{fig:geometric distribution}}
+\end{figure}
+
+\PartialImpliesRankable*
+\begin{proof}
+Take a closed term $M$ and sparse ranking function $f$ on $M$. Define $f_1 : Rch(M) \rightharpoonup \mathbb R$ by
+\begin{align*}
+    f_1(N) & := f(N) \text{ whenever $f(N)$ is defined,} \\
+    f_1(V) & := 0 \text{ for values $V$ not in the domain of $f$.}
+\end{align*}
+
+Define $(\nnext(N,s),\_) = \red^n(N,s)$ for the least $n \geq 0$ such that it's in the domain of $f_1$, and $g(N,s) := \left | \{m < n \mid \red^m(N,s) \text{ is of the form } (E[\tY N'],s') \} \right |$. 
+The function $\nnext$ is well-defined (i.e.~$n$ is finite) for all $N \in Rch(M)$ by induction on the path from $M$ to $N$, by the third condition on sparse ranking functions. Define $f_2(N) = \int_\entrosp f_1(\nnext(N,s)) + g(N,s) \, \mu_{\entrosp}(\mathrm d s)$. The (total) function $f_2$ agrees with $f$ on $f$'s domain, and it is a ranking function on $M$ (in fact, the least ranking function of which $f$ is a restriction, by the same argument as \Cref{thm:minimal}).
+\end{proof}

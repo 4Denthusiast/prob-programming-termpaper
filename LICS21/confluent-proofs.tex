@@ -1,7 +1,6 @@
 % !TEX root = main.tex
+\label{apx:confluent}
 The rules defining $\sim_c$ can be more intuitively understood as diagrams. In the following diagrams, a circle represents a term (or skeleton), and the leaves on the trees are subterms at the positions indicated by the labels in the other nodes. The labels on the arrows between trees are the positions of the reductions, and dashed arrows represent some number of reductions in a row. If a reduction sequence includes one branch of one of these cases at some point in it, then the positions in the reduction sequence obtained by substituting in the other branch are all related by $\sim_c$ to the corresponding positions in the original reduction sequence.
-
-\lo{TODO. Remove the white space by repositioning the sim diagrams.}
 \include{sim-diagram}
 %The diagram is not actually in the figure environment because that doesn't work properly with it extending over several pages. The empty figure is just needed to get the label and caption.
 \begin{figure}[htb]
@@ -205,13 +204,11 @@ Together, $R_s$ and $R_d$ contain all of the skeletons of terms that can reduce 
 
 \AstEquivalence*
 \begin{proof}
-\akr{I'm not sure whether this proof is sufficiently detailed. It would be pretty easy to fill it in more, just very verbose.}
-
 For both $\red$ and $\Rightarrow_{\cbv}$, the probability measure on the sample space can be used to define a measure on the reduction sequences of each finite length. In the case that the reduction sequences terminate after a finite number of steps by reaching a value, the reduction sequence defined using $\Rightarrow_{\cbv}$ should be taken to continue by repeating the last term indefinitely, as $\red$ does, even though $\Rightarrow_{\cbv}$ specifies no next step in this case. The distributions are equal for each length, by induction, as follows.
 
 The base case, length 0, is trivial, because in both cases the distribution has probability 1 on the sequence containing only $M$.
 
-For the inductive case, suppose that the distributions of reduction sequences of length $n$ are equal. \akr{TODO: mention the case that it has already terminated by step $n$, or is about to. The two versions of the semantics handle it a little differently.}
+For the inductive case, suppose that the distributions of reduction sequences of length $n$ are equal.
 
 For any term $N$ which is not a value, there is a unique environment $E$ and redex $R$ such that $N = E[R]$. The position of the hole in $E$ is equal to $\cbv(N)$, so that $N|\cbv(N) = R$, as the cases in the definition of $\cbv$ match the cases in the definition of environments. If $R \neq \tsample$, let $R'$ be the result of reducing $R$ (which is equal in both versions of the semantics), then $E[R'] = N[R' / \cbv(N)]$ therefore $\red(N,s) = (E[R'],s)$ and $(N,s) \Rightarrow_{\cbv} (E[R'],s)$. The distribution of next terms, conditional on the previous term, in the case that that previous term reduces deterministically, is therefore equal for $\red$ and $\Rightarrow_{\cbv}$.
 
@@ -242,3 +239,44 @@ Pick some $p \in Q$, and let $(M,p) \Rightarrow^k_r (N,p')$. The injection $i(M 
 
 Taking the contrapositive of this, we have the desired result.
 \end{proof}
+
+\Cref{ex:sum of powers}
+Recall that
+\begin{align*}
+M =&\ (\lambda n. P[n]) \lfloor \tsample^{-1/2} \rfloor \\
+P[n] =&\ (\lambda p. \Xi[p] n) (\lambda x. \Theta[x] n)) \\
+\Xi[p] =&\ \tY \lambda f n. \tif{n = 0}{\underline 0}{p n + f (n-1)} \\
+\Theta[x] =&\ \tY \lambda f n. \tif{n = 0}{\underline 1}{x \times f (n-1)}.
+\end{align*}
+
+Let $r$ be the reduction strategy which reduces $M$ in the order
+\begin{align*}
+&\ M \\
+\to^* &\ P[\underline n] \\
+\to^* &\ (\lambda p.\ \Xi[p]\ \underline n)\ (\lambda x. \underbrace{x \times \dots \times x \times}_n \underline 1) \\
+\to^{\phantom *} &\ \Xi[\lambda x. \underbrace{x \times \dots \times x \times}_n \underline 1]\ \underline n \\
+\to^{\phantom *} &\ \tif{\underline n = 0}{\underline 0}{\underline{n^n} + \Xi[\lambda x. x \times \dots \underline 1]\ \underline{n-1}} \\
+\to^* &\ \underline{n^n} + \underline{(n-1)^n} + \dots + \underline 0 \\
+\to^* &\ \underline{\sum_{k=0}^n k^n}
+\end{align*}
+(this is a little underspecified, but the details are not important). A suitable sparse ranking function for it is
+\begin{align*}
+M \mapsto & \frac{\pi^2}{3} \\
+P[\underline n] \mapsto & 2n+2 \\
+(\lambda p.\ \Xi[p]\ \underline n)\ (\lambda x. \underbrace{x \times \dots \times x \times}_{n-k} (\Theta[x]\ \underline k)) \mapsto & n + k + 2 \\
+\Xi[\lambda x. \underbrace{x \times \dots \times x \times}_n \underline 1]\ \underline n \mapsto & n + 1 \\
+\underline{n^n} + \dots + \underline{(n-k+1)^n} + \Xi[\lambda x. x \times \dots \underline 1]\ \underline k \mapsto & k + 1 \\
+\underline{\sum_{k=0}^n k^n} \mapsto & 0.
+\end{align*}
+
+The first step is justified because the probability of reaching $P[\underline n]$ for any specific $n \geq 0$ is $(n+1)^{-2} - (n+2)^{-2} = \frac{2n + 3}{(n+1)^2(n+2)^2}$, therefore the expected next value of the ranking function is $\sum_{n=0}^{\infty} \frac{(2n+2)(2n + 3)}{(n+1)^2(n+2)^2} = \frac{\pi^2}{3}$. The other steps are deterministic, and involve 1 or 0 $\tY$-reductions each. Given that all of the reduction steps after the first are deterministic, and the number of $\tY$ reduction steps is not that hard to count, defining the sparse ranking function's values only at $M$ and $P[\underline n]$ would also have been reasonable, although in a similar term which had more random samples throughout, that would not have been so simple.
+
+Providing a ranking function of some sort for this term in a similar level of detail would have been rather more complicated using only the standard reduction strategy. The recursion in $\Theta$ would have had to be evaluated separately for every time it was used, so there would have been more (and more complex) terms to consider in the reduction sequence. Also, the number of $\tY$-reductions from $P[\underline n]$ would have been $n^2 + 2n + 1$ instead of $2n + 2$, therefore the expected number of $\tY$ reductions starting from $M$ would be infinite, i.e.~$M$ is not $\tY$-PAST, therefore it is not even rankable. It would be possible to define an antitone sparse ranking function for it, but it would have to include terms such as
+\begin{align*}
+& \underline{n^n} + \dots + \underline{(n-k_1+1)^n} + \\
+& (\underbrace{\underline{n-k_1} \times \dots \times \underline{n-k_1} \times}_{n-k_2-1} (\Theta[\underline{n-k_1}] (\underline{k_2} - 1))) + \\
+& \Xi[\lambda x. \Theta[x] \underline n] (\underline{n-k_1} - 1) \mapsto \log((n+1)k_1 + k_2)
+\end{align*}
+as only one of the several cases, which is significantly more complicated and difficult to use.
+
+It wouldn't even be possible in this case to give a sparser version of the ranking function defined only at $M$ and $P[\underline n]$, because the amount that an antitone sparse ranking function must decrease at each $\tY$-reduction step depends on the value of the ranking function at the next term where it is defined, therefore it is necessary to have these intermediate steps in order for the ranking function to be able to change sufficiently slowly.
