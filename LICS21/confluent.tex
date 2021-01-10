@@ -11,7 +11,7 @@ so the reduction order mostly doesn't matter.
 In the probabilistic case, this may not be true, because $\beta$-reduction can duplicate $\tsample$s, so the outputs of the copies of the sample may be identical or independent, depending on whether the sample is taken before or after $\beta$-reduction. 
 There are, however, some restricted variations on the reduction order that do not have this problem.
 
-\paragraph{}
+\medskip
 Even with this restriction, a sampling semantics in the style of the one already defined would not be entirely Church-Rosser, as, for example, $\red^3(\tsample - \tsample, (1,0,\dots))$ would be either $1$ or $-1$ depending on the order of evaluation of the $\tsample$s, as that determines which sample from the pre-selected sequence is used for each one. To fix this, rather than pre-selecting samples according to the order they'll be drawn in, select them according to the position in the term where they'll be used instead.
 
 A \emph{position} is a finite sequence of steps into a term, defined inductively as
@@ -63,7 +63,7 @@ The binary relation $\to$ is defined by the following rules, each is conditional
 In each of these cases, $M \mid \alpha$ is the \emph{redex}, and the reduction takes place at $\alpha$.
 \end{definition}
 
-\paragraph{}
+\medskip
 Labelling the pre-chosen samples by the positions in the term would also not work because in some cases, a $\tsample$ will be duplicated before being reduced, for example, in $(\lambda x. x \, {\underline 0} \, \mathbin{\underline{+}} \, {x \, \underline 0}) (\lambda y. \tsample)$, both of the $\tsample$ redexes that eventually occur originate at $@_2 ; \lambda$. 
 It is therefore necessary to consider possible positions that may occur in other terms reachable from the original term. 
 Even this is itself inadequate because some of the positions in different reachable terms need to be considered the same, and the number of reachable terms is in general uncountable, which leads to measure-theoretic issues.
@@ -120,7 +120,7 @@ Reduction sequences are used rather than reachable skeletons because if the same
 
 The reduction sequences of skeletons will often be discussed as though they were just skeletons, identifying them with their final skeletons. With this abuse of notation, a reduction sequence $N$ (actually $N_1 \to^\ast N_n = N$) may be said to reduce to a reduction sequence $O$, where the reduction sequence implicitly associated with the final skeleton $O$ is $N_1 \to^\ast N_n \to O$.
 
-\paragraph{}
+\medskip
 This is still not quite sufficient because sometimes the same samples must be used at corresponding positions in different reduction sequences. 
 
 \begin{example} \label{ex:cousin sim} 
@@ -169,7 +169,7 @@ Formally $L_s(M) := \{[(X, \alpha)]_{\sim^\ast_M} : X \mid \alpha = \tsample\}$.
 The new sample space is then defined as $I^{L_s(M)}$, with the Borel $\sigma$-algebra and product measure.
 Since $I^{L_s(M)}$ is a countable product, the measure space is well-defined \cite[Cor.~2.7.3]{AshDD00}.
 
-\paragraph{}
+\medskip
 Before defining the new version of the reduction relation $\red$, the following lemma is necessary for it to be well-defined.
 
 \begin{restatable}{lemma}{lemmaSimMN}
@@ -192,13 +192,13 @@ We write an element of $\biguplus_{M \in \Lambda_0} I^{L_s(M)}$ as $(M', s)$ whe
 \end{align*}
 \end{definition}
 
-\paragraph{}
+\medskip
 This reduction relation now has all of the properties required of it. In particular, it can be considered an extension of the standard trace semantics (as will be seen later in \Cref{thm:AstEquivalence}), and also:
 \begin{restatable}{lemma}{churchRosser} \label{churchRosser}
 The relation $\Rightarrow$ is Church-Rosser.
 \end{restatable}
 
-\paragraph{}
+\medskip
 The reduction relation $\Rightarrow$ is nondeterministic, so it admits multiple possible reduction strategies. 
 A \emph{reduction strategy} starting from a closed term $M$ is a partial function $f$ from $Rch(M)$ to positions, such that for any reachable term $N$ where $f$ is defined, $f(N)$ is a position of a redex in $N$, and if $f(N)$ is not defined, $N$ is a value.
 Using a reduction strategy $f$, a subset of $\Rightarrow$ that isn't nondeterministic, $\Rightarrow_f$, can be defined by $(N,s) \Rightarrow_f (N',s')$ just if $(N,s) \Rightarrow (N',s')$ and $N$ reduces to $N'$ with the redex at $f(N)$.
@@ -282,7 +282,7 @@ If the antitone function is just the constant function $1$ instead, then it is c
 If a closed PPCF term $M$ has a ranking function, sparse ranking function, antitone ranking function or antitone sparse ranking function with respect to a reduction strategy $r$, then $M$ is AST with respect to $r$, and AST.
 \end{theorem}
 
-\paragraph{}
+\medskip
 If, as seems likely, \Cref{thm:antitone rankable implies termination} is complete for terms from which every reachable term is AST, then by the following theorem, \Cref{thm:confluent ranking} can't actually prove the termination of any terms not already provable by \Cref{thm:antitone rankable implies termination} and \Cref{thm:antitone partial implies rankable}.
 
 \begin{restatable}{theorem}{confluentNoStronger}
