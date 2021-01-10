@@ -33,7 +33,8 @@ M_3 =
 \end{enumerate}
 \end{example}
 
-The term $M_1$ is rankable, terminating in 31 $\tY$-steps on average, and $M_3$ only has a $1/1024$ chance of terminating, but in between, $M_2$ is AST, but isn't $\tY$-PAST, therefore it isn't rankable and \Cref{thm:rankable implies termination} is insufficient to prove its termination. We therefore want to find a generalised notion of ranking function so that $M_2$ becomes rankable, and then prove it sound i.e.~rankable in this generalised sense implies AST.
+The term $M_1$ is rankable, terminating in 31 $\tY$-steps on average, and $M_3$ only has a $1/1024$ chance of terminating, but in between, $M_2$ is AST, but isn't $\tY$-PAST, therefore it isn't rankable and \Cref{thm:rankable implies termination} is insufficient to prove its termination. 
+Thus we seek a generalised notion of ranking function so that $M_2$ becomes rankable, and then prove it sound i.e.~rankable in this generalised sense implies AST.
 
 %\paragraph*{Idea} 
 
@@ -132,7 +133,8 @@ We have
   \step[\geq]{}
 \expect{\epsilon(Y_n) \cdot {\bf 1}_{\set{T > n}}}
 %  \step[=]{definition of conditional expectation for a discrete variable}
-\step[=]{}
+%\step[=]{}
+\mathbin{=}
 \mathbb P[T > n]\ \expect{\epsilon(Y_n) \mid T > n}
   \step[\geq]{Jensen's inequality}
 \mathbb P[T > n]\ \epsilon(\expect{Y_n \mid T > n})
@@ -148,7 +150,7 @@ Therefore, by a telescoping sum
 &\leq -1 < 0 
 \end{align*}
 %\lo{$\expect{Y_0 - B_x \; x \; \epsilon(\expect{Y_0} \, x^{-1})}$}
-which is a contradiction, therefore the claim must be true, therefore $P[T > n]$ tends to 0 as $n$ tends to infinity, therefore $T < \infty$ almost surely.
+which is a contradiction, therefore the claim must be true, therefore $P[T > n] \to 0$ as $n \to \infty$, therefore $T < \infty$ a.s.
 \end{proof}
 
 Note that it is essential in this proof that $\epsilon$ be defined for all $\mathbb R_{\geq 0}$, not just the values that $(Y_n)_{n \geq 0}$ actually takes (or at least if $(Y_n)_{n \geq 0}$ is uniformly bounded, $\epsilon$ must be positive at the supremum as well as the actual values). 
@@ -183,7 +185,7 @@ If a closed PPCF term $M$ is antitone rankable, then $T_M^{\tY} < \infty$ a.s.~(
 \begin{proof}
 As in %Theorem \ref{thm:basicRankingSoundness}, 
 \Cref{thm:rankable implies termination},
-take the probability space $(\entrosp, \Sigma_\entrosp, \mu_\entrosp)$, and define the same random variables $T_n, X_n, Y_n, T_M^{\tY}$. 
+take the probability space $(\entrosp, \Sigma_\entrosp, \mu_\entrosp)$, and define the same r.v.~$T_n, X_n, Y_n, T_M^{\tY}$. 
 Thanks to \Cref{thm:rankable and strict rankable}, $(Y_n)_{n \geq 0}$ is a supermartingale; and because $M$ is now assumed to be antitone rankable, it is an antitone strict supermartingale w.r.t.~stopping time $T_M^{\tY}$. 
 Thus, by \Cref{thm:a-c strict}, $T_M^{\tY} < \infty$ a.s.
 \end{proof}
@@ -191,13 +193,19 @@ Thus, by \Cref{thm:a-c strict}, $T_M^{\tY} < \infty$ a.s.
 %\paragraph{}
 As before, constructing antitone ranking fuctions completely is not necessary, and there is a corresponding notion of an antitone sparse ranking function.
 
-Define an \emph{antitone sparse ranking function} on a closed term $M$ to be a partial function $F : Rch(M) \rightharpoonup \mathbb{R}$ such that for some antitone function $\epsilon : \mathbb{R}_{\geq 0} \to \mathbb{R}_{>0}$
+Define an \emph{antitone sparse ranking function} on a closed term $M$ to be a partial function $F : Rch(M) \rightharpoonup \mathbb{R}$ such that for some antitone function $\epsilon : \mathbb{R}_{\geq 0} \to \mathbb{R}_{>0}$:
+\begin{inparaenum}[(i)]
+\item $f(N) \geq 0$ for all $N \in \dom(f)$,
+\item $M \in \dom(f)$,
+\item for any $N \in \dom(f)$, evaluation of $N$ will eventually reach some $O$ which is either a value or in $\dom(f)$, and $f(N) \geq \mathbb E [f(O) + \epsilon(f(O)) \times \text{the number of $\tY$-reduction steps from $N$ to $O$}]$ (where $f(O)$ is taken to be 0 if $O$ is a value outside of $\dom(f)$).
+\end{inparaenum}
+\iffalse
 \begin{itemize}
 \item $f(N) \geq 0$ for all $N$ where $f$ is defined.
 \item $f$ is defined at $M$.
 \item For any $N$ in the domain of definition of $f$, evaluation of $N$ will eventually reach some $O$ which is either a value or in the domain of definition of $f$, and $f(N) \geq \mathbb E [f(O) + \epsilon(f(O)) \times \text{the number of $\tY$-reduction steps from $N$ to $O$}]$ (where $f(O)$ is taken to be 0 if $O$ is a value outside of the domain of $f$).
 \end{itemize}
-
+\fi
 \begin{restatable}{theorem}{AntitonePartial}  \label{thm:antitone partial implies rankable}
   Every antitone sparse ranking function is a restriction of an antitone ranking function.
 \end{restatable}
@@ -220,12 +228,12 @@ $\Theta_2 = \tY \, \lambda f n . \,
 we can define an antitone sparse ranking function $f_2 : \mathit{Rch}(M_2) \rightharpoonup \nnReal$ 
 %with antitone function $\epsilon_2$ defined as follows (for $n \in \mathbb N$):
 by
-\[
-f: {\Theta_2} \, n 
-\mapsto 
-g_2(n), \qquad 
-0 \mapsto 0
-\]
+\(
+f_2: {\Theta_2} \, n \mapsto 
+g_2(n)
+\)
+and
+$0 \mapsto 0$
 for $n \in \mathbb N$.
 % \begin{align*}
 % {\Theta_2} \, n 

@@ -65,6 +65,15 @@ The definition of rankability is also inconvenient for syntactic sugar. It could
 In both of these cases, there are only some values of the ranking function that are semantically important. 
 \begin{definition}
 Define a \emph{sparse ranking function} on a closed term $M$ to be a partial function $f : Rch(M) \rightharpoonup \mathbb R$ such that
+\begin{inparaenum}[(i)]
+    \item $f(N) \geq 0$ for all $N \in \dom(f)$,
+    \item $M \in \dom(f)$,
+    \item for any $N \in \dom(f)$, evaluation of $N$ will eventually 
+    %\akr{It would be nicer for this to be only almost certain, to make this more neatly in-between rankability and AST, but that doesn't actually work because of terms reachable with 0 probability. Of course, ASTness doesn't imply rankability, so any definition of sparse ranking function that includes all Y-PAST terms wouldn't always extend to a total ranking function.}
+     reach some $O$ which is either a value or in $\dom(f)$, and $f(N) \geq \mathbb E[f(O) + \text{ the number of $\tY$-reduction steps from $N$ to $O$}]$ (where $f(O)$ is taken to be 0 if $O$ is a value outside of $\dom(f)$).
+\end{inparaenum}
+
+\iffalse
 \begin{itemize}
     \item $f(N) \geq 0$ for all $N$ where $f$ is defined.
     \item $f$ is defined at $M$.
@@ -72,6 +81,7 @@ Define a \emph{sparse ranking function} on a closed term $M$ to be a partial fun
     %\akr{It would be nicer for this to be only almost certain, to make this more neatly in-between rankability and AST, but that doesn't actually work because of terms reachable with 0 probability. Of course, ASTness doesn't imply rankability, so any definition of sparse ranking function that includes all Y-PAST terms wouldn't always extend to a total ranking function.}
      reach some $O$ which is either a value or in the domain of definition of $f$, and $f(N) \geq \mathbb E[f(O) + \text{ the number of $\tY$-reduction steps from $N$ to $O$}]$ (where $f(O)$ is taken to be 0 if $O$ is a value outside of the domain of $f$).
 \end{itemize}
+\fi
 \end{definition}
 A sparse ranking function that is total is just a ranking function. Providing a sparse ranking function is essentially part way between providing a ranking function and directly proving almost sure termination.
 
@@ -106,7 +116,7 @@ E[M \oplus_p N] \to^3  E[N] \\[2mm]
 % \end{align*}
 A sparse ranking function could be defined with respect to this shortcut reduction simply by replacing $\to$ and $\red$ in the definition of a sparse ranking function by a version that goes straight from $N \oplus_p O$ to $N$ or $O$. Such a pseudo-sparse ranking function would then be a partial function from a subset of $Rch(M)$, so it could also be considered as a partial function from all of $Rch(M)$, and it would in fact also be an actual sparse ranking function. It is therefore possible to prove rankability directly using the shortcutted reductions.
 
-A similar procedure would work for other forms of syntactic sugar. If a closed term $N$ eventually reduces to one of a set of other terms $\{N_i \mid i \in I\}$ with certain probabilities, a sparse ranking function defined with respect to a reduction sequence that skips straight from $N$ to $N_i$ is also a valid sparse ranking function for the original reduction function, and therefore its existence implies almost sure termination. There is a caveat, however, that $\tY$-reduction steps skipped over in the shortcut still need to be counted for the expected number of $\tY$-reduction steps.
+A similar procedure would work for other forms of syntactic sugar. If a closed term $N$ eventually reduces to one of a set of other terms $\{N_i \mid i \in I\}$ with certain probabilities, a sparse ranking function defined w.r.t.~a reduction sequence that skips straight from $N$ to $N_i$ is also a valid sparse ranking function for the original reduction function, and therefore its existence implies almost sure termination. There is a caveat, however, that $\tY$-reduction steps skipped over in the shortcut still need to be counted for the expected number of $\tY$-reduction steps.
 
 %\paragraph{}
 With this abbreviation, the geometric distribution example from earlier can be written as $(\tY \lambda f n.\ n \oplus_{0.5} f(n+1)) \, \underline 0$. It is then easy to see that the following is a sparse ranking function:

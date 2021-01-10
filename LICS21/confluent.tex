@@ -19,7 +19,7 @@ A \emph{position} is a finite sequence of steps into a term, defined inductively
 \alpha ::= & \; {\cdot} \mid \lambda ; \alpha \mid @_1 ; \alpha \mid @_2 ; \alpha \mid \underline f_i ; \alpha \\
 & {} \mid \tY ; \alpha \mid \textsf{if}_1 ; \alpha \mid \textsf{if}_2 ; \alpha \mid \textsf{if}_3 ; \alpha.
 \end{align*}
-The \emph{subterm of $M$ at a position $\alpha$}, denoted $M \mid \alpha$, is defined as
+The \emph{subterm of $M$ at $\alpha$}, denoted $M \mid \alpha$, is defined as
 \begin{align*}
 M \mid \cdot & = M \\
 \lambda x. M \mid \lambda ; \alpha & = M \mid \alpha \\
@@ -115,10 +115,10 @@ For this particular term, $\mathit{Sk}(A[\underline r])$ does not depend on the 
 
 Reduction sequences are used rather than reachable skeletons because if the same skeleton is reached twice, different samples may be needed. 
 
-\begin{example} Consider the term $M = \tY (\lambda f x.\ \tif{\tsample - \underline{0.5} < 0}{f \, x}{x}) \, \underline 0$, which reduces after a few steps to $N = \tif{\tsample - \underline{0.5}  < 0}{M}{\underline 0}$. If the pre-selected sample for $(N,\textsf{if}_1;\underline{-}_1)$ is less than 0.5, $N$ reduces back to $M$, then $N$ again, then the same sample is used the next time, therefore it's an infinite loop, whereas if samples are labelled by reduction sequences, the samples for $M \to \dots \to N$ are independent from the samples for $M \to \dots \to N \to M \to \dots \to N$, and so on.
+\begin{example} Consider the term $M = \tY (\lambda f x.\ \tif{\tsample - \underline{0.5} < 0}{f \, x}{x}) \, \underline 0$, which reduces after a few steps to $N = \tif{\tsample - \underline{0.5}  < 0}{M}{\underline 0}$. If the pre-selected sample for $(N,\textsf{if}_1;\underline{-}_1)$ is less than 0.5, $N$ reduces back to $M$, then $N$ again, then the same sample is used the next time, therefore it's an infinite loop, whereas if samples are labelled by reduction sequences, the samples for $M \to^\ast N$ are independent from the samples for $M \to^\ast N \to M \to^\ast N$, and so on.
 \end{example}
 
-The reduction sequences of skeletons will often be discussed as though they were just skeletons, identifying them with their final skeletons. With this abuse of notation, a reduction sequence $N$ (actually $N_1 \to \dots \to N_n = N$) may be said to reduce to a reduction sequence $O$, where the reduction sequence implicitly associated with the final skeleton $O$ is $N_1 \to \dots \to N_n \to O$.
+The reduction sequences of skeletons will often be discussed as though they were just skeletons, identifying them with their final skeletons. With this abuse of notation, a reduction sequence $N$ (actually $N_1 \to^\ast N_n = N$) may be said to reduce to a reduction sequence $O$, where the reduction sequence implicitly associated with the final skeleton $O$ is $N_1 \to^\ast N_n \to O$.
 
 \paragraph{}
 This is still not quite sufficient because sometimes the same samples must be used at corresponding positions in different reduction sequences. 
@@ -262,11 +262,18 @@ Any closed term for which an antitone ranking function with respect to a reducti
 
 \begin{definition}
 An \emph{antitone sparse ranking function on $M$ with respect to a reduction strategy $r$} is a partial function $f : Rch_r(M) \rightharpoonup \mathbb R$ such that there exists some antitone function $\epsilon : \nnReal \to \pReal$ such that
+\begin{inparaenum}[(i)]
+    \item $f(N) \geq 0$ for all $N \in \dom(f)$,
+    \item $M \in \dom(f)$,
+    \item for any $N \in \dom(f)$, evaluation of $N$ at the positions specified by $r$ will eventually reach some $O$ such that either $r(O)$ isn't defined or $f(O)$ is, and $f(N) \geq \mathbb E[f(O) + \epsilon(f(O)) \times \text{the number of $\tY$-reduction steps from $N$ to $O$}]$ (where $f(O)$ is taken to be 0 if $O$ is a value outside of $\dom(f)$).
+\end{inparaenum}
+\iffalse
 \begin{itemize}
     \item $f(N) \geq 0$ for all $N$ where $f$ is defined.
     \item $f$ is defined at $M$.
     \item For any $N$ in the domain of definition of $f$, evaluation of $N$ at the positions specified by $r$ will eventually reach some $O$ such that either $r(O)$ isn't defined or $f(O)$ is, and $f(N) \geq \mathbb E[f(O) + \epsilon(f(O)) \times \text{the number of $\tY$-reduction steps from $N$ to $O$}]$ (where $f(O)$ is taken to be 0 if $O$ is a value outside of the domain of $f$).
 \end{itemize}
+\fi
 \end{definition}
 
 If the antitone function is just the constant function $1$ instead, then it is called a \emph{(sparse) ranking function on $M$ with respect to $r$} instead, and the term is called \emph{rankable} with respect to $r$.
