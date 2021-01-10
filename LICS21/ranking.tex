@@ -84,15 +84,26 @@ As a corollary, any term which admits a sparse ranking function terminates almos
 
 \subsection{Examples}
 Let $M \oplus_p N = \tif{\tsample - p < 0} M N$, for $p \in (0,1]$, then there are the pseudo-reduction relations
-\begin{align*}
-E[M \oplus_p N] \to^3 & E[M] & \\
-E[M \oplus_p N] \to^3 & E[N] & \\
-\red^3(E[M \oplus_p N], s) = & \left\{
+\[
+\begin{array}{c}
+E[M \oplus_p N] \to^3  E[M] \qquad
+E[M \oplus_p N] \to^3  E[N] \\[2mm]
+\red^3(E[M \oplus_p N], s) = \left\{
     \begin{array}{ll}
         (E[M],\pi_t(s)) & \text{if } \pi_h(s) < p \\
-        (E[N],\pi_t(s)) & \text{if } \pi_h(s) \geq p. \\
+        (E[N],\pi_t(s)) & \text{if } \pi_h(s) \geq p. 
     \end{array} \right .
-\end{align*}
+\end{array}
+\]
+% \begin{align*}
+% E[M \oplus_p N] \to^3 & E[M] & \\
+% E[M \oplus_p N] \to^3 & E[N] & \\
+% \red^3(E[M \oplus_p N], s) = & \left\{
+%     \begin{array}{ll}
+%         (E[M],\pi_t(s)) & \text{if } \pi_h(s) < p \\
+%         (E[N],\pi_t(s)) & \text{if } \pi_h(s) \geq p. \\
+%     \end{array} \right .
+% \end{align*}
 A sparse ranking function could be defined with respect to this shortcut reduction simply by replacing $\to$ and $\red$ in the definition of a sparse ranking function by a version that goes straight from $N \oplus_p O$ to $N$ or $O$. Such a pseudo-sparse ranking function would then be a partial function from a subset of $Rch(M)$, so it could also be considered as a partial function from all of $Rch(M)$, and it would in fact also be an actual sparse ranking function. It is therefore possible to prove rankability directly using the shortcutted reductions.
 
 A similar procedure would work for other forms of syntactic sugar. If a closed term $N$ eventually reduces to one of a set of other terms $\{N_i \mid i \in I\}$ with certain probabilities, a sparse ranking function defined with respect to a reduction sequence that skips straight from $N$ to $N_i$ is also a valid sparse ranking function for the original reduction function, and therefore its existence implies almost sure termination. There is a caveat, however, that $\tY$-reduction steps skipped over in the shortcut still need to be counted for the expected number of $\tY$-reduction steps.

@@ -193,9 +193,9 @@ The fact $y_{t_k} \geq 2^{k+1}$ is proven by induction on $k$. For base case, $2
     y_n & = y_{t_k} \frac{\mathbb P[T > t_k]}{\mathbb P[T > n]} - \sum_{m=t_k}^{n-1} \epsilon(y_m) \frac{\mathbb P[T > m+1]}{\mathbb P[T > n]} \\
     & \geq \frac{\mathbb P[T > t_k]}{\mathbb P[T > n]} (y_{t_k} - \sum_{m=t_k}^{n-1} \epsilon(y_m)) \\
     & \geq \frac{\mathbb P[T > t_k]}{\mathbb P[T > n]} (y_{t_k} - \sum_{m=t_k}^{n-1} \frac{2^k}{t_{k+1}-t_k}) \\
-\end{align*}
+%\end{align*}
 %Allow a page break so that the sim-diagram lines up neatly.
-\begin{align*}
+%\begin{align*}
     & = \frac{\mathbb P[T > t_k]}{\mathbb P[T > n]} (y_{t_k} - \frac{2^k (n - t_k)}{t_{k+1}-t_k}) \\
     & \geq \frac{\mathbb P[T > t_k]}{\mathbb P[T > n]} (y_{t_k} - 2^k) \\
     & \geq \frac{\mathbb P[T > t_k]}{\mathbb P[T > n]} (2^{k+1} - 2^k) \\

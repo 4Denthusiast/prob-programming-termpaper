@@ -105,8 +105,9 @@ Therefore
 \dfrac{\expect{Y_n} - \mathbb P[T \leq n] \, \expect{Y_n \mid T \leq n}}{\mathbb P[T > n]}
   \step[\leq]{}
 \dfrac{\expect{Y_n}}{\mathbb P[T > n]}
-  \step[\leq]{}
-\dfrac{\expect{Y_0}}{\mathbb P[T > n]}
+%  \step[\leq]{}
+%\dfrac{\expect{Y_0}}{\mathbb P[T > n]}
+\mathbin{=} \dfrac{\expect{Y_0}}{\mathbb P[T > n]}
 \end{calculation}
 
 \emph{Claim}: For all $0 < x \leq 1$, 
@@ -125,7 +126,8 @@ We have
 %\lo{Change of justification of the second equality below: event, not discrete r.v. Recall: expectation conditioning on r.v.~(resp.~event) is a r.v.~(resp.~number).}
 \begin{calculation}
 \expect{Y_n-Y_{n+1}}
-  \step[=]{}
+%  \step[=]{}
+\mathbin{=}
 \expect{Y_n - \expect{Y_{n+1} \mid \calF_n}}
   \step[\geq]{}
 \expect{\epsilon(Y_n) \cdot {\bf 1}_{\set{T > n}}}
@@ -234,12 +236,12 @@ for $n \in \mathbb N$.
 % \end{align*}
 For $n \geq 1$, $\Theta_2 \, n$ reduces in several steps to either $\Theta_2 \, (n-1)$ or $\Theta_2 \, (n+1)$,\footnote{Technically this is not quite correct, because of the distinction between $\underline n + 1$ and $\underline{n + 1}$, but this ranking function can still be made to work by appealing to \Cref{thm:confluent ranking}, as can the others in this section with similar issues.} each with probability $1/2$, with one $\tY$-reduction.
 Now
-\begin{align*}
+\begin{align*}%\textstyle
 & g_2(n) - \frac{g_2(n-1) + g_2(n+1)} 2 \\
-  &=  \ln \Big(\frac{n+1}{\sqrt{n(n+2)}}\Big) \\
-  &=  \frac 1 2 \ln\left(\frac{(n+1)^2}{n(n+2)}\right) \\
-  &=  \frac 1 2 \ln\left(1 + \frac 1 {n(n+2)}\right) \\
-  &>  \frac 1 {n(n+2) + 1} \\
+  &=  \ln \Big(\frac{n+1}{\sqrt{n(n+2)}}\Big) 
+  =  \frac 1 2 \ln\left(\frac{(n+1)^2}{n(n+2)}\right) \\
+  &=  \frac 1 2 \ln\left(1 + \frac 1 {n(n+2)}\right) 
+  >  \frac 1 {n(n+2) + 1} \\
   &>  \frac 1 2 \frac 1 {(n+1)^2} + \frac 1 2 \frac 1 {(n+3)^2}
 \end{align*}
 Moreover $\Theta_2 \, 0$ reduces to $0$ with one $\tY$-reduction with a reduction in $g_2$ of $1$.
@@ -282,9 +284,11 @@ For a more complex (not $\tY$-PAST) example, consider the following ``continuous
 \begin{example}[Escaping spline]
 \label{ex:escaping spline}\cite[\S 5.4]{DBLP:journals/pacmpl/McIverMKK18}
 \[
-\underbrace{\big
-(\tY \, f \, x . \,
-0 \oplus_{\frac{1}{x+1}} f(x + 1) \big)}_{\Xi} 
+%\underbrace{
+\big(\tY \, f \, x . \,
+0 \oplus_{\frac{1}{x+1}} f(x + 1) 
+\big)
+%}_{\Xi} 
 \, 10
 \]
 \end{example}
@@ -303,7 +307,7 @@ recursively defined\footnote{Inspired by examples in \cite{DBLP:journals/pacmpl/
 \[
 \begin{array}{l}
 \Xi := \tY \lambda \varphi \, f^{\textsf{R} \to \textsf{R} \to \textsf{R}} \, s^\textsf{R} \, n^\textsf{R} . \\
-\quad\tif{n \leq 0}{s}{
+\qquad\tif{n \leq 0}{s}{
 f \, n \, (\varphi \, f \, s \, (n - 1))
 \oplus_p
 f \, n \, (\varphi \, f \, s \, (n + 1))

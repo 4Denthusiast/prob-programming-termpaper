@@ -14,7 +14,7 @@ A \emph{ranking function on $M \in \Lambda^0$} is a measurable function $f:\math
 \begin{enumerate}
     \item $f(E[\tY \lambda x. N]) \geq 1+ f(E[\lambda z. N[(\tY \lambda x. N)/x] z)$ where $z$ is not free in $N$
     \item $f(E[\tsample]) \geq \int_I f(E[\underline{x}]) \, \Leb(\mathrm{d}x)$
-    \item $f(E[R]) \geq f(E[R'])$ for any other redex $R$, where $R \to R'$.
+    \item $f(E[R]) \geq f(E[R'])$ for any other redex $R$ with $R \to R'$
 \end{enumerate}
 \iffalse
 \lo{@Andrew: As defined, ranking function $f$ is not required to satisfy: $f(N) = 0$ iff $N$ is a value. But for AST analysis, we always require $f$ to satisfy this property. It seems cleaner to include this in the definition.} 
@@ -24,7 +24,7 @@ A \emph{ranking function on $M \in \Lambda^0$} is a measurable function $f:\math
 We say that the ranking function $f$ is \emph{strict} if there exists $\epsilon > 0$ such that for all $E$ and $R \to R'$, $f(E[R']) \leq f(E[R]) - \epsilon$.
 
 Any closed term for which a ranking (respectively, strict ranking) function exists is called \emph{rankable} (respectively, \emph{strictly rankable}). 
-For example, the term $(\tY \lambda x.x) \, \underline 0$ is not rankable.
+For example, $(\tY \lambda x.x) \, \underline 0$ is not rankable.
 \end{definition}
 
 It will be demonstrated later that for any rankable term $M$, if $(M_n)_{n \geq 0}$ is the reduction sequence starting from $M$, then $(f(M_n))_{n \geq 0}$ is a supermartingale, and $M$ terminates almost surely, but first, some preliminaries about supermartingales.
@@ -77,7 +77,9 @@ Recall the $\sigma$-algebra (consisting of measurable subsets ``prior to $T$'')
 \]
 and if $T \leq T'$, then $\calF_{T} \subseteq \calF_{T'}$.
 
-The following is an iterated version of Doob's well-known Optional Sampling Theorem (see, e.g., \cite[\S 6.7]{AshDD00} and \cite[Thm.~7.2]{DBLP:conf/popl/FioritiH15}).
+The following is an iterated version of Doob's well-known Optional Sampling Theorem 
+%(see, e.g., \cite[\S 6.7]{AshDD00} and \cite[Thm.~7.2]{DBLP:conf/popl/FioritiH15}).
+(see e.g.~\cite{AshDD00,DBLP:conf/popl/FioritiH15}).
 \begin{theorem}[Optional Sampling]
 \label{thm:optional sampling}
 Let $(X_n)_{n \geq 0}$ be a supermartingale, and $(T_n)_{n \geq 0}$ a sequence of increasing stopping times, all adapted to filtration $(\calF_n)_{n \geq 0}$, then $(X_{T_n})_{n \geq 0}$ is a supermartingale adapted to $(\calF_{T_n})_{n \geq 0}$ if one of the following conditions holds:
@@ -99,7 +101,7 @@ and the filtration $(\mathcal{F}_n)_{n \geq 0}$ where $\mathcal{F}_n := \sigma(M
 Thus $T_M$ is the \emph{runtime} of $M$ (and $M$ is AST iff $\mu_{\entrosp}(T_M < \infty) = 1$).
 
 Our first result is the following theorem.
-\begin{restatable}{theorem}{rankableAndStrictRankable}[Deriving supermartingales] 
+\begin{restatable}[Deriving supermartingales]{theorem}{rankableAndStrictRankable}
 \label{thm:rankable and strict rankable}
 If a closed PPCF term $M$ is rankable (respectively, strictly rankable) by $f$ 
 then $(f(M_n))_{n \geq 0}$ is a supermartingale (respectively, ranking supermartingale w.r.t.~stopping time $T_M$) adapted to $(\mathcal{F}_n)_{n \geq 0}$. %where $\mathcal{F}_n = \sigma(M_1, \cdots, M_n)$.
@@ -144,7 +146,7 @@ $T_M^\tY$ is a stopping time adapted to $(\calF_{T_n})_{n \geq 0}$.
 \begin{enumerate}
 \item If a closed PPCF term $M$ is rankable, then $M$ is AST (equivalently, $T^{\tY}_M < \infty$ almost surely), and $M$ is $\tY$-positively almost sure terminating ($\tY$-PAST) i.e.~$\expect{T^{\tY}_M} < \infty$. 
 
-\item If a closed PPCF term $M$ is strictly rankable, then $\expect{T_M} < \infty$ i.e.~$M$ is positively almost sure terminating (PAST).
+\item If a closed PPCF term $M$ is strictly rankable, then $\expect{T_M} < \infty$ i.e.~$M$ is positively a.s.~terminating (PAST).
 \end{enumerate}
 \end{theorem}
 
@@ -159,7 +161,7 @@ Therefore, by \Cref{lem:rank-PAST}, $T^{\tY}_M < \infty$ a.s.~and $\expect{T^{\t
 
 %For 2, we have that $(f(M_n))_{n \geq 0}$ is a ranking supermartingale (\Cref{thm:rankable and strict rankable}) w.r.t.~stopping time $T_M$. 
 %It follows immediately from \Cref{lem:rank-PAST} that $\expect{T_M} < \infty$.
-Statement 2 follows at once from \Cref{thm:rankable and strict rankable} and \Cref{lem:rank-PAST}.
+Statement 2 follows from \Cref{thm:rankable and strict rankable} and \Cref{lem:rank-PAST}.
 \end{proof}
 
 Thus the method of (strict) ranking function is sound for proving (positive) a.s.~termination of PPCF programs.

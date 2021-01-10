@@ -235,17 +235,20 @@ It is not quite true, however, that all reduction strategies produce the same va
 If $M$ is AST with respect to any reduction strategy, it is AST.
 \end{corollary}
 \begin{proof}
-Suppose $M$ is AST with respect to $f$. Let the set of samples with which it terminates with this reduction strategy be $X$. By \Cref{thm:CbvIsTerminatingest}, $M$ also terminates with $\cbv$ and every element of $X$, and $X$ has measure 1, by assumption, therefore $M$ is AST with respect to $\cbv$ therefore by \Cref{thm:AstEquivalence} it is AST.
+Suppose $M$ is AST w.r.t.~$f$. Let the set of samples with which it terminates with this reduction strategy be $X$. By \Cref{thm:CbvIsTerminatingest}, $M$ also terminates with $\cbv$ and every element of $X$, and $X$ has measure 1, by assumption, therefore $M$ is AST with respect to $\cbv$ therefore by \Cref{thm:AstEquivalence} it is AST.
 \end{proof}
 
 All of the theorems on the termination of rankable terms therefore extend to other reduction strategies too. The proofs of \Cref{thm:rankable implies termination,thm:partial implies rankable,thm:antitone rankable implies termination,thm:antitone partial implies rankable} are all sufficiently generic with respect to what the reduction relation actually is that they can be directly applied to other reduction strategies. They only require that the number of reductions that can occur without any of them being a $\tY$-reduction is bounded for any starting term (which is true, because \Cref{thm:de groote} applies equally to any reduction strategy). For a reduction strategy $r$ and term $M$, just substitute $N[r(N)]$ being a $\tY$-redex for $N$ being of the form $E[\tY \lambda x. O]$, and $r(N)$ being undefined for $N$ being a value.
 
 The domain of definition of the ranking functions also needs to be changed from the reachable terms $Rch(M)$ to the \emph{reachable terms with respect to the reduction strategy $r$},
-\begin{align*}
-& Rch_r(M) = \\ & \{N \mid \exists n, (N_i)_{0 \leq i \leq n}: N_0 = M, N_n = N, N_i \to N_{i+1} \text{ at } r(N_i)\}.
-\end{align*}
+\[
+\begin{array}{l}
+Rch_r(M) := \{N \mid \exists n, (N_i)_{0 \leq i \leq n} : {}\\
+\qquad\qquad\qquad N_0 = M, N_n = N, N_i \to N_{i+1} \text{ at } r(N_i)\}.
+\end{array}
+\]
 
-To be more explicit, the modified forms of the theorems are:
+More explicitly, the modified forms of the theorems are:
 \begin{definition}
 An \emph{antitone ranking function on $M$ with respect to a reduction strategy $r$} is a measurable function $f:\mathit{Rch}_r(M) \to \mathbb{R}$ such that $f(N) \geq 0$ for all $N$, and there exists an antitone function $\epsilon : \nnReal \to \pReal$ such that
 \begin{itemize}
@@ -290,7 +293,7 @@ P[n] =&\ (\lambda p. \Xi[p] n) (\lambda x. \Theta[x] n)) \\
 \Theta[x] =&\ \tY \lambda f n. \tif{n = 0}{\underline 1}{x \times f (n-1)}.
 \end{align*}
 
-With the CBV reduction strategy, the recursion in $\Theta[x]$ (that defines the function $k \mapsto k^x$) is executed separately for every term in the sum in $\Xi$. Not only is this much more complicated than simplifying $\Theta[x] \underline n$ first, it requires considerably more $\tY$-reduction steps, so many so that $M$ is $\tY$-PAST with respect to a reduction strategy that simplifies $\Theta[x] \underline n$ first (call it ``$r$''), but isn't $\tY$-PAST with respect to the standard reduction strategy, so that $M$ is rankable with respect to $r$, but isn't rankable. It is still antitone rankable, but this is much more complicated. Details of the ranking function construction with and without using the confluent semantics are given in Appendix \ref{apx:confluent}.
+With the CBV reduction strategy, the recursion in $\Theta[x]$ (that defines the function $k \mapsto k^x$) is executed separately for every term in the sum in $\Xi$. Not only is this much more complicated than simplifying $\Theta[x] \underline n$ first, it requires considerably more $\tY$-reduction steps, so many so that $M$ is $\tY$-PAST with respect to a reduction strategy that simplifies $\Theta[x] \underline n$ first (call it ``$r$''), but isn't $\tY$-PAST with respect to the standard reduction strategy, so that $M$ is rankable with respect to $r$, but isn't rankable. It is still antitone rankable, but this is much more complicated. Details of the ranking function construction with and without using the confluent semantics are given in \Cref{apx:confluent}.
 \end{example}
 
 Even some of the examples given earlier implicitly use slightly non-standard reduction strategies to make the definitions of their ranking functions slightly simpler. For example, the antitone sparse ranking function in \Cref{ex:unbiased random walk} was defined at $\Theta_2\ \underline n$ (where $\Theta_2 = \tY \, \lambda f n . \, \tif{n = 0}{0}{f \, (n - 1) \oplus_{1/2} f \, (n + 1)}$), but $\Theta_2\ \underline{10}$ actually reduces to $\Theta_2\ (\underline{10} - 1)$ or $\Theta_2\ (\underline{10} + 1)$, and (taking the second of these), it then reduces to $(\lambda z. (\lambda n. \, \tif{n = 0}{0}{\Theta_2 \, (n - 1) \oplus_{1/2} \Theta_2 \, (n + 1)}) z) \, (\underline{10} + 1)$, then $(\lambda z. (\lambda n. \, \tif{n = 0}{0}{\Theta_2 \, (n - 1) \oplus_{1/2} \Theta_2 \, (n + 1)}) z) \, \underline{11}$, bypassing $\Theta_2\ \underline{11}$ entirely. The antitone sparse ranking function in the form given can be justified anyway, by considering it to be using a reduction strategy which is the same as $\cbv$ except that in $\Theta_2\ (\underline f \underline n)$, it evaluates the redex at $@_2$ first.

@@ -3,9 +3,9 @@
 \section{Introduction}
 \label{sec:intro}
 
-Various theorems about probabilistic programs rely on the assumption that the program terminates almost surely. One possible approach to prove almost sure termination is to find some variant on the program state that decreases on average sufficiently quickly that it must at some point reach 0, at which point the program terminates. In other words, the program's behavior is used to define an associated ranking supermartingale. Proof rules based on relating the program state to supermartingales already exist for first-order imperative programs \cite{DBLP:journals/pacmpl/McIverMKK18}. This paper's contribution is to extend this method to a higher-order setting.
+Various theorems about probabilistic programs rely on the assumption that the program terminates almost surely. One possible approach to prove almost sure termination (AST) is to find some variant on the program state that decreases on average sufficiently quickly that it must at some point reach 0, at which point the program terminates. In other words, the program's behavior is used to define an associated (ranking) supermartingale. Proof rules based on relating the program state to supermartingales already exist for first-order imperative programs \cite{DBLP:conf/cav/ChakarovS13,DBLP:conf/popl/FioritiH15,DBLP:journals/pacmpl/McIverMKK18}. This paper's contribution is to extend this method to a higher-order setting.
 
-The language PPCF used in this paper is simply typed, with an explicit recursion primitive, $\tY$. As the type system already constrains the terms enough to force termination in the absence of the recursion construct, it is only the $\tY$-reduction steps that must be counted, making defining ranking functions somewhat easier.
+The language PPCF used in this paper is simply typed, with an explicit recursion primitive, $\tY$. As the type system already constrains the terms enough to force termination in the absence of the recursion construct \cite{tait1967,BarendregtDS2010}, it is only the $\tY$-reduction steps that must be counted, making defining ranking functions somewhat easier.
 
 The notion of a sparse ranking function is introduced to make constructing ranking functions more convenient. Most of the individual execution steps of a typical program are trivial and easy to mentally skip over. Sparse ranking functions can be defined only for those points in the execution of a program which are semantically important, while all of the other intermediate steps can be ignored. This also makes the ranking function method of proving AST more compatible with syntactic sugar, because the intermediate reduction steps implicit in the simplified notation can be ignored.
 
@@ -16,3 +16,15 @@ Basic (non-random) lambda calculus has the very useful Church-Rosser property, w
 \subsubsection*{Contributions}
 
 This is the first application of martingales to probabilistic lambda calculus, and the first version of sampling semantics that's capable of satisfying the (restricted) Church-Rosser property.
+
+\lo{To continue.}
+
+\subsubsection*{Outline}
+
+We present the syntax and sampling (or trace) semantics of PPCF in \Cref{sec:PPCF}.
+In \Cref{sec:supermartingales}, we show that ranking functions on terms induce supermartingales, which form the basis of a sound method for proving AST.
+We introduce sparse ranking functions in \Cref{sec:ranking} and antitone ranking functions in \Cref{sec:antitone}, and illustrate how they can be used to prove AST via examples. 
+In \Cref{sec:confluent}, we present a confluent trace semantics and demonstrate its usefulness.
+We discuss further applications of the confluent semantics in \Cref{sec:applications}; and conclude with comments on related work and further directions in \Cref{sec:related}.
+
+\paragraph*{Additional materials} Further details of some of the examples and all missing proofs can be found in the appendices.
