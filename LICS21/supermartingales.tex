@@ -3,7 +3,7 @@
 \label{sec:supermartingales}
 
 One approach to proving that a term terminates almost surely is to find some variant that is bounded below and, on average, decreases sufficiently quickly that it must eventually reach 0, similarly to the approach taken by 
-%\citep{DBLP:journals/pacmpl/McIverMKK18} 
+%\cite{DBLP:journals/pacmpl/McIverMKK18} 
 \cite{DBLP:conf/popl/FioritiH15} and others for imperative programs.
 
 These variants are defined as functions from reachable terms (i.e.~possible states of the program's execution) to real numbers. Specifically, let the set of reachable terms from a given closed starting term $M$ be $Rch(M) := \{N \in \Lambda \mid M \to^* N \}$, with the $\sigma$-algebra induced as a subset of $\Lambda$.
@@ -50,7 +50,7 @@ A \emph{ranking supermartingale} w.r.t.~$T$ is a $\epsilon$-ranking supermarting
 \end{definition}
 
 \begin{remark}
-Our notion of ranking supermartingale is a slight generalisation of the original definition, due to \citep{DBLP:conf/cav/ChakarovS13,DBLP:conf/popl/FioritiH15}, which does not refer to a stopping time explicitly:
+Our notion of ranking supermartingale is a slight generalisation of the original definition, due to \cite{DBLP:conf/cav/ChakarovS13,DBLP:conf/popl/FioritiH15}, which does not refer to a stopping time explicitly:
 Fioriti and Hermanns call a supermartingale $(Y_n)_{n \geq 0}$ \emph{ranking} if $Y_n \geq 0$, and there exists $\epsilon > 0$ such that $\expect{Y_{n+1} \mid \calF_n} \leq Y_n - \epsilon \cdot {\bf 1}_{\set{Y_n > 0}}$.
 \end{remark}
 
@@ -58,15 +58,15 @@ Intuitively $Y_n$ gives the rank of the program after $n$ steps of computation, 
 In a $\epsilon$-ranking supermartingale, each computation step causes a strict decrease in rank of at least $\epsilon$, provided the term in question is not a value.
 
 \begin{restatable}{lemma}{rankPast}
-%\begin{lemma}%[{\citep[Lemma 5.5]{DBLP:conf/popl/FioritiH15}}]
-% \citep[Prop 1]{DBLP:conf/popl/ChatterjeeFNH16}}
+%\begin{lemma}%[{\cite[Lemma 5.5]{DBLP:conf/popl/FioritiH15}}]
+% \cite[Prop 1]{DBLP:conf/popl/ChatterjeeFNH16}}
 \label{lem:rank-PAST}
 Let $(Y_n)_{n \geq 0}$ be a $\epsilon$-ranking supermartingale w.r.t.~the stopping time $T$, then $T < \infty$ a.s., and $\expect{T} \leq \frac{\expect{Y_0}}{\epsilon}$.
 %\end{lemma}
 \end{restatable}
 
 \begin{remark}
-\Cref{lem:rank-PAST} is a slight extension of \citep[Lemma 5.5]{DBLP:conf/popl/FioritiH15},
+\Cref{lem:rank-PAST} is a slight extension of \cite[Lemma 5.5]{DBLP:conf/popl/FioritiH15},
 which asserts the same result but for the specific stopping time $T : \omega \mapsto \min\set{n \mid Y_n(\omega) = 0}$.
 \end{remark}
 

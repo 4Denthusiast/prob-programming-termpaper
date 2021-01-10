@@ -97,7 +97,7 @@ Note that the requirement that $M$ be closed is not important for the proofs of 
 %\paragraph{}
 \begin{remark}
 \label{rem:score}
-This definition of almost sure termination is equivalent to that given in \citep{MakOPW21} (although the program semantics is stated in a slightly different way), except for the presence of a $\tscore(r)$ construct for soft conditioning. 
+This definition of almost sure termination is equivalent to that given in \cite{MakOPW21} (although the program semantics is stated in a slightly different way), except for the presence of a $\tscore(r)$ construct for soft conditioning. 
 The $\tscore(r)$ construct is not relevant to termination except that it fails if its argument is less than or equal to zero, which allows computations to fail after finitely many steps. 
 If such a thing were added, it would merely require an additional side condition to our main theorems, that no failing term was reachable (or, in the case of the confluent semantics based results, no term where the reduction stragegy is not defined is reachable via the reduction strategy unless it's a value).
 \end{remark}

@@ -12,8 +12,8 @@
 \usepackage{tikz}
 \usetikzlibrary{positioning, graphs, quotes, graphdrawing, shapes.geometric}
 \usegdlibrary{layered, circular}
-\usepackage[square]{natbib}
-\setcitestyle{aysep={}}
+%\usepackage[square]{natbib}
+%\setcitestyle{aysep={}}
 
 %\definecolor{oxblue}{RGB}{0,33,71}
 %\definecolor{oxgold}{HTML}{a0630a}
@@ -128,12 +128,10 @@ Antitone ranking functions have weaker restrictions on how fast they must decrea
 Sparse ranking functions take values only at a subset of the program's reachable states, so they are simpler to define and more flexible. 
 Ranking functions with respect to alternative reduction strategies can be used to prove almost sure termination,
 thanks to a restricted confluence result.
-This is based on similar work by Mciver, Morgan, Kaminski and Katoen in the setting of a first-order imperative language, but adapted to a higher-order language.
+This is based on similar work by McIver, Morgan, Kaminski and Katoen in the setting of a first-order imperative language, but adapted to a higher-order functional language.
 The sparse ranking function and confluent semantics extensions are unique to the higher-order setting.
 Our methods can be used to prove almost sure termination of programs that are beyond the reach of methods in the literature, including higher-order and non-affine recursion.
 \end{abstract}
-
-%\lo{``Ranking functions with respect to alternative reduction strategies'' is a bit of a mouthful. How about calling it ``(reduction) strategy-insensitive ranking function''?}
 
 \IEEEpeerreviewmaketitle
 
@@ -153,9 +151,13 @@ Our methods can be used to prove almost sure termination of programs that are be
 
 \input{related}
 
+%\bibliographystyle{apalike}
+\bibliographystyle{IEEEtran}
+\bibliography{references-Beutner,../references}
+
 \appendices
 
-\section{Supplementary materials for \Cref{sec:PPCF}}
+%\section{Supplementary materials for \Cref{sec:PPCF}}
 
 \input{apx-typing-rules}
 
@@ -179,8 +181,6 @@ Our methods can be used to prove almost sure termination of programs that are be
 
 %\input{notes}
 
-\bibliographystyle{apalike}
-\bibliography{references-Beutner,../references}
 
 \tableofcontents
 

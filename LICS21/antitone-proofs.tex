@@ -114,13 +114,13 @@ For each $n$, $\Theta[n]$ reduces to either $0$ or $\Theta[n+1]$, with a $\tY$-r
 
 \medskip
 
-Many of the recent advances in the development of AST verification methods \citep{DBLP:conf/pldi/ChenH20,DBLP:conf/cav/ChakarovS13,DBLP:conf/popl/FioritiH15,DBLP:journals/pacmpl/McIverMKK18,DBLP:conf/aplas/HuangFC18,DBLP:conf/popl/ChatterjeeNZ17,DBLP:journals/pacmpl/AgrawalC018,DBLP:conf/cav/ChatterjeeFG16,DBLP:conf/lics/OlmedoKKM16,DBLP:journals/pacmpl/Huang0CG19} are concerned with loop-based programs.
+Many of the recent advances in the development of AST verification methods \cite{DBLP:conf/pldi/ChenH20,DBLP:conf/cav/ChakarovS13,DBLP:conf/popl/FioritiH15,DBLP:journals/pacmpl/McIverMKK18,DBLP:conf/aplas/HuangFC18,DBLP:conf/popl/ChatterjeeNZ17,DBLP:journals/pacmpl/AgrawalC018,DBLP:conf/cav/ChatterjeeFG16,DBLP:conf/lics/OlmedoKKM16,DBLP:journals/pacmpl/Huang0CG19} are concerned with loop-based programs.
 We can view such loops as tail-recursive programs that are, in particular, \emph{affine recursive}, i.e., 
-in each evaluation (or run) of the body of the recursion, recursive calls are made from at most one call site \citep[\S 4.1]{DBLP:journals/toplas/LagoG19}.
+in each evaluation (or run) of the body of the recursion, recursive calls are made from at most one call site \cite[\S 4.1]{DBLP:journals/toplas/LagoG19}.
 (Note that whether a program is affine recursive cannot be checked by just counting textual occurrences of variables.)
 Termination analysis of \emph{non-affine recursive} probabilistic programs does not seem to have received much attention.
-Methods such as those presented in \citep{DBLP:journals/toplas/LagoG19} are explicitly restricted to affine programs, and are unsound otherwise.
-By contrast, many probabilistic programming languages allow for richer recursive structures \citep{DBLP:conf/pkdd/TolpinMW15,DBLP:conf/uai/GoodmanMRBT08,DBLP:journals/corr/MansinghkaSP14}.
+Methods such as those presented in \cite{DBLP:journals/toplas/LagoG19} are explicitly restricted to affine programs, and are unsound otherwise.
+By contrast, many probabilistic programming languages allow for richer recursive structures \cite{DBLP:conf/pkdd/TolpinMW15,DBLP:conf/uai/GoodmanMRBT08,DBLP:journals/corr/MansinghkaSP14}.
 
 \medskip
 
@@ -133,15 +133,15 @@ Let
 A suitable sparse ranking function for $\Xi \, \underline 1$ would be $\Xi^n \, \underline i \mapsto 3 \, n$ (for $n \geq 0$), because $\Xi^n \, \underline i$ reduces to either $\Xi^{n+1} \, \underline{i+1}$ or $\Xi^{n-1} \, \underline{i+1}$, with probabilities $1/3$ and $2/3$. The value of $i$ does not actually matter for the progress of this recursion. It is basically another variant of the biased random walk, except that the relevant variable is the number of copies of $\Xi$, instead of a real number in the term.
 
 
-There is an obvious source of deterministic (i.e.~non-probabilistic) higher-order functions defined by recursion, viz., \emph{higher-order recursion schemes} (HORS) (see e.g.~\citep{DBLP:conf/lics/Ong06,DBLP:conf/lics/Ong15}).
+There is an obvious source of deterministic (i.e.~non-probabilistic) higher-order functions defined by recursion, viz., \emph{higher-order recursion schemes} (HORS) (see e.g.~\cite{DBLP:conf/lics/Ong06,DBLP:conf/lics/Ong15}).
 (Incidentally the (sparse) ranking function method is just as applicable to the termination analysis of \emph{deterministic} PPCF programs.)
 Recently \cite{DBLP:conf/lics/KobayashiLG19} have extended HORS to \emph{probabilistic higher-order recursion schemes} (PHORS), which are HORS augmented with probabilistic (binary) branching $\oplus_p$.
-As HORS are in essence the $\lambda \tY$-calculus \citep{DBLP:conf/lics/Statman02} (i.e.~pure simply-typed lambda calculus with recursion, generated from a finite base type), PHORS are definable in PPCF:
+As HORS are in essence the $\lambda \tY$-calculus \cite{DBLP:conf/lics/Statman02} (i.e.~pure simply-typed lambda calculus with recursion, generated from a finite base type), PHORS are definable in PPCF:
 (order-$n$) PHORS is encodable as (order-$n$) (call-by-name) PPCF, but the former is strictly less expressive (because the underlying recursion schemes are not Turing complete). 
 %Some interesting PPCF terms such as \Cref{ex:non-affine with continuous distribution} %\refExample{complexExample} 
 %cannot be expressed as PHORS.
 %\akr{As I removed the referenced example, and I don't even know what a PHORS is, I've just removed this comment too.}
-A relevant result here is that the AST problem is decidable for order-1 PHORS (by reduction to the PSPACE-hard solvability of finite systems of polynomial equations with real coefficients; see \citep{DBLP:journals/jacm/EtessamiY09}), but undecidable for order-2 PHORS.
+A relevant result here is that the AST problem is decidable for order-1 PHORS (by reduction to the PSPACE-hard solvability of finite systems of polynomial equations with real coefficients; see \cite{DBLP:journals/jacm/EtessamiY09}), but undecidable for order-2 PHORS.
 
 \Cref{ex:higher-order recursion}
 Consider the higher-order function
