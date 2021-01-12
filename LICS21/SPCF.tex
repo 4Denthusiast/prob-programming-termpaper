@@ -36,7 +36,7 @@ We write $\to^\ast$ for the reflexive, transitive closure of $\to$.
 
 Every closed well-typed term either is a value or reduces to another term.
 
-\subsection{Sampling semantics}
+\subsection{Trace semantics}
 \label{sec:sampling semantics}
 This version of the reduction relation allows $\tsample$ to reduce to any number in $[0,1]$. 
 To more precisely specify the probabilities, an additional argument is needed to determine the outcome of random samples. Let $ I := [0,1] \subset \mathbb{R} $, and define $\entrosp := I^{\mathbb{N}}$, with the Borel $\sigma$-algebra $\Sigma_\entrosp$ and the probability measure, denoted $\mu_{\entrosp}$, given by the limit of $1 \gets I \gets I^2 \gets \cdots$, where the maps are the projections that ignore the last element. Equivalently, a basis of measurable sets is $\prod_{i=0}^\infty X_i$ where $X_i$ are all Borel and all but finitely many are $I$, and $\mu_{\entrosp} (\prod_{i=0}^\infty X_i) := \prod_{i=0}^\infty \Leb(X_i)$.
@@ -99,7 +99,7 @@ which terminates on the set $\pi_h^{-1}[[0,0.5]]$, has probability 0.5 of failin
 \label{rem:score}
 This definition of almost sure termination is equivalent to that given in \cite{MakOPW21} (although the program semantics is stated in a slightly different way), except for the presence of a $\tscore(r)$ construct for soft conditioning. 
 The $\tscore(r)$ construct is not relevant to termination except that it fails if its argument is less than or equal to zero, which allows computations to fail after finitely many steps. 
-If such a thing were added, it would merely require an additional side condition to our main theorems, that no failing term was reachable (or, in the case of the confluent semantics based results, no term where the reduction stragegy is not defined is reachable via the reduction strategy unless it's a value).
+If such a thing were added, it would merely require an additional side condition to our main theorems, that no failing term was reachable (or, in the case of the confluent semantics based results, no term where the reduction strategy is not defined is reachable via the reduction strategy unless it's a value).
 \end{remark}
 
 \iffalse
