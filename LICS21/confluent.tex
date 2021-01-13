@@ -12,7 +12,7 @@ In the probabilistic case, this may not be true, because $\beta$-reduction can d
 There are, however, some restricted variations on the reduction order that do not have this problem.
 
 \medskip
-Even with this restriction, a sampling semantics in the style of the one already defined would not be entirely Church-Rosser, as, for example, $\red^3(\tsample - \tsample, (1,0,\dots))$ would be either $1$ or $-1$ depending on the order of evaluation of the $\tsample$s, as that determines which sample from the pre-selected sequence is used for each one. To fix this, rather than pre-selecting samples according to the order they'll be drawn in, select them according to the position in the term where they'll be used instead.
+Even with this restriction, a trace semantics in the style of the one already defined would not be entirely Church-Rosser, as, for example, $\red^3(\tsample - \tsample, (1,0,\dots))$ would be either $1$ or $-1$ depending on the order of evaluation of the $\tsample$s, as that determines which sample from the pre-selected sequence is used for each one. To fix this, rather than pre-selecting samples according to the order they'll be drawn in, select them according to the position in the term where they'll be used instead.
 
 A \emph{position} is a finite sequence of steps into a term, defined inductively as
 \begin{align*}
@@ -81,7 +81,7 @@ For example, we have
 \).
 
 Given a closed term $M$, let $L_0(M)$ be the set of pairs, the first element of which is a $\to$-reduction sequence of skeletons starting at $\mathit{Sk}(M)$, and the second of which is a position in the final skeleton of the reduction sequence. 
-As with the traces from $I^{\mathbb N}$ used to pre-select samples to use in the standard sampling semantics, modified traces, which are elements of $I^{L_0(M)}$ (with one more caveat introduced later), will be used to pre-select a sample from $I$ for each element of $L_0(M)$, which will then be used if a $\tsample$ reduction is ever performed at that position.
+As with the traces from $I^{\mathbb N}$ used to pre-select samples to use in the standard trace semantics, modified traces, which are elements of $I^{L_0(M)}$ (with one more caveat introduced later), will be used to pre-select a sample from $I$ for each element of $L_0(M)$, which will then be used if a $\tsample$ reduction is ever performed at that position.
 
 
 A (skeletal) reduction sequence is assumed to contain the information on the locations of all of the redexes as well as the actual sequence of skeletons that occurs. For example, $(\lambda x. x) ((\lambda x. x) \, \skeletonPlaceholder)$ could reduce to $(\lambda x. x) \, \skeletonPlaceholder$ with the redex at either $\cdot$ or $@_2$, and these give different reduction sequences.
@@ -217,7 +217,7 @@ The usual call-by-value semantics can be implemented as one of these reduction s
 
 A closed term $M$ terminates with a given reduction strategy $f$ and samples $s$ if there is some natural number $n$ such that $(M,s) \Rightarrow_f^n (N,s')$ where $f$ gives no reduction at $N$. The term terminates almost surely with respect to $f$ if it terminates with $f$ for almost all $s$.
 
-With these definitions, it is now possible to relate the confluent sampling semantics back to the standard sampling semantics.
+With these definitions, it is now possible to relate the confluent trace semantics back to the standard trace semantics.
 
 \begin{restatable}{theorem}{AstEquivalence} \label{thm:AstEquivalence}
 A closed term $M$ is AST with respect to $\cbv$ iff it is AST.
