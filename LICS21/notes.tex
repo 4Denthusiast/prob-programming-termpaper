@@ -11,3 +11,26 @@ Currently $\tY$ is not a legal term. This is unnatural: there is no reason to so
 It is also standard to regard variables as values in a CBV language.
 
 Problem: $\tY \, \tY$ is then a ``stuck'' term: neither value nor redex. A possible solution is to redefine the $\tY$-redex rule as $\tY \, V \to \lambda z . V \, (\tY \, V) \, z$, but I expect this would affect many proofs in the confluent semantics section, and there may not be time for such a change.
+
+\begin{example}[Non-affine recursion with continuous distribution]
+\label{ex:non-affine with continuous distribution}
+Consider 
+\[
+\Xi := \tY \lambda f x . \big(\mathsf{let} \; e = \tsample \; \mathsf{in} \;
+\mathsf{if}\boldsymbol{(}e \leq p, x, X\boldsymbol{)}\big)
+\]
+where
+\(
+X = \big( f^3(x+1) \oplus_e f^2(x+1) \big) \oplus_{\mathit{sig}(x)} f^2(x+1) 
+\)
+and $\mathit{sig}(x)$ is the sigmoid function.
+
+Not only is this program non-affine recursive,
+note also the use of a random sample, $e$, as a first-class value, and the subsequent use as a probability in the binary choice $\oplus_e$.
+Such a computation cannot be modelled via discrete distributions. 
+
+We can use the ranking function method (coupled with the solution of linear recurrence relations) to show that provided $p \geq \sqrt{7} - 2$, the program $\Xi \, \underline r$ is AST for all $r \in \Real$.
+
+\lo{This example is taken from the series of 3d-printing-company running examples (Beutner-Ong 2021).
+This paper is as yet unpublished, and effectively uncitable for the time being (because of strict double-blind submission rules).}
+\end{example}
