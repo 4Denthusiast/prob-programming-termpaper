@@ -157,7 +157,7 @@ f \, n \, (\varphi \, f \, s \, (n + 1))
 }
 \end{array}
 \]
-Let $F : \textsf{R} \to \textsf{R} \to \textsf{R}$ be a function such that $F\ \underline n\ \underline m$ terminates with no $\tY$ reductions for all $m$ and $n$. Then $\Xi\ F\ \underline x\ \underline y$ has the antitone sparse ranking function $F \underline{n_0} (F \underline{n_1} (\dots(\Xi\ F\ \underline x\ \underline n)\dots) \mapsto g_1(n)$, where $g_1$ is as in \Cref{ex:unbiased random walk}, using the same antitone function too. (Again, this is not actually the correct reduction order, in that $F$ should be applied to its argument $n_i$ and reduced to a value before its second argument is expanded, but this would complicate the presentation, and this version can be justified by \Cref{thm:confluent ranking} instead.)
+Let $F : \textsf{R} \to \textsf{R} \to \textsf{R}$ be a function such that $F\ \underline n\ \underline m$ terminates with no $\tY$ reductions for all $m$ and $n$. Then $\Xi\ F\ \underline x\ \underline y$ has the antitone sparse ranking function $F \underline{n_0} (F \underline{n_1} (\dots(\Xi\ F\ \underline x\ \underline n)\dots) \mapsto g_2(n)$, where $g_2$ is as in \Cref{ex:unbiased random walk}, using the same antitone function too. (Again, this is not actually the correct reduction order, in that $F$ should be applied to its argument $n_i$ and reduced to a value before its second argument is expanded, but this would complicate the presentation, and this version can be justified by \Cref{thm:confluent ranking} instead.)
 
 The inequalities required for this to be an antitone partial supermartingale are satisfied with just the same reasoning as in \Cref{ex:unbiased random walk}, therefore this term too is antitone rankable.
 
