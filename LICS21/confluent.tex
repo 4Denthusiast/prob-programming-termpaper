@@ -2,7 +2,7 @@
 \section{Confluent trace semantics}
 \label{sec:confluent}
 
-When proving almost sure termination in this way, it is necessary to consider which terms a given term may reduce to. Sometimes however, the reduction that the programmer has in mind may not be strictly the call-by-value order defined so far; or considering an alternative reduction order may be simpler or more intuitive.
+When proving almost sure termination in this way, it is necessary to consider all of the terms a given term may reduce to, and organise them into a manageable number of cases to assign ranking function values. Sometimes however, the reduction that the programmer has in mind may not be strictly the call-by-value order defined so far; or the number of cases necessary for defining a sparse ranking function is excessive because the reduction does not proceed in a neat and orderly manner. In cases such as these, it may be much more convenient to instead consider ranking functions with respect to alternative reduction strategies constructed to match the individual term in question, thereby reducing the number of cases needed and simplifying the reachable terms. It will be shown in \Cref{thm:confluent ranking} that ranking functions with respect to alternative reduction strategies are sound for proving AST in the usual sense (i.e.~with respect to the standard CBV reduction strategy). In order to obtain this result, we prove a relation between the results of using different reduction strategies, by first constructing a confluent trace semantics that is equivalent to the standard semantics as a special case.
 
 Non-probabilistic lambda calculi generally have the Church-Rosser property, that if a term $A$ reduces to both $B_1$ and $B_2$, there is some $C$ 
 %with reduction sequences $B_1 \to^* C$ and $B_2 \to^* C$, 
@@ -115,7 +115,7 @@ For this particular term, $\mathit{Sk}(A[\underline r])$ does not depend on the 
 
 Reduction sequences are used rather than reachable skeletons because if the same skeleton is reached twice, different samples may be needed. 
 
-\begin{example} Consider the term $M = \tY (\lambda f x.\ \tif{\tsample - \underline{0.5} < 0}{f \, x}{x}) \, \underline 0$, which reduces after a few steps to $N = \tif{\tsample - \underline{0.5}  < 0}{M}{\underline 0}$. If the pre-selected sample for $(N,\textsf{if}_1;\underline{-}_1)$ is less than 0.5, $N$ reduces back to $M$, then $N$ again, then the same sample is used the next time, therefore it's an infinite loop, whereas if samples are labelled by reduction sequences, the samples for $M \to^\ast N$ are independent from the samples for $M \to^\ast N \to M \to^\ast N$, and so on.
+\begin{example} Consider the term $M = \tY (\lambda f x.\ \tif{\tsample - \underline{0.5} < 0}{f \, x}{x}) \, \underline 0$, which reduces after a few steps to $N = \tif{\tsample - \underline{0.5}  < 0}{M}{\underline 0}$. If we label samples by just skeletons and positions, and the pre-selected sample for $(\mathit{Sk}(N),\textsf{if}_1;\underline{-}_1)$ is less than 0.5, $N$ reduces back to $M$, then $N$ again, then the same sample is used the next time, therefore it's an infinite loop, whereas if samples are labelled by reduction sequences, the samples for $M \to^\ast N$ are independent from the samples for $M \to^\ast N \to M \to^\ast N$, and so on.
 \end{example}
 
 The reduction sequences of skeletons will often be discussed as though they were just skeletons, identifying them with their final skeletons. With this abuse of notation, a reduction sequence $N$ (actually $N_1 \to^\ast N_n = N$) may be said to reduce to a reduction sequence $O$, where the reduction sequence implicitly associated with the final skeleton $O$ is $N_1 \to^\ast N_n \to O$.
@@ -281,6 +281,8 @@ If the antitone function is just the constant function $1$ instead, then it is c
 \begin{theorem} \label{thm:confluent ranking}
 If a closed PPCF term $M$ has a ranking function, sparse ranking function, antitone ranking function or antitone sparse ranking function with respect to a reduction strategy $r$, then $M$ is AST with respect to $r$, and AST.
 \end{theorem}
+
+When constructing an (antitone) sparse ranking function with respect to an alternative reduction strategy, it is intuitively simplest to define the sparse ranking function and the reduction strategy together. For each key reachable term where the sparse ranking function is defined, simply decide which sub-term should be reduced next, and how far before the next key reachable term. The only restrictions to bear in mind on evaluating sub-terms are that a $\tsample$ may not be evaluated inside a $\lambda$ or $\tY$ on the right of an application, and a $\beta$ redex may not be reduced until its argument is a value. This can be seen as applied to \Cref{ex:sum of powers} at the end of \Cref{apx:confluent}.
 
 \medskip
 If, as seems likely, \Cref{thm:antitone rankable implies termination} is complete for terms from which every reachable term is AST, then by the following theorem, \Cref{thm:confluent ranking} can't actually prove the termination of any terms not already provable by \Cref{thm:antitone rankable implies termination} and \Cref{thm:antitone partial implies rankable}.
