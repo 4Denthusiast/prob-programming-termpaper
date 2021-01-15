@@ -2,13 +2,17 @@
 \section{Related work and further directions}
 \label{sec:related}
 
-\lo{TODO. Related work (.75 column). Discuss \cite{DBLP:conf/birthday/BlancLM05}.}
+\lo{TODO. Related work (.75 column). Discuss \cite{DBLP:conf/birthday/BlancLM05}.} \akr{I think that that labelling scheme is not really that related. Would a note like "This is another scheme for labelling positions in reachable terms, therefore it appears superficially similar, but it's not actually that related." actually be worthwhile? I suppose it could at least reassure readers that we're aware of that paper and it isn't the same thing, but I don't know how likely readers are to actually draw the relation in the first place.}
 
 \lo{Our results specialise to proving termination of non-random lambda calculus, which is much studied. Our approach is closest in spirit to Jones' work on size-change principle \cite{DBLP:journals/lmcs/JonesB08,DBLP:conf/aplas/SereniJ05}. Dal Lago's \cite{DBLP:journals/toplas/LagoG19} work builds on this. We think that martingales are a good framework for generalising / unifying with size-change work.}
 
 \lo{Other approaches, mainly based on types, are complementary to ours.}
 
-\lo{Kobayashi et al.: PHORS are strictly weaker in expressivity \cite{DBLP:conf/lics/KobayashiLG1}.}
+\lo{Kobayashi et al.: PHORS are strictly weaker in expressivity \cite{DBLP:conf/lics/KobayashiLG19}.}
+
+The main theorem in \cite{DBLP:journals/pacmpl/McIverMKK18} is similar to our \ref{thm:antitone rankable implies termination}, but in an imperative language. While we require that the antitone ranking function decreases for every $\tY$-reduction step, they require that it decreases for every iteration of a certain while loop (the ranking function in that case is defined in the context of a particular loop), which is similar to the recursion construct $\tY$ but limited to tail recursion. The difference in the exact progress condition is not significant. Their progress condition, that there are antitone functions $p$ and $d$ such that the ranking function decreases from $x$ by at least $d(x)$ with probability at least $p(x)$, would not have worked directly because it does not cope as easily with the fact that the ranking function may change in value at the intermediate non-$\tY$ reduction steps (provided it does not increase in expectation). However, it is easy enough to convert a ranking function that satisfies either progress condition to the other.
+
+The confluent semantics, and the results based on it, is new in the setting of a functional language, because an imperative language does not have any equivalent of other redexes, or a similar nondeterministic structure. The sparse ranking function construction is also more useful in a functional language (although it would be possible to give an equivalent in an imperative language), because in an imperative language where the order of execution is more rigid, the iterations of the while loop provide a natural set of checkpoints where it is reasonable to give values of the ranking function.
 
 We have not yet been able to prove \Cref{conj:antitone} which would imply that \Cref{thm:antitone rankable implies termination} is almost complete.
 \begin{conjecture}
