@@ -2,7 +2,14 @@
 \section{Confluent trace semantics}
 \label{sec:confluent}
 
-When proving almost sure termination in this way, it is necessary to consider all of the terms a given term may reduce to, and organise them into a manageable number of cases to assign ranking function values. Sometimes however, the reduction that the programmer has in mind may not be strictly the call-by-value order defined so far; or the number of cases necessary for defining a sparse ranking function is excessive because the reduction does not proceed in a neat and orderly manner. In cases such as these, it may be much more convenient to instead consider ranking functions with respect to alternative reduction strategies constructed to match the individual term in question, thereby reducing the number of cases needed and simplifying the reachable terms. It will be shown in \Cref{thm:confluent ranking} that ranking functions with respect to alternative reduction strategies are sound for proving AST in the usual sense (i.e.~with respect to the standard CBV reduction strategy). In order to obtain this result, we prove a relation between the results of using different reduction strategies, by first constructing a confluent trace semantics that is equivalent to the standard semantics as a special case.
+When proving almost sure termination in this way, it is necessary to consider all of the terms a given term may reduce to, and organise them into a manageable number of cases to assign ranking function values. 
+Sometimes however, the reduction that the programmer has in mind may not be strictly the call-by-value order defined so far; 
+or the number of cases necessary for defining a sparse ranking function is excessive because the reduction does not proceed in a neat and orderly manner. 
+In cases such as these \changed[lo]{(see e.g.~\cref{ex:sum of powers})}, it may be much more convenient to instead consider ranking functions with respect to alternative reduction strategies constructed to match the individual term in question, 
+thereby reducing the number of cases needed and simplifying the reachable terms. 
+It will be shown in \Cref{thm:confluent ranking} that ranking functions with respect to alternative reduction strategies are sound for proving AST in the usual sense (i.e.~with respect to the standard CBV reduction strategy). 
+In order to obtain this result, we prove a relation between the results of using different reduction strategies, 
+by first constructing a confluent trace semantics that is equivalent to the standard semantics as a special case.
 
 Non-probabilistic lambda calculi generally have the Church-Rosser property, that if a term $A$ reduces to both $B_1$ and $B_2$, there is some $C$ 
 %with reduction sequences $B_1 \to^* C$ and $B_2 \to^* C$, 
