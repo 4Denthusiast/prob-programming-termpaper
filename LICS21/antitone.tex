@@ -75,85 +75,13 @@ we say that $(Y_n)_{n \geq 0}$ is an \emph{antitone strict supermartingale w.r.t
 %\lo{The preceding definition does not place any constraint on the stopping time $T$ (other than that it is w.r.t.~the filtration $(\calF_n)_{n \geq 0}$). However for the definition to make sense, $T$ must be the stopping time $T(s) := \min \set{n \mid Y_n(s) = 0}$.}
 %\akr{The definition you gave for an antitone ranking function is incorrect, because the antitone ranking functions are a proper subset of ranking functions. Although we may have been referring to antitone ranking functions as a type of ranking function, they're a generalisation, so they don't actually meet the definition of a ranking function in general.}
 
-\begin{theorem}
+\begin{restatable}{theorem}{ACStrict}
 \label{thm:a-c strict}
 Let $(Y_n)_{n \geq 0}$ be an antitone strict supermartingale w.r.t.~stopping time $T$. 
 Then $T < \infty$ a.s.
-\end{theorem}
+\end{restatable}
 
-\begin{proof}
-First, as $(Y_n)$ is a supermartingale, $\expect{Y_n} \leq \expect{Y_0}$. 
-Therefore
-\begin{calculation}
-\expect{Y_n \mid T > n}
-   \step[=]{rearranging terms}
-% \dfrac{\mathbb P[T > n] \, \expect{Y_n \mid T > n} 
-% + 
-% \mathbb P[T \leq n] \, \expect{Y_n \mid T \leq n} 
-% - 
-% \mathbb P[T \leq n] \, \expect{Y_n \mid T \leq n}}{\mathbb P[T > n]}
-\dfrac{
-\begin{array}{l}
-\mathbb P[T > n] \, \expect{Y_n \mid T > n} 
-+ 
-\mathbb P[T \leq n] \, \expect{Y_n \mid T \leq n} 
-\\
-{} - 
-\mathbb P[T \leq n] \, \expect{Y_n \mid T \leq n}
-\end{array}
-}{\mathbb P[T > n]}
-  \step[=]{definition of conditional expectation}
-\dfrac{\expect{Y_n} - \mathbb P[T \leq n] \, \expect{Y_n \mid T \leq n}}{\mathbb P[T > n]}
-  \step[\leq]{}
-\dfrac{\expect{Y_n}}{\mathbb P[T > n]}
-%  \step[\leq]{}
-%\dfrac{\expect{Y_0}}{\mathbb P[T > n]}
-\mathbin{=} \dfrac{\expect{Y_0}}{\mathbb P[T > n]}
-\end{calculation}
-
-\emph{Claim}: For all $0 < x \leq 1$, 
-\(
-\mathbb P[T > B_x] \leq x,
-\)
-where $B_x = \left \lceil \dfrac{\expect{Y_0}+1}{x \; \epsilon(\expect{Y_0} \, x^{-1})} \right \rceil$ and $\epsilon : \nnReal \to \pReal$ is the antitone function. 
-
-\smallskip
-
-As the convex hull of $\epsilon$ (the greatest convex function less than or equal to it) satisfies all the conditions assumed of $\epsilon$, in addition to being convex, assume wlog that $\epsilon$ is convex.
-
-Assume for a contradiction that $\mathbb P[T > B_x] > x$.
-Then, take $n \leq B_x$. 
-We have
-%\lo{Change of justification of the second equality below: event, not discrete r.v. Recall: expectation conditioning on r.v.~(resp.~event) is a r.v.~(resp.~number).}
-\begin{calculation}
-\expect{Y_n-Y_{n+1}}
-%  \step[=]{}
-\mathbin{=}
-\expect{Y_n - \expect{Y_{n+1} \mid \calF_n}}
-  \step[\geq]{}
-\expect{\epsilon(Y_n) \cdot {\bf 1}_{\set{T > n}}}
-%  \step[=]{definition of conditional expectation for a discrete variable}
-%\step[=]{}
-\mathbin{=}
-\mathbb P[T > n]\ \expect{\epsilon(Y_n) \mid T > n}
-  \step[\geq]{Jensen's inequality}
-\mathbb P[T > n]\ \epsilon(\expect{Y_n \mid T > n})
-  \step[\geq]{proved earlier}
-\mathbb P[T > n]\ \epsilon\Big(\dfrac{\expect{Y_0}}{\mathbb P[T > n]}\Big)
-  \step[>]{assumption, $\mathbb P[T > n] \geq \mathbb P[T > B_x] > x$}
-x \; \epsilon\big(\expect{Y_0} \, x^{-1}\big).
-\end{calculation}
-Therefore, by a telescoping sum
-\begin{align*}
-\expect{Y_{B_x}} 
-&= \expect{Y_{B_x}-Y_0+Y_0} \leq \expect{Y_0} - B_x \; x \; \epsilon(\expect{Y_0} \, x^{-1})\\
-&\leq -1 < 0 
-\end{align*}
-%\lo{$\expect{Y_0 - B_x \; x \; \epsilon(\expect{Y_0} \, x^{-1})}$}
-which is a contradiction, therefore the claim must be true, therefore $P[T > n] \to 0$ as $n \to \infty$, therefore $T < \infty$ a.s.
-\end{proof}
-
-Note that it is essential in this proof that $\epsilon$ be defined for all $\mathbb R_{\geq 0}$, not just the values that $(Y_n)_{n \geq 0}$ actually takes (or at least if $(Y_n)_{n \geq 0}$ is uniformly bounded, $\epsilon$ must be positive at the supremum as well as the actual values). 
+It is essential in this theorem that $\epsilon$ be defined for all $\mathbb R_{\geq 0}$, not just the values that $(Y_n)_{n \geq 0}$ actually takes (or at least if $(Y_n)_{n \geq 0}$ is uniformly bounded, $\epsilon$ must be positive at the supremum as well as the actual values). 
 
 \begin{example}
 Take the probability space $(\Omega, \calF, \mathbb{P})$ where $\Omega$ is the closed interval of reals $[-1, 1]$, $\calF$ the Borel $\sigma$-algebra, and $\mathbb{P}$ the corresponding Lebesgue probability measure.

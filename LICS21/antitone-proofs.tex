@@ -1,5 +1,78 @@
 % !TEX root = main.tex
 \label{apx:antitone}
+\ACStrict*
+\begin{proof}
+First, as $(Y_n)$ is a supermartingale, $\expect{Y_n} \leq \expect{Y_0}$. 
+Therefore
+\begin{calculation}
+\expect{Y_n \mid T > n}
+   \step[=]{rearranging terms}
+% \dfrac{\mathbb P[T > n] \, \expect{Y_n \mid T > n} 
+% + 
+% \mathbb P[T \leq n] \, \expect{Y_n \mid T \leq n} 
+% - 
+% \mathbb P[T \leq n] \, \expect{Y_n \mid T \leq n}}{\mathbb P[T > n]}
+\dfrac{
+\begin{array}{l}
+\mathbb P[T > n] \, \expect{Y_n \mid T > n} 
++ 
+\mathbb P[T \leq n] \, \expect{Y_n \mid T \leq n} 
+\\
+{} - 
+\mathbb P[T \leq n] \, \expect{Y_n \mid T \leq n}
+\end{array}
+}{\mathbb P[T > n]}
+  \step[=]{definition of conditional expectation}
+\dfrac{\expect{Y_n} - \mathbb P[T \leq n] \, \expect{Y_n \mid T \leq n}}{\mathbb P[T > n]}
+  \step[\leq]{}
+\dfrac{\expect{Y_n}}{\mathbb P[T > n]}
+%  \step[\leq]{}
+%\dfrac{\expect{Y_0}}{\mathbb P[T > n]}
+\mathbin{=} \dfrac{\expect{Y_0}}{\mathbb P[T > n]}
+\end{calculation}
+
+\emph{Claim}: For all $0 < x \leq 1$, 
+\(
+\mathbb P[T > B_x] \leq x,
+\)
+where $B_x = \left \lceil \dfrac{\expect{Y_0}+1}{x \; \epsilon(\expect{Y_0} \, x^{-1})} \right \rceil$ and $\epsilon : \nnReal \to \pReal$ is the antitone function. 
+
+\smallskip
+
+As the convex hull of $\epsilon$ (the greatest convex function less than or equal to it) satisfies all the conditions assumed of $\epsilon$, in addition to being convex, assume wlog that $\epsilon$ is convex.
+
+Assume for a contradiction that $\mathbb P[T > B_x] > x$.
+Then, take $n \leq B_x$. 
+We have
+%\lo{Change of justification of the second equality below: event, not discrete r.v. Recall: expectation conditioning on r.v.~(resp.~event) is a r.v.~(resp.~number).}
+\begin{calculation}
+\expect{Y_n-Y_{n+1}}
+%  \step[=]{}
+\mathbin{=}
+\expect{Y_n - \expect{Y_{n+1} \mid \calF_n}}
+  \step[\geq]{}
+\expect{\epsilon(Y_n) \cdot {\bf 1}_{\set{T > n}}}
+%  \step[=]{definition of conditional expectation for a discrete variable}
+%\step[=]{}
+\mathbin{=}
+\mathbb P[T > n]\ \expect{\epsilon(Y_n) \mid T > n}
+  \step[\geq]{Jensen's inequality}
+\mathbb P[T > n]\ \epsilon(\expect{Y_n \mid T > n})
+  \step[\geq]{proved earlier}
+\mathbb P[T > n]\ \epsilon\Big(\dfrac{\expect{Y_0}}{\mathbb P[T > n]}\Big)
+  \step[>]{assumption, $\mathbb P[T > n] \geq \mathbb P[T > B_x] > x$}
+x \; \epsilon\big(\expect{Y_0} \, x^{-1}\big).
+\end{calculation}
+Therefore, by a telescoping sum
+\begin{align*}
+\expect{Y_{B_x}} 
+&= \expect{Y_{B_x}-Y_0+Y_0} \leq \expect{Y_0} - B_x \; x \; \epsilon(\expect{Y_0} \, x^{-1})\\
+&\leq -1 < 0 
+\end{align*}
+%\lo{$\expect{Y_0 - B_x \; x \; \epsilon(\expect{Y_0} \, x^{-1})}$}
+which is a contradiction, therefore the claim must be true, therefore $P[T > n] \to 0$ as $n \to \infty$, therefore $T < \infty$ a.s.
+\end{proof}
+
 \AntitonePartial*
 \begin{proof}
   Take a closed term $M$ and an antitone sparse ranking function $f$ on $M$, with a corresponding antitone function $\epsilon$. Assume wlog that $\epsilon$ is convex (as if it isn't, we can just take its convex hull instead). As in Theorem \ref{thm:partial implies rankable}, define $f_1 : Rch(M) \rightharpoonup \mathbb R$ by

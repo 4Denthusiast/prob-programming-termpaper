@@ -1,12 +1,11 @@
 % !TEX root = main.tex
 \section{Applications}
 \label{sec:applications}
-Although the definition of potential positions in a term in \Cref{sec:confluent} was intended simply to define a variant of trace semantics that has a restricted version of the Church-Rosser property, it is likely to also be applicable to \changed[lo]{inference algorithms (for probabilistic programs) as well}.
+Although the definition of potential positions in a term in \Cref{sec:confluent} was intended simply to define a variant of trace semantics that has a restricted version of the Church-Rosser property, it is likely to also be applicable to inference algorithms (for probabilistic programs) as well.
 
-\lo{What you described in the following paragraph is not the Metropolis-Hastings algorithm (for MH algorithm, see e.g.~Algorithm 1, Slide 18 of 5-MCMC-part2.pdf \footnote{\url{https://www.cs.ox.ac.uk/teaching/materials20-21/SPP/Lectures/5-MCMC-part2.pdf}, \cite{Ong20}}), but a version of component-wise MH adapted to (models \emph{qua}) probabilistic programs (see Slide 36 onwards, 6-operational semantics.pdf \footnote{\url{https://www.cs.ox.ac.uk/teaching/materials20-21/SPP/Lectures/6-Operational-Semantics-21Nov20.pdf}, \cite{Ong20} \label{fnote:lmh}}).}
+%\lo{What you described in the following paragraph is not the Metropolis-Hastings algorithm (for MH algorithm, see e.g.~Algorithm 1, Slide 18 of 5-MCMC-part2.pdf \footnote{\url{https://www.cs.ox.ac.uk/teaching/materials20-21/SPP/Lectures/5-MCMC-part2.pdf}, \cite{Ong20}}), but a version of component-wise MH adapted to (models \emph{qua}) probabilistic programs (see Slide 36 onwards, 6-operational semantics.pdf \footnote{\url{https://www.cs.ox.ac.uk/teaching/materials20-21/SPP/Lectures/6-Operational-Semantics-21Nov20.pdf}, \cite{Ong20} \label{fnote:lmh}}).}
 
-%In the Metropolis-Hastings inference algorithm, 
-\changed[lo]{In lightweight Metropolis-Hastings (LMH) or single-site MH (originally suggested by \cite{wingate2011lightweight}; see also \cite{rainforth2017Automating})},
+In lightweight Metropolis-Hastings (LMH) or single-site MH (originally suggested by \cite{wingate2011lightweight}; see also \cite{rainforth2017Automating}),
 the program is executed, with a random value being chosen each time a $\tsample$ redex is evaluated. The trace of samples used is recorded, then for the next step, it is modified slightly before the program is run again. This time, when $\tsample$ redexes are evaluated, they may be taken from the pre-determined trace instead of chosen randomly. The change to the trace may be accepted or rejected, depending on the probability weight associated with each execution of the program (based on a conditioning language construct), and after this process is repeated sufficiently many times, the distribution of results of the program tends towards the true posterior distribution.
 
 It is essential to the efficiency of this algorithm that after modifying the trace, the weight of the resultant program execution is likely to be similar to the weight of the previous execution. This is satisfied by the values of the samples being similar to their original values, which (for a sufficiently well-behaved program) will tend to make the entire execution proceed similarly. In the simplest version of this algorithm, the samples in the trace are used one at a time, in the order they are encountered. However, if as a result of some random choice, more or fewer samples are taken during some stage of the program, subsequent samples in the trace will be displaced, and end up being used for different purposes than previously, thereby decreasing the correlation between the program runs.
@@ -14,7 +13,7 @@ It is essential to the efficiency of this algorithm that after modifying the tra
 It is possible to reduce this problem by labelling the samples in the trace by something other than the order in which they are used. If the labels of samples in the trace correspond closely to the roles that the samples play in the program execution, this will increase the efficiency of the inference algorithm. 
 In \cite{wingate2011lightweight}, for example, something rather like a stack trace is used, although this assdressing scheme turns out to have various problems \cite{kiselyov2016problems,Hur2015a}. 
 Potential positions could also be used for a similar purpose, although in practice, a more compact representation than an entire skeletal reduction sequence would be necessary. 
-\lo{It would be very interesting (and rewarding, I believe) to work out the details. There is a formalisation of LMH for Idealised Anglican in \Cref{fnote:lmh}. SPCF is a much nicer probabilistic programming language (in purified / idealised form).}
+%\lo{It would be very interesting (and rewarding, I believe) to work out the details. There is a formalisation of LMH for Idealised Anglican in \Cref{fnote:lmh}. SPCF is a much nicer probabilistic programming language (in purified / idealised form).}
 Selecting an appropriate addressing scheme can also be important in the context of variational inference \cite[\S 6.2.2]{paige2016automatic}.
 
 The $\sim$ relation as it has been defined is not exactly what would be necessary for inference (for example, $\sim_c$ only becomes relevant when there are multiple different reduction strategies being considered), but something much like it is still likely to be useful.
@@ -23,4 +22,4 @@ The $\sim$ relation as it has been defined is not exactly what would be necessar
 
 Another possible application for the confluent trace semantics would be as a justification, within a trace-style semantics, of some forms of equational reasoning. 
 By introducing reduction steps that go backwards to terms not reachable from the original term, it may in some cases be simplified, or equivalences between terms may be proved, by appealing to confluence results such as \Cref{churchRosser} and \Cref{thm:CbvIsTerminatingest}.
-\lo{Can you provide an example (and present it in the appendix)?}
+\lo{Can you provide an example (and present it in the appendix)?} \akr{I don't have any compelling example for this in mind.}
