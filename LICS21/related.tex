@@ -4,32 +4,32 @@
 
 \lo{TODO. Related work (.75 column). Discuss \cite{DBLP:conf/birthday/BlancLM05}.} \akr{I think that that labelling scheme is not really that related. Would a note like ``This is another scheme for labelling positions in reachable terms, therefore it appears superficially similar, but it's not actually that related.'' actually be worthwhile? I suppose it could at least reassure readers that we're aware of that paper and it isn't the same thing, but I don't know how likely readers are to actually draw the relation in the first place.}
 
-Most methods for proving AST of programs do not support continuous distributions \cite{DBLP:journals/toplas/LagoG19,DBLP:journals/jacm/KaminskiKMO18,DBLP:conf/lics/OlmedoKKM16,DBLP:conf/lics/KobayashiLG19,DBLP:conf/mfcs/KaminskiK15,DBLP:series/mcs/McIverM05}.
+Most methods for proving AST of programs in the literature do not support continuous distributions \cite{DBLP:journals/toplas/LagoG19,DBLP:journals/jacm/KaminskiKMO18,DBLP:conf/lics/OlmedoKKM16,DBLP:conf/lics/KobayashiLG19,DBLP:conf/mfcs/KaminskiK15,DBLP:series/mcs/McIverM05}.
 The few that do \cite{DBLP:conf/popl/FioritiH15,DBLP:conf/pldi/ChenH20,DBLP:journals/toplas/ChatterjeeFNH18} are for first-order imperative programs.
 
 A fortiori, our results specialise to a method for proving termination of non-random lambda calculus. 
 Thus restricted, our approach is closest in spirit to Jones' work on size-change termination \cite{DBLP:journals/lmcs/JonesB08,DBLP:conf/aplas/SereniJ05}. 
-Dal Lago and Grellois \cite{DBLP:journals/toplas/LagoG19} extend this to programs with discrete distributions, but their method is restricted to first-order affine recursion.
+Dal Lago and Grellois \cite{DBLP:journals/toplas/LagoG19} extend this to programs with discrete distributions, but their method is limited to affine recursion of first-order functions.
 Breuvart and Dal Lago \cite{DBLP:conf/ppdp/BreuvartL18} develop systems of intersection types from which the termination probability of higher-order programs (with discrete distributions) can be inferred from (infinitely many) type derivations. 
 
-Kobayashi et al.~\cite{DBLP:conf/lics/KobayashiLG19} show that the termination probability of CbN order-$n$ probabilistic recursion schemes ($n$-PHORS) can be obtained as the least fixpoint of suitable order-$(n-1)$ fixpoint equations, which are solvable using Kleene fixpoint iteration.  
+Kobayashi et al.~\cite{DBLP:conf/lics/KobayashiLG19} show that the termination probability of order-$n$ probabilistic recursion schemes ($n$-PHORS) can be obtained as the least fixpoint of suitable order-$(n-1)$ fixpoint equations, which are solvable by Kleene fixpoint iteration.  
 By contrast, our approach works for programs with continuous distributions. 
-It is worth noting that (order-$n$) PHORS is strictly less expressive then (order-$n$) CbN PPCF (because the underlying recursion schemes are not Turing complete). 
-Some interesting PPCF terms such as \cref{ex:raven complex,ex:higher-order recursion}
+Note that $n$-PHORS is strictly less expressive then order-$n$ CbN PPCF (because the underlying recursion schemes are not Turing complete):
+PPCF terms in \cref{ex:raven complex,ex:higher-order recursion}
 %\refExample{complexExample} 
-are not expressible as PHORS.
+are not definable as PHORS.
 
-The main result in the work \cite{DBLP:journals/pacmpl/McIverMKK18} by McIver et al.~is similar to our \cref{thm:antitone rankable implies termination}, but in an imperative language. While we require that the antitone ranking function decreases for every $\tY$-reduction step, they require that it decreases for every iteration of a certain while loop (the ranking function in that case is defined in the context of a particular loop), which is similar to $\tY$ but limited to tail recursion. 
+The main result by McIver et al.~\cite{DBLP:journals/pacmpl/McIverMKK18} is similar to our \cref{thm:antitone rankable implies termination}, but in an imperative language. While we require that the antitone ranking function decreases for every $\tY$-reduction step, they require that it decreases for every iteration of a certain while loop (the ranking function in that case is defined in the context of a particular loop), which is similar to $\tY$ but limited to tail recursion. 
 The difference in the exact progress condition is not significant. 
 \akr{Their progress condition, that there are antitone functions $p$ and $d$ such that the ranking function decreases from $x$ by at least $d(x)$ with probability at least $p(x)$, would not have worked directly because it does not cope as easily with the fact that the ranking function may change in value at the intermediate non-$\tY$ reduction steps (provided it does not increase in expectation). However, it is easy enough to convert a ranking function that satisfies either progress condition to the other.}
-\lo{We may have to omit this.}
+\lo{Can you replace the highlighted by a brief comment on their discussion of completeness?}
 
 The confluent semantics, and the results based on it, is new in the setting of a functional language, because an imperative language does not have any equivalent of other redexes, or a similar nondeterministic structure. The sparse ranking function construction is also more useful in a functional language (although it would be possible to give an equivalent in an imperative language), because in an imperative language where the order of execution is more rigid, the iterations of the while loop provide a natural set of checkpoints where it is reasonable to give values of the ranking function.
 
 \paragraph*{Further directions} We have not yet been able to prove \Cref{conj:antitone} which would imply that \Cref{thm:antitone rankable implies termination} is almost complete.
-\begin{conjecture}
+\begin{conjecture}[Completeness]
 \label{conj:antitone}
-Every term is antitone rankable if all of the terms reachable from it are AST.
+Every PPCF term is antitone rankable if all terms reachable from it are AST.
 \end{conjecture}
 
 The \Cref{def:more general red} of redexes and which positions are acceptable to reduce at is sufficiently restrictive to guarantee Church-Rosserness, but is also a little more restrictive in some cases than is necessary for this purpose. For example, if the argument of a function is not yet a value, but its reduction to a value would be deterministic, or the function is affine, then applying the function before reducing its argument would not cause any problematic duplication of random samples. Similarly, if $\tsample$ occurs at position $\alpha;@_2;\beta;\lambda;\gamma$, but the function at $\alpha;@_1$ is affine, evaluating the $\tsample$ may in some cases also work fine. A more complete characterisation of which redexes can be reduced without breaking Church-Rosserness could be interesting.

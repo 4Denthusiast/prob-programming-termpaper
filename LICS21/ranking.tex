@@ -3,16 +3,16 @@
 \label{sec:ranking}
 
 Although rankability implies almost sure termination, the converse does not hold in general. For example,
-\begin{equation}
+\begin{equation*}
 \tif{{-}\tsample < 0}{\underline{0}}{(\tY \lambda x. x) \, \underline 0}
 \label{ex:0 probability reachable}
-\end{equation}
+\end{equation*}
 terminates in 3 steps with probability 1, but isn't rankable because $(\tY \lambda x. x) \, \underline 0$ is reachable, although that has probability 0. 
 Not only is this counterexample AST, it's PAST. %positively almost surely terminating i.e.~the expected time to termination is finite.
 
 A ranking function can be constructed under the stronger assumptions that, for every $N$ reachable from $M$, the expected number of $\tY$-reduction steps from $N$ to a value is finite. 
 In particular, the expected number of $\tY$-reduction steps from each reachable term is a ranking function. 
-However, note that a finite number of expected $\tY$-reduction steps does not necessarily imply a finite number of expected total reduction steps.
+However, a finite number of expected $\tY$-reduction steps does not necessarily imply a finite number of expected total reduction steps.
 
 \begin{example}
 \label{ex:tY finite does not imply t finite}

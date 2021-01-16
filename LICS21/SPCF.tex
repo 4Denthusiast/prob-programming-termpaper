@@ -48,7 +48,7 @@ Following \cite{DBLP:conf/icfp/BorgstromLGS16}, the $\sigma$-algebra on $\Lambda
 Thus identified, we give $\Lambda$ the countable disjoint union topology of the product topology of the discrete topology on $\mathsf{Sk}_m$ and the standard topology on $\Real^m$, and take the corresponding Borel $\sigma$-algebra.
 Note that the connected components of $\Lambda$ have the form $\{S\} \times \Real^m$, with $S$ ranging over $\mathsf{Sk}_m$, and $m$ over $\mathbb{N}$.
 
-The one-step reduction is given by the function $\red : \Lambda^0 \times \entrosp \to \Lambda^0 \times \entrosp$ where
+\changed[lo]{The one-step reduction of the \emph{trace-based} (or \emph{sampling-style}) \emph{operational semantics} \cite{DBLP:journals/jcss/Kozen81,DBLP:conf/icfp/BorgstromLGS16,DBLP:conf/esop/CulpepperC17}} is given by the function $\red : \Lambda^0 \times \entrosp \to \Lambda^0 \times \entrosp$ where
 \begin{equation*}
 \red(M,s) := \left\{
     \begin{array}{ll}
@@ -66,8 +66,8 @@ The result after $n$ steps is then simply
 \] 
 and the limit $\red^\infty$ can then be defined as a partial function as $\lim_{n \to \infty} \red^n(M,s)$ whenever that sequence becomes constant by reaching a value. A term $M$ terminates for a sample sequence $s$ if the limit $\red^\infty(M,s)$ is defined.
 
-The reduction function is measurable, and the set of values is measurable, therefore the set of $s$ such that $M$ terminates at $s$ within $n$ steps is measurable for any $n$, therefore $\{s \mid M \text{ terminates at } s \}$ is measurable. 
-We say that a term $M$ is \emph{almost surely terminating} (AST) just if $\mu_{\entrosp}(\{s \mid M \text{ terminates at } s\}) = 1$.
+The reduction function is measurable, and the set of values is measurable, therefore the set of $s$ such that $M$ terminates at $s$ within $n$ steps is measurable for any $n$, therefore $\{s \mid \hbox{$M$ terminates at $s$}\}$ is measurable. 
+We say that a term $M$ is \emph{almost surely terminating} (AST) just if $\mu_{\entrosp}(\{s \mid \hbox{$M$ terminates at $s$}\}) = 1$.
 
 \iffalse
 \lo{Alternatively, define the \emph{runtime of $M$} to be the random variable 
@@ -86,9 +86,9 @@ For example, the term
 (\tY \lambda f, n: \tif{\tsample - 0.5 < 0}{n}{f (n+1)} ) \, \underline{0},
 \] 
 which generates a geometric distribution, terminates on the set $\entrosp \setminus [0.5,1]^\mathbb N$, which has measure 1, therefore it terminates almost surely, whereas 
-\[
+\(
 \tif{\tsample - 0.5 < 0}{\underline 0}{(\tY \lambda x. x) \underline 0}
-\] 
+\), 
 which terminates on the set $\pi_h^{-1}[[0,0.5]]$, has probability 0.5 of failing to terminate.
 
 %\paragraph{}
@@ -97,8 +97,8 @@ which terminates on the set $\pi_h^{-1}[[0,0.5]]$, has probability 0.5 of failin
 %\paragraph{}
 \begin{remark}
 \label{rem:score}
-This definition of almost sure termination is equivalent to that given in \cite{MakOPW21} (although the program semantics is stated in a slightly different way), except for the presence of a $\tscore(r)$ construct for soft conditioning. 
-The $\tscore(r)$ construct is not relevant to termination except that it fails if its argument is less than or equal to zero, which allows computations to fail after finitely many steps. 
+Our definition of AST is equivalent to that given in \cite{MakOPW21} (although the program semantics is stated in a slightly different way), except for the presence of a $\tscore(r)$ construct for soft conditioning. 
+The $\tscore(r)$ construct is irrelevant to termination except that it fails if its argument is less than or equal to zero, which allows computations to fail after finitely many steps. 
 If such a thing were added, it would merely require an additional side condition to our main theorems, that no failing term was reachable (or, in the case of the confluent semantics based results, no term where the reduction strategy is not defined is reachable via the reduction strategy unless it's a value).
 \end{remark}
 
