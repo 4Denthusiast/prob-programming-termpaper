@@ -3,30 +3,35 @@
 \section{Introduction}
 \label{sec:intro}
 
-Probabilistic (or randomised) programs have long been recognised as central to the efficient solution of algorithmic problems \cite{Rabin1976}.
+Probabilistic (or randomised) programs have long been recognised as essential to the efficient solution of many algorithmic problems \cite{Rabin1976}.
 More recently, in probabilistic programming \cite{DBLP:conf/icse/GordonHNR14,rainforth2017Automating,vandemeent2018Introduction}, probabilistic programs are used to express generative models whose posterior probability can be computed by general purpose inference engines.
 Sampling from continuous distributions is an essential construct of probabilistic programming languages, such as Church \cite{DBLP:conf/uai/GoodmanMRBT08}, Stan \cite{carpenter2017stan}, Anglican \cite{DBLP:conf/pkdd/TolpinMW15}, Gen \cite{cusumano-towner2019Gen}, Pyro \cite{bingham2019Pyro}, Edward \cite{tran2016edward} and Turing \cite{ge2018Turing}.
-Another key feature is higher order; in fact some of the most influential probabilistic languages are functional.
+Another key feature is higher order; in fact some of the most influential probabilistic programming languages are functional.
 
 In this paper we study a central property of probabilistic programs: \emph{termination}. 
-A program is \emph{almost surely terminating} (AST) if a run of it terminates with probability $1$.
-When a probabilistic program implements a solution to an algorithmic problem, one naturally requires the computation to terminate with a high probability, usually $1$.
+A program is \emph{almost surely terminating} (AST) if a run of it terminates with probability one.
+When a probabilistic program implements a solution to an algorithmic problem, we naturally require the computation to terminate with a high probability, usually $1$.
 In probabilistic programming, guarantees of AST are equally important. 
 Indeed, it is standard for designers and implementors of probabilistic programming systems to regard non-AST programs as defining invalid models, and hence inadmissible \cite{Rainforth2017,DBLP:conf/uai/GoodmanMRBT08}.
 
-Moreover, various theorems about probabilistic programs rely on the assumption that the program terminates almost surely. 
+Moreover various theorems about probabilistic programs rely on the assumption that the program terminates almost surely. 
 A recent result \cite{MakOPW20} proves that AST programs have density functions that are differentiable almost everywhere.
-This is significant for Bayesian machine learning, because the latter property is a precondition for the correctness of some of the most scalable inference algorithms, such as Hamiltonian Monte Carlo \cite{DBLP:conf/aistats/ZhouGKRYW19,Nishimura2020b} and reparameterised gradient variational inference \cite{DBLP:conf/nips/LeeYY18}.
+This is significant for Bayesian machine learning, because almost everywhere differentiability is a precondition for the correctness of some of the most scalable inference algorithms, such as Hamiltonian Monte Carlo \cite{DBLP:conf/aistats/ZhouGKRYW19,Nishimura2020b} and reparameterised gradient variational inference \cite{DBLP:conf/nips/LeeYY18}.
+
+Despite its importance, the AST problem is difficult: 
+Deciding AST of first-order imperative programs with discrete probabilities is $\Pi^0_2$-complete \cite{DBLP:conf/mfcs/KaminskiK15}.
+In recent unpublished work, the AST problem for higher-order programs with continuous distributions (and suitable primitive functions) is shown to have the same complexity.
+Though the problem of proving AST of imperative probabilistic programs is much studied \cite{DBLP:journals/jacm/KaminskiKMO18,DBLP:conf/lics/OlmedoKKM16,DBLP:conf/mfcs/KaminskiK15,DBLP:series/mcs/McIverM05,DBLP:conf/popl/FioritiH15,DBLP:conf/pldi/ChenH20,DBLP:journals/toplas/ChatterjeeFNH18}, to our knowledge the problem of proving AST of higher-order programs with continuous distribution is new.
 
 \subsection*{Contributions}
 
-A possible approach to prove almost sure termination (AST) is to find some variant on the program state, called \emph{ranking function}, that decreases on average sufficiently quickly that it must at some point reach 0, at which point the program terminates. 
+A possible approach to prove AST is to find some variant on the program state, called \emph{ranking function}, that decreases on average sufficiently quickly that it must at some point reach 0, at which point the program terminates. 
 In other words, the program's behavior is used to define an associated (ranking) \emph{supermartingale}. Proof rules based on relating the program state to supermartingales already exist for first-order imperative programs \cite{DBLP:conf/cav/ChakarovS13,DBLP:conf/popl/FioritiH15,DBLP:journals/pacmpl/McIverMKK18}. This paper's contribution is to extend this method to a higher-order setting.
 
 The language PPCF used in this paper is simply typed, with random continuous sampling, and an explicit recursion primitive, $\tY$. 
 We define a \emph{ranking function} on a term $M$ to be a non-negative measurable function on the reachable terms from $M$ whose expected value decreases or is unchanged as the term is reduced.
 Because the type system already constrains the terms enough to force termination in the absence of the recursion construct \cite{tait1967,BarendregtDS2010}, it is only the $\tY$-reduction steps that must be counted, making defining ranking functions somewhat easier.
-Using supermartingales and Doob's (iterated) Optional Sampling Theorem, we show the soundness of rankability (\cref{thm:rankable implies termination}): if a PPCF term has a ranking function then it is AST.
+Using supermartingales and Doob's (iterated) Optional Sampling Theorem, we show the soundness of rankability (\cref{thm:rankable implies termination}): if a term has a ranking function, it is AST.
 
 To define a ranking function, one has to try to organise the set of reachable terms (of the program being analysed) into a manageable number of syntactic cases. 
 Unfortunately (for any fixed reduction strategy) there are programs whose reachable terms span such a large number of cases that it would be extremely difficult to analyse by hand, if at all possible. 
@@ -38,8 +43,8 @@ Most of the individual execution steps of a typical program are trivial and easy
 A ranking function (or sparse ranking function) provides a bound on the expected number of $\tY$-reduction steps before the program terminates, therefore ranking functions cannot be constructed for terms whose expected number of $\tY$-reduction steps is infinite, such as the simplest implementation of the 1D unbiased random walk. 
 This restriction can be removed by generalising ranking functions to \emph{antitone ranking functions}, which rather than having to decrease by a constant amount for each $\tY$-reduction step, may decrease by a variable amount, depending on the value of the ranking function. 
 Thanks to this feature, the antitone ranking function method is capable of handling programs which terminate arbitrarily slowly. \lo{TODO: Reference some examples.}
-We show that this method is sound for proving AST (\cref{thm:antitone rankable implies termination}), 
-and it also enjoys a sparse function theorem (\cref{thm:antitone partial implies rankable}).
+We show that this method is also sound for proving AST (\cref{thm:antitone rankable implies termination}), 
+moreover it also enjoys a sparse function theorem (\cref{thm:antitone partial implies rankable}).
 \akr{Our progress condition is equivalent to that given by McIver et al.~\cite{DBLP:journals/pacmpl/McIverMKK18} (by applying a transformation to the ranking function), but needs to be different in order to be compatible with the presence of additional intermediate reduction steps where the ranking function is not required to decrease at all.}
 \lo{The same point is made in \cref{sec:related}, so the preceding can be omitted.}
 
@@ -47,10 +52,10 @@ Basic (non-random) lambda calculus has the very useful Church-Rosser property, w
 Probabilistic lambda calculus does not have this property, because random choices may be duplicated, and evaluating the same subterm multiple times can yield different results. 
 However, with a restricted set of reduction strategies, Church-Rosserness may be regained. 
 We introduce a novel addressing scheme for the possible random choices in a program's execution, which ensures that the same random choices are taken at corresponding positions in alternative reduction sequences, so that the same eventual result can be reached. 
-This is then used to prove yet another extension to the ranking function theorem, that (\cref{thm:confluent ranking}) ranking functions may be defined with respect to alternative reduction strategies (which in some cases may lead to a considerably simpler execution and ranking function), and (\cref{thm:confluentNoStronger}) rankability in this sense still imples almost sure termination. 
+This is then used to prove yet another extension to the ranking function theorem, that (\cref{thm:confluent ranking}) ranking functions may be defined with respect to alternative reduction strategies (which in some cases may lead to a considerably simpler execution and ranking function), and (\cref{cor:Reduction strategy independence}) rankability in this sense still imples almost sure termination. 
 The confluent trace semantics is of wider interest, and has other possible applications as well, for example in Bayesian inference algorithms.
 
-By combining these methods we can prove AST of a variety of PPCF programs, including cases (e.g.~\cref{ex:non-affine recursion,ex:higher-order recursion}) that are beyond the reach of methods in the literature.
+By combining these methods we can prove AST of a variety of PPCF programs that are beyond the reach of methods in the literature, including non-affine recursion\footnote{\label{fnote:non-affine} Non-affine recursive programs are recursive programs that can, during the evaluation of the recursive body, make multiple recursive calls (of a first-order function) from distinct call sites.} (\cref{ex:non-affine recursion easy}) and recursions that define high-order functions (\cref{ex:higher-order recursion}).
 
 \paragraph*{Outline}
 

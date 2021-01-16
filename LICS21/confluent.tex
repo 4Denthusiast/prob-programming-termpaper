@@ -241,7 +241,8 @@ If $M$ terminates with some reduction strategy $f$ and trace $s$, it terminates 
 
 It is not quite true, however, that all reduction strategies produce the same values (barring some reduction strategies terminating where others don't), because it is possible for a reduction strategy to overshoot the value that the standard semantics produces by, for example, performing reductions inside of a lambda. Even for the same value of the samples, the final values may be different. A more restricted result is true, however, that if a term terminates with some reduction strategy $f$ and samples $s$, the value that $\Rightarrow_{\cbv}$ terminates with can reduce via $\Rightarrow$ to the value that $\Rightarrow_f$ terminates with (as a corollary to the proof of \Cref{thm:CbvIsTerminatingest}).
 
-\begin{corollary}
+\begin{corollary}[Reduction strategy independence]
+\label{cor:Reduction strategy independence}
 If $M$ is AST with respect to any reduction strategy, it is AST.
 \end{corollary}
 \begin{proof}
