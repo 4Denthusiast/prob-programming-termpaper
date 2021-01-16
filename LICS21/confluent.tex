@@ -102,11 +102,12 @@ A[x] &= \tif{\tif{x>0}{I}{I} \, \tsample - 0.5 > 0}{0}{\Omega}\\
 B &= \tif{\tsample - 0.5 > 0}{0}{\Omega}
 \end{align*}
 If terms rather than skeletons were used to label samples, the set of modified traces where $A[\tsample]$ terminates would be
-\begin{align*}
-\bigcup_{r \in [0,1]} \Big\{s \mid\ & s(A[\tsample], \mathsf{if}_1;\underline{-}_1;@_1;\mathsf{if}_1) = r, \\
-& s(A[\tsample] \to A[\underline r] \to^* B, \mathsf{if}_1 ; \underline{-}_1) > 0.5 \Big\}.
-\end{align*}
-
+\[
+\begin{array}{l}
+\bigcup_{r \in [0,1]} \big\{s \mid\ s(A[\tsample], \mathsf{if}_1;\underline{-}_1;@_1;\mathsf{if}_1) = r, \\
+\qquad\qquad\qquad s(A[\tsample] \to A[\underline r] \to^* B, \mathsf{if}_1 ; \underline{-}_1) > 0.5 \big\}.
+\end{array}
+\]
 \iffalse
 \lo{The occurrence of $L_s(M)$ in the set comprehension below should be $L_0(M)$?}
 
@@ -140,7 +141,7 @@ Each of these samples becomes the value of the first numeral in $O$ in their res
 
 \begin{definition}
 The relation $\sim$ is defined as the union of the minimal symmetric relations $\sim_p$ (``$p$'' for parent-child) and $\sim_c$ (``$c$'' for cousin) satisfying
-\begin{enumerate}
+\begin{asparaenum}[(i)]
     \item If $N$ reduces to $O$ with the redex at position $\alpha$, and $\beta$ is a position in $N$ disjoint from $\alpha$, then $(N,\beta) \sim_p (O,\beta)$.
     
     \item If $N$ $\beta$-reduces to $O$ at position $\alpha$, $\beta$ is a position in $N \mid \alpha;@_1;\lambda$ and $N \mid \alpha;@_1;\lambda;\beta$ is not the variable involved in the reduction, $(N,\alpha;@_1;\lambda;\beta) \sim_p (O, \alpha;\beta)$
@@ -162,7 +163,7 @@ The relation $\sim$ is defined as the union of the minimal symmetric relations $
         \item $N \mid \alpha = \tY (\lambda x. A)$, $A$ reduced at $\beta$ is $A'$, $(\gamma_i)_i$ is a list of all the positions where $A' \mid \gamma  = x$, ordered from left to right, $O_1$ is $N$ reduced first at $\alpha;\tY;\lambda;\beta$ then at $\alpha$, and $O_2$ is $N$ reduced first at $\alpha$ then at $\alpha;\lambda;@_1;\gamma_i;Y;\lambda;\beta$ for each $i$ in order where $\gamma_i$ is left of $\beta$ then at $\alpha;\lambda;@_1;\beta$ then at $\alpha;\lambda;@_1;\gamma_i;Y;\lambda;\beta$ for the remaining values of $i$.
     \end{enumerate}
     (in which case $O_1$ and $O_2$ are equal as skeletons, but with different reduction sequences), $O_1'$ and $O_2'$ are the results of applying some reduction sequence to each of $O_1$ and $O_2$ (the same reductions in each case, which is always possible because they're equal terms), and $\delta$ is a position in $O_1'$ (or equivalently $O_2'$), then $(O_1',\delta) \sim_c (O_2',\delta)$.
-\end{enumerate}
+\end{asparaenum}
 The $\sim_c$-rules are illustrated in \Cref{sim-diagram}.
 \end{definition}
 
@@ -287,8 +288,8 @@ An \emph{antitone sparse ranking function on $M$ with respect to a reduction str
 
 If the antitone function is just the constant function $1$ instead, then it is called a \emph{(sparse) ranking function on $M$ with respect to $r$} instead, and the term is called \emph{rankable} with respect to $r$.
 
-\begin{theorem} \label{thm:confluent ranking}
-If a closed PPCF term $M$ has a ranking function, sparse ranking function, antitone ranking function or antitone sparse ranking function with respect to a reduction strategy $r$, then $M$ is AST with respect to $r$, and AST.
+\begin{theorem}[Confluent ranking] \label{thm:confluent ranking}
+If a closed PPCF term $M$ has a ranking function, sparse ranking function, antitone ranking function or antitone sparse ranking function w.r.t.~a reduction strategy $r$, then $M$ is AST w.r.t.~$r$, and AST.
 \end{theorem}
 
 When constructing an (antitone) sparse ranking function with respect to an alternative reduction strategy, it is intuitively simplest to define the sparse ranking function and the reduction strategy together. For each key reachable term where the sparse ranking function is defined, simply decide which sub-term should be reduced next, and how far before the next key reachable term. The only restrictions to bear in mind on evaluating sub-terms are that a $\tsample$ may not be evaluated inside a $\lambda$ or $\tY$ on the right of an application, and a $\beta$ redex may not be reduced until its argument is a value. This can be seen as applied to \Cref{ex:sum of powers} at the end of \Cref{apx:confluent}.
@@ -297,6 +298,7 @@ When constructing an (antitone) sparse ranking function with respect to an alter
 If, as seems likely, \Cref{thm:antitone rankable implies termination} is complete for terms from which every reachable term is AST, then by the following theorem, \Cref{thm:confluent ranking} can't actually prove the termination of any terms not already provable by \Cref{thm:antitone rankable implies termination} and \Cref{thm:antitone partial implies rankable}.
 
 \begin{restatable}{theorem}{confluentNoStronger}
+\label{thm:confluentNoStronger}
 For any closed term $M$ and reduction strategy $r$ on $M$, if every term in $\mathit{Rch}_r(M)$ is AST, then every term in $\mathit{Rch}(M)$ is AST.
 \end{restatable}
 

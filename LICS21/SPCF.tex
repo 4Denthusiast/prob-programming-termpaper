@@ -4,7 +4,7 @@
 
 \subsection{Syntax of PPCF}
 
-The language PPCF is a simply-typed lambda calculus with sampling of real numbers from the closed interval $[0,1]$. 
+The language PPCF is a CbV version of PCF with sampling of real numbers from the closed interval $[0,1]$ \cite{Ehrhard2018c,DBLP:journals/pacmpl/EhrhardPT18,MakOPW21}.
 %\changed[lo]{following \cite{MakOPW21} except the score function (\Cref{rem:score})}. 
 Types and terms are defined as follows, where $r$ is a real number, $x$ is a variable, $f : \mathbb{R}^n \to \mathbb{R}$ is any measurable function, and $\Gamma$ is an environment:
 \begin{align*}
@@ -33,8 +33,7 @@ then a term reduces if it is formed by substituting a redex in a context i.e.
   E[\tsample] & \to E[\underline r] \text{ where } r \in [0,1].
 \end{align*}
 We write $\to^\ast$ for the reflexive, transitive closure of $\to$.
-
-Every closed well-typed term either is a value or reduces to another term.
+Every closed term either is a value or reduces to another term.
 
 \subsection{Trace semantics}
 \label{sec:sampling semantics}
@@ -44,7 +43,7 @@ The maps $\pi_h:\entrosp \to I, \; \pi_t:\entrosp \to \entrosp$ popping the firs
 Following \cite{DBLP:conf/esop/CulpepperC17}, we call the probability space $(\entrosp, \Sigma_\entrosp, \mu_{\entrosp})$ the \emph{entropy space}, and call elements of $\entrosp$ \emph{traces}.
 
 Define a \emph{skeleton} to be a term but, instead of having real constants $\underline r$, it has a placeholder $\skeletonPlaceholder$, so that each term $M$ has a skeleton $\mathit{Sk}(M)$, and each skeleton $S$ can be converted to a term $S[r]$ given a vector $r$ of $n$ real numbers to substitute in, where $n$ is the number of occurrences of $\skeletonPlaceholder$ in $S$. 
-Following \cite{DBLP:conf/icfp/BorgstromLGS16}, the $\sigma$-algebra on $\Lambda$ is defined by identifying $\Lambda$ with $\bigcup_{m\geq 0} \big(\mathsf{Sk}_m \times \Real^m \big)$, where $\mathsf{Sk}_m$ is the set of skeletons containing $m$ occurrences of $\skeletonPlaceholder$.
+Following \cite{DBLP:conf/icfp/BorgstromLGS16,DBLP:conf/lics/StatonYWHK16,DBLP:journals/pacmpl/EhrhardPT18}, the $\sigma$-algebra on $\Lambda$ is defined by identifying $\Lambda$ with $\bigcup_{m\geq 0} \big(\mathsf{Sk}_m \times \Real^m \big)$, where $\mathsf{Sk}_m$ is the set of skeletons containing $m$ occurrences of $\skeletonPlaceholder$.
 Thus identified, we give $\Lambda$ the countable disjoint union topology of the product topology of the discrete topology on $\mathsf{Sk}_m$ and the standard topology on $\Real^m$, and take the corresponding Borel $\sigma$-algebra.
 Note that the connected components of $\Lambda$ have the form $\{S\} \times \Real^m$, with $S$ ranging over $\mathsf{Sk}_m$, and $m$ over $\mathbb{N}$.
 
@@ -97,8 +96,8 @@ which terminates on the set $\pi_h^{-1}[[0,0.5]]$, has probability 0.5 of failin
 %\paragraph{}
 \begin{remark}
 \label{rem:score}
-Our definition of AST is equivalent to that given in \cite{MakOPW21} (although the program semantics is stated in a slightly different way), except for the presence of a $\tscore(r)$ construct for soft conditioning. 
-The $\tscore(r)$ construct is irrelevant to termination except that it fails if its argument is less than or equal to zero, which allows computations to fail after finitely many steps. 
+Our definition of AST is equivalent to that given in \cite{MakOPW21} (although the program semantics is stated in a slightly different way), except for the presence of a $\tscore$ construct for soft conditioning. 
+The $\tscore$ construct is irrelevant to termination except that it fails if its argument is negative, thus allowing computations to fail after finitely many steps. 
 If such a thing were added, it would merely require an additional side condition to our main theorems, that no failing term was reachable (or, in the case of the confluent semantics based results, no term where the reduction strategy is not defined is reachable via the reduction strategy unless it's a value).
 \end{remark}
 

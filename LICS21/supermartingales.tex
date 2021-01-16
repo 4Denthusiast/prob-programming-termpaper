@@ -50,8 +50,8 @@ A \emph{ranking supermartingale} w.r.t.~$T$ is a $\epsilon$-ranking supermarting
 \end{definition}
 
 \begin{remark}
-Our notion of ranking supermartingale is a slight generalisation of the original definition, due to \cite{DBLP:conf/cav/ChakarovS13,DBLP:conf/popl/FioritiH15}, which does not refer to a stopping time explicitly:
-Fioriti and Hermanns call a supermartingale $(Y_n)_{n \geq 0}$ \emph{ranking} if $Y_n \geq 0$, and there exists $\epsilon > 0$ such that $\expect{Y_{n+1} \mid \calF_n} \leq Y_n - \epsilon \cdot {\bf 1}_{\set{Y_n > 0}}$.
+Our notion of ranking supermartingale is a minor generalisation of the original definition, due to \cite{DBLP:conf/cav/ChakarovS13,DBLP:conf/popl/FioritiH15}, which does not refer to a stopping time explicitly.
+%: Fioriti and Hermanns call a supermartingale $(Y_n)_{n \geq 0}$ \emph{ranking} if $Y_n \geq 0$, and there exists $\epsilon > 0$ such that $\expect{Y_{n+1} \mid \calF_n} \leq Y_n - \epsilon \cdot {\bf 1}_{\set{Y_n > 0}}$.
 \end{remark}
 
 Intuitively $Y_n$ gives the rank of the program after $n$ steps of computation, and $T$ is the time at which it reaches a value (which may be infinite if it fails to terminate).
@@ -113,9 +113,10 @@ The ranking supermartingale condition is satisfied essentially by a case analysi
 
 \subsection{Soundness of rankability}
 
-In the rest of this section we show that if $M \in \Lambda^0$ is rankable, then $M$ is AST: in other words, the method of ranking function is sound for proving a.s.~termination of PPCF programs.
+In the rest of this section we show that if a PPCF term is rankable, then it is AST. 
+%in other words, the method of ranking function is sound for proving a.s.~termination of PPCF programs.
 
-Let $f$ be a ranking function on $M$.
+Let $f$ be a ranking function on $M \in \Lambda^0$.
 Define random variables on the probability space $(\entrosp, \Sigma_\entrosp, \mu_{\entrosp})$:
 \begin{align}
 T_{-1}(s) & := -1 \nonumber \\
@@ -136,7 +137,7 @@ $(T_n)_{n \geq 0}$ is an increasing sequence of stopping times adapted to $(\cal
 
 The random variable $T_M^\tY$, which we call the \emph{$\tY$-runtime of $M$}, can equivalently be defined as the number of $\tY$-reduction steps in the reduction sequence of $M$. 
 Note that, as the type system ensures that the reduction relation excluding $\tY$-reduction is strongly normalising, only finitely many reductions can occur in a row without one of them being a $\tY$-reduction, therefore $T_M^\tY < \infty$ a.s.~iff $M$ is AST. 
-Moreover 
+Moreover: 
 \begin{restatable}{lemma}{TMtYStoppingTime}
 \label{lem:TMtY is a stopping time}
 $T_M^\tY$ is a stopping time adapted to $(\calF_{T_n})_{n \geq 0}$.
@@ -152,16 +153,15 @@ $T_M^\tY$ is a stopping time adapted to $(\calF_{T_n})_{n \geq 0}$.
 
 \begin{proof}
 Let $f$ be a ranking function on $M$.
-For 1, since $(T_n)_{n \geq 0}$ is an increasing sequence of stopping times, each is adapted to $(\calF_n)_{n \geq 0}$ and bounded (\Cref{lem:TnBounded}),
+For (i), since $(T_n)_{n \geq 0}$ is an increasing sequence of stopping times, each is adapted to $(\calF_n)_{n \geq 0}$ and bounded (\Cref{lem:TnBounded}),
 and $(f(M_n))_{n \geq 0}$ is a supermartingale also adapted to $(\calF_n)_{n \geq 0}$ (\Cref{thm:rankable and strict rankable}),
 it follows from the Optional Sampling \Cref{thm:optional sampling} that $(Y_n)_{n \geq 0}$ %where $Y_n := f(M_{T_n})$ 
 is a supermartingale adapted to $(\calF_{T_n})_{n \geq 0}$.
 Notice the stopping time $T_M^\tY$ is also adapted to $(\calF_{T_n})_{n \geq 0}$ (\Cref{lem:TMtY is a stopping time}); and we have that $(Y_n)_{n \geq 0}$ is a $1$-ranking supermartingale.
 Therefore, by \Cref{lem:rank-PAST}, $T^{\tY}_M < \infty$ a.s.~and $\expect{T^{\tY}_M} < \infty$.
-
 %For 2, we have that $(f(M_n))_{n \geq 0}$ is a ranking supermartingale (\Cref{thm:rankable and strict rankable}) w.r.t.~stopping time $T_M$. 
 %It follows immediately from \Cref{lem:rank-PAST} that $\expect{T_M} < \infty$.
-Statement 2 follows from \Cref{thm:rankable and strict rankable} and \Cref{lem:rank-PAST}.
+Statement (ii) follows at once from \Cref{thm:rankable and strict rankable} and \Cref{lem:rank-PAST}.
 \end{proof}
 
 Thus the method of (strict) ranking function is sound for proving (positive) a.s.~termination of PPCF programs.
