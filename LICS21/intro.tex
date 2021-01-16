@@ -3,12 +3,24 @@
 \section{Introduction}
 \label{sec:intro}
 
-\lo{Proving termination of higher-order probabilistic programs with continuous distribution is important but difficult.}
+Probabilistic (or randomised) programs have long been recognised as central to the efficient solution of algorithmic problems \cite{Rabin1976}.
+More recently, in probabilistic programming \cite{DBLP:conf/icse/GordonHNR14,rainforth2017Automating,vandemeent2018Introduction}, probabilistic programs are used to express generative models whose posterior probability can be computed by general purpose inference engines.
+Sampling from continuous distributions is an essential construct of probabilistic programming languages, such as Church \cite{DBLP:conf/uai/GoodmanMRBT08}, Stan \cite{carpenter2017stan}, Anglican \cite{DBLP:conf/pkdd/TolpinMW15}, Gen \cite{cusumano-towner2019Gen}, Pyro \cite{bingham2019Pyro}, Edward \cite{tran2016edward} and Turing \cite{ge2018Turing}.
+Another key feature is higher order; in fact some of the most influential probabilistic languages are functional.
 
-\medskip
+In this paper we study a central property of probabilistic programs: \emph{termination}. 
+A program is \emph{almost surely terminating} (AST) if a run of it terminates with probability $1$.
+When a probabilistic program implements a solution to an algorithmic problem, one naturally requires the computation to terminate with a high probability, usually $1$.
+In probabilistic programming, guarantees of AST are equally important. 
+Indeed, it is standard for designers and implementors of probabilistic programming systems to regard non-AST programs as defining invalid models, and hence inadmissible \cite{Rainforth2017,DBLP:conf/uai/GoodmanMRBT08}.
 
-Various theorems about probabilistic programs rely on the assumption that the program terminates almost surely. 
-One possible approach to prove almost sure termination (AST) is to find some variant on the program state, called \emph{ranking function}, that decreases on average sufficiently quickly that it must at some point reach 0, at which point the program terminates. 
+Moreover, various theorems about probabilistic programs rely on the assumption that the program terminates almost surely. 
+A recent result \cite{MakOPW20} proves that AST programs have density functions that are differentiable almost everywhere.
+This is significant for Bayesian machine learning, because the latter property is a precondition for the correctness of some of the most scalable inference algorithms, such as Hamiltonian Monte Carlo \cite{DBLP:conf/aistats/ZhouGKRYW19,Nishimura2020b} and reparameterised gradient variational inference \cite{DBLP:conf/nips/LeeYY18}.
+
+\subsection*{Contributions}
+
+A possible approach to prove almost sure termination (AST) is to find some variant on the program state, called \emph{ranking function}, that decreases on average sufficiently quickly that it must at some point reach 0, at which point the program terminates. 
 In other words, the program's behavior is used to define an associated (ranking) \emph{supermartingale}. Proof rules based on relating the program state to supermartingales already exist for first-order imperative programs \cite{DBLP:conf/cav/ChakarovS13,DBLP:conf/popl/FioritiH15,DBLP:journals/pacmpl/McIverMKK18}. This paper's contribution is to extend this method to a higher-order setting.
 
 The language PPCF used in this paper is simply typed, with random continuous sampling, and an explicit recursion primitive, $\tY$. 
@@ -40,13 +52,7 @@ The confluent trace semantics is of wider interest, and has other possible appli
 
 By combining these methods we can prove AST of a variety of PPCF programs, including cases (e.g.~\cref{ex:non-affine recursion,ex:higher-order recursion}) that are beyond the reach of methods in the literature.
 
-\subsubsection*{Contributions}
-
-This is the first application of martingales to probabilistic lambda calculus, and the first version of trace semantics that's capable of satisfying the (restricted) Church-Rosser property.
-
-\lo{Ongoing.}
-
-\subsubsection*{Outline}
+\paragraph*{Outline}
 
 We present the syntax and trace semantics of PPCF in \Cref{sec:PPCF}.
 In \Cref{sec:supermartingales}, we show that ranking functions on terms induce supermartingales, which form the basis of a sound method for proving AST.
