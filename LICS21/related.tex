@@ -15,8 +15,9 @@ Breuvart and Dal Lago \cite{DBLP:conf/ppdp/BreuvartL18} develop systems of inter
 
 Kobayashi et al.~\cite{DBLP:conf/lics/KobayashiLG19} show that the termination probability of order-$n$ probabilistic recursion schemes ($n$-PHORS) can be obtained as the least fixpoint of suitable order-$(n-1)$ fixpoint equations, which are solvable by Kleene fixpoint iteration.  
 By contrast, our approach works for programs with continuous distributions. 
-Note that $n$-PHORS is strictly less expressive then order-$n$ CbN PPCF (because the underlying recursion schemes are not Turing complete):
-PPCF terms in \cref{ex:raven complex,ex:higher-order recursion}
+Note that $n$-PHORS is strictly less expressive then order-$n$ CbN PPCF:
+% (because the underlying recursion schemes are not Turing complete):
+the PPCF terms in \cref{ex:raven complex,ex:higher-order recursion}
 %\refExample{complexExample} 
 are not definable as PHORS.
 
@@ -40,5 +41,5 @@ Although this is a broadly applicable method of proving almost sure termination 
 \paragraph*{Conclusions}
 
 We have presented the first application of martingales to probabilistic lambda calculus, and the first version of trace semantics that's capable of satisfying the (restricted) Church-Rosser property.
-Though the construction of ranking functions is inherently difficult, using sparse ranking functions, antitone ranking functions and ranking functions w.r.t.~an alternative reduction strategy, we have shown that a great variety of programs can be shown to be AST, including some that are beyond the reach of methods in the literature.
+Though the construction of ranking functions is inherently difficult, using sparse ranking functions, antitone ranking functions and ranking functions w.r.t.~an alternative reduction strategy, we have shown that a great variety of programs can be proved to be AST, including some that are beyond the reach of methods in the literature.
 
