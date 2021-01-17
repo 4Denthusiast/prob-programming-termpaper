@@ -34,7 +34,7 @@ We define a \emph{ranking function} on a term $M$ to be a non-negative measurabl
 Because the type system already constrains the terms enough to force termination in the absence of the recursion construct \cite{tait1967,BarendregtDS2010}, it is only the $\tY$-reduction steps that must be counted, making defining ranking functions somewhat easier.
 Using supermartingales and Doob's (iterated) Optional Sampling Theorem, we show the soundness of rankability (\cref{thm:rankable implies termination}): if a term has a ranking function, it is AST.
 
-To define a ranking function, one has to try to organise the set of reachable terms (of the program being analysed) into a manageable number of syntactic cases. 
+To define a ranking function, one would typically try to organise the set of reachable terms (of the program being analysed) into a manageable number of syntactic cases. 
 Unfortunately (for any fixed reduction strategy) there are programs whose reachable terms span such a large number of cases that it would be extremely difficult to analyse by hand, if at all possible. 
 How can the construction of ranking functions be made possible or easier?
 

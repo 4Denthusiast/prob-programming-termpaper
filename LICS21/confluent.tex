@@ -305,7 +305,7 @@ For any closed term $M$ and reduction strategy $r$ on $M$, if every term in $\ma
 
 However, there are some terms which terminate more simply and directly via some alternative reduction strategy. For these examples, a custom reduction strategy is specified for each term under consideration.
 
-\begin{example} \label{ex:sum of powers}
+\begin{example}[Sum of powers] \label{ex:sum of powers}
 The following term picks a random natural number $n$, then computes $\sum_{k=0}^n k^n$.
 \begin{align*}
 M =&\ (\lambda n. P[n]) \lfloor \tsample^{-1/2} \rfloor \\
