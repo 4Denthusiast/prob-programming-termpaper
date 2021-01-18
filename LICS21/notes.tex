@@ -6,7 +6,7 @@
   \text{\em terms } M, N &::= V  \mid  M_1 \, M_2  \mid  \underline{f}(M_1,\dots ,M_n) \\
    & \qquad \mid  \tif{M < 0}{N_1}{N_2}  \mid  \tsample
 \end{align*}
-Currently $\tY$ is not a legal term. This is unnatural: there is no reason to so restrict $\tY$. Following \citep[p.~376]{DBLP:conf/fsttcs/Sieber90}, we should define $\tY$ as a value (and so a proper term); it follows that $\tY \, M$ is redundant as a clause.
+Currently $\tY$ is not a legal term. This is unnatural: there is no reason to so restrict $\tY$. Following \cite[p.~376]{DBLP:conf/fsttcs/Sieber90}, we should define $\tY$ as a value (and so a proper term); it follows that $\tY \, M$ is redundant as a clause.
 
 It is also standard to regard variables as values in a CBV language.
 
@@ -34,3 +34,7 @@ We can use the ranking function method (coupled with the solution of linear recu
 \lo{This example is taken from the series of 3d-printing-company running examples (Beutner-Ong 2021).
 This paper is as yet unpublished, and effectively uncitable for the time being (because of strict double-blind submission rules).}
 \end{example}
+
+AKR: {I'd suggest, as a simplified version of the non-affine continuous example, $(\tY \lambda f x. (\mathsf{let} \; e = \tsample \; \mathsf{in} \; \tif{e \leq p}{x}{f^2(x+1) \oplus_{sig(x)} f^3(x+1)}) \underline 0$ (or possibly that, but with some simpler algebraic function instead of the sigmoid). This removes the extra $\oplus$ and makes $x$ more relevant, but I think it preserves all the important features.}
+
+AKR: {Oh, I forgot a bit. $e$ is meant to be used again too. That can just be involved in the probability of the $\oplus$ or something, instead of having a separate one.}
