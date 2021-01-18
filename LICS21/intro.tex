@@ -8,10 +8,8 @@ More recently, in probabilistic programming \cite{DBLP:conf/icse/GordonHNR14,rai
 Sampling from continuous distributions is an essential construct of probabilistic programming languages, such as Church \cite{DBLP:conf/uai/GoodmanMRBT08}, Stan \cite{carpenter2017stan}, Anglican \cite{DBLP:conf/pkdd/TolpinMW15}, Gen \cite{cusumano-towner2019Gen}, Pyro \cite{bingham2019Pyro}, Edward \cite{tran2016edward} and Turing \cite{ge2018Turing}.
 Another key feature is higher order; in fact some of the most influential probabilistic programming languages are functional.
 
-In this paper we study a central property of probabilistic programs: \emph{termination}. 
-A program is \emph{almost surely terminating} (AST) if a run of it terminates with probability one.
-When a probabilistic program implements a solution to an algorithmic problem, we naturally require the computation to terminate with a high probability, usually $1$.
-In probabilistic programming, guarantees of AST are equally important. 
+In this paper we study a central property of probabilistic programs: \emph{termination}.
+When a probabilistic program implements a solution to an algorithmic problem, we naturally require the computation to terminate with probability $1$, in which case the program is called \emph{almost surely terminating} (AST).
 Indeed, it is standard for designers and implementors of probabilistic programming systems to regard non-AST programs as defining invalid models, and hence inadmissible \cite{Rainforth2017,DBLP:conf/uai/GoodmanMRBT08}.
 (Yet none of these systems provides any support for the development or verification of AST programs.)
 

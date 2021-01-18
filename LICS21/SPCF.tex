@@ -38,7 +38,7 @@ Every closed term either is a value or reduces to another term.
 \subsection{Trace semantics}
 \label{sec:sampling semantics}
 This version of the reduction relation allows $\tsample$ to reduce to any number in $[0,1]$. 
-To more precisely specify the probabilities, an additional argument is needed to determine the outcome of random samples. Let $ I := [0,1] \subset \mathbb{R} $, and define $\entrosp := I^{\mathbb{N}}$, with the Borel $\sigma$-algebra $\Sigma_\entrosp$ and the probability measure, denoted $\mu_{\entrosp}$, given by the limit of $1 \gets I \gets I^2 \gets \cdots$, where the maps are the projections that ignore the last element. Equivalently, a basis of measurable sets is $\prod_{i=0}^\infty X_i$ where $X_i$ are all Borel and all but finitely many are $I$, and $\mu_{\entrosp} (\prod_{i=0}^\infty X_i) := \prod_{i=0}^\infty \Leb(X_i)$, \changed[lo]{writing $\Leb$ for the Lebesgue measure.}
+To more precisely specify the probabilities, an additional argument is needed to determine the outcome of random samples. Let $ I := [0,1] \subset \mathbb{R} $, and define $\entrosp := I^{\mathbb{N}}$, with the Borel $\sigma$-algebra $\Sigma_\entrosp$. Equivalently, a basis of measurable sets is $\prod_{i=0}^\infty X_i$ where $X_i$ are all Borel and all but finitely many are $I$, and the probability measure $\mu_{\entrosp}$ is given by $\mu_{\entrosp} (\prod_{i=0}^\infty X_i) := \prod_{i=0}^\infty \Leb(X_i)$, \changed[lo]{writing $\Leb$ for the Lebesgue measure.}
 \changed[lo]{The maps $\pi_h:\entrosp \to I$ (projecting to the first element) and $\pi_t:\entrosp \to \entrosp$ (popping the first element) are then measurable.}
 Following \cite{DBLP:conf/esop/CulpepperC17}, we call the probability space $(\entrosp, \Sigma_\entrosp, \mu_{\entrosp})$ the \emph{entropy space}, and elements of $\entrosp$ \emph{traces}.
 
@@ -82,7 +82,7 @@ and $M$ is \emph{positively almost surely terminating} (PAST) if $\expect{T_M} <
 \fi
 For example, the term 
 \[
-(\tY \lambda f, n: \tif{\tsample - 0.5 < 0}{n}{f (n+1)} ) \, \underline{0},
+(\tY \lambda f n: \tif{\tsample - 0.5 < 0}{n}{f (n+1)} ) \, \underline{0},
 \] 
 which generates a geometric distribution, terminates on the set $\entrosp \setminus [0.5,1]^\mathbb N$, which has measure 1, therefore it terminates almost surely, whereas 
 \(

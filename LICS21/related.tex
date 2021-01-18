@@ -31,7 +31,7 @@ The confluent semantics, and the results based on it, is new in the setting of a
 \paragraph*{Further directions} We have not yet been able to prove \Cref{conj:antitone} which would imply that \Cref{thm:antitone rankable implies termination} is almost complete.
 \begin{conjecture}[Completeness]
 \label{conj:antitone}
-Every PPCF term is antitone rankable if all terms reachable from it are AST.
+If every term reachable from a certain PPCF term is AST, then that term is antitone rankable.
 \end{conjecture}
 
 The \Cref{def:more general red} of redexes and which positions are acceptable to reduce at is sufficiently restrictive to guarantee Church-Rosserness, but is also a little more restrictive in some cases than is necessary for this purpose. For example, if the argument of a function is not yet a value, but its reduction to a value would be deterministic, or the function is affine, then applying the function before reducing its argument would not cause any problematic duplication of random samples. Similarly, if $\tsample$ occurs at position $\alpha;@_2;\beta;\lambda;\gamma$, but the function at $\alpha;@_1$ is affine, evaluating the $\tsample$ may in some cases also work fine. A more complete characterisation of which redexes can be reduced without breaking Church-Rosserness could be interesting.

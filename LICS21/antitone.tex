@@ -121,19 +121,15 @@ Thus, by \Cref{thm:a-c strict}, $T_M^{\tY} < \infty$ a.s.
 %\paragraph{}
 As before, constructing antitone ranking fuctions completely is not necessary, and there is a corresponding notion of an antitone sparse ranking function.
 
+\begin{definition}
 Define an \emph{antitone sparse ranking function} on a closed term $M$ to be a partial function $F : Rch(M) \rightharpoonup \mathbb{R}$ such that for some antitone function $\epsilon : \mathbb{R}_{\geq 0} \to \mathbb{R}_{>0}$:
 \begin{inparaenum}[(i)]
 \item $f(N) \geq 0$ for all $N \in \dom(f)$,
 \item $M \in \dom(f)$,
 \item for any $N \in \dom(f)$, evaluation of $N$ will eventually reach some $O$ which is either a value or in $\dom(f)$, and $f(N) \geq \mathbb E [f(O) + \epsilon(f(O)) \times \text{the number of $\tY$-reduction steps from $N$ to $O$}]$ (where $f(O)$ is taken to be 0 if $O$ is a value outside of $\dom(f)$).
 \end{inparaenum}
-\iffalse
-\begin{itemize}
-\item $f(N) \geq 0$ for all $N$ where $f$ is defined.
-\item $f$ is defined at $M$.
-\item For any $N$ in the domain of definition of $f$, evaluation of $N$ will eventually reach some $O$ which is either a value or in the domain of definition of $f$, and $f(N) \geq \mathbb E [f(O) + \epsilon(f(O)) \times \text{the number of $\tY$-reduction steps from $N$ to $O$}]$ (where $f(O)$ is taken to be 0 if $O$ is a value outside of the domain of $f$).
-\end{itemize}
-\fi
+\end{definition}
+
 \begin{restatable}[Sparse function]{theorem}{AntitonePartial}  \label{thm:antitone partial implies rankable}
   Every antitone sparse ranking function is a restriction of an antitone ranking function.
 \end{restatable}
@@ -193,18 +189,16 @@ To our knowledge, the problem of proving AST of probabilistic functional program
 \fi
 
 \begin{example}[Continuous random walk]\label{ex:raven complex}
-In PPCF we can construct a function whose argument changes by a random amount at each recursive call: $\Theta \, 10$ where
+In PPCF we can construct a function whose argument changes by a random amount at each recursive call: $\Theta \, \underline{10}$ where
 \[
 %\underbrace{\big
-\Theta := \tY \, \lambda f x . \tif{x \leq 0}{0}{f(x - \tsample)}
+\Theta := \tY \, \lambda f x .\ \tif{x \leq 0}{\underline 0}{f(x - \tsample)}
 %}_{\Theta} \, 10
 \]
 
-For a more complex (not $\tY$-PAST) example, consider the following ``continuous random walk'': $\Xi \, 10$ where
+For a more complex (not $\tY$-PAST) example, consider the following continuous random walk: $\Xi \, \underline{10}$ where
 \[
-%\underbrace{\big(
-\Xi := \tY \, f \, x . \tif{x \leq 0}{0}{f(x - \tsample + 1/2)} 
-%\big)}_{\Xi} \, 10
+\Xi := \tY \, \lambda f x .\ \tif{x \leq 0}{\underline 0}{f(x - \tsample + 1/2)} 
 \]
 \end{example}
 
@@ -212,9 +206,9 @@ For a more complex (not $\tY$-PAST) example, consider the following ``continuous
 \label{ex:Fair-in-the-limit random walk}\cite[\S 5.3]{DBLP:journals/pacmpl/McIverMKK18}
 \[
 \big
-(\tY \, f \, x . 
-\tif{x \leq 0}{0}{f(x - 1) \oplus_{\frac{x}{2x+1}} f(x + 1)} \big)
-\, 10
+(\tY\ \lambda f x .\ 
+\tif{x \leq 0}{\underline 0}{f(x - 1) \oplus_{\frac{x}{2x+1}} f(x + 1)} \big)
+\, \underline{10}
 \]
 \end{example}
 
@@ -222,11 +216,11 @@ For a more complex (not $\tY$-PAST) example, consider the following ``continuous
 \label{ex:escaping spline}\cite[\S 5.4]{DBLP:journals/pacmpl/McIverMKK18}
 \[
 %\underbrace{
-\big(\tY \, f \, x . \,
-0 \oplus_{\frac{1}{x+1}} f(x + 1) 
+\big(\tY\ \lambda f x . \,
+\underline 0 \oplus_{\frac{1}{x+1}} f(x + 1) 
 \big)
 %}_{\Xi} 
-\, 10
+\, \underline{10}
 \]
 \end{example}
 
