@@ -13,7 +13,7 @@ When a probabilistic program implements a solution to an algorithmic problem, we
 Indeed, it is standard for designers and implementors of probabilistic programming systems to regard non-AST programs as defining invalid models, and hence inadmissible \cite{Rainforth2017,DBLP:conf/uai/GoodmanMRBT08}.
 (Yet none of these systems provides any support for the development or verification of AST programs.)
 
-Moreover various theorems about probabilistic programs rely on the assumption that the program terminates almost surely. 
+Moreover various theorems about probabilistic programs rely on the assumption that the program terminates almost surely (see e.g.~\cite{DBLP:conf/uai/GoodmanMRBT08}). 
 A recent result \cite{MakOPW20} proves that AST programs have density functions that are differentiable almost everywhere.
 This is significant for Bayesian machine learning, because almost everywhere differentiability is a precondition for the correctness of some of the most scalable inference algorithms, such as Hamiltonian Monte Carlo \cite{DBLP:conf/aistats/ZhouGKRYW19,Nishimura2020b} and reparameterised gradient variational inference \cite{DBLP:conf/nips/LeeYY18}.
 
