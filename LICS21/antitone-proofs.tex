@@ -24,11 +24,10 @@ Therefore
 }{\mathbb P[T > n]}
   \step[=]{definition of conditional expectation}
 \dfrac{\expect{Y_n} - \mathbb P[T \leq n] \, \expect{Y_n \mid T \leq n}}{\mathbb P[T > n]}
-  \step[\leq]{}
+  \step[\leq]{$Y_n \geq 0$ always}
 \dfrac{\expect{Y_n}}{\mathbb P[T > n]}
-%  \step[\leq]{}
-%\dfrac{\expect{Y_0}}{\mathbb P[T > n]}
-\mathbin{=} \dfrac{\expect{Y_0}}{\mathbb P[T > n]}
+  \step[\leq]{$(Y_n)_n$ is a supermartingale}
+\dfrac{\expect{Y_0}}{\mathbb P[T > n]}
 \end{calculation}
 
 \emph{Claim}: For all $0 < x \leq 1$, 
@@ -44,17 +43,13 @@ As the convex hull of $\epsilon$ (the greatest convex function less than or equa
 Assume for a contradiction that $\mathbb P[T > B_x] > x$.
 Then, take $n \leq B_x$. 
 We have
-%\lo{Change of justification of the second equality below: event, not discrete r.v. Recall: expectation conditioning on r.v.~(resp.~event) is a r.v.~(resp.~number).}
 \begin{calculation}
 \expect{Y_n-Y_{n+1}}
-%  \step[=]{}
-\mathbin{=}
+  \step[=]{$\calF_n \subseteq \calF_{n+1}$, def.~\& linearity of cond.~expectation}
 \expect{Y_n - \expect{Y_{n+1} \mid \calF_n}}
-  \step[\geq]{}
+  \step[\geq]{antitone strict assumption}
 \expect{\epsilon(Y_n) \cdot {\bf 1}_{\set{T > n}}}
-%  \step[=]{definition of conditional expectation for a discrete variable}
-%\step[=]{}
-\mathbin{=}
+  \step[=]{definition of expectation conditioning on an event}
 \mathbb P[T > n]\ \expect{\epsilon(Y_n) \mid T > n}
   \step[\geq]{Jensen's inequality}
 \mathbb P[T > n]\ \epsilon(\expect{Y_n \mid T > n})
@@ -82,30 +77,30 @@ which is a contradiction, therefore the claim must be true, therefore $P[T > n] 
   \end{align*}
 
 
-  Define $(\nnext(N,s),\_) = \red^n(N,s)$ for the least $n \geq 0$ such that it's in the domain of $f_1$, and $g(N,s) := \left | \{m < n \mid \red^m(N,s) \text{ is of the form } (E[\tY N'],s') \} \right |$. 
+  Define $(\nnext(N,s),\_) = \red^n(N,s)$ for the least $n \geq 0$ such that it's in the domain of $f_1$, and $g(N,s) := \left | \{m < n \mid \red^m(N,s) \text{ is of the form } (E[\tY\, \lambda x. N'],s') \} \right |$. 
   The function $\nnext$ is well-defined (i.e.~$n$ is finite) for all $N \in Rch(M)$ by induction on the path from $M$ to $N$, by the third condition on antitone partial ranking functions. Define $f_2(N) := \int_\entrosp f_1(\nnext(N,s)) + \epsilon(f_1(\nnext(N,s))) g(N,s) \, \mu_{\entrosp}(\mathrm d s)$. For any term $N$ where $f$ is defined, $f_2(N) = f(N)$, and the value that $f_2$ would have at $N$ if $f$ were not defined at $N$ is $\leq f(N)$, by the third condition on antitone partial ranking functions. In order to show that $f_2$ is an antitone partial ranking function, it therefore suffices to show that the value that $f_2$ would have had at each term if $f$ were not defined at that term is at least the expectation of $f_2$ after one reduction step (plus $\epsilon(f_2(N))$ if the reduction step is a $tY$-reduction). For any term $N$ which is not of the form $E[R]$ for some $\tY$-redex $R$, this is trivial. If $R$ is a $\tY$-redex, then $\epsilon(f_2(N)) \leq \int_\entrosp \epsilon(f_1(\nnext(N,s)))\, \mu_{\entrosp}(\mathrm d s)$ by the convexity of $\epsilon$, because $n$ is bounded. Therefore, the (total) function $f_2$, which agrees with $f$ on $f$'s domain, is an antitone ranking function on $M$ (with the same function $\epsilon$ if it's convex).
 \end{proof}
 
 
 \Cref{ex:raven complex}
 Let $\Theta := \tY \, \lambda f x . \tif{x \leq 0}{0}{f(x - \tsample)}$. 
-We can construct a sparse ranking function $f$ for $\Theta \, 10$ as follows:
+We can construct a sparse ranking function $f$ for $\Theta \, \underline{10}$ as follows:
 \begin{align*}
 \Theta \, \underline l 
 &\mapsto 
 l + 2
 \\
-\tif{l \leq 0}{0}{\Theta \, (l - \tsample)}
+\tif{\underline l \leq 0}{0}{\Theta \, (\underline l - \tsample)}
 &\mapsto
 l + 1
 \\
-0 &\mapsto 0.
+\underline 0 &\mapsto 0.
 \end{align*}
 
-For a more complex (not $\tY$-PAST) example, consider the following ``continuous random walk'': $\Xi \, 10$ where
+For a more complex (not $\tY$-PAST) example, consider the following ``continuous random walk'': $\Xi \, \underline{10}$ where
 \[
 %\underbrace{\big(
-\Xi := \tY \, f \, x . \tif{x \leq 0}{0}{f(x - \tsample + 1/2)} 
+\Xi := \tY \, \lambda f x . \tif{x \leq 0}{0}{f(x - \tsample + 1/2)} 
 %\big)}_{\Xi} \, 10
 \]
 Let $g(x) := 2 + \ln(x + 1)$, and let $\epsilon$ be the function specified by
@@ -116,10 +111,10 @@ The limit of this as $x \to \infty$ and $g(x+1/2) \to \infty$ is 0, and $\frac {
 therefore $\epsilon$ is antitone and bounded below by 0.
 We define an antitone sparse ranking function by:
 \[
-\Xi \, l 
+\Xi \, \underline l 
 \mapsto 
 g(l), \qquad 
-0 \mapsto 0
+\underline 0 \mapsto 0
 \]
 
 % \begin{align*}
@@ -145,9 +140,9 @@ Hence this is a valid antitone sparse ranking function and the term is AST.
 \Cref{ex:Fair-in-the-limit random walk}
 \[
 \underbrace{\big
-(\tY \, f \, x . 
+(\tY \, \lambda f x .\ 
 \tif{x \leq 0}{0}{f(x - 1) \oplus_{\frac{x}{2x+1}} f(x + 1)} \big)}_{\Xi} 
-\, 10
+\, \underline{10}
 \]
 To construct an antitone ranking function, we solve the recurrence relation:
 % \[
@@ -169,19 +164,19 @@ For $n > 2$, $z_n = \ln(n-1)$ works. The expected decrease is $\frac 1 2(\ln(1+\
 \Cref{ex:escaping spline}
 \[
 \underbrace{\big
-(\tY \, f \, x . \,
+(\tY \, \lambda f x . \,
 0 \oplus_{\frac{1}{x+1}} f(x + 1) \big)}_{\Xi} 
-\, 10
+\, \underline{10}
 \]
 
 In this case, the fact that the ranking function must decrease at each $\tY$-step (in an antitone sparse ranking function) by the expected value of $\epsilon$ not at the current term, but at the next term where the ranking function is defined, is a little harder to deal with, because the variable $x$ can change all the way to $0$ in one step, therefore simply adding a small offset doesn't suffice to compensate for this fact.
 
-Consider the candidate ranking function $\Xi \, n \mapsto n + 1$. For each $n$, $\Xi \, n$ reduces to either $0$ (with probability $\frac 1 {n + 1}$) or $\Xi \, (n + 1)$, therefore the expected value of the ranking function is $\frac{n(n+2)}{n+1} = n + 1 - \frac 1 {(n+1)^2}$, and the required decrease is $\frac{\epsilon(0) + n \epsilon(n + 2)}{n + 1}$, therefore eventually, the expected decrease isn't enough, whatever the value of $\epsilon(0)$ is.
+Consider the candidate ranking function $\Xi \, \underline n \mapsto n + 1$. For each $n$, $\Xi \, \underline n$ reduces to either $\underline 0$ (with probability $\frac 1 {n + 1}$) or $\Xi \, \underline{n + 1}$, therefore the expected value of the ranking function is $\frac{n(n+2)}{n+1} = n + 1 - \frac 1 {(n+1)^2}$, and the required decrease is $\frac{\epsilon(0) + n \epsilon(n + 2)}{n + 1}$, therefore eventually, the expected decrease isn't enough, whatever the value of $\epsilon(0)$ is.
 
 If instead, we take the ranking function to be defined after the $\tY$-reduction but before the $\tsample$-reduction as well, this can be resolved. Letting $\Theta[n] = \underline 0 \oplus_{\frac 1 n} \Xi \, n$:
 \begin{align*}
-\Theta[n] &\mapsto n \\
-\Xi \, 10 & \mapsto 12.
+\Theta[\underline n] &\mapsto n \\
+\Xi \, \underline{10} & \mapsto 12.
 \end{align*}
 For each $n$, $\Theta[n]$ reduces to either $0$ or $\Theta[n+1]$, with a $\tY$-reduction only in the latter case, and the condition that this is an antitone sparse ranking function is that $n \geq \frac{(n-1)(n+1)}{n} + \frac{n-1}{n} \epsilon(n+1)$ and $12 \geq 11 + \epsilon(11)$. These are satisfied by setting $\epsilon(x) = \min(1, 1/x)$, therefore this term is AST.
 
@@ -238,7 +233,7 @@ Let $F : \textsf{R} \to \textsf{R} \to \textsf{R}$ be a function such that $F\ \
 
 The inequalities required for this to be an antitone partial supermartingale are satisfied with just the same reasoning as in \Cref{ex:unbiased random walk}, therefore this term too is antitone rankable.
 
-Again, this is not actually the correct reduction order, in that $F$ should be applied to its argument $n_i$ and reduced to a value before its second argument is expanded, but this would complicate the presentation, and this version can be justified by \Cref{thm:confluent ranking} instead. The reduction strategy implied here should be clear enough (assuming that, where it isn't specified, it just matches $\cbv$), but to be more precise, let $r(F \underline{n_0} (\dots(F\ \underline {n_{k-1}}\ X)\dots)) = @_2^k;\cbv(X)$, where $X$ is not a value or of the form $F\ \underline{n_k}\ Z$ for some non-value $Z$. All terms match this pattern for exactly one value of $k \geq 0$, except for values. Within $X$, there is necessarily a redex at $\cbv(X)$. The only conditions that $@_2^k;\cbv(X)$ is also a position of a redex in the whole term are that if the redex is a $\tsample$, it is not inside a $\lambda$ or $\tY$ on the right of an application, which is true because $\cbv$ never selects a redex inside of a $\lambda$. After $n$ reaches $0$, the term is $F \underline{n_0} (\dots(F\ \underline {n_k}\ \underline x)\dots)$, then the innermost $F$ is evaluated completely in $\cbv$ order, therefore (by assumption) it terminates. Because there are no $\tY$-reductions in the evaluation of $F$, it can't reach any other term of the form $F\ \underline{n_k'}\ X$, therefore $k$ never changes until this whole subexpression reaches a number, at which point $k$ decreases by 1 and the next $F$ is evaluated.
+Again, this is not actually the correct reduction order, in that $F$ should be applied to its argument $n_i$ and reduced to a value before its second argument is expanded, but this would complicate the presentation, and this version can be justified by \Cref{thm:confluent ranking} instead. The reduction strategy implied here should be clear enough (assuming that, where it isn't specified, it just matches $\cbv$), but to be more precise, let $r(F \underline{n_0} (\dots(F\ \underline {n_{k-1}}\ X)\dots)) = @_2^k;\cbv(X)$, where $X$ is not a value or of the form $F\ \underline{n_k}\ Z$ for some non-value $Z$. All terms match this pattern for exactly one value of $k \geq 0$, except for values. Within $X$, there is necessarily a redex at $\cbv(X)$. The only conditions that $@_2^k;\cbv(X)$ is also a position of a redex in the whole term are that if the redex is a $\tsample$, it is not inside a $\lambda$ that's inside a $\tY$ or on the right of an application, which is true because $\cbv$ never selects a redex inside of a $\lambda$. After $n$ reaches $0$, the term is $F \underline{n_0} (\dots(F\ \underline {n_k}\ \underline x)\dots)$, then the innermost $F$ is evaluated completely in $\cbv$ order, therefore (by assumption) it terminates. Because there are no $\tY$-reductions in the evaluation of $F$, it can't reach any other term of the form $F\ \underline{n_k'}\ X$, therefore $k$ never changes until this whole subexpression reaches a number, at which point $k$ decreases by 1 and the next $F$ is evaluated.
 
 
 \antitoneSeemsComplete*

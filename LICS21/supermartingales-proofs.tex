@@ -63,7 +63,7 @@ We show the non-trivial case of $i = 2$.
 First we express 
 \begin{equation}
 f(M_{n+1})[s \in \mathbf{T}_2] = \sum_{i \in \calI} 
-f(E_i[\underline{\sigma_i(s)}][\underline{\rho(s)}])[s \in U_i]
+f(E_i[\sigma_i(s)][\underline{\rho(s)}])[s \in U_i]
 \label{eqn:f 2 n+1}
 \end{equation}
 where 
@@ -71,18 +71,18 @@ where
 \item $\calI$ is a countable indexing set
 \item $E_i[\cdot][\tsample] \in \mathsf{Sk}_{j_i}$, and $\sigma_i : \entrosp \to \Real^{j_i}$, and $\rho(s) := \pi_h(\pi_1(\red^n(M, s))) = \pi_h(\pi_t^{l_i}(s)) \in \Real$ 
 \item $\set{U_i}_{i \in \calI}$ is a partition of $\mathbf{T}_2$, 
-where each $U_i$ is determined by a skeletal term $E_i[\cdot][\tsample]$ and a number (of draws) $l_i \leq n$, satisfying
-\(
-s \in U_i
-\iff
-(E_i[\underline{r}][{\tsample}], \pi_t^{l_i}(s)) = \red^n(M, s),
-\;
-\hbox{for some }r \in \Real^{j_i}.
-\)
+where each $U_i$ is determined by a skeletal environment $E_i$ and a number (of draws) $l_i \leq n$, so that $U_i$ is the set of traces where after $n$ reduction steps, $l_i$ samples have been used, and the term has reached $E_i[r][\tsample]$ for some $r \in \Real^{j_i}$.
+%\(
+%s \in U_i
+%\iff
+%(E_i[\underline{r}][{\tsample}], \pi_t^{l_i}(s)) = \red^n(M, s),
+%\;
+%\hbox{for some }r \in \Real^{j_i}.
+%\)
 (We use the (measurable) function $\sigma_i : \entrosp \to \Real^{j_i}$ to skolemise the existentially quantified $r$.)
 Equivalently
 \[
-U_i := \#\mathrm{draw}_n^{-1}(l_i) \cap M_n^{-1}(E_i[\cdot][\tsample], \Real^{j_i}) \in \calF_n.
+U_i := \#\mathrm{draw}_n^{-1}[l_i] \cap M_n^{-1}[\{E_i[r][\tsample] \mid r \in \Real^{j_i}\}] \in \calF_n.
 \]
 %\lo{I.e.~$(E_i[\underline{\sigma_i(s)}][{\tsample}], \pi_t^{l_i}(s)) = \red^n(M, s)$ iff $s \in U_i$.}
 \end{itemize}
@@ -104,40 +104,40 @@ Plainly $\sigma_i(s)$ depends on $s_{\leq l}$, and $\rho(s)$ depends on $s_{\leq
 Take $u \in (U_i)_{\leq l}$.
 It then follows from the definition of ranking function that
 \[%\textstyle
-\int_I \Leb(\dif r) \, f(E_i[\underline{\widehat{\sigma_i}(u)}][\underline{r}])) \leq f(E_i[\underline{\widehat{\sigma_i}(u)}][\tsample])).
+\int_I \Leb(\dif r) \, f(E_i[\widehat{\sigma_i}(u)][\underline{r}])) \leq f(E_i[\widehat{\sigma_i}(u)][\tsample])).
 \]
 Take $A \in \calF_n$, and integrating both sides, we get
 \begin{align*}
-& \int_{(A \cap U_i)_{\leq l}} \Leb_l(\dif u) \, \int_I \textrm{Leb}(\dif r) \, f(E_i[\underline{\widehat{\sigma_i}(u)}][\underline{r}])) \\
-& \leq \int_{(A \cap U_i)_{\leq l}} \Leb_l(\dif u) \, f(E_i[\underline{\widehat{\sigma_i}(u)}][\tsample])).
+& \int_{(A \cap U_i)_{\leq l}} \Leb_l(\dif u) \, \int_I \textrm{Leb}(\dif r) \, f(E_i[\widehat{\sigma_i}(u)][\underline{r}])) \\
+& \leq \int_{(A \cap U_i)_{\leq l}} \Leb_l(\dif u) \, f(E_i[\widehat{\sigma_i}(u)][\tsample])).
 \end{align*}
 Since $\Leb_{l+1}$ is the (unique) product measure satisfying $\Leb_{l+1}(V \times B) = \Leb_l(V) \cdot \Leb(B)$, and $(U_i)_{\leq l_i} \cdot I^\omega = U_i$, we have
 %it follows from the preceding observation that
 \begin{align*}
-& \int_{(A \cap U_i)_{\leq l+1}} \Leb_{l+1}(\dif u') \, f(E_i[\underline{\widehat{\sigma_i}(u')}][\underline{\widehat{\rho}(u')}])) \\
+& \int_{(A \cap U_i)_{\leq l+1}} \Leb_{l+1}(\dif u') \, f(E_i[\widehat{\sigma_i}(u')][\underline{\widehat{\rho}(u')}])) \\
 & \leq 
-\int_{(A \cap U_i)_{\leq l+1}} \Leb_{l+1}(\dif u') \, f(E_i[\underline{\widehat{\sigma_i}(u')}][\tsample]))
+\int_{(A \cap U_i)_{\leq l}} \Leb_l(\dif u') \, f(E_i[\widehat{\sigma_i}(u')][\tsample]))
 \end{align*}
 and so, by (\ref{eqn:truncate})
 \begin{align}
-& \int_{A \cap U_i} \mu_{\entrosp}(\dif s) \, f(E_i[\underline{\sigma_i(s)}][\underline{\rho(s)}])) \nonumber \\
+& \int_{A \cap U_i} \mu_{\entrosp}(\dif s) \, f(E_i[\sigma_i(s)][\underline{\rho(s)}])) \nonumber \\
 & \leq 
-\int_{A \cap U_i} \mu_{\entrosp}(\dif s) \, f(E_i[\underline{\sigma_i(s)}][\tsample])).
+\int_{A \cap U_i} \mu_{\entrosp}(\dif s) \, f(E_i[\sigma_i(s)][\tsample])).
 \label{eqn:a u ui}
 \end{align}
 
 Now, integrating both sides of (\ref{eqn:f 2 n+1}), we have
 \begin{align*}
-& \int_A \mu_{\entrosp}(\dif s) \, f_{n+1}(M)[s \in \mathbf{T}_i] \\
+& \int_A \mu_{\entrosp}(\dif s) \, f(M_{n+1})[s \in \mathbf{T}_2] \\
 &= 
-\int_A \mu_{\entrosp}(\dif s) \, \sum_{i \in \calI} f(E_i[\underline{\sigma_i(s)}][\underline{\rho(s)}])[s \in U_i] \\
+\int_A \mu_{\entrosp}(\dif s) \, \sum_{i \in \calI} f(E_i[\sigma_i(s)][\underline{\rho(s)}])[s \in U_i] \\
 &= 
-\sum_{i \in \calI} \int_{A \cap U_i} \mu_{\entrosp}(\dif s) \, f(E_i[\underline{\sigma_i(s)}][\underline{\rho(s)}])\\
+\sum_{i \in \calI} \int_{A \cap U_i} \mu_{\entrosp}(\dif s) \, f(E_i[\sigma_i(s)][\underline{\rho(s)}])\\
 &\leq 
-\sum_{i \in \calI} \int_{A \cap U_i} \mu_{\entrosp}(\dif s) \, f(E_i[\underline{\sigma_i(s)}][\tsample])
+\sum_{i \in \calI} \int_{A \cap U_i} \mu_{\entrosp}(\dif s) \, f(E_i[\sigma_i(s)][\tsample])
 \quad \hbox{$\because$ (\ref{eqn:a u ui})}\\
 &= 
-\int_{A} \mu_{\entrosp}(\dif s) \, \sum_{i \in \calI} \, f(E_i[\underline{\sigma_i(s)}][\tsample])[s \in U_i]\\
+\int_{A} \mu_{\entrosp}(\dif s) \, \sum_{i \in \calI} \, f(E_i[\sigma_i(s)][\tsample])[s \in U_i]\\
 &= \int_{A} \mu_{\entrosp}(\dif s) f_{n}(M)[s \in \mathbf{T}_2]
 %\quad \hbox{$\because$ (\ref{eqn:f 2 n+1})}
 \end{align*}
@@ -189,14 +189,13 @@ $(\lambda x . \transform{M_1} + \transform{M_2}) \, \transform{B}$, for a fresh 
 \transform{M_1 \, M_2} &:= \transform{M_1} \, \transform{M_2} \\
 n \geq 0, \; \transform{f \, M_1 \cdots M_n} &:= (\lambda z_1 \cdots z_n . r) \, \transform{M_1} \cdots \transform{M_n} \\
 \transform{\tif{B}{M_1}{M_2}} &:= \big(\lambda z . (\transform{M_1} + \transform{M_2})\big) \, \transform{B} \\
-\transform{\tY \, f \, y . N} &:= \lambda y . \transform{N}[\bot / f]
+\transform{\tY N} &:= (\lambda y . \bot) \transform{N}
 \end{align*}
 In the above, variables $z, z_1, \cdots, z_n$ are assumed to be fresh; $f$ ranges over primitive functions and numerals.
 
 The idea is that $\transform{M}$ captures the initial, non-recursive operational behaviour of $M$, so that $\transform{M}$ simulates the reduction of $M$ until the latter reaches a value, or a term of the form $E[\tY \lambda x. N]$.
 
-It is straightforward to see that for every trace $s \in \entrosp$, there is a reduction sequence of $\transform{M}$ that simulates (an initial subsequene of) the reduction of $M$ under $s$;
-and the simulation can be made lockstep.
+It is straightforward to see that for every trace $s \in \entrosp$, there is a reduction sequence of $\transform{M}$ that simulates (an initial subsequene of) the reduction of $M$ under $s$.
 
 Finally thanks to the following
 \begin{theorem}[de Groote]
@@ -236,15 +235,13 @@ we have:
 \begin{proof}
 %For each $n \in \omega$, $\set{T_M^\tY = n} \in \calF_{T_n}$.
 To see $\set{T_M^\tY = n} \in \calF_{T_n}$ for a given $n$, we need to show that $\set{T_M^\tY = n} \cap \set{T_n \leq i} \in \calF_i$, for all $i \in \omega$.
-Let $\cal V$ be the measurable subset of $\Lambda^0$ given by the countable union of $\set{\alpha_j} \times \mathbb{R}^j$ where $\alpha_j$ ranges over skeletons which are values with $j$ place-holders, and $j$ ranges over $\omega$.
-Let $\cal W$ be the measurable subset of $\Lambda^0$ given by the countable union of $\set{\beta_j} \times \mathbb{R}^j$ where $\beta_j$ ranges over skeletons which are not values, and with $j$ place-holders, and $j$ ranges over $\omega$.
-%Then $\set{T_M^\tY = n} \cap \set{T_n \leq i}$ is given by
+Let $\cal V$ be the set of values in $\Lambda^0$ (which is measurable), and let $\cal W$ be the non-values.
 Then, it suffices to observe that $\set{T_M^\tY = n} \cap \set{T_n \leq i}
 = \bigcup_{l=n}^i 
-\big( M_l^{-1} ({\cal V}) \cap  
-M_{l-1}^{-1} ({\cal W}) \cap 
+\big( M_l^{-1} [{\cal V}] \cap  
+M_{l-1}^{-1} [{\cal W}] \cap 
 \set{T_n = l} \big)
-$.
+$, where each of $M_l^{-1} [{\cal V}]$, $M_{l-1}^{-1} [{\cal W}]$, and $\set{T_n = l}$ is in $\calF_i$.
 \end{proof}
 
 

@@ -210,7 +210,7 @@ The relation $\Rightarrow$ is Church-Rosser.
 
 \medskip
 The reduction relation $\Rightarrow$ is nondeterministic, so it admits multiple possible reduction strategies. 
-A \emph{reduction strategy} starting from a closed term $M$ is a partial function $f$ from $\mathit{Rch}(M)$ to positions, such that for any reachable term $N$ where $f$ is defined, $f(N)$ is a position of a redex in $N$, and if $f(N)$ is not defined, $N$ is a value.
+A \emph{reduction strategy} starting from a closed term $M$ is a measurable partial function $f$ from $\mathit{Rch}(M)$ to positions, such that for any reachable term $N$ where $f$ is defined, $f(N)$ is a position of a redex in $N$, and if $f(N)$ is not defined, $N$ is a value.
 Using a reduction strategy $f$, a subset of $\Rightarrow$ that isn't nondeterministic, $\Rightarrow_f$, can be defined by $(N,s) \Rightarrow_f (N',s')$ just if $(N,s) \Rightarrow (N',s')$ and $N$ reduces to $N'$ with the redex at $f(N)$.
 
 The usual call-by-value semantics can be implemented as one of these reduction strategies, given by (with $V$ a value and $T$ a term that isn't a value and $M$ a general term)
@@ -289,7 +289,7 @@ If the antitone function is just the constant function $1$ instead, then it is c
 If a closed PPCF term $M$ has a ranking function, sparse ranking function, antitone ranking function or antitone sparse ranking function w.r.t.~a reduction strategy $r$, then $M$ is AST w.r.t.~$r$, and AST.
 \end{theorem}
 
-When constructing an (antitone) sparse ranking function with respect to an alternative reduction strategy, it is intuitively simplest to define the sparse ranking function and the reduction strategy together. For each key reachable term where the sparse ranking function is defined, simply decide which sub-term should be reduced next, and how far before the next key reachable term. The only restrictions to bear in mind on evaluating sub-terms are that a $\tsample$ may not be evaluated inside a $\lambda$ or $\tY$ on the right of an application, and a $\beta$ redex may not be reduced until its argument is a value. This can be seen as applied to \Cref{ex:sum of powers} at the end of \Cref{apx:confluent}.
+When constructing an (antitone) sparse ranking function with respect to an alternative reduction strategy, it is intuitively simplest to define the sparse ranking function and the reduction strategy together. For each key reachable term where the sparse ranking function is defined, simply decide which sub-term should be reduced next, and how far before the next key reachable term. The only restrictions to bear in mind on evaluating sub-terms are that a $\tsample$ may not be evaluated inside a $\lambda$ that's inside a $\tY$ or on the right of an application, and a $\beta$ redex may not be reduced until its argument is a value. This can be seen as applied to \Cref{ex:sum of powers} at the end of \Cref{apx:confluent}.
 
 \medskip
 If, as seems likely, \Cref{thm:antitone rankable implies termination} is complete for terms from which every reachable term is AST, then by the following theorem, \Cref{thm:confluent ranking} can't actually prove the termination of any terms not already provable by \Cref{thm:antitone rankable implies termination} and \Cref{thm:antitone partial implies rankable}.
