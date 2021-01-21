@@ -275,44 +275,24 @@ P[\underline n] \mapsto & 2n+2 \\
 The first step is justified because the probability of reaching $P[\underline n]$ for any specific $n \geq 0$ is $(n+1)^{-2} - (n+2)^{-2} = \frac{2n + 3}{(n+1)^2(n+2)^2}$, therefore the expected next value of the ranking function is $\sum_{n=0}^{\infty} \frac{(2n+2)(2n + 3)}{(n+1)^2(n+2)^2} = \frac{\pi^2}{3}$. The other steps are deterministic, and involve 1 or 0 $\tY$-reductions each. Given that all of the reduction steps after the first are deterministic, and the number of $\tY$ reduction steps is not that hard to count, defining the sparse ranking function's values only at $M$ and $P[\underline n]$ would also have been reasonable, although in a similar term which had more random samples throughout, that would not have been so simple.
 
 Providing a ranking function of some sort for this term in a similar level of detail would have been rather more complicated using only the standard reduction strategy. The recursion in $\Theta$ would have had to be evaluated separately for every time it was used, so there would have been more (and more complex) terms to consider in the reduction sequence. Also, the number of $\tY$-reductions from $P[\underline n]$ would have been $n^2 + 2n + 1$ instead of $2n + 2$, therefore the expected number of $\tY$ reductions starting from $M$ would be infinite, i.e.~$M$ is not $\tY$-PAST, therefore it is not even rankable. It would be possible to define an antitone sparse ranking function for it, but it is much more difficult to construct:
-\iffalse
-\begin{align*}
-& M \mapsto 1.47 \\
-& P[\underline n] \mapsto 1 + \ln((n+1)n + 1) \\
-& \Xi[\lambda x. \Theta[x] \underline n] \underline n \mapsto 1 + \ln((n+1)n + 1) \\
-& \underline{n^n} + \dots + \underline{k_1^n} + \\
-& \Xi[\lambda x. \Theta[x] \underline n] (\underline{k_1} - 1) \mapsto 1 + \ln((n+1)(k_1-1)+1) \\
-& \underline{n^n} + \dots + \underline{(k_1+1)^n} + \Theta[\underline{k_1}] \underline{n} + \\
-& \Xi[\lambda x. \Theta[x] \underline n] (\underline{k_1} - 1) \mapsto 1 + \ln((n+1)k_1 + 1) \\
-& \underline{n^n} + \dots + \underline{(k_1+1)^n} + \\
-& \underbrace{\underline{k_1} \times \dots \times \underline{k_1} \times}_{n-k_2+1} \Theta[\underline{k_1}] (\underline{k_2} - 1) + \\
-& \Xi[\lambda x. \Theta[x] \underline n] (\underline{k_1} - 1) \mapsto 1 + \ln((n+1)k_1 + k_2 + 1) \\
-& \underline{\sum_{k=0}^n k^n} \mapsto 0.
-\end{align*}
-\fi
 \begin{align*}
 M & \mapsto 1.47 \\
 P[\underline n] & \mapsto 1 + \ln((n+1)n + 1) \\
 \Xi[\lambda x. \Theta[x] \, \underline n] \, \underline n & \mapsto 1 + \ln((n+1)n + 1) \\
-%\underline{n^n} + \dots + \underline{k_1^n} + \\
-%\Xi[\lambda x. \Theta[x] \underline n] (\underline{k_1} - 1) & \mapsto 1 + \ln((n+1)(k_1-1)+1) \\
 \left.\begin{array}{r}
 \underline{n^n} + \dots + \underline{k_1^n} + {}\\
 \Xi[\lambda x. \Theta[x] \underline n] (\underline{k_1} - 1) 
 \end{array}\right\} 
 & \mapsto 1 + \ln((n+1)(k_1-1)+1) \\
-%\underline{n^n} + \dots + \underline{(k_1+1)^n} + \Theta[\underline{k_1}] \underline{n} + \\
-%\Xi[\lambda x. \Theta[x] \underline n] (\underline{k_1} - 1) & \mapsto 1 + \ln((n+1)k_1 + 1) \\
 \left.\begin{array}{r}
 \underline{n^n} + \dots + \underline{(k_1+1)^n} +  {}\\
-\Theta[\underline{k_1}] \, \underline{n} + \Xi[\lambda x. \Theta[x] \, \underline n] (\underline{k_1} - 1) 
+\Theta[\underline{k_1}] \, \underline{n} +  {}\\
+\Xi[\lambda x. \Theta[x] \, \underline n] (\underline{k_1} - 1) 
 \end{array}\right\}
 & \mapsto 1 + \ln((n+1)k_1 + 1) \\
-%\underline{n^n} + \dots + \underline{(k_1+1)^n} + \\
-%\underbrace{\underline{k_1} \times \dots \times \underline{k_1} \times}_{n-k_2+1} \Theta[\underline{k_1}] (\underline{k_2} - 1) + \\
-%\Xi[\lambda x. \Theta[x] \underline n] (\underline{k_1} - 1) & \mapsto 1 + \ln((n+1)k_1 + k_2 + 1) \\
 \left.\begin{array}{r}\underline{n^n} + \dots + \underline{(k_1+1)^n} + {} \\
-\underbrace{\underline{k_1} \times \dots \times \underline{k_1} \times}_{n-k_2+1} \Theta[\underline{k_1}] (\underline{k_2} - 1) + {} \\
+\underbrace{\underline{k_1} \times \dots \times \underline{k_1} \times}_{n-k_2+1} {} \\
+\Theta[\underline{k_1}] (\underline{k_2} - 1) + {} \\
 \Xi[\lambda x. \Theta[x] \, \underline n] (\underline{k_1} - 1)
 \end{array}\right\} & \mapsto 1 + \ln((n+1)k_1 + k_2 + 1) \\
 \underline{\textstyle\sum_{k=0}^n k^n} & \mapsto 0.
