@@ -22,9 +22,10 @@ the PPCF terms in \cref{ex:raven complex,ex:higher-order recursion}
 are not definable as PHORS.
 
 The main result by McIver et al.~\cite{DBLP:journals/pacmpl/McIverMKK18} is similar to our \cref{thm:antitone rankable implies termination}, but in an imperative language. While we require that the antitone ranking function decreases for every $\tY$-reduction step, they require that it decreases for every iteration of a certain while loop (the ranking function in that case is defined in the context of a particular loop), which is similar to $\tY$ but limited to tail recursion. 
-The difference in the exact progress condition is not significant. 
+The difference in the exact progress condition is insignificant. A ranking function satisfying either progress condition can easily be converted to satisfy the other.
 \akr{Their progress condition, that there are antitone functions $p$ and $d$ such that the ranking function decreases from $x$ by at least $d(x)$ with probability at least $p(x)$, would not have worked directly because it does not cope as easily with the fact that the ranking function may change in value at the intermediate non-$\tY$ reduction steps (provided it does not increase in expectation). However, it is easy enough to convert a ranking function that satisfies either progress condition to the other.}
 \lo{Can you replace the highlighted by a brief comment on their discussion of completeness?}
+\akr{I would, but there's no space. Their completeness results seem pretty weak anyway.}
 
 The confluent semantics, and the results based on it, is new in the setting of a functional language, because an imperative language does not have any equivalent of other redexes, or a similar nondeterministic structure. The sparse ranking function construction is also more useful in a functional language (although it would be possible to give an equivalent in an imperative language), because in an imperative language where the order of execution is more rigid, the iterations of the while loop provide a natural set of checkpoints where it is reasonable to give values of the ranking function.
 
