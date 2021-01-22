@@ -24,7 +24,7 @@ Though the problem of proving AST of imperative probabilistic programs is much s
 
 \subsection*{Contributions}
 
-A possible approach to prove AST is to find some variant on the program state, called \emph{ranking function}, that decreases on average sufficiently quickly that it must at some point reach 0, at which point the program terminates. 
+A possible approach to proving AST is to find some variant on the program state, called \emph{ranking function}, that decreases on average sufficiently quickly that it must at some point reach 0, at which point the program terminates. 
 In other words, the program's behavior is used to define an associated (ranking) \emph{supermartingale}. Proof rules based on relating the program state to supermartingales already exist for first-order imperative programs \cite{DBLP:conf/cav/ChakarovS13,DBLP:conf/popl/FioritiH15,DBLP:journals/pacmpl/McIverMKK18}. This paper's contribution is to extend this method to a higher-order setting.
 
 The language PPCF used in this paper is simply typed, with random continuous sampling, and an explicit recursion primitive, $\tY$. 
