@@ -216,9 +216,22 @@ Not only is this program non-affine recursive,
 note also the use of a random sample, $e$, as a first-class value, and the subsequent use as a probability in the binary choice $\oplus_e$.
 Such a computation cannot be modelled via discrete distributions. 
 
-We can use the ranking function method (coupled with the solution of linear recurrence relations) to show that provided $p \geq \frac{5 - \sqrt{21}}{2}$, the program $\Xi \, \underline 3$ is AST. Consider the edge case, that $p = \frac{5 - \sqrt{21}}{2}$ exactly.
+We can use the ranking function method (coupled with the solution of linear recurrence relations) to show that provided $p \geq \frac{5 - \sqrt{21}}{2}$, the program $\Xi \, \underline 3$ is AST. 
+Consider the edge case, that $p = \frac{5 - \sqrt{21}}{2}$ exactly.
 
-The term $\Xi^n\ \underline x$ (for $n > 0$, $x^{-2} < p$) reduces to either $\Xi^{n-1}\ \underline{x+1}$, $\Xi^n\ \underline{x+1}$ or $\Xi^{n+1}\ \underline{x+1}$, with probabilities $p-x^{-2}$, $(1-p+x^{-2})\frac{p-x^{-2}}{2}$ and $(1-p+x^{-2})(1-\frac{p-x^{-2}}{2})$ respectively. Let $a(\Xi^n\ \underline x) = n + 2x^{-1}$. This is a supermartingale (because the decrease in $2x^{-1}$ as $x$ increases is enough to offset the average increase in $n$), but it does not satisfy the antitone-strict progress condition. It does however have a bounded-below variance, so the usual method of using $\ln a$ instead of just $a$ works. Calculating the exact amount that $\ln a$ decreases is not necessary, because it can be bounded as follows: $a$ changes by at least $1/2$ with probability at least $1/11$ (assuming $x \geq 3$), therefore $\ln(a)$ decreases in expectation by at least $\frac{1}{11}(\ln(a+\frac{1}{2}) - \ln(a) -\frac 1 {2a})$, using the fact that a linear approximation to $\ln$, applied to $a$, at least doesn't increase, then adding the deviation of $\ln$ from its linear approximation $\ln(a) + \frac{x-a}{a}$ (and using the fact that the linear approximation is everywhere an overestimate), we obtain a sufficiently strong bound on the decrease of $\ln(a)$ that it's an antitone sparse ranking function. (It can obviously be extended to $\Xi\ \underline 1$ too, which reduces to $\Xi^n\ \underline 3$ or a value after a bounded number of steps, but that complicates the analysis a little.)
+The term $\Xi^n\, \underline x$ (for $n > 0$, $x^{-2} < p$) reduces to either $\Xi^{n-1}\, \underline{x+1}$, $\Xi^n\ \underline{x+1}$ or $\Xi^{n+1}\, \underline{x+1}$, 
+with probabilities $p-x^{-2}$, $(1-p+x^{-2})\frac{p-x^{-2}}{2}$ and $(1-p+x^{-2})(1-\frac{p-x^{-2}}{2})$ respectively. 
+Let $a(\Xi^n\, \underline x) = n + 2 \, x^{-1}$. 
+This is a supermartingale (because the decrease in $2 \, x^{-1}$ as $x$ increases is enough to offset the average increase in $n$), but it does not satisfy the antitone-strict progress condition. 
+It does however have a bounded-below variance, so the usual method of using $\ln a$ instead of just $a$ works. 
+Calculating the exact amount that $\ln a$ decreases is not necessary, because it can be bounded as follows: 
+$a$ changes by at least $1/2$ with probability at least $1/11$ (assuming $x \geq 3$), 
+therefore $\ln(a)$ decreases in expectation by at least $\frac{1}{11}(\ln(a+\frac{1}{2}) - \ln(a) -\frac 1 {2a})$, 
+using the fact that a linear approximation to $\ln$, applied to $a$, at least doesn't increase, 
+then adding the deviation of $\ln$ from its linear approximation $\ln(a) + \frac{x-a}{a}$ 
+(and using the fact that the linear approximation is everywhere an overestimate), 
+we obtain a sufficiently strong bound on the decrease of $\ln(a)$ that it's an antitone sparse ranking function. 
+(It can obviously be extended to $\Xi\, \underline 1$ too, which reduces to $\Xi^n\, \underline 3$ or a value after a bounded number of steps, but that complicates the analysis a little.)
 
 \subsubsection*{Higher-order recursion}
 

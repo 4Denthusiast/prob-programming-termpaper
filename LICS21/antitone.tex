@@ -215,15 +215,15 @@ For a more complex (not $\tY$-PAST) example, consider the following continuous r
 \begin{example}[Non-affine recursion]
 \label{ex:non-affine recursion easy}
 \[
-(\tY \lambda f x. x \oplus_{2/3} f (f (x + 1)))\ \underline 1
+(\tY \lambda f x. x \oplus_{2/3} f (f (x + 1)))\, \underline 1
 \]
 \end{example}
 
 \begin{example}[More complex non-affine recursion]
 \label{ex:non-affine continuous}
 \begin{align*}
-& (\tY\, \lambda f x.\, (\lambda e. X[e]) \tsample)\ \underline 0 \\
-& X[e] = \tif{e \leq p - x^{-2}}{x}{f^2(x+1) \oplus_e f(x+1)}
+& (\tY\, \lambda f x.\, (\lambda e. X[e]) \, \tsample)\, \underline 0 \\
+& X[e] := \tif{e \leq p - x^{-2}}{x}{f^2(x+1) \oplus_e f(x+1)}
 \end{align*}
 \end{example}
 
