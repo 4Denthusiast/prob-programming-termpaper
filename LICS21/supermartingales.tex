@@ -27,7 +27,7 @@ Any closed term for which a ranking (respectively, strict ranking) function exis
 For example, $(\tY \lambda x.x) \, \underline 0$ is not rankable.
 \end{definition}
 
-It will be demonstrated later that for any rankable term $M$, if $(M_n)_{n \geq 0}$ is the reduction sequence starting from $M$ (considered as a stochastic process), then $(f(M_n))_{n \geq 0}$ is a supermartingale, and $M$ terminates almost surely, but first, some preliminaries about supermartingales (see e.g.~\cite{Williams1999} for details).
+It will be demonstrated later that for any rankable term $M$, if $(M_n)_{n \geq 0}$ is the reduction sequence starting from $M$ (considered as a stochastic process), then $(f(M_n))_{n \geq 0}$ is a supermartingale, and $M$ terminates almost surely, but first, some preliminaries about supermartingales (see e.g.~\cite{Williams1999,Durrett2019} for details).
 \iffalse
 \lo{It is confusing (strictly speaking, incorrect) to say that $(M_n)_{n \geq 0}$ is a reduction sequence from $M$. Formally $M_n$ is the random variable $M_n: s \mapsto \pi_0 (\red^n(M, s))$.}
 \akr{I guess it's implicitly identifying a sequence of functions ($(M_n)_{n \geq 0}$), and a function producing sequences (a reduction-sequence-valued random variable), but this sort of thing seems very standard in dealing with random variables (e.g.~applying a function to some random variables, which is really a sort of concatenation).}

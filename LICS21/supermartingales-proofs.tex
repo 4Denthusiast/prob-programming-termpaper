@@ -147,6 +147,8 @@ Now, integrating both sides of (\ref{eqn:f 2 n+1}), we have
 As an immediate corollary of \Cref{lem:key rankable}, each $f(M_n)$ is integrable.
 This concludes the proof of \Cref{thm:rankable and strict rankable}. 
 
+\medskip
+
 \newcommand\transform[1]{{\ulcorner{#1}\urcorner}}
 
 %\section{$\tY$ stopping times are finite}
@@ -198,7 +200,7 @@ The idea is that $\transform{M}$ captures the initial, non-recursive operational
 It is straightforward to see that for every trace $s \in \entrosp$, there is a reduction sequence of $\transform{M}$ that simulates (an initial subsequene of) the reduction of $M$ under $s$.
 
 Finally thanks to the following
-\begin{theorem}[de Groote]
+\begin{theorem}[de Groote \cite{DBLP:conf/lfcs/Groote94}]
 \label{thm:de groote}
 The simply-typed nondeterministic lambda-calculus is strongly normalising. \qed
 \end{theorem}
@@ -209,6 +211,7 @@ we have:
 
 \item Further there is a finite bound (say $l$) on the length of such $\transform{M}$-reduction sequences; and $l$ bounds the stopping time $T_1$.
 \end{enumerate}
+This concludes the proof of \cref{lem:TnBounded}.
 
 \iffalse
 @inproceedings{DBLP:conf/lfcs/Groote94,
@@ -230,6 +233,8 @@ we have:
   bibsource = {dblp computer science bibliography, https://dblp.org}
 }
 \fi
+
+\medskip
 
 \TMtYStoppingTime*
 \begin{proof}

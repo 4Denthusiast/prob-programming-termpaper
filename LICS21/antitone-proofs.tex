@@ -82,7 +82,7 @@ which is a contradiction, therefore the claim must be true, therefore $P[T > n] 
 \end{proof}
 
 
-\Cref{ex:raven complex}
+\subsection*{\Cref{ex:raven complex}}
 Let $\Theta := \tY \, \lambda f x . \tif{x \leq 0}{0}{f(x - \tsample)}$. 
 We can construct a sparse ranking function $f$ for $\Theta \, \underline{10}$ as follows:
 \begin{align*}
@@ -137,7 +137,7 @@ as well.
 Hence this is a valid antitone sparse ranking function and the term is AST.
 
 
-\Cref{ex:Fair-in-the-limit random walk}
+\subsection*{\Cref{ex:Fair-in-the-limit random walk}}
 \[
 \underbrace{\big
 (\tY \, \lambda f x .\ 
@@ -184,7 +184,7 @@ For each $n$, $\Theta[n]$ reduces to either $0$ or $\Theta[n+1]$, with a $\tY$-r
 
 %\medskip
 
-\subsubsection*{Non-affine recursion}
+\subsection*{Non-affine recursion}
 
 Many of the recent advances in the development of AST verification methods \cite{DBLP:conf/pldi/ChenH20,DBLP:conf/cav/ChakarovS13,DBLP:conf/popl/FioritiH15,DBLP:journals/pacmpl/McIverMKK18,DBLP:conf/aplas/HuangFC18,DBLP:conf/popl/ChatterjeeNZ17,DBLP:journals/pacmpl/AgrawalC018,DBLP:conf/cav/ChatterjeeFG16,DBLP:conf/lics/OlmedoKKM16,DBLP:journals/pacmpl/Huang0CG19} are concerned with loop-based programs.
 We can view such loops as tail-recursive programs that are, in particular, \emph{affine recursive}, i.e., 
@@ -194,10 +194,7 @@ Termination analysis of \emph{non-affine recursive} probabilistic programs does 
 Methods such as those presented in \cite{DBLP:journals/toplas/LagoG19} are explicitly restricted to affine programs, and are unsound otherwise.
 By contrast, many probabilistic programming languages allow for richer recursive structures \cite{DBLP:conf/pkdd/TolpinMW15,DBLP:conf/uai/GoodmanMRBT08,DBLP:journals/corr/MansinghkaSP14}.
 
-\medskip
-
-
-\Cref{ex:non-affine recursion easy}
+\subsection*{\Cref{ex:non-affine recursion easy}}
 Let 
 \[
 \Xi := \tY \lambda f x. x \oplus_{2/3} f (f (x + 1))
@@ -233,7 +230,7 @@ then adding the deviation of $\ln$ from its linear approximation $\ln(a) + \frac
 we obtain a sufficiently strong bound on the decrease of $\ln(a)$ that it's an antitone sparse ranking function. 
 (It can obviously be extended to $\Xi\, \underline 1$ too, which reduces to $\Xi^n\, \underline 3$ or a value after a bounded number of steps, but that complicates the analysis a little.)
 
-\subsubsection*{Higher-order recursion}
+\subsection*{Higher-order recursion}
 
 There is an obvious source of deterministic (i.e.~non-probabilistic) higher-order functions defined by recursion, viz., \emph{higher-order recursion schemes} (HORS) (see e.g.~\cite{DBLP:conf/lics/Ong06,DBLP:conf/lics/Ong15}).
 (Incidentally the (sparse) ranking function method is just as applicable to the termination analysis of \emph{deterministic} PPCF programs.)
@@ -245,7 +242,7 @@ As HORS are in essence the $\lambda \tY$-calculus \cite{DBLP:conf/lics/Statman02
 %\akr{As I removed the referenced example, and I don't even know what a PHORS is, I've just removed this comment too.}
 A relevant result here is that the AST problem is decidable for order-1 PHORS (by reduction to the PSPACE-hard solvability of finite systems of polynomial equations with real coefficients; see \cite{DBLP:journals/jacm/EtessamiY09}), but undecidable for order-2 PHORS.
 
-\Cref{ex:higher-order recursion}
+\subsection*{\Cref{ex:higher-order recursion}}
 Consider the higher-order function
 $\Xi : (\textsf{R} \to \textsf{R} \to \textsf{R}) \to \textsf{R} \to \textsf{R} \to \textsf{R}$
 recursively defined by
