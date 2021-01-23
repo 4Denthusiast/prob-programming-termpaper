@@ -205,7 +205,7 @@ A suitable sparse ranking function for $\Xi \, \underline 1$ would be $\Xi^n \, 
 \subsection*{\Cref{ex:non-affine continuous} (More complex non-affine recursion)}
 Let
 \begin{align*}
-\Xi & = \tY\, \lambda f x.\, (\lambda e. X[e]) \tsample \\
+\Xi & = \tY\, \lambda f x.\, (\lambda e. X[e]) \, \tsample \\
 X[e] & = \tif{e \leq p - x^{-2}}{x+1}{f^2(x+1) \oplus_e f(x+1)}
 \end{align*}
 
@@ -232,15 +232,17 @@ we obtain a sufficiently strong bound on the decrease of $\ln(a)$ that it's an a
 
 \subsection*{Higher-order recursion}
 
-There is an obvious source of deterministic (i.e.~non-random) higher-order functions defined by recursion, viz., \emph{higher-order recursion schemes} (HORS) (see e.g.~\cite{DBLP:conf/lics/Ong06,DBLP:conf/lics/Ong15}).
+There is an important formalism for constructing (non-random) higher-order recursive functions, viz., \emph{higher-order recursion schemes} (HORS) (see e.g.~\cite{DBLP:conf/lics/Ong06,DBLP:conf/lics/Ong15}).
 %(Incidentally the (sparse) ranking function method is just as applicable to the termination analysis of \emph{deterministic} PPCF programs.)
 Recently \cite{DBLP:conf/lics/KobayashiLG19} have extended HORS to \emph{probabilistic higher-order recursion schemes} (PHORS), which are HORS augmented with probabilistic (binary) branching $\oplus_p$.
 As HORS are in essence the $\lambda \tY$-calculus \cite{DBLP:conf/lics/Statman02} (i.e.~pure simply-typed lambda calculus with recursion, generated from a finite base type), PHORS are definable in PPCF:
-(order-$n$) PHORS is encodable as (order-$n$) (call-by-name) PPCF, but the former is strictly less expressive (because the underlying recursion schemes are not Turing complete). 
+(order-$n$) PHORS is encodable as (order-$n$) call-by-name PPCF, but the former is strictly less expressive (because the underlying HORS is not Turing complete). 
+For example, the PPCF term in \Cref{ex:higher-order recursion} is not definable in PHORS.
 %Some interesting PPCF terms such as \Cref{ex:non-affine with continuous distribution} %\refExample{complexExample} 
 %cannot be expressed as PHORS.
 %\akr{As I removed the referenced example, and I don't even know what a PHORS is, I've just removed this comment too.}
-A relevant result here is that the AST problem is decidable for order-1 PHORS (by reduction to the PSPACE-hard solvability of finite systems of polynomial equations with real coefficients; see \cite{DBLP:journals/jacm/EtessamiY09}), but undecidable for order-2 PHORS.
+
+A relevant result here is that the AST problem is decidable for order-1 PHORS (by reduction to the PSPACE-hard solvability of finite systems of polynomial equations with real coefficients; see \cite{DBLP:journals/jacm/EtessamiY09}), but undecidable for PHORS with order greater than 1 \cite{DBLP:conf/lics/KobayashiLG19}.
 
 \subsection*{\Cref{ex:higher-order recursion} (Higher-order recursion)}
 Consider the higher-order function
