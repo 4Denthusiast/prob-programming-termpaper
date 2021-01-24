@@ -69,7 +69,7 @@ The binary relation $\to$ is defined by the following rules, each is conditional
   \text{if } M \mid \alpha = \tif{\underline r < 0}{N_1}{N_2},\ & M \to M[N_2/\alpha] \text{ where }r \geq 0 \\
   \text{if } M \mid \alpha = \tsample \text{ and $\lambda$ does}&\text{ not occur after $@_2$ or $\tY$ in $\alpha$},\\ & M \to M[\underline r/\alpha] \text{ where } r \in [0,1].
 \end{align*}
-In each of these cases, $M \mid \alpha$ is the \defn{redex}, and the reduction takes place at $\alpha$.
+In each of these cases, $M \mid \alpha$ is the \defn{redex}, and the \defn{reduction takes place at $\alpha$}.
 \end{definition}
 
 \medskip
@@ -250,7 +250,7 @@ Suppose $M$ is AST w.r.t.~$f$. Let the set of samples with which it terminates w
 
 All of the theorems on the termination of rankable terms therefore extend to other reduction strategies too. The proofs of \Cref{thm:rankable implies termination,thm:partial implies rankable,thm:antitone rankable implies termination,thm:antitone partial implies rankable} are all sufficiently generic with respect to what the reduction relation actually is that they can be directly applied to other reduction strategies. They only require that the number of reductions that can occur without any of them being a $\tY$-reduction is bounded for any starting term (which is true, because \Cref{thm:de groote} applies equally to any reduction strategy). For a reduction strategy $r$ and term $M$, just substitute $N[r(N)]$ being a $\tY$-redex for $N$ being of the form $E[\tY \lambda x. O]$, and $r(N)$ being undefined for $N$ being a value.
 
-The domain of definition of the ranking functions also needs to be changed from the reachable terms $\mathit{Rch}(M)$ to the \emph{reachable terms with respect to the reduction strategy $r$},
+The domain of definition of the ranking functions also needs to be changed from the reachable terms $\mathit{Rch}(M)$ to the \defn{reachable terms with respect to the reduction strategy $r$},
 \[
 \begin{array}{l}
 \mathit{Rch}_r(M) := \{N \mid \exists n, (N_i)_{0 \leq i \leq n} : {}\\
