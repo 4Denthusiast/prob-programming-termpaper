@@ -10,7 +10,7 @@ These variants are defined as functions from reachable terms (i.e.~possible stat
 
 \begin{definition}\rm
 \label{def:ranking function}
-A \emph{ranking function on $M \in \Lambda^0$} is a measurable function $f:\mathit{Rch}(M) \to \mathbb{R}$ such that $f(N) \geq 0$ for all $N$\footnote{The fact that the ranking function can be 0 in some cases before it reaches a value is necessary to get \Cref{thm:minimal} to work neatly.}, and
+A \defn{ranking function on $M \in \Lambda^0$} is a measurable function $f:\mathit{Rch}(M) \to \mathbb{R}$ such that $f(N) \geq 0$ for all $N$\footnote{The fact that the ranking function can be 0 in some cases before it reaches a value is necessary to get \Cref{thm:minimal} to work neatly.}, and
 \begin{enumerate}
     \item $f(E[\tY \lambda x. N]) \geq 1+ f(E[\lambda z. N[(\tY \lambda x. N)/x] z)$ where $z$ is not free in $N$
     \item $f(E[\tsample]) \geq \int_I f(E[\underline{x}]) \, \Leb(\mathrm{d}x)$
@@ -21,9 +21,9 @@ A \emph{ranking function on $M \in \Lambda^0$} is a measurable function $f:\math
 \akr{The fact that the ranking function can be 0 in some cases before it reaches a value is necessary to get \Cref{thm:minimal} to work neatly.}
 \lo{OK. Let's leave \Cref{def:ranking function} as it is.}
 \fi
-We say that the ranking function $f$ is \emph{strict} if there exists $\epsilon > 0$ such that for all $E$ and $R \to R'$, $f(E[R']) \leq f(E[R]) - \epsilon$.
+We say that the ranking function $f$ is \defn{strict} if there exists $\epsilon > 0$ such that for all $E$ and $R \to R'$, $f(E[R']) \leq f(E[R]) - \epsilon$.
 
-Any closed term for which a ranking (respectively, strict ranking) function exists is called \emph{rankable} (respectively, \emph{strictly rankable}). 
+Any closed term for which a ranking (respectively, strict ranking) function exists is called \defn{rankable} (respectively, \defn{strictly rankable}). 
 For example, $(\tY \lambda x.x) \, \underline 0$ is not rankable.
 \end{definition}
 
@@ -37,16 +37,16 @@ It will be demonstrated later that for any rankable term $M$, if $(M_n)_{n \geq 
 Fix a probability space $(\Omega, \calF, \mathbb{P})$ and a filtration $(\calF_n)_{n \geq 0}$ (i.e.~$\calF_n \subseteq \calF$ is a $\sigma$-algebra, and $\calF_n \subseteq \calF_{n+1}$ for all $n$). 
 %(In subsequent applications to termination analysis, $\Omega = \entrosp$, and $\mathbb{P} = \mu_{\entrosp}$.)
 Let $T$ be a r.v.~that takes values in $\mathbb{N} \cup \set{\infty}$.
-We call $T$ a \emph{stopping time adapted to $(\calF_n)_{n \geq 0}$} just if $\set{T = n} \in \calF_n$, for all $n$.
+We call $T$ a \defn{stopping time} \emph{adapted to $(\calF_n)_{n \geq 0}$} just if $\set{T = n} \in \calF_n$, for all $n$.
 
 \begin{definition}\rm
 \begin{asparaenum}[(i)]
-\item A sequence of r.v.s $(Y_n)_{n \geq 0}$ adapted to a filtration $(\calF_n)_{n \geq 0}$ is a \emph{supermartingale} if for all $n \geq 0$, $Y_n$ is integrable (i.e.~$\expect{|Y_n|} < \infty$), and $\expect{Y_{n+1} \mid \calF_n} \leq Y_n$ a.s.~(i.e.~for all $A \in \calF_n$, $\int_A \mathbb{P}(\dif \omega) \, Y_{n+1}(\omega) \leq \int_A \mathbb{P}(\dif \omega) \,Y_n(\omega)$).
+\item A sequence of r.v.s $(Y_n)_{n \geq 0}$ adapted to a filtration $(\calF_n)_{n \geq 0}$ is a \defn{supermartingale} if for all $n \geq 0$, $Y_n$ is integrable (i.e.~$\expect{|Y_n|} < \infty$), and $\expect{Y_{n+1} \mid \calF_n} \leq Y_n$ a.s.~(i.e.~for all $A \in \calF_n$, $\int_A \mathbb{P}(\dif \omega) \, Y_{n+1}(\omega) \leq \int_A \mathbb{P}(\dif \omega) \,Y_n(\omega)$).
 \item Let $\epsilon > 0$. 
 Given a stopping time $T$ and a supermartingale $(Y_n)_{n \geq 0}$, both adapted to filtration $(\calF_n)_{n \geq 0}$, 
-we say that $(Y_n)_{n \geq 0}$ is a \emph{$\epsilon$-ranking supermartingale w.r.t.~$T$} if for all $n$, $Y_n \geq 0$ and $\expect{Y_{n+1} \mid \calF_n} \leq Y_n - \epsilon \cdot \mathbf{1}_{\set{T > n}}$.
+we say that $(Y_n)_{n \geq 0}$ is a $\epsilon$-\defn{ranking supermartingale w.r.t.~$T$} if for all $n$, $Y_n \geq 0$ and $\expect{Y_{n+1} \mid \calF_n} \leq Y_n - \epsilon \cdot \mathbf{1}_{\set{T > n}}$.
 \footnote{For $A \in \calF$, we write ${\bf 1}_A$ for the \emph{indicator function} of $A$, i.e., the random variable defined by ${\bf 1}_A(\omega) := 1$ if $\omega \in A$, and $0$ otherwise.} %\lo{\LaTeX\ does not allow the preceding bracketed sentence to be typeset as a footnote. Strange!}\lo{Now it does. Stranger.}
-A \emph{ranking supermartingale} w.r.t.~$T$ is a $\epsilon$-ranking supermartingale w.r.t.~$T$ for some $\epsilon > 0$.
+A \defn{ranking supermartingale} w.r.t.~$T$ is a $\epsilon$-ranking supermartingale w.r.t.~$T$ for some $\epsilon > 0$.
 \end{asparaenum}
 \end{definition}
 
@@ -99,7 +99,7 @@ M_n(s) &:= \pi_0 (\red^n(M, s))\\
 T_M(s) &:= \min \set{n \mid \hbox{$M_n(s)$ is a value}}
 \end{align*} 
 and the filtration $(\mathcal{F}_n)_{n \geq 0}$ where $\mathcal{F}_n := \sigma(M_1, \cdots, M_n)$.
-Thus $T_M$ is the \emph{runtime} of $M$ (and $M$ is AST iff $\mu_{\entrosp}(T_M < \infty) = 1$).
+Thus $T_M$ is the \defn{runtime} of $M$ (and $M$ is AST iff $\mu_{\entrosp}(T_M < \infty) = 1$).
 
 Our first result is the following theorem.
 \begin{restatable}[Deriving supermartingales]{theorem}{rankableAndStrictRankable}

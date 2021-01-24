@@ -40,9 +40,9 @@ Every closed term either is a value or reduces to another term.
 This version of the reduction relation allows $\tsample$ to reduce to any number in $[0,1]$. 
 To more precisely specify the probabilities, an additional argument is needed to determine the outcome of random samples. Let $ I := [0,1] \subset \mathbb{R} $, and define $\entrosp := I^{\mathbb{N}}$, with the Borel $\sigma$-algebra $\Sigma_\entrosp$. Equivalently, a basis of measurable sets is $\prod_{i=0}^\infty X_i$ where $X_i$ are all Borel and all but finitely many are $I$, and the probability measure $\mu_{\entrosp}$ is given by $\mu_{\entrosp} (\prod_{i=0}^\infty X_i) := \prod_{i=0}^\infty \Leb(X_i)$, \changed[lo]{writing $\Leb$ for the Lebesgue measure.}
 \changed[lo]{The maps $\pi_h:\entrosp \to I$ (projecting to the first element) and $\pi_t:\entrosp \to \entrosp$ (popping the first element) are then measurable.}
-Following \cite{DBLP:conf/esop/CulpepperC17}, we call the probability space $(\entrosp, \Sigma_\entrosp, \mu_{\entrosp})$ the \emph{entropy space}, and elements of $\entrosp$ \emph{traces}.
+Following \cite{DBLP:conf/esop/CulpepperC17}, we call the probability space $(\entrosp, \Sigma_\entrosp, \mu_{\entrosp})$ the \emph{entropy space}, and elements of $\entrosp$ \defn{traces}.
 
-Define a \emph{skeleton} to be a term but, instead of having real constants $\underline r$, it has a placeholder $\skeletonPlaceholder$, so that each term $M$ has a skeleton $\mathit{Sk}(M)$, and each skeleton $S$ can be converted to a term $S[r]$ given a vector $r$ of $n$ real numbers to substitute in, where $n$ is the number of occurrences of $\skeletonPlaceholder$ in $S$. 
+Define a \defn{skeleton} to be a term but, instead of having real constants $\underline r$, it has a placeholder $\skeletonPlaceholder$, so that each term $M$ has a skeleton $\mathit{Sk}(M)$, and each skeleton $S$ can be converted to a term $S[r]$ given a vector $r$ of $n$ real numbers to substitute in, where $n$ is the number of occurrences of $\skeletonPlaceholder$ in $S$. 
 Following \cite{DBLP:conf/icfp/BorgstromLGS16,DBLP:conf/lics/StatonYWHK16,DBLP:journals/pacmpl/EhrhardPT18}, the $\sigma$-algebra on $\Lambda$ is defined by identifying $\Lambda$ with $\bigcup_{m\geq 0} \big(\mathsf{Sk}_m \times \Real^m \big)$, where $\mathsf{Sk}_m$ is the set of skeletons containing $m$ occurrences of $\skeletonPlaceholder$.
 Thus identified, we give $\Lambda$ the countable disjoint union topology of the product topology of the discrete topology on $\mathsf{Sk}_m$ and the standard topology on $\Real^m$, and take the corresponding Borel $\sigma$-algebra.
 Note that the connected components of $\Lambda$ have the form $\{S\} \times \Real^m$, with $S$ ranging over $\mathsf{Sk}_m$, and $m$ over $\mathbb{N}$.
@@ -66,7 +66,7 @@ The result after $n$ steps is then simply
 and the limit $\red^\infty$ can then be defined as a partial function as $\lim_{n \to \infty} \red^n(M,s)$ whenever that sequence becomes constant by reaching a value. A term $M$ terminates for a sample sequence $s$ if the limit $\red^\infty(M,s)$ is defined.
 
 The reduction function is measurable, and the set of values is measurable, therefore the set of $s$ such that $M$ terminates at $s$ within $n$ steps is measurable for any $n$, therefore $\{s \mid \hbox{$M$ terminates at $s$}\}$ is measurable \cite{DBLP:conf/icfp/BorgstromLGS16,MakOPW21}. 
-We say that a term $M$ is \emph{almost surely terminating} (AST) just if $\mu_{\entrosp}(\{s \mid \hbox{$M$ terminates at $s$}\}) = 1$.
+We say that a term $M$ is \defn{almost surely terminating} (\defn{AST}) just if $\mu_{\entrosp}(\{s \mid \hbox{$M$ terminates at $s$}\}) = 1$.
 
 \iffalse
 \lo{Alternatively, define the \emph{runtime of $M$} to be the random variable 
@@ -80,7 +80,7 @@ T_M(s) :=
 Equivalently, we say that $M$ is \emph{almost surely terminating} (AST) if $T_M < \infty$ a.s.; 
 and $M$ is \emph{positively almost surely terminating} (PAST) if $\expect{T_M} < \infty$.}
 \fi
-\begin{example} The term 
+\begin{example}[Geometric distribution] The term 
 \[
 (\tY \lambda f n: \tif{\tsample - 0.5 < 0}{n}{f (n+1)} ) \, \underline{0},
 \] 

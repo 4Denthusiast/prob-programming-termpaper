@@ -21,12 +21,12 @@ There are, however, some restricted variations on the reduction order that do no
 \medskip
 Even with this restriction, a trace semantics in the style of the one already defined would not be entirely Church-Rosser, as, for example, $\red^3(\tsample - \tsample, (1,0,\dots))$ would be either $1$ or $-1$ depending on the order of evaluation of the $\tsample$s, as that determines which sample from the pre-selected sequence is used for each one. To fix this, rather than pre-selecting samples according to the order they'll be drawn in, select them according to the position in the term where they'll be used instead.
 
-A \emph{position} is a finite sequence of steps into a term, defined inductively as
+A \defn{position} is a finite sequence of steps into a term, defined inductively as
 \begin{align*}
 \alpha ::= & \; {\cdot} \mid \lambda ; \alpha \mid @_1 ; \alpha \mid @_2 ; \alpha \mid \underline f_i ; \alpha \\
 & {} \mid \tY ; \alpha \mid \textsf{if}_1 ; \alpha \mid \textsf{if}_2 ; \alpha \mid \textsf{if}_3 ; \alpha.
 \end{align*}
-The \emph{subterm of $M$ at $\alpha$}, denoted $M \mid \alpha$, is defined as
+The \defn{subterm of $M$ at $\alpha$}, denoted $M \mid \alpha$, is defined as
 \begin{align*}
 M \mid \cdot & = M \\
 \lambda x. M \mid \lambda ; \alpha & = M \mid \alpha \\
@@ -69,7 +69,7 @@ The binary relation $\to$ is defined by the following rules, each is conditional
   \text{if } M \mid \alpha = \tif{\underline r < 0}{N_1}{N_2},\ & M \to M[N_2/\alpha] \text{ where }r \geq 0 \\
   \text{if } M \mid \alpha = \tsample \text{ and $\lambda$ does}&\text{ not occur after $@_2$ or $\tY$ in $\alpha$},\\ & M \to M[\underline r/\alpha] \text{ where } r \in [0,1].
 \end{align*}
-In each of these cases, $M \mid \alpha$ is the \emph{redex}, and the reduction takes place at $\alpha$.
+In each of these cases, $M \mid \alpha$ is the \defn{redex}, and the reduction takes place at $\alpha$.
 \end{definition}
 
 \medskip
@@ -173,7 +173,7 @@ In \Cref{ex:cousin sim}, $(M,\underline{+}_1) \sim_p (M \to N_2,\underline{+}_1)
 If we extend it to have three $\tsample$s, $\sim_c$ becomes necessary as well: Let $M_{sss} = \tsample + \tsample + \tsample$ (taking the three-way addition to be a single primitive function), $M_{Xss} = \skeletonPlaceholder + \tsample + \tsample$, and so on. There are then reduction sequences $M_{sss} \to M_{Xss} \to M_{XXs} \to M_{XXX} \to \skeletonPlaceholder$ and $M_{sss} \to M_{sXs} \to M_{XXs} \to M_{XXX} \to \skeletonPlaceholder$. For the first two reductions, these reduction sequences take the same samples by $\sim_p$, case i, as in \Cref{ex:cousin sim}~. The next reduction uses the samples labelled by $(M_{sss} \to M_{Xss} \to M_{XXs}, \underline{+}_3)$ and $(M_{sss} \to M_{sXs} \to M_{XXs}, \underline{+}_3)$, which are related by $\sim_c$, case a, therefore when these reduction sequences reach $M_{XXX}$, they still contain all the same numbers, as desired.
 \end{example}
 
-The reflexive transitive closure $\sim^*$ of this relation is used to define the set of \emph{potential positions} $L(M) = L_0(M) / \sim^*$, and each equivalence class can be considered as the same position as it may occur across multiple reachable skeletons. 
+The reflexive transitive closure $\sim^*$ of this relation is used to define the set of \defn{potential positions} $L(M) = L_0(M) / \sim^*$, and each equivalence class can be considered as the same position as it may occur across multiple reachable skeletons. 
 If $(N,\alpha) \sim^* (O,\beta)$, then $N \mid \alpha$ and $O \mid \beta$ both have the same shape (i.e.~they're either both the placeholder $\skeletonPlaceholder$, both variables, both applications, both $\tsample$s etc.), therefore it's well-defined to talk of the set of potential positions where there is a $\tsample$, $L_s(M)$. 
 Formally $L_s(M) := \{[(X, \alpha)]_{\sim^\ast_M} : X \mid \alpha = \tsample\}$.
 The new sample space is then defined as $I^{L_s(M)}$, with the Borel $\sigma$-algebra and product measure.
@@ -210,8 +210,10 @@ The relation $\Rightarrow$ is Church-Rosser.
 
 \medskip
 The reduction relation $\Rightarrow$ is nondeterministic, so it admits multiple possible reduction strategies. 
-A \emph{reduction strategy} starting from a closed term $M$ is a measurable partial function $f$ from $\mathit{Rch}(M)$ to positions, such that for any reachable term $N$ where $f$ is defined, $f(N)$ is a position of a redex in $N$, and if $f(N)$ is not defined, $N$ is a value.
+%\begin{definition}
+A \defn{reduction strategy} starting from a closed term $M$ is a measurable partial function $f$ from $\mathit{Rch}(M)$ to positions, such that for any reachable term $N$ where $f$ is defined, $f(N)$ is a position of a redex in $N$, and if $f(N)$ is not defined, $N$ is a value.
 Using a reduction strategy $f$, a subset of $\Rightarrow$ that isn't nondeterministic, $\Rightarrow_f$, can be defined by $(N,s) \Rightarrow_f (N',s')$ just if $(N,s) \Rightarrow (N',s')$ and $N$ reduces to $N'$ with the redex at $f(N)$.
+%\end{definition}
 
 The usual call-by-value semantics can be implemented as one of these reduction strategies, given by (with $V$ a value and $T$ a term that isn't a value and $M$ a general term)
 \begin{align*}
@@ -225,7 +227,8 @@ The usual call-by-value semantics can be implemented as one of these reduction s
 \end{align*}
 (this last case covers redexes at the root position).
 
-A closed term $M$ terminates with a given reduction strategy $f$ and samples $s$ if there is some natural number $n$ such that $(M,s) \Rightarrow_f^n (N,s')$ where $f$ gives no reduction at $N$. The term terminates almost surely with respect to $f$ if it terminates with $f$ for almost all $s$.
+A closed term $M$ terminates with a given reduction strategy $f$ and samples $s$ if there is some natural number $n$ such that $(M,s) \Rightarrow_f^n (N,s')$ where $f$ gives no reduction at $N$. 
+The term terminates almost surely with respect to $f$ if it terminates with $f$ for almost all $s$.
 
 With these definitions, it is now possible to relate the confluent trace semantics back to the standard trace semantics.
 
@@ -257,18 +260,18 @@ The domain of definition of the ranking functions also needs to be changed from 
 
 More explicitly, the modified forms of the theorems are:
 \begin{definition}
-An \emph{antitone ranking function on $M$ with respect to a reduction strategy $r$} is a measurable function $f:\mathit{Rch}_r(M) \to \mathbb{R}$ such that $f(N) \geq 0$ for all $N$, and there exists an antitone function $\epsilon : \nnReal \to \pReal$ such that
+An \defn{antitone ranking function on $M$ with respect to a reduction strategy $r$} is a measurable function $f:\mathit{Rch}_r(M) \to \mathbb{R}$ such that $f(N) \geq 0$ for all $N$, and there exists an antitone function $\epsilon : \nnReal \to \pReal$ such that
 \begin{itemize}
     \item $f(N) \geq \epsilon(f(N)) + f(N')$ if $N[r(N)]$ is a $\tY$-redex and $N$ reduces to $N'$ at $r(N)$
     \item $f(N) \geq \int_I f(N[\underline{x}/r(N)]) \, \Leb(\mathrm{d}x)$ if $N[r(N)] = \tsample$
 
     \item $f(N) \geq f(N')$ if $r(N)$ is any other redex, where $N \to N'$ at $r(N)$.
 \end{itemize}
-Any closed term for which an antitone ranking function with respect to a reduction strategy $r$ exists is called \emph{antitone rankable} with respect to $r$. 
+Any closed term for which an antitone ranking function with respect to a reduction strategy $r$ exists is called \defn{antitone rankable} with respect to $r$. 
 \end{definition}
 
 \begin{definition}
-An \emph{antitone sparse ranking function on $M$ with respect to a reduction strategy $r$} is a partial function $f : \mathit{Rch}_r(M) \rightharpoonup \mathbb R$ such that there exists some antitone function $\epsilon : \nnReal \to \pReal$ such that
+An \defn{antitone sparse ranking function on $M$ with respect to a reduction strategy $r$} is a partial function $f : \mathit{Rch}_r(M) \rightharpoonup \mathbb R$ such that there exists some antitone function $\epsilon : \nnReal \to \pReal$ such that
 \begin{inparaenum}[(i)]
     \item $f(N) \geq 0$ for all $N \in \dom(f)$,
     \item $M \in \dom(f)$,
@@ -283,7 +286,7 @@ An \emph{antitone sparse ranking function on $M$ with respect to a reduction str
 \fi
 \end{definition}
 
-If the antitone function is just the constant function $1$ instead, then it is called a \emph{(sparse) ranking function on $M$ with respect to $r$} instead, and the term is called \emph{rankable} with respect to $r$.
+If the antitone function is just the constant function $1$ instead, then it is called a \defn{(sparse) ranking function on $M$ with respect to $r$} instead, and the term is called \defn{rankable} with respect to $r$.
 
 \begin{theorem}[Confluent ranking] \label{thm:confluent ranking}
 If a closed PPCF term $M$ has a ranking function, sparse ranking function, antitone ranking function or antitone sparse ranking function w.r.t.~a reduction strategy $r$, then $M$ is AST w.r.t.~$r$, and AST.
