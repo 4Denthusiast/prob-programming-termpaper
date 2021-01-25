@@ -231,7 +231,7 @@ The usual call-by-value semantics can be implemented as one of these reduction s
 (this last case covers redexes at the root position).
 
 A closed term $M$ terminates with a given reduction strategy $f$ and samples $s$ if there is some natural number $n$ such that $(M,s) \Rightarrow_f^n (N,s')$ where $f$ gives no reduction at $N$. 
-The term terminates almost surely with respect to $f$ if it terminates with $f$ for almost all $s$.
+The term \emph{terminates almost surely w.r.t.~$f$} if it terminates with $f$ for almost all $s$.
 
 With these definitions, it is now possible to relate the confluent trace semantics back to the standard trace semantics.
 
