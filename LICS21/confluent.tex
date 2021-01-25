@@ -57,7 +57,7 @@ Two subterms $N_1$ and $N_2$ of a term $M$, corresponding to positions $\alpha_1
 If $\alpha_1$ is a prefix of $\alpha_2$ (written as $\alpha_1 \leq \alpha_2$), then $N_2$ is also a subterm of $N_1$. If neither $\alpha_1 \leq \alpha_2$ nor $\alpha_1 \geq \alpha_2$, the positions are said to be \emph{disjoint}. 
 The notion of disjointness is mostly relevant in that if $\alpha_1$ and $\alpha_2$ are disjoint, performing a substitution at $\alpha_1$ will leave the subterm at $\alpha_2$ unaffected.
 
-With this notation, a more general reduction relation $\to$ can be defined.
+Thus we can define a more general reduction relation\footnote{In this section $\to$ always means the relation defined in \cref{def:more general red}.} $\to$.
 \begin{definition}
 \label{def:more general red}
 The binary relation $\to$ is defined by the following rules, each is conditional on a redex occurring at position $\alpha$ in the term $M$:
@@ -72,7 +72,7 @@ The binary relation $\to$ is defined by the following rules, each is conditional
 In each of these cases, $M \mid \alpha$ is the \defn{redex}, and the \defn{reduction takes place at $\alpha$}.
 \end{definition}
 
-\medskip
+%\medskip
 Labelling the pre-chosen samples by the positions in the term would also not work because in some cases, a $\tsample$ will be duplicated before being reduced, for example, in $(\lambda x. x \, {\underline 0} \, \mathbin{\underline{+}} \, {x \, \underline 0}) (\lambda y. \tsample)$, both of the $\tsample$ redexes that eventually occur originate at $@_2 ; \lambda$. 
 It is therefore necessary to consider possible positions that may occur in other terms reachable from the original term. 
 Even this is itself inadequate because some of the positions in different reachable terms need to be considered the same, and the number of reachable terms is in general uncountable, which leads to measure-theoretic issues.
@@ -95,7 +95,7 @@ As with the traces from $I^{\mathbb N}$ used to pre-select samples to use in the
 
 A (skeletal) reduction sequence is assumed to contain the information on the locations of all of the redexes as well as the actual sequence of skeletons that occurs. For example, $(\lambda x. x) ((\lambda x. x) \, \skeletonPlaceholder)$ could reduce to $(\lambda x. x) \, \skeletonPlaceholder$ with the redex at either $\cdot$ or $@_2$, and these give different reduction sequences.
 
-\begin{example}[Labelling samples by terms]
+\begin{example}%[Labelling samples by terms]
 Consider the terms
 \begin{align*}
 A[x] &= \tif{\tif{x>0}{I}{I} (\lambda y.\tsample)\, \underline 0 - \underline{0.5} > 0}{\underline 0}{\Omega}\\
