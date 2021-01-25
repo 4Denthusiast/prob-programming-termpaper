@@ -211,7 +211,7 @@ This reduction relation now has all of the properties required of it. In particu
 The relation $\Rightarrow$ is Church-Rosser.
 \end{restatable}
 
-\paragraph*{Reduction strategy}
+\paragraph*{Reduction strategy determinising $\Rightarrow$}
 The reduction relation $\Rightarrow$ is nondeterministic, so it admits multiple possible reduction strategies. 
 %\begin{definition}
 A \defn{reduction strategy} starting from a closed term $M$ is a measurable partial function $f$ from $\mathit{Rch}(M)$ to positions, such that for any reachable term $N$ where $f$ is defined, $f(N)$ is a position of a redex in $N$, and if $f(N)$ is not defined, $N$ is a value.
