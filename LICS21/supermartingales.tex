@@ -99,7 +99,7 @@ M_n(s) &:= \pi_0 (\red^n(M, s))\\
 T_M(s) &:= \min \set{n \mid \hbox{$M_n(s)$ is a value}}
 \end{align*} 
 and the filtration $(\mathcal{F}_n)_{n \geq 0}$ where $\mathcal{F}_n := \sigma(M_1, \cdots, M_n)$.
-Thus $T_M$ is the \defn{runtime} of $M$ (and $M$ is AST iff $\mu_{\entrosp}(T_M < \infty) = 1$).
+Thus $T_M$ is the \defn{runtime} of $M$ (and $M$ is AST iff $\mu_{\entrosp}(T_M < \infty) = 1$); we say that $M$ is \defn{positively almost surely terminating} (\defn{PAST}) if $\expect{T_M} < \infty$.
 
 Our first result is the following theorem.
 \begin{restatable}[Deriving supermartingales]{theorem}{rankableAndStrictRankable}
@@ -136,9 +136,10 @@ $(T_n)_{n \geq 0}$ is an increasing sequence of stopping times adapted to $(\cal
 %The random variable $T_M$ is a stopping time w.r.t.~filtration $(\calF_n)_{n \geq 0}$. 
 %Since $f(M_n(s)) = 0$ iff $M_n(s)$ is a value, $T_M$ is the \emph{runtime of $M$}.
 
-The random variable $T_M^\tY$, which we call the \emph{$\tY$-runtime of $M$}, can equivalently be defined as the number of $\tY$-reduction steps in the reduction sequence of $M$. 
+The random variable $T_M^\tY$, which we call the $\tY$-\defn{runtime} of $M$, can equivalently be defined as the number of $\tY$-reduction steps in the reduction sequence of $M$. 
 Note that, as the type system ensures that the reduction relation excluding $\tY$-reduction is strongly normalising, only finitely many reductions can occur in a row without one of them being a $\tY$-reduction, therefore $T_M^\tY < \infty$ a.s.~iff $M$ is AST. 
-Moreover: 
+We say that $M$ is $\tY$-\defn{PAST} if $\expect{T^{\tY}_M} < \infty$.
+
 \begin{restatable}{lemma}{TMtYStoppingTime}
 \label{lem:TMtY is a stopping time}
 $T_M^\tY$ is a stopping time adapted to $(\calF_{T_n})_{n \geq 0}$.
@@ -146,9 +147,11 @@ $T_M^\tY$ is a stopping time adapted to $(\calF_{T_n})_{n \geq 0}$.
 
 \begin{theorem}[Soundness of rankability] \label{thm:rankable implies termination}
 \begin{enumerate}
-\item If a closed PPCF term $M$ is rankable, then $M$ is AST (equivalently, $T^{\tY}_M < \infty$ almost surely), and $M$ is $\tY$-positively almost sure terminating ($\tY$-PAST) i.e.~$\expect{T^{\tY}_M} < \infty$. 
+\item If a closed PPCF term $M$ is rankable, then $M$ is AST and $\tY$-PAST.
+%AST (equivalently, $T^{\tY}_M < \infty$ almost surely), and $M$ is $\tY$-positively almost sure terminating ($\tY$-PAST) i.e.~$\expect{T^{\tY}_M} < \infty$. 
 
-\item If a closed PPCF term $M$ is strictly rankable, then $\expect{T_M} < \infty$ i.e.~$M$ is positively a.s.~terminating (PAST).
+\item If a closed PPCF term $M$ is strictly rankable, then $M$ is PAST.
+%$\expect{T_M} < \infty$ i.e.~$M$ is PAST.
 \end{enumerate}
 \end{theorem}
 
