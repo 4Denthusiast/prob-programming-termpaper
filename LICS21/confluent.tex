@@ -195,7 +195,7 @@ At each reduction step $M \to N$, the sample space must be restricted from $I^{L
 The injection $L_0(N) \to L_0(M)$ is trivial to define by appending $\mathit{Sk}(M) \to \mathit{Sk}(N)$ to each path, and using \Cref{lem:sim-M-N}, this induces a corresponding injection on the quotient, $L(N) \to L(M)$. 
 The corresponding map $L_s(N) \to L_s(M)$ is then denoted $i(M \to N)$.
 
-\begin{definition}[$\Rightarrow$-reduction]
+\begin{definition}[$\Rightarrow$ reduction]
 Unlike in the purely call-by-value case, the version of the reduction relation that takes into account samples is still a general relation rather than a function, so it is denoted ``$\Rightarrow$'' instead of ``$\red$'', and it relates $\biguplus_{M \in \Lambda_0} I^{L_s(M)}$ to itself.
 We write an element of $\biguplus_{M \in \Lambda_0} I^{L_s(M)}$ as $(M', s)$ where the \emph{term} $M' \in \Lambda^0$ and $s \in  I^{L_s(M')}$.
 \begin{align*}
@@ -211,7 +211,7 @@ This reduction relation now has all of the properties required of it. In particu
 The relation $\Rightarrow$ is Church-Rosser.
 \end{restatable}
 
-\medskip
+\paragraph*{Reduction strategy}
 The reduction relation $\Rightarrow$ is nondeterministic, so it admits multiple possible reduction strategies. 
 %\begin{definition}
 A \defn{reduction strategy} starting from a closed term $M$ is a measurable partial function $f$ from $\mathit{Rch}(M)$ to positions, such that for any reachable term $N$ where $f$ is defined, $f(N)$ is a position of a redex in $N$, and if $f(N)$ is not defined, $N$ is a value.
@@ -305,7 +305,7 @@ If, as seems likely, \Cref{thm:antitone rankable implies termination} is complet
 For any closed term $M$ and reduction strategy $r$ on $M$, if every term in $\mathit{Rch}_r(M)$ is AST, then every term in $\mathit{Rch}(M)$ is AST.
 \end{restatable}
 
-However, there are some terms which terminate more simply and directly via some alternative reduction strategy. For these examples, a custom reduction strategy is specified for each term under consideration.
+\paragraph*{Custom reduction strategy for AST analysis} However, there are some terms which terminate more simply and directly via some alternative reduction strategy. For these examples, a custom reduction strategy is specified for each term under consideration.
 
 \begin{example}[Sum of powers] \label{ex:sum of powers}
 The following term picks a random natural number $n$, then computes $\sum_{k=0}^n k^n$.
