@@ -4,8 +4,8 @@
 
 \begin{example}[Random walk]
 \label{ex:ac-ranking}
-\begin{enumerate}
-\item 1D biased (towards 0) random walk
+\begin{compactenum}[(i)]
+\item One-dimensional (1D) biased (towards 0) random walk
 \[
 M_1 = 
 \big(\tY \, \lambda f n . \, 
@@ -25,13 +25,12 @@ M_3 =
 \big(\tY \, \lambda f n . \, 
 \tif{n = 0}{0}{f \, (n - 1) \oplus_{1/3} f \, (n + 2)}\big) \, 10
 \]
-
-
 %While {x > 0} do {x := x-1 \oplus_2/3 x:= x+1}
-
 %M2 = While {x > 0} do {x := x-1 \oplus_2/3 x:= x+2}
-\end{enumerate}
+\end{compactenum}
 \end{example}
+
+\medskip
 
 The term $M_1$ is rankable, terminating in 31 $\tY$-steps on average, and $M_3$ only has a $1/1024$ chance of terminating, but in between, $M_2$ is AST, but isn't $\tY$-PAST, therefore it isn't rankable and \Cref{thm:rankable implies termination} is insufficient to prove its termination. 
 Thus we seek a generalised notion of ranking function so that $M_2$ becomes rankable, and then prove it sound i.e.~rankable in this generalised sense implies AST.
@@ -222,7 +221,7 @@ For a more complex (not $\tY$-PAST) example, consider the following continuous r
 \begin{example}[More complex non-affine recursion]
 \label{ex:non-affine continuous}
 \begin{align*}
-& (\tY\, \lambda f x.\, (\lambda e. X[e]) \, \tsample)\, \underline 0 \\
+& (\tY\, \lambda f x.\, (\lambda e. X[e]) \, \tsample)\, \underline 0 \quad \hbox{where}\\
 & X[e] := \tif{e \leq p - x^{-2}}{x}{f^2(x+1) \oplus_e f(x+1)}
 \end{align*}
 \end{example}
