@@ -1,0 +1,32 @@
+(@Luke: This is a bit over the word limit, but some of that is comments to you. If it's still too long after you've responded, we can cut some of the more minor ones as you suggested.)
+
+Reviewer 1 asked what "\mathsf R", "r.v." and "a.s." are. "\mathsf R" refers to the base type for programs which reduce to real-number values. "r.v." means random variable, and "a.s." means almost surely.
+
+Reviewer 2 said that there were no examples of reduction strategies beyond CBV. As the other reduction strategies mainly considered in this work (i.e. used with Theorem V1.16) are intended to be specifically designed for particular programs, the other examples are given along with particular example programs, specifically the extended discussions of examples V.14 and VI.17 in the appendices.
+
+CBN is not considered a valid reduction strategy because it violates the condition that the argument of a beta redex must be a value.
+
+(@Luke: I don't understand why they're objecting to "Y \lambda f n. M". Their objection isn't the colon (while the syntax for lambda terms was defined with a dot) because they also object to it again later where we did use a dot. The abbreviation "\lambda f n. M" for "\lambda f. \lambda n. M" seems sufficiently standard that I don't expect that this is their objection either. Maybe they're expecting brackets ("Y (\lambda f n. M)")? I don't want to reply that this objection is incorrect without understanding what the objection is, but I think it is incorrect.)
+
+Example IV.1 actually is rankable, as rankability corresponds (approximately) to Y-PAST.
+
+(@Luke: I remember looking up what "contractum" meant, but I can't find it now.)
+
+At the end of section IV, the next reduction in i ⊕_0.5 (Y \lambda fn. n ⊕_0.5 f(n+1)) (i+1) is the ⊕_0.5 (or, to be more precise, the sample implicit in that notation), not the Y, because ⊕ is syntactic sugar for a sort of if, and the branches of an if are not evaluated before one of them is selected.
+
+Example V.1 is simply meant to illustrate that there are some terms which terminate too slowly to be rankable.
+
+The relation defined in VI.1 is non-deterministic, and alpha can take any value that locates one of these types of redexes.
+
+Labelling the samples with elements of a set A simply refers to picking samples s from I^A, then using s(a) for the sample reduction whenever the relevant position/number of samples previoustly taken/reduction sequence and position (depending on the labelling) is a.
+
+In example VI.2, it's not clear whether you're referring to the skeleton placeholder number, sans-serif X, or simply that x should be uppercase because it's a term (which would be correct). "I" here is meant as shorthand for the identity function.
+
+Regarding the general comments on section 6.
+The restrictions in reduction strategies are the extra conditions in Def VI.1 on what reductions are valid (specifically, that the argument of a beta redex must be a value, and the restrictions on positions where sample reductions can occur).
+The body of a Y subterm is effectively both the function and the argument in an application. If it contians multiple occurrences of the relevant variable, it will be duplicated by the Y reduction. More specifically, consider (Y \lambda f n. if n = 0 then (\lambda x. sample) else \lambda x.(f 0 0 + f 0 0)) 1 0. This reduces to something like (lambda x. sample) 0 + (\lambda x. sample) 0. If the sample had been allowed to be reduced first, the samples would have ended up correlated. The fact that the position has to have a Y and a lambda in it to be excluded is simply to accommodate things like Y if sample > 0.5 then M else N, where there actually should be reductions inside the Y.
+Yes, (lambda x. x 0 + x 0) (lambda y. sample) illustrates why the reduction strategies must be restricted. The correct distribution of results is triangular, with support [0,2] and peak at 1. The (invalid) reduction strategy that reduces the sample first would instead produce a uniform distribution on [0,2], because it would be taking one sample and scaling it up rather than taking two independent samples. The restriction that sample reductions can't occur at positions in which lambda occurs after @_2 is indeed to avoid problems with terms like this.
+In Definition VI.8, s is a function L_s(M) to I, and i(M -> N) is a function L_s(N) to L_s(M), therefore the composition i(M -> N) then s is valid.
+
+Regarding reviewer 3's questions about the completeness conjecture:
+I am not aware of any particularly relevant previous literature. I did spend a while trying to solve the problem, and do intend to try some more in future, but didn't have time to continue. Part of what makes this question so difficult is that you have to construct an antitone function that represents the rate of convergence of all of the different states the program could be in, and assign all the program states ranking function values, despite it be not obvious how to compare, for example, one state which would either terminate in a few steps or extremely slowly, and another which would terminate after a long time, but more deterministically. The fact that, for constructing a ranking function, even branches with 0 probability must be considered is an additional cause of difficulty, as they can terminate arbitrarily much slower than the program itself.
