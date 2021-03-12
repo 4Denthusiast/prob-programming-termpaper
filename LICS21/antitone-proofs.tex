@@ -82,7 +82,7 @@ which is a contradiction, therefore the claim must be true, therefore $P[T > n] 
 \end{proof}
 
 
-\Cref{ex:raven complex}
+\subsection*{\Cref{ex:raven complex} (Continuous random walk)}
 Let $\Theta := \tY \, \lambda f x . \tif{x \leq 0}{0}{f(x - \tsample)}$. 
 We can construct a sparse ranking function $f$ for $\Theta \, \underline{10}$ as follows:
 \begin{align*}
@@ -137,7 +137,7 @@ as well.
 Hence this is a valid antitone sparse ranking function and the term is AST.
 
 
-\Cref{ex:Fair-in-the-limit random walk}
+\subsection*{\Cref{ex:Fair-in-the-limit random walk} (Fair-in-the-limit random walk) \cite[\S 5.3]{DBLP:journals/pacmpl/McIverMKK18}}
 \[
 \underbrace{\big
 (\tY \, \lambda f x .\ 
@@ -184,7 +184,7 @@ For each $n$, $\Theta[n]$ reduces to either $0$ or $\Theta[n+1]$, with a $\tY$-r
 
 %\medskip
 
-\subsubsection*{Non-affine recursion}
+\subsection*{Non-affine recursion}
 
 Many of the recent advances in the development of AST verification methods \cite{DBLP:conf/pldi/ChenH20,DBLP:conf/cav/ChakarovS13,DBLP:conf/popl/FioritiH15,DBLP:journals/pacmpl/McIverMKK18,DBLP:conf/aplas/HuangFC18,DBLP:conf/popl/ChatterjeeNZ17,DBLP:journals/pacmpl/AgrawalC018,DBLP:conf/cav/ChatterjeeFG16,DBLP:conf/lics/OlmedoKKM16,DBLP:journals/pacmpl/Huang0CG19} are concerned with loop-based programs.
 We can view such loops as tail-recursive programs that are, in particular, \emph{affine recursive}, i.e., 
@@ -194,10 +194,7 @@ Termination analysis of \emph{non-affine recursive} probabilistic programs does 
 Methods such as those presented in \cite{DBLP:journals/toplas/LagoG19} are explicitly restricted to affine programs, and are unsound otherwise.
 By contrast, many probabilistic programming languages allow for richer recursive structures \cite{DBLP:conf/pkdd/TolpinMW15,DBLP:conf/uai/GoodmanMRBT08,DBLP:journals/corr/MansinghkaSP14}.
 
-\medskip
-
-
-\Cref{ex:non-affine recursion easy}
+\subsection*{\Cref{ex:non-affine recursion easy} (Non-affine recursion)}
 Let 
 \[
 \Xi := \tY \lambda f x. x \oplus_{2/3} f (f (x + 1))
@@ -205,10 +202,10 @@ Let
 A suitable sparse ranking function for $\Xi \, \underline 1$ would be $\Xi^n \, \underline i \mapsto 3 \, n$ (for $n \geq 0$), because $\Xi^n \, \underline i$ reduces to either $\Xi^{n+1} \, \underline{i+1}$ or $\Xi^{n-1} \, \underline{i+1}$, with probabilities $1/3$ and $2/3$. The value of $i$ does not actually matter for the progress of this recursion. It is basically another variant of the biased random walk, except that the relevant variable is the number of copies of $\Xi$, instead of a real number in the term.
 
 
-\Cref{ex:non-affine continuous}
+\subsection*{\Cref{ex:non-affine continuous} (More complex non-affine recursion)}
 Let
 \begin{align*}
-\Xi & = \tY\, \lambda f x.\, (\lambda e. X[e]) \tsample \\
+\Xi & = \tY\, \lambda f x.\, (\lambda e. X[e]) \, \tsample \\
 X[e] & = \tif{e \leq p - x^{-2}}{x+1}{f^2(x+1) \oplus_e f(x+1)}
 \end{align*}
 
@@ -216,23 +213,38 @@ Not only is this program non-affine recursive,
 note also the use of a random sample, $e$, as a first-class value, and the subsequent use as a probability in the binary choice $\oplus_e$.
 Such a computation cannot be modelled via discrete distributions. 
 
-We can use the ranking function method (coupled with the solution of linear recurrence relations) to show that provided $p \geq \frac{5 - \sqrt{21}}{2}$, the program $\Xi \, \underline 3$ is AST. Consider the edge case, that $p = \frac{5 - \sqrt{21}}{2}$ exactly.
+We can use the ranking function method (coupled with the solution of linear recurrence relations) to show that provided $p \geq \frac{5 - \sqrt{21}}{2}$, the program $\Xi \, \underline 3$ is AST. 
+Consider the edge case, that $p = \frac{5 - \sqrt{21}}{2}$ exactly.
 
-The term $\Xi^n\ \underline x$ (for $n > 0$, $x^{-2} < p$) reduces to either $\Xi^{n-1}\ \underline{x+1}$, $\Xi^n\ \underline{x+1}$ or $\Xi^{n+1}\ \underline{x+1}$, with probabilities $p-x^{-2}$, $(1-p+x^{-2})\frac{p-x^{-2}}{2}$ and $(1-p+x^{-2})(1-\frac{p-x^{-2}}{2})$ respectively. Let $a(\Xi^n\ \underline x) = n + 2x^{-1}$. This is a supermartingale (because the decrease in $2x^{-1}$ as $x$ increases is enough to offset the average increase in $n$), but it does not satisfy the antitone-strict progress condition. It does however have a bounded-below variance, so the usual method of using $\ln a$ instead of just $a$ works. Calculating the exact amount that $\ln a$ decreases is not necessary, because it can be bounded as follows: $a$ changes by at least $1/2$ with probability at least $1/11$ (assuming $x \geq 3$), therefore $\ln(a)$ decreases in expectation by at least $\frac{1}{11}(\ln(a+\frac{1}{2}) - \ln(a) -\frac 1 {2a})$, using the fact that a linear approximation to $\ln$, applied to $a$, at least doesn't increase, then adding the deviation of $\ln$ from its linear approximation $\ln(a) + \frac{x-a}{a}$ (and using the fact that the linear approximation is everywhere an overestimate), we obtain a sufficiently strong bound on the decrease of $\ln(a)$ that it's an antitone sparse ranking function. (It can obviously be extended to $\Xi\ \underline 1$ too, which reduces to $\Xi^n\ \underline 3$ or a value after a bounded number of steps, but that complicates the analysis a little.)
+The term $\Xi^n\, \underline x$ (for $n > 0$, $x^{-2} < p$) reduces to either $\Xi^{n-1}\, \underline{x+1}$, $\Xi^n\ \underline{x+1}$ or $\Xi^{n+1}\, \underline{x+1}$, 
+with probabilities $p-x^{-2}$, $(1-p+x^{-2})\frac{p-x^{-2}}{2}$ and $(1-p+x^{-2})(1-\frac{p-x^{-2}}{2})$ respectively. 
+Let $a(\Xi^n\, \underline x) = n + 2 \, x^{-1}$. 
+This is a supermartingale (because the decrease in $2 \, x^{-1}$ as $x$ increases is enough to offset the average increase in $n$), but it does not satisfy the antitone-strict progress condition. 
+It does however have a bounded-below variance, so the usual method of using $\ln a$ instead of just $a$ works. 
+Calculating the exact amount that $\ln a$ decreases is not necessary, because it can be bounded as follows: 
+$a$ changes by at least $1/2$ with probability at least $1/11$ (assuming $x \geq 3$), 
+therefore $\ln(a)$ decreases in expectation by at least $\frac{1}{11}(\ln(a+\frac{1}{2}) - \ln(a) -\frac 1 {2a})$, 
+using the fact that a linear approximation to $\ln$, applied to $a$, at least doesn't increase, 
+then adding the deviation of $\ln$ from its linear approximation $\ln(a) + \frac{x-a}{a}$ 
+(and using the fact that the linear approximation is everywhere an overestimate), 
+we obtain a sufficiently strong bound on the decrease of $\ln(a)$ that it's an antitone sparse ranking function. 
+(It can obviously be extended to $\Xi\, \underline 1$ too, which reduces to $\Xi^n\, \underline 3$ or a value after a bounded number of steps, but that complicates the analysis a little.)
 
-\subsubsection*{Higher-order recursion}
+\subsection*{Higher-order recursion}
 
-There is an obvious source of deterministic (i.e.~non-probabilistic) higher-order functions defined by recursion, viz., \emph{higher-order recursion schemes} (HORS) (see e.g.~\cite{DBLP:conf/lics/Ong06,DBLP:conf/lics/Ong15}).
-(Incidentally the (sparse) ranking function method is just as applicable to the termination analysis of \emph{deterministic} PPCF programs.)
+There is an important formalism for constructing (non-random) higher-order recursive functions, viz., \emph{higher-order recursion schemes} (HORS) (see e.g.~\cite{DBLP:conf/lics/Ong06,DBLP:conf/lics/Ong15}).
+%(Incidentally the (sparse) ranking function method is just as applicable to the termination analysis of \emph{deterministic} PPCF programs.)
 Recently \cite{DBLP:conf/lics/KobayashiLG19} have extended HORS to \emph{probabilistic higher-order recursion schemes} (PHORS), which are HORS augmented with probabilistic (binary) branching $\oplus_p$.
 As HORS are in essence the $\lambda \tY$-calculus \cite{DBLP:conf/lics/Statman02} (i.e.~pure simply-typed lambda calculus with recursion, generated from a finite base type), PHORS are definable in PPCF:
-(order-$n$) PHORS is encodable as (order-$n$) (call-by-name) PPCF, but the former is strictly less expressive (because the underlying recursion schemes are not Turing complete). 
+(order-$n$) PHORS is encodable as (order-$n$) call-by-name PPCF, but the former is strictly less expressive (because the underlying HORS is not Turing complete). 
+For example, the PPCF term in \Cref{ex:higher-order recursion} is not definable in PHORS.
 %Some interesting PPCF terms such as \Cref{ex:non-affine with continuous distribution} %\refExample{complexExample} 
 %cannot be expressed as PHORS.
 %\akr{As I removed the referenced example, and I don't even know what a PHORS is, I've just removed this comment too.}
-A relevant result here is that the AST problem is decidable for order-1 PHORS (by reduction to the PSPACE-hard solvability of finite systems of polynomial equations with real coefficients; see \cite{DBLP:journals/jacm/EtessamiY09}), but undecidable for order-2 PHORS.
 
-\Cref{ex:higher-order recursion}
+A relevant result here is that the AST problem is decidable for order-1 PHORS (by reduction to the PSPACE-hard solvability of finite systems of polynomial equations with real coefficients; see \cite{DBLP:journals/jacm/EtessamiY09}), but undecidable for PHORS with order greater than 1 \cite{DBLP:conf/lics/KobayashiLG19}.
+
+\subsection*{\Cref{ex:higher-order recursion} (Higher-order recursion)}
 Consider the higher-order function
 $\Xi : (\textsf{R} \to \textsf{R} \to \textsf{R}) \to \textsf{R} \to \textsf{R} \to \textsf{R}$
 recursively defined by
@@ -246,11 +258,28 @@ f \, n \, (\varphi \, f \, s \, (n + 1))
 }
 \end{array}
 \]
-Let $F : \textsf{R} \to \textsf{R} \to \textsf{R}$ be a function such that $F\ \underline n\ \underline m$ terminates with no $\tY$ reductions for all $m$ and $n$. Then $\Xi\ F\ \underline x\ \underline y$ has the antitone sparse ranking function $F \underline{n_0} (F \underline{n_1} (\dots(\Xi\ F\ \underline x\ \underline n)\dots) \mapsto g_2(n)$, where $g_2$ is as in \Cref{ex:unbiased random walk}, using the same antitone function too.
+Let $F : \textsf{R} \to \textsf{R} \to \textsf{R}$ be a function such that $F\ \underline n\ \underline m$ terminates with no $\tY$ reductions for all $m$ and $n$. Then $\Xi\ F\ \underline x\ \underline y$ has the antitone sparse ranking function 
+\[
+F \, \underline{n_0} \, (F \, \underline{n_1} \, (\dots(\Xi\ F\, \underline x\, \underline n)\dots) \mapsto g_2(n),
+\] 
+where $g_2$ is as in \Cref{ex:unbiased random walk}, using the same antitone function too.
 
 The inequalities required for this to be an antitone partial supermartingale are satisfied with just the same reasoning as in \Cref{ex:unbiased random walk}, therefore this term too is antitone rankable.
 
-Again, this is not actually the correct reduction order, in that $F$ should be applied to its argument $n_i$ and reduced to a value before its second argument is expanded, but this would complicate the presentation, and this version can be justified by \Cref{thm:confluent ranking} instead. The reduction strategy implied here should be clear enough (assuming that, where it isn't specified, it just matches $\cbv$), but to be more precise, let $r(F \underline{n_0} (\dots(F\ \underline {n_{k-1}}\ X)\dots)) = @_2^k;\cbv(X)$, where $X$ is not a value or of the form $F\ \underline{n_k}\ Z$ for some non-value $Z$. All terms match this pattern for exactly one value of $k \geq 0$, except for values. Within $X$, there is necessarily a redex at $\cbv(X)$. The only conditions that $@_2^k;\cbv(X)$ is also a position of a redex in the whole term are that if the redex is a $\tsample$, it is not inside a $\lambda$ that's inside a $\tY$ or on the right of an application, which is true because $\cbv$ never selects a redex inside of a $\lambda$. After $n$ reaches $0$, the term is $F \underline{n_0} (\dots(F\ \underline {n_k}\ \underline x)\dots)$, then the innermost $F$ is evaluated completely in $\cbv$ order, therefore (by assumption) it terminates. Because there are no $\tY$-reductions in the evaluation of $F$, it can't reach any other term of the form $F\ \underline{n_k'}\ X$, therefore $k$ never changes until this whole subexpression reaches a number, at which point $k$ decreases by 1 and the next $F$ is evaluated.
+Again, this is not actually the correct reduction order, in that $F$ should be applied to its argument $n_i$ and reduced to a value before its second argument is expanded, 
+but this would complicate the presentation, and this version can be justified by \Cref{thm:confluent ranking} instead. 
+The reduction strategy implied here should be clear enough (assuming that, where it isn't specified, it just matches $\cbv$), but to be more precise, 
+let 
+\[
+r \, (F \, \underline{n_0} \, (\dots(F\, \underline {n_{k-1}}\, X)\dots)) = @_2^k;\cbv(X),
+\] 
+where $X$ is not a value or of the form $F\ \underline{n_k}\ Z$ for some non-value $Z$. All terms match this pattern for exactly one value of $k \geq 0$, except for values. 
+Within $X$, there is necessarily a redex at $\cbv(X)$. 
+The only conditions that $@_2^k;\cbv(X)$ is also a position of a redex in the whole term are that if the redex is a $\tsample$, 
+it is not inside a $\lambda$ that's inside a $\tY$ or on the right of an application, which is true because $\cbv$ never selects a redex inside of a $\lambda$. 
+After $n$ reaches $0$, the term is $F \, \underline{n_0} \, (\dots(F\, \underline {n_k} \, \underline x)\dots)$, then the innermost $F$ is evaluated completely in $\cbv$ order, therefore (by assumption) it terminates. 
+Because there are no $\tY$-reductions in the evaluation of $F$, it can't reach any other term of the form $F\, \underline{n_k'}\, X$, 
+therefore $k$ never changes until this whole subexpression reaches a number, at which point $k$ decreases by 1 and the next $F$ is evaluated.
 
 
 \antitoneSeemsComplete*

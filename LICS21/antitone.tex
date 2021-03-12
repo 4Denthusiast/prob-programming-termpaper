@@ -4,8 +4,8 @@
 
 \begin{example}[Random walk]
 \label{ex:ac-ranking}
-\begin{enumerate}
-\item 1D biased (towards 0) random walk
+\begin{compactenum}[(i)]
+\item One-dimensional (1D) biased (towards 0) random walk
 \[
 M_1 = 
 \big(\tY \, \lambda f n . \, 
@@ -25,13 +25,12 @@ M_3 =
 \big(\tY \, \lambda f n . \, 
 \tif{n = 0}{0}{f \, (n - 1) \oplus_{1/3} f \, (n + 2)}\big) \, 10
 \]
-
-
 %While {x > 0} do {x := x-1 \oplus_2/3 x:= x+1}
-
 %M2 = While {x > 0} do {x := x-1 \oplus_2/3 x:= x+2}
-\end{enumerate}
+\end{compactenum}
 \end{example}
+
+\medskip
 
 The term $M_1$ is rankable, terminating in 31 $\tY$-steps on average, and $M_3$ only has a $1/1024$ chance of terminating, but in between, $M_2$ is AST, but isn't $\tY$-PAST, therefore it isn't rankable and \Cref{thm:rankable implies termination} is insufficient to prove its termination. 
 Thus we seek a generalised notion of ranking function so that $M_2$ becomes rankable, and then prove it sound i.e.~rankable in this generalised sense implies AST.
@@ -39,11 +38,11 @@ Thus we seek a generalised notion of ranking function so that $M_2$ becomes rank
 %\paragraph*{Idea} 
 
 \begin{definition}
-The definition of \emph{antitone ranking function} $f$ for $M \in \Lambda^0$ is the same as that of ranking function except that in the case of $\tY$-redex, 
+The definition of \defn{antitone ranking function} $f$ for $M \in \Lambda^0$ is the same as that of ranking function except that in the case of $\tY$-redex, 
 we require the existence of an antitone (meaning: $r < r'$ implies $\epsilon(r) \geq \epsilon(r')$) function $\epsilon : \nnReal \to \pReal$ such that the ranking function $f :\mathit{Rch}(M) \to \nnReal$ satisfies
 \[f(E[R']) \leq f(E[R]) - \epsilon(f(E[R])) \] 
 where $R \to R'$ is the $\tY$-redex rule.
-Any closed term for which an antitone ranking function exists is called \emph{antitone rankable}.
+Any closed term for which an antitone ranking function exists is called \defn{antitone rankable}.
 \iffalse
 Given a ranking function $f$ on $M \in \Lambda^0$, we say that $f$ is \emph{antitone} if there exists an antitone function\footnote{i.e.~$r < r'$ implies $\epsilon(r) \geq \epsilon(r')$} $\epsilon : \nnReal \to \pReal$ such that %the ranking function $f$ satisfies
 \[
@@ -65,7 +64,7 @@ We assume $\tY f^{A \to B} \, x^A \, . \, \theta^B$ is a value.}
 
 \begin{definition}
 Given a probability space $(\Omega, \calF, \mathbb{P})$, and a supermartingale $(Y_n)_{n \geq 0}$ and a stopping time $T$ adapted to filtration $(\calF_n)_{n \geq 0}$,
-we say that $(Y_n)_{n \geq 0}$ is an \emph{antitone strict supermartingale w.r.t.~$T$} if for all $n \geq 0$, we have $Y_n \geq 0$, and there exists an antitone function $\epsilon : \nnReal \to \pReal$ satisfying
+we say that $(Y_n)_{n \geq 0}$ is an \defn{antitone strict supermartingale w.r.t.~$T$} if for all $n \geq 0$, we have $Y_n \geq 0$, and there exists an antitone function $\epsilon : \nnReal \to \pReal$ satisfying
 \(
 \expect{Y_{n+1} \mid \calF_n} \leq Y_n - \epsilon (Y_n) \cdot {\bf 1}_{\set{T > n}}
 \).
@@ -122,7 +121,7 @@ Thus, by \Cref{thm:a-c strict}, $T_M^{\tY} < \infty$ a.s.
 As before, constructing antitone ranking fuctions completely is not necessary, and there is a corresponding notion of an antitone sparse ranking function.
 
 \begin{definition}
-Define an \emph{antitone sparse ranking function} on a closed term $M$ to be a partial function $F : Rch(M) \rightharpoonup \mathbb{R}$ such that for some antitone function $\epsilon : \mathbb{R}_{\geq 0} \to \mathbb{R}_{>0}$:
+Define an \defn{antitone sparse ranking function} on a closed term $M$ to be a partial function $F : Rch(M) \rightharpoonup \mathbb{R}$ such that for some antitone function $\epsilon : \mathbb{R}_{\geq 0} \to \mathbb{R}_{>0}$:
 \begin{inparaenum}[(i)]
 \item $f(N) \geq 0$ for all $N \in \dom(f)$,
 \item $M \in \dom(f)$,
@@ -166,7 +165,7 @@ for $n \in \mathbb N$.
 % \\
 % 0 &\mapsto 0.
 % \end{align*}
-For $n \geq 1$, $\Theta_2 \, n$ reduces in several steps to either $\Theta_2 \, (n-1)$ or $\Theta_2 \, (n+1)$,\footnote{Technically this is not quite correct, because of the distinction between $\underline n + 1$ and $\underline{n + 1}$, but this ranking function can still be made to work by appealing to \Cref{thm:confluent ranking}, as can the others in this section with similar issues.} each with probability $1/2$, with one $\tY$-reduction.
+For $n \geq 1$, $\Theta_2 \, n$ reduces in several steps to either $\Theta_2 \, (n-1)$ or $\Theta_2 \, (n+1)$,\footnote{Technically this is not quite correct, because of the distinction between $\underline n + 1$ and $\underline{n + 1}$, but this ranking function can still be made to work by appealing to the Confluent Ranking \Cref{thm:confluent ranking}, as can the others in this section with similar issues. See \cref{rem:ex corrected using confluent semantics} for a fuller account.} each with probability $1/2$, with one $\tY$-reduction.
 Now
 \begin{align*}%\textstyle
 & g_2(n) - \frac{g_2(n-1) + g_2(n+1)} 2 \\
@@ -180,7 +179,7 @@ Moreover $\Theta_2 \, 0$ reduces to $0$ with one $\tY$-reduction with a reductio
 Therefore by setting $\epsilon_2(x) = \frac 1 {(e^{x-1}+1)^2}$, the condition on how much $g_2$ must decrease is met. It is also defined at $M_2 = \Theta_2 \, 10$, and is non-negative, therefore it is an antitone sparse ranking function, and $M_2$ is AST.
 \end{example}
 
-All of the following examples also have antitone ranking functions, provided in Appendix \ref{apx:antitone}.
+\paragraph*{More challenging examples} All of the following examples also have antitone ranking functions, provided in Appendix \ref{apx:antitone}.
 
 \iffalse
 Sampling from continuous distributions is an essential feature of statistical probabilistic programming languages. (See e.g.~Church \cite{DBLP:conf/uai/GoodmanMRBT08}, Stan \cite{carpenter2017stan}, Anglican \cite{DBLP:conf/pkdd/TolpinMW15}, Gen \cite{cusumano-towner2019Gen}, Pyro \cite{bingham2019Pyro}, Edward \cite{tran2016edward} and Turing \cite{ge2018Turing}.)
@@ -215,15 +214,15 @@ For a more complex (not $\tY$-PAST) example, consider the following continuous r
 \begin{example}[Non-affine recursion]
 \label{ex:non-affine recursion easy}
 \[
-(\tY \lambda f x. x \oplus_{2/3} f (f (x + 1)))\ \underline 1
+(\tY \lambda f x. x \oplus_{2/3} f (f (x + 1)))\, \underline 1
 \]
 \end{example}
 
 \begin{example}[More complex non-affine recursion]
 \label{ex:non-affine continuous}
 \begin{align*}
-& (\tY\, \lambda f x.\, (\lambda e. X[e]) \tsample)\ \underline 0 \\
-& X[e] = \tif{e \leq p - x^{-2}}{x}{f^2(x+1) \oplus_e f(x+1)}
+& (\tY\, \lambda f x.\, (\lambda e. X[e]) \, \tsample)\, \underline 0 \quad \hbox{where}\\
+& X[e] := \tif{e \leq p - x^{-2}}{x}{f^2(x+1) \oplus_e f(x+1)}
 \end{align*}
 \end{example}
 
@@ -245,7 +244,7 @@ For any $F : \textsf{R} \to \textsf{R} \to \textsf{R}$ such that $F\, \underline
 \end{example}
 
 \paragraph*{Completeness}
-It seems very likely that this method is complete in the case that every reachable term is AST (\cref{conj:antitone}), but we have been unable to actually prove this. It is certainly at least capable of proving the termination of terms which terminate arbitrarily slowly (in the sense that there is no similar limitation to Theorem \ref{thm:rankable implies termination}, which can only prove termination of $\tY$-PAST terms).
+It seems very likely that this method is complete in the case that every reachable term is AST (\cref{conj:antitone}), but we have been unable to actually prove this. It is certainly at least capable of proving the termination of terms which terminate arbitrarily slowly (in the sense that there is no similar limitation to \cref{thm:rankable implies termination}, which can only prove termination of $\tY$-PAST terms).
 
 The following theorem does not prove completeness, but is suggestive in that direction:
 \begin{restatable}{theorem}{antitoneSeemsComplete}
