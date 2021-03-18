@@ -3,6 +3,7 @@
 \usepackage{amsfonts}
 \newcommand{\tY}{\mathsf{Y}}
 \newcommand{\tsample}{\mathsf{sample}}
+\newcommand{\tscore}{\mathsf{score}}
 
 \title{DPhil Thesis Proposal: Semantics of Probabilistic Functional Languages}
 \author{Andrew Kenyon-Roberts}
@@ -10,16 +11,52 @@
 \begin{document}
 \maketitle
 \section{Introduction}
+The augumentation of lambda calculus with random sampling and conditioning, the fundamental constructs of probabilistic programming, can be interpreted formally in many different ways, and provides certain unique challenges in defining the language's semantics. The standard approach to defining random things, where all the random values are considered as functions from a probability space, has the problem that the random samples, which should form the basis of this probability space, are not specified in advance. There are various possible schemes of organising the probability space such that this data is available, known as trace or entropy space semantics. The conditioning construct, which modifies the posterior probability of an event, fits somewhat unnaturally in this framework, and has to be specified as an extra step that modifies the probabilities at the end.
+
+Alternatively, the distribution of results can be specified more directly as a distribution. This omits any information on joint distributions from the semantics, but this itself can be in some ways an advantage, as a subterm can be duplicated without being correlated to itself. It would be natural to attempt to use the category of measurable spaces, however, that turns out to not be cartesian closed. This motivates the introduction of quasi-Borel spaces as an alternative way in which a distribution can be defined, which has a more restrictive set of morphisms and does not have this issue, but is nevertheless still able to represent all the functions definable as programs.
+
+For my thesis, I plan to extend the existing literature and my own previous work in defining the semantics of probabilistic functional languages.
 
 
-%Existing approaches:
-    %brief summary, axes of difference: operational, denotational, distribution-based, trace-based
-    %Operational Semantics
-    %Denotational Semantics
+\section{Existing approaches}
+The various existing approaches to defining the semantics of probabilistic functional languages can generally be categorised as operational or denotational (depending on whether it works by defining the state of the program at each step, or by defining the meanings of subprograms independently and combining them together) (this distinction applies to functional languages more generally, rather than being specific to probabilistic languages), and distribution-based or trace-based (depending on whether only the distribution of outputs is defined, or the output that occurs is defined as a function of a random input).
+
+As a running example, I will be using a simply-typed call by value language with a random sampling construct in the form of a probabilistic choice $M \oplus N$, a conditioning construct $\tscore(r)$ for non-negative real constants $r$, and countably many primitive values of some base type $\mathsf T$. Although this language is rather deficient (there is no way to use continuous distributions, for example, and no recursion), it will be sufficient to illustrate the different styles of semantics.
+
+\subsection{Operational Semantics}
+In operational semantics, the meaning of the program is defined by repeatedly transforming a term into other terms, until it reaches a value, a term which is considered finished, which is the output. A small-step trace-based operational semantics of the example language can be defined as follows.
+
+First, an \emph{environment} is defined as
+\begin{equation*}
+E := \cdot \mid E M \mid V E,
+\end{equation*}
+so that an environment is a term with a single hole, where $M$ is a term and $V$ is a value. Substituting terms into environments is defined in the usual way. The single-step reduction relation can then be defined as
+\begin{align*}
+(E[(\lambda x. M) V], t, s) & \to (M[V/x], t, s) \\
+(E[M \oplus N], t, s) & \to (E[M], 0:t, s) \\
+(E[M \oplus N], t, s) & \to (E[N], 1:t, s) \\
+(E[\tscore(r)], t, s) & \to (E[(\lambda x. x)], t, rs),
+\end{align*}
+where $t$ is a list of booleans, $:$ is the cons operator, and $s$ is a real number. The probability of $M$ reaching a value $V$ can then be defined as
+\[
+\sum_{(M,[],1) \to^* (V,t,s)} 2^{-\mathrm{length}(t)} s.
+\]
+
+Alternatively, this could be defined in a different but closely related version of operational semantics, the big-step semantics:
+\begin{align*}
+\frac{(M, t_0, s_0) \Downarrow (\lambda x. M', t_1, s_1) \; (N, t_1, s_1) \Downarrow (N', t_2, s_2) \; (M'[N'/x], t_2, s_2) \Downarrow (O, t_3, s_3)}{(M N, t_0, s_0) \Downarrow (O, t_3, s_3)} \quad
+\frac{(M, 0:t_0, s_0) \Downarrow (M', t_1, s_1)}{(M \oplus N, t_0, s_0) \Downarrow (M', t_1, s_1)} \quad
+\frac{(N, 1:t_0, s_0) \Downarrow (N', t_1, s_1)}{(M \oplus N, t_0, s_0) \Downarrow (N', t_1, s_1)} \quad
+\frac{}{(\tscore(r), t, s) \Downarrow (\lambda x. x, t, rs)}.
+\end{align*}
+The notation in this case could be simplified somewhat, but that would obscure the connection to the small-step semantics. If $V$ is a value, then $(M, t_0, s_0) \to^* (V, t_1, s_1)$ iff $(M, t_0, s_0) \Downarrow (V, t_1, s_1)$.
+
+\subsection{Denotational Semantics}
         %Denotational Semantics in the non-probabilistic case, types and inconsistencies
         %QBSes
     %Distribution-based Semantics
     %Trace-based Semantics
+
 
 \section{My Previous Research}
 My thesis will be building on the paper I recently submitted to LICS (in collaboration with Luke Ong), Supermartingales, Ranking Functions and Probabilistic Lambda Calculus. In it, we extend existing work on proving almost-sure termination using ranking functions (functions from the program state to non-negative real numbers which at each step have a non-positive expected change, and which satisfy some further progress condition) to the context of a functional language with continuous distributions. Because the language used is simply-typed, the only way that non-termination is possible is using the explicit recursion contruct, $\tY$, therefore adding a condition that the ranking function must decrease by 1 for every $\tY$-reduction step provides a bound on the expected number of $\tY$-reduction steps, which implies almost sure termination. This result is then extended in three ways (which can all be combined).
@@ -33,6 +70,7 @@ The third extension, and the most interesting and relevant to my intended thesis
 This is enough to ensure that the distribution of results is (barring cases where some reduction strategies may terminate while others don't) the same, but that would be difficult to prove directly, and the result doesn't extend to the same traces giving the same results. For example, if the trace is simply a sequence of samples which are used in the order in which the $\tsample$-reductions occur, then the term $\tsample - \tsample$ reduces with the trace $0, 1, ...$ to either $1$ or $-1$, depending on which $\tsample$ is reduced first. This example can be fixed by labelling the samples in the trace by positions in the term rather than the order in which they're used, but in other cases, that would still not be sufficient. Consider, for example, $(\lambda f. f 0 + f 0) (\lambda x. \tsample)$. This reduces (by some reduction strategies) to $\tsample + \tsample$, but the $\tsample$s here don't correspond in a unique way to the $\tsample$s in the initial term, therefore labelling samples by positions in the initial term isn't sufficient. Perhaps it would be possible to in some way label those $\tsample$s by a combination of the position of the $\tsample$ they're derived from and the occurrences of the variable $f$ that they were substituted in to, but the approach I ended up taking was a somewhat more brute-force solution, in that if any labelling scheme would have worked, so would this one, by design. Samples are labelled by a combination of a term reachable from the initial term (technically a reachable skeleton instead, with all the real numbers removed, for measure-theoretic reasons) and a position within that term, with an equivalence relation defined on these (reachable term, position) pairs that is the minimum required to ensure confluence.
 
 This definition is sufficient to prove the AST result that is nominally the main focus of that paper, but also seems like something that has a lot of potential to be used for other purposes. The limits of confluence for probabilistic functional languages is not something I have seen discussed extensively elsewhere, except the fact that some reduction strategies (specifically call-by-name and call-by-value) give different results. The way that confluence is obtained with a trace-based semantics also seems likely to extend to a denotational trace semantics.
+
 
 \section{Planned research}
 \subsection{Using Labelling to Combine Denotational and Trace Semantics}
