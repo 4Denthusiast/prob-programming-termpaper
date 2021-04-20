@@ -1,0 +1,112 @@
+% Inference algorithm using labelling, where the labels are string provided by the program.
+@article{lee2019towards,
+  title={Towards verified stochastic variational inference for probabilistic programs},
+  author={Lee, Wonyeol and Yu, Hangyeol and Rival, Xavier and Yang, Hongseok},
+  journal={Proceedings of the ACM on Programming Languages},
+  volume={4},
+  number={POPL},
+  pages={1--33},
+  year={2019},
+  publisher={ACM New York, NY, USA}
+}
+
+% Algorithm to use metropilis-hastings with labelled samples to perform inference. Actually incorrect because the way it re-uses samples makes some transitions impossible.
+ @InProceedings{pmlr-v15-wingate11a, title = {Lightweight Implementations of Probabilistic Programming Languages Via Transformational Compilation}, author = {David Wingate and Andreas Stuhlmueller and Noah Goodman}, booktitle = {Proceedings of the Fourteenth International Conference on Artificial Intelligence and Statistics}, pages = {770--778}, year = {2011}, editor = {Geoffrey Gordon and David Dunson and Miroslav Dudík}, volume = {15}, series = {Proceedings of Machine Learning Research}, address = {Fort Lauderdale, FL, USA}, month = {11--13 Apr}, publisher = {JMLR Workshop and Conference Proceedings}, pdf = {http://proceedings.mlr.press/v15/wingate11a/wingate11a.pdf}, url = {http://proceedings.mlr.press/v15/wingate11a.html}, abstract = {We describe a general method of transforming arbitrary programming languages into probabilistic programming languages with straightforward MCMC inference engines. Random choices in the program are “"named"” with information about their position in an execution trace; these names are used in conjunction with a database of randomness to implement MCMC inference in the space of execution traces. We encode naming information using lightweight source-to-source compilers. Our method enables us to reuse existing infrastructure (compilers, interpreters, etc.) with minimal additional code, implying fast models with low development overhead. We illustrate the technique on two languages, one functional and one imperative: Bher, a compiled version of the Church language which eliminates interpretive overhead of the original MIT-Church implementation, and Stochastic Matlab, a new open-source language. [pdf]} }
+
+% rankability implies AST for imperative programs. Also something like antitone rankability
+@article{mciver2017new,
+  title={A new proof rule for almost-sure termination},
+  author={McIver, Annabelle and Morgan, Carroll and Kaminski, Benjamin Lucien and Katoen, Joost-Pieter},
+  journal={Proceedings of the ACM on Programming Languages},
+  volume={2},
+  number={POPL},
+  pages={1--28},
+  year={2017},
+  publisher={ACM New York, NY, USA}
+}
+
+%Defines QBSes and discusses why they're necessary
+@INPROCEEDINGS{8005137,  author={C. {Heunen} and O. {Kammar} and S. {Staton} and H. {Yang}},  booktitle={2017 32nd Annual ACM/IEEE Symposium on Logic in Computer Science (LICS)},   title={A convenient category for higher-order probability theory},   year={2017},  volume={},  number={},  pages={1-12},  doi={10.1109/LICS.2017.8005137}}
+
+% Confusing set of slides discusses types, including a definition of denotational semantics for simply-typed lambda calculus.
+@book{barendregt2013lambda,
+  title={Lambda calculus with types},
+  author={Barendregt, Henk and Dekkers, Wil and Statman, Richard},
+  year={2013},
+  publisher={Cambridge University Press}
+}
+
+% Defines operational big-step trace semantics with entropy splitting for SPCF without conditioning or recursion, and discusses contextual equivalence.
+@InProceedings{culpepper17,
+author="Culpepper, Ryan
+and Cobb, Andrew",
+editor="Yang, Hongseok",
+title="Contextual Equivalence for Probabilistic Programs with Continuous Random Variables and Scoring",
+booktitle="Programming Languages and Systems",
+year="2017",
+publisher="Springer Berlin Heidelberg",
+address="Berlin, Heidelberg",
+pages="368--392",
+abstract="We present a logical relation for proving contextual equivalence in a probabilistic programming language (PPL) with continuous random variables and with a scoring operation for expressing observations and soft constraints.",
+isbn="978-3-662-54434-1"
+}
+
+% Defines big & small step distribution & (finite) trace semantics for an untyped language, proves equivalence.
+@article{borgstrom2016lambda,
+  title={A lambda-calculus foundation for universal probabilistic programming},
+  author={Borgstr{\"o}m, Johannes and Dal Lago, Ugo and Gordon, Andrew D and Szymczak, Marcin},
+  journal={ACM SIGPLAN Notices},
+  volume={51},
+  number={9},
+  pages={33--46},
+  year={2016},
+  publisher={ACM New York, NY, USA}
+}
+
+% Defines a first-order language with explicit management of probabilistic vs deterministic computations, with a denotational and an operational (distribution-based) semantics (and a little discussion of the motivation for the different styles), then a somewhat peculiar higher-order language, again with explicit management of randomness, and operational and denotational semantics for that. The denotational semantics is based on the category of presheaves on Meas.
+% Looks related to that other paper I've properly by Staton about commutativity & program transformations, but not the same
+@inproceedings{10.1145/2933575.2935313,
+author = {Staton, Sam and Yang, Hongseok and Wood, Frank and Heunen, Chris and Kammar, Ohad},
+title = {Semantics for Probabilistic Programming: Higher-Order Functions, Continuous Distributions, and Soft Constraints},
+year = {2016},
+isbn = {9781450343916},
+publisher = {Association for Computing Machinery},
+address = {New York, NY, USA},
+url = {https://doi.org/10.1145/2933575.2935313},
+doi = {10.1145/2933575.2935313},
+abstract = {We study the semantic foundation of expressive probabilistic programming languages, that support higher-order functions, continuous distributions, and soft constraints (such as Anglican, Church, and Venture). We define a metalanguage (an idealised version of Anglican) for probabilistic computation with the above features, develop both operational and denotational semantics, and prove soundness, adequacy, and termination. This involves measure theory, stochastic labelled transition systems, and functor categories, but admits intuitive computational readings, one of which views sampled random variables as dynamically allocated read-only variables. We apply our semantics to validate nontrivial equations underlying the correctness of certain compiler optimisations and inference algorithms such as sequential Monte Carlo simulation. The language enables defining probability distributions on higher-order functions, and we study their properties.},
+booktitle = {Proceedings of the 31st Annual ACM/IEEE Symposium on Logic in Computer Science},
+pages = {525–534},
+numpages = {10},
+location = {New York, NY, USA},
+series = {LICS '16}
+}
+
+% Thorough but general discussion of denotational semantics as it applies to many types of programming languages
+@incollection{MOSSES1990575,
+title = {CHAPTER 11 - Denotational Semantics},
+editor = {JAN {VAN LEEUWEN}},
+booktitle = {Formal Models and Semantics},
+publisher = {Elsevier},
+address = {Amsterdam},
+pages = {575-631},
+year = {1990},
+series = {Handbook of Theoretical Computer Science},
+isbn = {978-0-444-88074-1},
+doi = {https://doi.org/10.1016/B978-0-444-88074-1.50016-0},
+url = {https://www.sciencedirect.com/science/article/pii/B9780444880741500160},
+author = {Peter D. MOSSES},
+abstract = {Publisher Summary
+This chapter focuses on denotational semantics, which is a framework for the formal description of programming language semantics. The main idea of denotational semantics is that each phrase of the language described is given a denotation, which is a mathematical object that represents the contribution of the phrase to the meaning of any complete program in which it occurs. The denotation of each phrase is determined just by the denotations of its subphrases. The chapter discusses the formalism used in denotational semantics: abstract syntax, semantic functions, and semantic domains. It also describes the nature of semantic functions and also describes the properties of compositionality and full abstractness. The chapter illustrates the major standard techniques that are used in denotational descriptions of programming languages, such as environments, stores, and continuations. The chapter explains the relation between these techniques and some fundamental concepts of programming languages.}
+}
+
+% Uses a denotational semantics for a first-order language to prove commutativity of variable binding with let.
+@inproceedings{staton2017commutative,
+  title={Commutative semantics for probabilistic programming},
+  author={Staton, Sam},
+  booktitle={European Symposium on Programming},
+  pages={855--879},
+  year={2017},
+  organization={Springer}
+}
+
