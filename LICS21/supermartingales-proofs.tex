@@ -33,7 +33,7 @@ Hence $\mathbb{E}[f(M_{n+1}) \mid \calF_n] \leq f(M_n)$ a.s.
 
 First, some notation.
 
-Given an $\omega$-sequence (e.g.~$s \in \entrosp$) and $m \geq 0$, we write $s_{\leq m} \in I^m$ to mean the prefix of $s$ of length $m$.
+Given an $\mathbb N$-indexed sequence (e.g.~$s \in \entrosp$) and $m \geq 0$, we write $s_{\leq m} \in I^m$ to mean the prefix of $s$ of length $m$.
 For $n \geq 0$, define
 \begin{align*}
 %M_n(s) &:= \pi_0 (\red^n(M, s))\\
@@ -49,7 +49,7 @@ The $\calF_n$-measurability of $M_n$ (and hence of $\#\mathrm{draw}_n$) follows 
 \fi
 Take $s \in A \in \calF_n$ with $\ndraw{n}{s} = l$.
 For any $s'\in \entrosp$, if $s_{\leq l} = s_{\leq l}'$ then $s' \in A$.
-It follows that ${\set{s_{\leq l}} \cdot I^\omega} \subseteq A$.
+It follows that ${\set{s_{\leq l}} \cdot I^{\mathbb N}} \subseteq A$.
 \lo{NOTE. To fix notation:
 \(
 \sigma(M_{n}) = \sigma\big(\set{M_{n}^{-1}(\alpha_j, U_{\alpha_j})
@@ -87,9 +87,9 @@ U_i := \#\mathrm{draw}_n^{-1}[l_i] \cap M_n^{-1}[\{E_i[r][\tsample] \mid r \in \
 %\lo{I.e.~$(E_i[\underline{\sigma_i(s)}][{\tsample}], \pi_t^{l_i}(s)) = \red^n(M, s)$ iff $s \in U_i$.}
 \end{itemize}
 
-Observe that if $s \in U_i$ then $\set{s_{\leq l_i}} \cdot I^\omega \subseteq U_i$;
-in fact $(U_i)_{\leq l_i} \cdot I^\omega = U_i$.
-%Moreover, for any $A \in \calF_n$, if $s \in A$ then $\set{s_{\leq l}} \cdot I^\omega \subseteq A$.
+Observe that if $s \in U_i$ then $\set{s_{\leq l_i}} \cdot I^{\mathbb N} \subseteq U_i$;
+in fact $(U_i)_{\leq l_i} \cdot I^{\mathbb N} = U_i$.
+%Moreover, for any $A \in \calF_n$, if $s \in A$ then $\set{s_{\leq l}} \cdot I^{\mathbb N} \subseteq A$.
 This means that for any measurable $g : \entrosp \to \Real_{\geq 0}$, if $g(s)$ only depends on the prefix of $s$ of length $(l_i+1)$, then, writing $\widehat{g} : I^{l_i+1} \to \Real_{\geq 0}$ where $g(s) = \widehat{g}(s_{\leq l_i+1})$, we have: for any $A \in \calF_n$ 
 \begin{equation}
 \int_{A \cap U_i}  \mu_{\entrosp}(\dif s) \, g(s) = 
@@ -111,7 +111,7 @@ Take $A \in \calF_n$, and integrating both sides, we get
 & \int_{(A \cap U_i)_{\leq l}} \Leb_l(\dif u) \, \int_I \textrm{Leb}(\dif r) \, f(E_i[\widehat{\sigma_i}(u)][\underline{r}])) \\
 & \leq \int_{(A \cap U_i)_{\leq l}} \Leb_l(\dif u) \, f(E_i[\widehat{\sigma_i}(u)][\tsample])).
 \end{align*}
-Since $\Leb_{l+1}$ is the (unique) product measure satisfying $\Leb_{l+1}(V \times B) = \Leb_l(V) \cdot \Leb(B)$, and $(U_i)_{\leq l_i} \cdot I^\omega = U_i$, we have
+Since $\Leb_{l+1}$ is the (unique) product measure satisfying $\Leb_{l+1}(V \times B) = \Leb_l(V) \cdot \Leb(B)$, and $(U_i)_{\leq l_i} \cdot I^{\mathbb N} = U_i$, we have
 %it follows from the preceding observation that
 \begin{align*}
 & \int_{(A \cap U_i)_{\leq l+1}} \Leb_{l+1}(\dif u') \, f(E_i[\widehat{\sigma_i}(u')][\underline{\widehat{\rho}(u')}])) \\
@@ -163,7 +163,7 @@ T_{n+1}(s) & := \min \{ k \mid k>T_n(s), M_k(s) \textrm{ a value or of form } E[
 
 \TnBounded*
 
-We first show that $T_1$ is bounded i.e.~$T_1 \leq n$, for some $n \in \omega$.
+We first show that $T_1$ is bounded i.e.~$T_1 \leq n$, for some $n \in \mathbb N$.
 
 A first proof idea is to construct a reduction argument to the strong normalisation of the simply-typed lambda-calculus.
  There is a classical transform of conditionals into the pure lambda-calculus.
@@ -239,7 +239,7 @@ This concludes the proof of \cref{lem:TnBounded}.
 \TMtYStoppingTime*
 \begin{proof}
 %For each $n \in \omega$, $\set{T_M^\tY = n} \in \calF_{T_n}$.
-To see $\set{T_M^\tY = n} \in \calF_{T_n}$ for a given $n$, we need to show that $\set{T_M^\tY = n} \cap \set{T_n \leq i} \in \calF_i$, for all $i \in \omega$.
+To see $\set{T_M^\tY = n} \in \calF_{T_n}$ for a given $n$, we need to show that $\set{T_M^\tY = n} \cap \set{T_n \leq i} \in \calF_i$, for all $i \in \mathbb N$.
 Let $\cal V$ be the set of values in $\Lambda^0$ (which is measurable), and let $\cal W$ be the non-values.
 Then, it suffices to observe that $\set{T_M^\tY = n} \cap \set{T_n \leq i}
 = \bigcup_{l=n}^i 

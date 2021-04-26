@@ -7,30 +7,28 @@ Sometimes however, the reduction that the programmer has in mind may not be stri
 or the number of cases necessary for defining a sparse ranking function is excessive because the reduction does not proceed in a neat and orderly manner. 
 In cases such as these (e.g.~\cref{ex:sum of powers}), it may be much more convenient to instead consider ranking functions with respect to alternative reduction strategies constructed to match the individual term in question, 
 thereby reducing the number of cases needed and simplifying the reachable terms. 
-It will be shown in \Cref{thm:confluent ranking} that ranking functions with respect to alternative reduction strategies are sound for proving AST in the usual sense (i.e.~with respect to the standard CBV reduction strategy). 
-In order to obtain this result, we prove a relation between the results of using different reduction strategies, 
-by first constructing a confluent trace semantics that is equivalent to the standard semantics as a special case.
 
-Non-probabilistic lambda calculi generally have the Church-Rosser property, that if a term $A$ reduces to both $B_1$ and $B_2$, there is some $C$ 
-%with reduction sequences $B_1 \to^* C$ and $B_2 \to^* C$, 
+In order to be able to use alternative reduction strategies to prove properties of the program defined using the usual reduction strategy, we first prove the relation between these different strategies, providing a confluent version of the semantics. It is therefore necessary to have some way of relating the samples that will be used in runs of the program using different reduction strategies. Positions are defined as a way of addressing sample statements within a program independently of the reduction order. Next, a version of the reduction relation is presented that is nondeterministic, so that it allows a choice of what order to perform reductions in. The notion of positions is extended to potential positions, for samples which may appear later in the reduction sequence but not necessarily in the initial term. In order to allow potential positions in different reduction sequences to be considered equivalent, a relation $\sim^*$ is defined, and finally, all of these are used to construct a confluent version of the trace semantics, $\Rightarrow$, that is still nondeterministic in reduction order, but does specify the outcome of random choices. The desired properties of this semantics (confluence and equivalence to the standard semantics) are proved (\Cref{churchRosser,thm:AstEquivalence}), then it is used to give extended versions of ranking functions and the related AST results, \Cref{thm:confluent ranking}. 
+
+Non-probabilistic lambda calculi are generally confluent, i.e.~if a term $A$ reduces to both $B_1$ and $B_2$, there is some $C$ 
 to which both $B_1$ and $B_2$ reduce,
 so the reduction order mostly doesn't matter. 
 In the probabilistic case, this may not be true, because $\beta$-reduction can duplicate $\tsample$s, so the outputs of the copies of the sample may be identical or independent, depending on whether the sample is taken before or after $\beta$-reduction. 
 There are, however, some restricted variations on the reduction order that do not have this problem.
 
 \medskip
-Even with this restriction, a trace semantics in the style of the one already defined would not be entirely Church-Rosser, as, for example, $\red^3(\tsample - \tsample, (1,0,\dots))$ would be either $1$ or $-1$ depending on the order of evaluation of the $\tsample$s, as that determines which sample from the pre-selected sequence is used for each one. To fix this, rather than pre-selecting samples according to the order they'll be drawn in, select them according to the position in the term where they'll be used instead.
+Even with such a restriction, a trace semantics in the style of the one already defined would not be entirely confluent, as, for example, $\red^3(\tsample - \tsample, (1,0,\dots))$ would be either $1$ or $-1$ depending on the order of evaluation of the $\tsample$s, as that determines which sample from the pre-selected sequence is used for each one. To fix this, rather than pre-selecting samples according to the order they'll be drawn in, select them according to the position in the term where they'll be used instead.
 
-A \defn{position} is a finite sequence of steps into a term, defined inductively as
+A \emph{position} is a finite sequence of steps into a term, defined inductively as
 \begin{align*}
 \alpha ::= & \; {\cdot} \mid \lambda ; \alpha \mid @_1 ; \alpha \mid @_2 ; \alpha \mid \underline f_i ; \alpha \\
 & {} \mid \tY ; \alpha \mid \textsf{if}_1 ; \alpha \mid \textsf{if}_2 ; \alpha \mid \textsf{if}_3 ; \alpha.
 \end{align*}
-The \defn{subterm of $M$ at $\alpha$}, denoted $M \mid \alpha$, is defined as
+The \emph{subterm of $M$ at $\alpha$}, denoted $M \mid \alpha$, is defined as
 \begin{align*}
 M \mid \cdot & = M \\
 \lambda x. M \mid \lambda ; \alpha & = M \mid \alpha \\
-M_1 M_2 \mid @_i ; \alpha & = M_i \mid \alpha \quad \text{for } i = 1,2 \\
+M_1 \, M_2 \mid @_i ; \alpha & = M_i \mid \alpha \quad \text{for } i = 1,2 \\
 \underline f(M_1,\dots,M_n) \mid \underline f_i ; \alpha & = M_i \mid \alpha \quad \text{for }i \leq n \\
 \tY M \mid \tY ; \alpha & = M \mid \alpha \\
 \tif{M_1 < 0}{M_2}{M_3} \mid \textsf{if}_i ; \alpha & = M_i \mid \alpha \quad \text{for } i = 1,2,3
@@ -69,11 +67,13 @@ The binary relation $\to$ is defined by the following rules, each is conditional
   \text{if } M \mid \alpha = \tif{\underline r < 0}{N_1}{N_2},\ & M \to M[N_2/\alpha] \text{ where }r \geq 0 \\
   \text{if } M \mid \alpha = \tsample \text{ and $\lambda$ does}&\text{ not occur after $@_2$ or $\tY$ in $\alpha$},\\ & M \to M[\underline r/\alpha] \text{ where } r \in [0,1].
 \end{align*}
-In each of these cases, $M \mid \alpha$ is the \defn{redex}, and the \defn{reduction takes place at $\alpha$}.
+In each of these cases, $M \mid \alpha$ is the \emph{redex}, and the reduction \emph{takes place at $\alpha$}. Each subterm can be a redex in at most one way, but there can be multiple redexes at different positions.
 \end{definition}
 
+The argument of a $\beta$ redex and the body of a $\tY$ redex may be duplicated by those reductions. It is therefore these cases that need to be handled carefully to avoid duplicating samples at the wrong time. In both cases, the potentially duplicated part must already be a value, which excludes terms like $\tsample$ or $\tsample + \underline 1$, which should be evaluated before being duplicated. In the other direction, if a $\tsample$ occurs inside of a $\lambda$, it may need to be duplicated before being evaluated, which is why a $\tsample$ reduction isn't allowed inside a $\lambda$ inside a $\tY$ or the right side of an application. These restrictions are in some cases unnecessarily strict, for example, in $(\lambda x. x) ((\lambda y. \tsample) \underline 0)$, it would be fine to evaluate the sample first, but they are at least sufficient to ensure confluence in terms of the distribution of results. Getting individual traces to behave correctly will take more work though.
+
 %\medskip
-Labelling the pre-chosen samples by the positions in the term would also not work because in some cases, a $\tsample$ will be duplicated before being reduced, for example, in $(\lambda x. x \, {\underline 0} \, \mathbin{\underline{+}} \, {x \, \underline 0}) (\lambda y. \tsample)$, both of the $\tsample$ redexes that eventually occur originate at $@_2 ; \lambda$. 
+Labelling the pre-chosen samples by the positions in the term by using $I^{\{\alpha \mid \, (M \mid \alpha) = \tsample\}}$ as the trace space would not be sufficient to solve the issue of different samples being used in corresponding locations in different reduction sequences because in some cases, a $\tsample$ will be duplicated before being reduced, for example, in $(\lambda x. x \, {\underline 0} \, \mathbin{\underline{+}} \, {x \, \underline 0}) (\lambda y. \tsample)$, both of the $\tsample$ redexes that eventually occur originate at $@_2 ; \lambda$. 
 It is therefore necessary to consider possible positions that may occur in other terms reachable from the original term. 
 Even this is itself inadequate because some of the positions in different reachable terms need to be considered the same, and the number of reachable terms is in general uncountable, which leads to measure-theoretic issues.
 
@@ -90,7 +90,7 @@ For example, we have
 \).
 
 Given a closed term $M$, let $L_0(M)$ be the set of pairs, the first element of which is a $\to$-reduction sequence of skeletons starting at $\mathit{Sk}(M)$, and the second of which is a position in the final skeleton of the reduction sequence. 
-As with the traces from $I^{\mathbb N}$ used to pre-select samples to use in the standard trace semantics, modified traces, which are elements of $I^{L_0(M)}$ (with one more caveat introduced later), will be used to pre-select a sample from $I$ for each element of $L_0(M)$, which will then be used if a $\tsample$ reduction is ever performed at that position.
+As with the traces from $I^{\mathbb N}$ used to pre-select samples to use in the standard trace semantics, modified traces, which are elements of $I^{L_0(M)}$ (with one more caveat introduced after Def. \ref{defn:sim}), will be used to pre-select a sample from $I$ for each element of $L_0(M)$, which will then be used if a $\tsample$ reduction is ever performed at that position.
 
 
 A (skeletal) reduction sequence is assumed to contain the information on the locations of all of the redexes as well as the actual sequence of skeletons that occurs. For example, $(\lambda x. x) ((\lambda x. x) \, \skeletonPlaceholder)$ could reduce to $(\lambda x. x) \, \skeletonPlaceholder$ with the redex at either $\cdot$ or $@_2$, and these give different reduction sequences.
@@ -98,7 +98,7 @@ A (skeletal) reduction sequence is assumed to contain the information on the loc
 \begin{example}%[Labelling samples by terms]
 Consider the terms
 \begin{align*}
-A[x] &= \tif{\tif{x>0}{I}{I} (\lambda y.\tsample)\, \underline 0 - \underline{0.5} > 0}{\underline 0}{\Omega}\\
+A[M] &= \tif{\tif{M>0}{I}{I} (\lambda y.\tsample)\, \underline 0 - \underline{0.5} > 0}{\underline 0}{\Omega}\\
 B &= \tif{\tsample - \underline{0.5} > 0}{\underline 0}{\Omega}
 \end{align*}
 If terms rather than skeletons were used to label samples, the set of modified traces where $A[\tsample]$ terminates would be
@@ -131,15 +131,15 @@ Reduction sequences are used rather than reachable skeletons because if the same
 The reduction sequences of skeletons will often be discussed as though they were just skeletons, identifying them with their final skeletons. With this abuse of notation, a reduction sequence $N$ (actually $N_1 \to^\ast N_n = N$) may be said to reduce to a reduction sequence $O$, where the reduction sequence implicitly associated with the final skeleton $O$ is $N_1 \to^\ast N_n \to O$.
 
 %\medskip
-This is still not quite sufficient because sometimes the same samples must be used at corresponding positions in different reduction sequences. 
+This is still not quite sufficient to attain confluence because sometimes the same samples must be used at corresponding positions in different reduction sequences. 
 
 \begin{example} \label{ex:cousin sim} 
 The term $M = \tsample + \tsample$ has the reachable skeletons $N_1 = \skeletonPlaceholder + \tsample, N_2 = \tsample + \skeletonPlaceholder, O = \skeletonPlaceholder + \skeletonPlaceholder$ and $\skeletonPlaceholder$, with reductions $M \to N_1 \to O \to \skeletonPlaceholder$ and $M \to N_2 \to O \to \skeletonPlaceholder$. 
 In the reduction $M \to N_1$, the sample labelled $(M, \underline{+}_1)$ is used, and in the reduction $N_2 \to O$, the sample labelled $(M \to N_2, \underline{+}_1)$ is used. 
-Each of these samples becomes the value of the first numeral in $O$ in their respective reduction sequences, therefore in order for Church-Rosserness to be attained, they must be the same. Which elements of $L_0(M)$ must match can be described by the relation $\sim^*$:
+Each of these samples becomes the value of the first numeral in $O$ in their respective reduction sequences, therefore in order for confluence to be attained, they must be the same. Which elements of $L_0(M)$ must match can be described by the relation $\sim^*$:
 \end{example}
 
-\begin{definition}
+\begin{definition} \label{defn:sim}
 The relation $\sim$ is defined as the union of the minimal symmetric relations $\sim_p$ (``$p$'' for parent-child) and $\sim_c$ (``$c$'' for cousin) satisfying
 \begin{asparaenum}[(i)]
     \item If $N$ reduces to $O$ with the redex at position $\alpha$, and $\beta$ is a position in $N$ disjoint from $\alpha$, then $(N,\beta) \sim_p (O,\beta)$.
@@ -174,11 +174,7 @@ If we extend it to have three $\tsample$s, $\sim_c$ becomes necessary as well: L
 \end{example}
 
 The reflexive transitive closure $\sim^*$ of this relation is used to define the set of \emph{potential positions} $L(M) = L_0(M) / \sim^*$, and each equivalence class can be considered as the same position as it may occur across multiple reachable skeletons. 
-If $(N,\alpha) \sim^* (O,\beta)$, then $N \mid \alpha$ and $O \mid \beta$ both have the same shape (i.e.~they're either both the placeholder $\skeletonPlaceholder$, both variables, both applications, both $\tsample$s etc.), therefore it's well-defined to talk of the set of \defn{potential positions where there is a $\tsample$}, $L_s(M)$. 
-Formally 
-\[
-L_s(M) := \{[(X, \alpha)]_{\sim^\ast_M} : X \mid \alpha = \tsample\}.
-\]
+If $(N,\alpha) \sim^* (O,\beta)$, then $N \mid \alpha$ and $O \mid \beta$ both have the same shape (i.e.~they're either both the placeholder $\skeletonPlaceholder$, both variables, both applications, both $\tsample$s etc.), therefore it's well-defined to talk of the set of \emph{potential positions where there is a $\tsample$}, $L_s(M)$.
 The new sample space is then defined as $I^{L_s(M)}$, with the Borel $\sigma$-algebra and product measure.
 Since $I^{L_s(M)}$ is a countable product, the measure space is well-defined \cite[Cor.~2.7.3]{AshDD00}.
 
@@ -208,13 +204,13 @@ We write an element of $\biguplus_{M \in \Lambda_0} I^{L_s(M)}$ as $(M', s)$ whe
 \medskip
 This reduction relation now has all of the properties required of it. In particular, it can be considered an extension of the standard trace semantics (as will be seen later in \Cref{thm:AstEquivalence}), and also:
 \begin{restatable}{lemma}{churchRosser} \label{churchRosser}
-The relation $\Rightarrow$ is Church-Rosser.
+The relation $\Rightarrow$ is confluent.
 \end{restatable}
 
 \paragraph*{Reduction strategy determinising $\Rightarrow$}
 The reduction relation $\Rightarrow$ is nondeterministic, so it admits multiple possible reduction strategies. 
 %\begin{definition}
-A \defn{reduction strategy} starting from a closed term $M$ is a measurable partial function $f$ from $\mathit{Rch}(M)$ to positions, such that for any reachable term $N$ where $f$ is defined, $f(N)$ is a position of a redex in $N$, and if $f(N)$ is not defined, $N$ is a value.
+A \emph{reduction strategy} starting from a closed term $M$ is a measurable partial function $f$ from $\mathit{Rch}(M)$ to positions, such that for any reachable term $N$ where $f$ is defined, $f(N)$ is a position of a redex in $N$, and if $f(N)$ is not defined, $N$ is a value.
 Using a reduction strategy $f$, a subset of $\Rightarrow$ that isn't nondeterministic, $\Rightarrow_f$, can be defined by $(N,s) \Rightarrow_f (N',s')$ just if $(N,s) \Rightarrow (N',s')$ and $N$ reduces to $N'$ with the redex at $f(N)$.
 %\end{definition}
 
@@ -263,18 +259,18 @@ The domain of definition of the ranking functions also needs to be changed from 
 
 More explicitly, the modified forms of the theorems are:
 \begin{definition}
-An \defn{antitone ranking function on $M$ w.r.t.~a reduction strategy $r$} is a measurable function $f:\mathit{Rch}_r(M) \to \mathbb{R}$ such that $f(N) \geq 0$ for all $N$, and there exists an antitone function $\epsilon : \nnReal \to \pReal$ such that
+An \emph{antitone ranking function on $M$ w.r.t.~a reduction strategy $r$} is a measurable function $f:\mathit{Rch}_r(M) \to \mathbb{R}$ such that $f(N) \geq 0$ for all $N$, and there exists an antitone function $\epsilon : \nnReal \to \pReal$ such that
 \begin{itemize}
     \item $f(N) \geq \epsilon(f(N)) + f(N')$ if $N[r(N)]$ is a $\tY$-redex and $N$ reduces to $N'$ at $r(N)$
     \item $f(N) \geq \int_I f(N[\underline{x}/r(N)]) \, \Leb(\mathrm{d}x)$ if $N[r(N)] = \tsample$
 
     \item $f(N) \geq f(N')$ if $r(N)$ is any other redex, where $N \to N'$ at $r(N)$.
 \end{itemize}
-Any closed term for which an antitone ranking function with respect to a reduction strategy $r$ exists is called \defn{antitone rankable w.r.t.~$r$}. 
+Any closed term for which an antitone ranking function with respect to a reduction strategy $r$ exists is called \emph{antitone rankable w.r.t.~$r$}. 
 \end{definition}
 
 \begin{definition}
-An \defn{antitone sparse ranking function on $M$ w.r.t.~a reduction strategy $r$} is a partial function $f : \mathit{Rch}_r(M) \rightharpoonup \mathbb R$ such that there exists some antitone function $\epsilon : \nnReal \to \pReal$ such that
+An \emph{antitone sparse ranking function on $M$ w.r.t.~a reduction strategy $r$} is a partial function $f : \mathit{Rch}_r(M) \rightharpoonup \mathbb R$ such that there exists some antitone function $\epsilon : \nnReal \to \pReal$ such that
 \begin{inparaenum}[(i)]
     \item $f(N) \geq 0$ for all $N \in \dom(f)$,
     \item $M \in \dom(f)$,
@@ -289,7 +285,7 @@ An \defn{antitone sparse ranking function on $M$ w.r.t.~a reduction strategy $r$
 \fi
 \end{definition}
 
-If the antitone function is just the constant function $1$ instead, then it is called a \defn{(sparse) ranking function on $M$ w.r.t.~$r$} instead, and the term is called \defn{rankable w.r.t.~$r$}.
+If the antitone function is just the constant function $1$ instead, then it is called a \emph{(sparse) ranking function on $M$ w.r.t.~$r$} instead, and the term is called \emph{rankable w.r.t.~$r$}.
 
 \begin{theorem}[Confluent ranking] \label{thm:confluent ranking}
 If a closed PPCF term $M$ has a ranking function, sparse ranking function, antitone ranking function or antitone sparse ranking function w.r.t.~a reduction strategy $r$, then $M$ is AST w.r.t.~$r$, and AST.

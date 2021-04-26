@@ -47,14 +47,14 @@ moreover it also enjoys a sparse function theorem (\cref{thm:antitone partial im
 \akr{Our progress condition is equivalent to that given by McIver et al.~\cite{DBLP:journals/pacmpl/McIverMKK18} (by applying a transformation to the ranking function), but needs to be different in order to be compatible with the presence of additional intermediate reduction steps where the ranking function is not required to decrease at all.}
 \lo{The same point is made in \cref{sec:related}, so the preceding can be omitted.}
 
-Basic (non-random) lambda calculus has the very useful Church-Rosser property, which implies (among other things) that even if execution of a program starts in a different order, it will still reach the same normal form eventually (assuming it does reach a normal form). 
+Basic (non-random) lambda calculus has the very useful property of confluence, which implies (among other things) that even if execution of a program starts in a different order, it will still reach the same normal form eventually (assuming it does reach a normal form). 
 Probabilistic lambda calculus does not have this property, because random choices may be duplicated, and evaluating the same subterm multiple times can yield different results. 
-However, with a restricted set of reduction strategies, Church-Rosserness may be regained. 
+However, with a restricted set of reduction strategies, confluence may be regained. 
 We introduce a novel addressing scheme for the possible random choices in a program's execution, which ensures that the same random choices are taken at corresponding positions in alternative reduction sequences, so that the same eventual result can be reached. 
 This is then used to prove yet another extension to the ranking function theorem, that (\cref{thm:confluent ranking}) ranking functions may be defined with respect to alternative reduction strategies (which in some cases may lead to a considerably simpler execution and ranking function), and (\cref{cor:Reduction strategy independence}) rankability in this sense still imples almost sure termination. 
 The confluent trace semantics is of wider interest, and has other possible applications as well, for example in Bayesian inference algorithms.
 
-By combining these methods we can prove AST of a variety of PPCF programs that are beyond the reach of methods in the literature, including non-affine recursion\footnote{\label{fnote:non-affine} Non-affine recursive programs are recursive programs that can, during the evaluation of the recursive body, make multiple recursive calls (of a first-order function) from distinct call sites.} (\cref{ex:non-affine recursion easy,ex:non-affine continuous}) and recursions that define high-order functions (\cref{ex:higher-order recursion}).
+By combining these methods we can prove AST of a variety of PPCF programs that are beyond the reach of methods in the literature, including non-affine recursion\footnote{\label{fnote:non-affine} Non-affine recursive programs are recursive programs that can, during the evaluation of the recursive body, make multiple recursive calls (of a first-order function) from distinct call sites.} (\cref{ex:non-affine recursion easy,ex:non-affine continuous}) and recursions that define higher-order functions (\cref{ex:higher-order recursion}).
 
 \paragraph*{Outline}
 
