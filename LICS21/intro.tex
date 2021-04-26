@@ -3,65 +3,16 @@
 \section{Introduction}
 \label{sec:intro}
 
-Probabilistic (or randomised) programs have long been recognised as essential to the efficient solution of many algorithmic problems \cite{Rabin1976}.
-More recently, in probabilistic programming \cite{DBLP:conf/icse/GordonHNR14,rainforth2017Automating,vandemeent2018Introduction}, probabilistic programs are used to express generative models whose posterior probability can be computed by general purpose inference engines.
-Sampling from continuous distributions is an essential construct of probabilistic programming languages, such as Church \cite{DBLP:conf/uai/GoodmanMRBT08}, Stan \cite{carpenter2017stan}, Anglican \cite{DBLP:conf/pkdd/TolpinMW15}, Gen \cite{cusumano-towner2019Gen}, Pyro \cite{bingham2019Pyro}, Edward \cite{tran2016edward} and Turing \cite{ge2018Turing}.
-Another key feature is higher order; in fact some of the most influential probabilistic programming languages are functional.
+Non-probabilistic lambda calculi are generally confluent, i.e.~if a term $A$ reduces to both $B_1$ and $B_2$, there is some $C$ 
+to which both $B_1$ and $B_2$ reduce,
+so the reduction order mostly doesn't matter. 
+In the probabilistic case, this may not be true, because $\beta$-reduction can duplicate $\tsample$s, so the outputs of the copies of the $\tsample$ may be identical or independent, depending on whether the sample is taken before or after $\beta$-reduction. Consider for example the term $(\lambda x. x + x)\, \tsample$, where $\tsample$ reduces to a number chosen uniformly at random from the interval $I = [0,1]$. If it is reduced in call-by-value order, first the $\tsample$ reduces to some number $r$, then the $\beta$ redex is evaluated, then $r$ is added to itself, yielding $\underline{2r}$. If it is reduced in call-by-name order instead, first the $\beta$ redex is reduced, yielding $\tsample + \tsample$, then the $\tsample$s are evaluated independently and added, yielding $\underline{r + r'}$. As $r$ and $r'$ are independent, the distribution of results is triangular, with support $[0,2]$ and peak at $1$, which is different from the uniform distribution of results in the CbV case.
 
-In this paper we study a central property of probabilistic programs: \emph{termination}.
-When a probabilistic program implements a solution to an algorithmic problem, we naturally require the computation to terminate with probability $1$, in which case the program is called \emph{almost surely terminating} (AST).
-Indeed, it is standard for designers and implementors of probabilistic programming systems to regard non-AST programs as defining invalid models, and hence inadmissible \cite{Rainforth2017,DBLP:conf/uai/GoodmanMRBT08}.
-(Yet none of these systems provides any support for the development or verification of AST programs.)
+The results obtained by CbV and CbN evaluation differ in a significant way, however, there are some cases where the order of evaluation doesn't matter. For example, in $\tsample + \tsample$, the order in which the $\tsample$s are evaluated doesn't affect the final result, and in $(\lambda x. \tsample)\, \underline 0$, the $\beta$ redex and the $\tsample$ can be evaluated in either order. In order to obtain the desired confluence result, we restrict our attention to a class of reduction strategies that are equivalent to CbV, as the CbN semantics is less expressive.
 
-Moreover various theorems about probabilistic programs rely on the assumption that the program terminates almost surely (see e.g.~\cite{DBLP:conf/uai/GoodmanMRBT08}). 
-A recent result \cite{MakOPW21} proves that AST programs have density functions that are differentiable almost everywhere.
-This is significant for Bayesian machine learning, because almost everywhere differentiability is a precondition for the correctness of some of the most scalable inference algorithms, such as Hamiltonian Monte Carlo \cite{DBLP:conf/aistats/ZhouGKRYW19,Nishimura2020b} and reparameterised gradient variational inference \cite{DBLP:conf/nips/LeeYY18}.
+Even with such a restriction, a trace semantics in the usual style would not be entirely confluent. In the normal sort of trace semantics\cite{borgstrom2016lambda}, there is a sequence of samples, the \emph{trace}, selected at random from a trace space such as $I^{\mathbb N}$, then for every $\tsample$ statement reduction, the next sample from the trace is used in order, so that the samples in the trace are effectively each labelled by a number corresponding to the execution order of the $\tsample$ statements. Consider the evaluation of the term $\tsample - \tsample$ using one of these simple linear traces, $(1, 0, \dots)$. It would reduce to either $1$ or $-1$ depending on the order of evaluation of the $\tsample$s, as that determines which sample from the pre-selected sequence is used for each one. To fix this, rather than pre-selecting samples according to the order they'll be drawn in, they can be labelled according to the position in the term where they'll be used instead.
 
-The AST problem is not just important, but also difficult: 
-Deciding AST of first-order imperative programs with discrete probabilities is $\Pi^0_2$-complete \cite{DBLP:conf/mfcs/KaminskiK15}.
-In recent work (under double-blind review elsewhere), the AST problem for higher-order programs with continuous distributions (and suitable primitive functions) is shown to have the same complexity.
-Though the problem of proving AST of imperative probabilistic programs is much studied \cite{DBLP:journals/jacm/KaminskiKMO18,DBLP:conf/lics/OlmedoKKM16,DBLP:conf/mfcs/KaminskiK15,DBLP:series/mcs/McIverM05,DBLP:conf/popl/FioritiH15,DBLP:conf/pldi/ChenH20,DBLP:journals/toplas/ChatterjeeFNH18}, to our knowledge the problem of proving AST of higher-order programs with continuous distributions is new.
+Further details, including all of the missing proofs, can be found in \cite[\S IV, \S D]{arxiv}.
 
-\subsection*{Contributions}
-
-A possible approach to proving AST is to find some variant on the program state, called \emph{ranking function}, that decreases on average sufficiently quickly that it must at some point reach 0, at which point the program terminates. 
-In other words, the program's behavior is used to define an associated (ranking) \emph{supermartingale}. Proof rules based on relating the program state to supermartingales already exist for first-order imperative programs \cite{DBLP:conf/cav/ChakarovS13,DBLP:conf/popl/FioritiH15,DBLP:journals/pacmpl/McIverMKK18}. This paper's contribution is to extend this method to a higher-order setting.
-
-The language PPCF used in this paper is simply typed, with random continuous sampling, and an explicit recursion primitive, $\tY$. 
-We define a \emph{ranking function} on a term $M$ to be a non-negative measurable function on the reachable terms from $M$ whose expected value decreases or is unchanged as the term is reduced.
-Because the type system already constrains the terms enough to force termination in the absence of the recursion construct \cite{tait1967,BarendregtDS2010}, it is only the $\tY$-reduction steps that must be counted, making defining ranking functions somewhat easier.
-Using supermartingales and Doob's (iterated) Optional Sampling Theorem, we show the soundness of rankability (\cref{thm:rankable implies termination}): if a term has a ranking function, it is AST.
-
-To define a ranking function, one would typically try to organise the set of reachable terms (of the program being analysed) into a manageable number of syntactic cases. 
-Unfortunately (for any fixed reduction strategy) there are programs whose reachable terms span such a large number of cases that it would be extremely difficult to analyse by hand, if at all possible. 
-How can the construction of ranking functions be made possible or easier?
-
-Our first answer is the notion of \emph{sparse ranking function}. 
-Most of the individual execution steps of a typical program are trivial and easy to mentally skip over. Sparse ranking functions can be defined only for those points in the execution of a program which are semantically important, while all of the other intermediate steps can be ignored. Yet, they are no less efficacious for proving AST (\cref{thm:partial implies rankable}): every sparse ranking function is a restriction of a ranking function. This also makes the ranking function method of proving AST more compatible with syntactic sugar, because the intermediate reduction steps implicit in the simplified notation can be ignored.
-
-A ranking function (or sparse ranking function) provides a bound on the expected number of $\tY$-reduction steps before the program terminates, therefore ranking functions cannot be constructed for terms whose expected number of $\tY$-reduction steps is infinite, such as the simplest implementation of the 1D unbiased random walk. 
-This restriction can be removed by generalising ranking functions to \emph{antitone ranking functions}, which rather than having to decrease by a constant amount for each $\tY$-reduction step, may decrease by a variable amount, depending on the value of the ranking function. 
-Thanks to this feature, the antitone ranking function method is capable of handling programs which terminate arbitrarily slowly. \lo{TODO: Reference some examples.}
-We show that this method is also sound for proving AST (\cref{thm:antitone rankable implies termination}), 
-moreover it also enjoys a sparse function theorem (\cref{thm:antitone partial implies rankable}).
-\akr{Our progress condition is equivalent to that given by McIver et al.~\cite{DBLP:journals/pacmpl/McIverMKK18} (by applying a transformation to the ranking function), but needs to be different in order to be compatible with the presence of additional intermediate reduction steps where the ranking function is not required to decrease at all.}
-\lo{The same point is made in \cref{sec:related}, so the preceding can be omitted.}
-
-Basic (non-random) lambda calculus has the very useful property of confluence, which implies (among other things) that even if execution of a program starts in a different order, it will still reach the same normal form eventually (assuming it does reach a normal form). 
-Probabilistic lambda calculus does not have this property, because random choices may be duplicated, and evaluating the same subterm multiple times can yield different results. 
-However, with a restricted set of reduction strategies, confluence may be regained. 
-We introduce a novel addressing scheme for the possible random choices in a program's execution, which ensures that the same random choices are taken at corresponding positions in alternative reduction sequences, so that the same eventual result can be reached. 
-This is then used to prove yet another extension to the ranking function theorem, that (\cref{thm:confluent ranking}) ranking functions may be defined with respect to alternative reduction strategies (which in some cases may lead to a considerably simpler execution and ranking function), and (\cref{cor:Reduction strategy independence}) rankability in this sense still imples almost sure termination. 
-The confluent trace semantics is of wider interest, and has other possible applications as well, for example in Bayesian inference algorithms.
-
-By combining these methods we can prove AST of a variety of PPCF programs that are beyond the reach of methods in the literature, including non-affine recursion\footnote{\label{fnote:non-affine} Non-affine recursive programs are recursive programs that can, during the evaluation of the recursive body, make multiple recursive calls (of a first-order function) from distinct call sites.} (\cref{ex:non-affine recursion easy,ex:non-affine continuous}) and recursions that define higher-order functions (\cref{ex:higher-order recursion}).
-
-\paragraph*{Outline}
-
-We present the syntax and trace semantics of PPCF in \Cref{sec:PPCF}.
-In \Cref{sec:supermartingales}, we show that ranking functions on terms induce supermartingales, which form the basis of a sound method for proving AST.
-We introduce sparse ranking functions in \Cref{sec:ranking} and antitone ranking functions in \Cref{sec:antitone}, and illustrate how they can be used to prove AST via examples. 
-In \Cref{sec:confluent}, we present a confluent trace semantics and demonstrate its usefulness.
-We discuss further applications of the confluent semantics in \Cref{sec:applications}; and conclude with comments on related work and further directions in \Cref{sec:related}.
-
-\paragraph*{Additional materials} Further details of some of the examples and all missing proofs can be found in the appendix.
+\subsection{Outline}
+First, the syntax of the language PPCF is introduced. Positions are defined as a way of addressing sample statements within a program independently of the reduction order. Next, a version of the reduction relation is presented that is nondeterministic, so that it allows a choice of what order to perform reductions in. The notion of positions is extended to potential positions, for samples which may appear later in the reduction sequence but not necessarily in the initial term. In order to allow potential positions in different reduction sequences to be considered equivalent, a relation $\sim^*$ is defined, and finally, all of these are used to construct a confluent version of the trace semantics, $\Rightarrow$, that is still nondeterministic in reduction order, but does specify the outcome of random choices.

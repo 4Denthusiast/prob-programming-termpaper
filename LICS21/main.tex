@@ -116,27 +116,19 @@
 % \newtheorem*{remark}{Remark}
 %\input{headerieee}
 
-\def\titlerunning{Supermartingales, Ranking Functions and Probabilistic PCF}
-%\def\authorrunning{Andrew Kenyon-Roberts and Luke Ong}
+\def\titlerunning{A Confluent Trace Semantics for Probabilistic Lambda Calculus}
+\def\authorrunning{Andrew Kenyon-Roberts}
 
 \begin{document}
 
-\title{Supermartingales, Ranking Functions and Probabilistic Lambda Calculus}
+\title{A Confluent Trace Semantics for Probabilistic Lambda Calculus}
 
-%\author{Andrew Kenyon-Roberts \and Luke Ong}
+\author{Andrew Kenyon-Roberts}
 
 \maketitle
 
 \begin{abstract}
-We introduce a method for proving almost sure termination in the context of lambda calculus with continuous random sampling and explicit recursion, based on ranking supermartingales. 
-This result is extended in three ways. 
-\emph{Antitone ranking functions} have weaker restrictions on how fast they must decrease, and are applicable to a wider range of programs. 
-\emph{Sparse ranking functions} take values only at a subset of the program's reachable states, so they are simpler to define and more flexible. 
-%Ranking functions with respect to alternative reduction strategies can be used to prove almost sure termination, thanks to a restricted confluence result.
-\emph{Ranking functions with respect to alternative reduction strategies} give yet more flexibility, and significantly increase the applicability of the ranking supermartingale approach to proving almost sure termination, thanks to a novel (restricted) confluence result which is of independent interest.
-The notion of antitone ranking function was inspired by similar work by McIver, Morgan, Kaminski and Katoen in the setting of a first-order imperative language, but adapted to a higher-order functional language.
-The sparse ranking function and confluent semantics extensions are unique to the higher-order setting.
-Our methods can be used to prove almost sure termination of programs that are beyond the reach of methods in the literature, including higher-order and non-affine recursion.
+Probabilistic lambda calculus has a weaker version of the confluence property of plain lambda calculus. However, in the usual formulation, this only applies in the sense of distributions, but not to individual traces of random choices. A new labelling scheme for random choices is introduced for PPCF, a simply-typed functional language with explicit recursion, real numbers and a random sampling operator, that allows a confluent version of trace semantics to be defined (with a restricted set of call-by-value reduction strategies).
 \end{abstract}
 
 \IEEEpeerreviewmaketitle
@@ -145,49 +137,9 @@ Our methods can be used to prove almost sure termination of programs that are be
 
 \input{SPCF}
 
-\input{supermartingales}
-
-\input{ranking}
-
-\input{antitone}
-
 \input{confluent}
 
-\input{applications}
-
-\input{related}
-
-%\bibliographystyle{apalike}
 \bibliographystyle{IEEEtran}
-\bibliography{../Bib/references-Beutner,../Bib/references}
-
-\appendices
-
-%\section{Supplementary materials for \Cref{sec:PPCF}}
-
-\input{apx-typing-rules}
-
-\section{Supplementary materials for \Cref{sec:supermartingales}}
-
-\input{supermartingales-proofs}
-
-\section{Supplementary materials for \Cref{sec:ranking}}
-
-\input{ranking-proofs}
-
-\section{Supplementary materials for \Cref{sec:antitone}}
-
-\input{antitone-proofs}
-
-\section{Supplementary materials for \Cref{sec:confluent}}
-
-\input{confluent-proofs}
-
-%\section{Notes (not for submission)}
-
-%\input{notes}
-
-
-\tableofcontents
+\bibliography{references-Beutner,../references}
 
 \end{document}
