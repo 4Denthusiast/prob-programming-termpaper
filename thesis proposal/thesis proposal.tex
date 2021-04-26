@@ -1,4 +1,8 @@
 \documentclass[titlepage]{article}
+
+\newif\ifdraft
+\drafttrue %% To hide all comments and highlighting, just comment this line out 
+\input{../Style/comment}
 \usepackage{amsmath}
 \usepackage{amsfonts}
 \usepackage{natbib}
@@ -136,11 +140,18 @@ This definition is sufficient to prove the AST result that is nominally the main
 \subsection{Using Labelling to Combine Denotational and Trace Semantics}
 Trace-based semantics is, in a sense, finer than distribution-based semantics. Given a measurable function $f : \Lambda \times \mathbb S \to A$ that describes some property of a term $\in \Lambda$ by using a trace from some sampling space $\mathbb S$, which has some fixed probability measure on it $\mu_{\mathbb S}$, this can be converted to a kernel from $\Lambda$ to $A$ using the push-forward measure of $\mu_{\mathbb S}$, but some information is lost in the process: which specific trace lead to which outcome. There is no corresponding simple way to convert a distribution-based semantics to a trace-based semantics that actually results in all the correct structure expected of a trace-based semantics. In trace-based semantics, it is possible to define things like correlations between the random variables it defines, because they are all defined in the same probability space, whereas this is not possible given merely a distribution of outputs.
 
-There are also some advantages of denotational over operational semantics. It provides meanings to sub-programs that can be reasoned about independently of their context. It can be more suitable for proving things like the effectiveness of a type system for proving termination, as the structure of the semantics more closely matches the derivations of typing judgements.%This paragraph could really do with some references. They don't even have to be probabilistic, just demonstrations of how useful denotational semantics in general can be.
+There are also some advantages of denotational over operational semantics. It provides meanings to sub-programs that can be reasoned about independently of their context. It can be more suitable for proving things like the effectiveness of a type system for proving termination \lo{Yes, provided the denotational semantics is \emph{adequate} (which in the non-random case means: $M$ converges iff the denotation of $M$ is not $\bot$), which is a non-trivial ask in probabilistic computation -- witness \cite{DBLP:journals/pacmpl/VakarKS19}.}, as the structure of the semantics more closely matches the derivations of typing judgements.%This paragraph could really do with some references. They don't even have to be probabilistic, just demonstrations of how useful denotational semantics in general can be.
+\lo{These are the advantages of a \emph{compositional} semantics, and compositionality is the defining feature of denotational semantics.}
 
 Existing approaches are either denotational and distribution-based, operational and distribution-based, or operational and trace-based. The combination of denotational and trace-based is more difficult to define, because some way of distinguishing multiple copies of the same sample statement is needed, so that they can derive their randomness from different parts of the trace. In operational semantics, this is easy enough, because the argument of a beta redex does not need to be evaluated at all before it is duplicated by the reduction, and its copies can simply be dealt with one at a time, like any other independent subterms. In denotational semantics, it is not the terms themselves which are combined in an application, but their interpretations, therefore the interpretation of the argument needs some way to retain the possibility of having multiple different results from the random process, even though there is only one trace used overall.
 
+\lo{A denotational trace-based semantics for SPCF does sound like an interesting problem. What might one be able to do with this model, which one can't with the standard trace-based operational semantics?}
+
+\lo{To envisage what such a model might look like, I find it helpful to consider the stochastic symbolic execution semantics of SPCF \cite{MakOP20b}.} \lo{To be continued.}
+
 An extension of the labelling scheme used in the confluent trace semantics of my previous paper could provide just such a possibility. The exact labelling scheme used there depends explicitly on the reduction sequences (and is also rather convoluted), so it is not suitable to use directly in defining a denotational semantics, but it seems highly likely that some labelling scheme that's equivalent but differently defined would be. If all of the subterms of the original term are given unique labels, and the labels form some sort of magma, so that when a reduction occurs, the labels of the argument's subterms and the function's subterms can be combined in some way to produce the labels of the reduct's subterms, then a trace that contains a value for every possible combination of labels could be used. The random samples taken in the evaluation of each subterm then depend on the transformation of the labels that occurs, which is distinct for each copy of the subterm.
+
+\lo{To give a denotational semantics of the simply-typed lambda calculus is to construct a cartesian closed category. One would expect a denotational trace-based semantics to have a strong operational flavour. This brings to mind game semantics, which is an unusual denotational semantics in exactly this sense that it is operational in  character. As you may know, it gave rise to the first syntax-independent fully abstract model for PCF.}
 
 \subsection{Using labelling to perform efficient inference}
 Another possible application of a labelling scheme for sample is in improving the efficiency of certain inference algorithms. In lightweight metropolis-hastings, the program is first executed, picking random values for all the samples taken, with the trace of samples being remembered. Then, random variations on the trace are tested, re-running the program with the modified trace and accepting or rejecting the modification based on the difference in the likelihood of the runs. It is essential to the efficiency of this algorithm that the score of a modified run is highly correlated to the score of the original run, as otherwise the acceptance ratio becomes low. At the same time, it is necessary that the proposed changes actually change the trace by not too small an amount, so that the distribution of traces converges to the stationary distribution quickly.
@@ -153,6 +164,11 @@ The requirements of a labelling scheme for this purpose are somewhat different f
 
 \subsection{Completeness of Antitone Rankability}
 A term is rankable iff every term reachable from it terminates with finitely many $\tY$-reduction steps in expectation. This essentially puts a limit on how slowly a term can terminate while still being rankable, so any term which is not $\tY$-positive almost surely terminating cannot be proven AST by assigning it a ranking function. With antitone ranking functions, there is no analogous restriction: there are arbitrarily slowly terminating terms (i.e. for any probability distribution on $\mathbb N$, there is a term whose distribution of number of $\tY$-reduction steps before termination is the given distribution) which are antitone rankable. It therefore seems rather likely that any term such that every term reachable from is is AST is antitone rankable. I intend to try to prove this result, even though it does not relate very closely to my overall thesis topic, because it would make my existing work more complete.
+
+\iffalse
+\bibliographystyle{apalike}
+\bibliography{../Bib/references-Beutner,../Bib/references}
+\fi
 
 \bibliography{references}
 \end{document}
