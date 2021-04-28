@@ -14,12 +14,13 @@ Indeed, it is standard for designers and implementors of probabilistic programmi
 (Yet none of these systems provides any support for the development or verification of AST programs.)
 
 Moreover various theorems about probabilistic programs rely on the assumption that the program terminates almost surely (see e.g.~\cite{DBLP:conf/uai/GoodmanMRBT08}). 
-A recent result \cite{MakOPW21} proves that AST programs have density functions that are differentiable almost everywhere.
+A recent result \cite{DBLP:conf/esop/MakOPW21} proves that AST programs have density functions that are differentiable almost everywhere.
 This is significant for Bayesian machine learning, because almost everywhere differentiability is a precondition for the correctness of some of the most scalable inference algorithms, such as Hamiltonian Monte Carlo \cite{DBLP:conf/aistats/ZhouGKRYW19,Nishimura2020b} and reparameterised gradient variational inference \cite{DBLP:conf/nips/LeeYY18}.
 
 The AST problem is not just important, but also difficult: 
 Deciding AST of first-order imperative programs with discrete probabilities is $\Pi^0_2$-complete \cite{DBLP:conf/mfcs/KaminskiK15}.
-In recent work (under double-blind review elsewhere), the AST problem for higher-order programs with continuous distributions (and suitable primitive functions) is shown to have the same complexity.
+In recent work \cite{BeutnerO21} %(under double-blind review elsewhere), 
+the AST problem for higher-order programs with continuous distributions (and suitable primitive functions) is shown to have the same complexity.
 Though the problem of proving AST of imperative probabilistic programs is much studied \cite{DBLP:journals/jacm/KaminskiKMO18,DBLP:conf/lics/OlmedoKKM16,DBLP:conf/mfcs/KaminskiK15,DBLP:series/mcs/McIverM05,DBLP:conf/popl/FioritiH15,DBLP:conf/pldi/ChenH20,DBLP:journals/toplas/ChatterjeeFNH18}, to our knowledge the problem of proving AST of higher-order programs with continuous distributions is new.
 
 \subsection*{Contributions}

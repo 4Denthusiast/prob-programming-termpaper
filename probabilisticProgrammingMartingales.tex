@@ -134,7 +134,7 @@ Various theorems about probabilistic programs rely on the assumption that the pr
 
 \subsection{Syntax of SPCF}
 
-The language SPCF is a simply-typed lambda calculus with sampling of real numbers from $[0,1]$ and unbounded scoring, following \cite{MakOPW21}. Types and terms are defined as follows, where $r$ is a real number, $x$ is a variable, $f : \mathbb{R}^n \to \mathbb{R}$ is any measurable function, and $\Gamma$ is an environment:
+The language SPCF is a simply-typed lambda calculus with sampling of real numbers from $[0,1]$ and unbounded scoring, following \cite{DBLP:conf/esop/MakOPW21}. Types and terms are defined as follows, where $r$ is a real number, $x$ is a variable, $f : \mathbb{R}^n \to \mathbb{R}$ is any measurable function, and $\Gamma$ is an environment:
 \begin{align*}
   & \text{types } A, B ::= \textsf{R}  \mid  A \to B \\
   & \text{values } V ::= \lambda x.M  \mid  \underline{r} \\
@@ -229,11 +229,11 @@ which terminates on the set $\pi_h^{-1}[[0,0.5]]$, has probability 0.5 of failin
 Note that the requirement that $M$ be closed is not important for the proofs of the theorems, but is simply required to ensure that $M$ reaches a value, rather than a general normal form like $x \, y$.
 
 \paragraph{}
-This definition of almost sure termination is equivalent to that given in \citep{MakOPW21}, although the program semantics is stated in a slightly different way. In particular, the argument to $\tscore$ is not relevant to termination (except for the possibility that its argument's evaluation wouldn't terminate).
+This definition of almost sure termination is equivalent to that given in \citep{DBLP:conf/esop/MakOPW21}, although the program semantics is stated in a slightly different way. In particular, the argument to $\tscore$ is not relevant to termination (except for the possibility that its argument's evaluation wouldn't terminate).
 
 \iffalse
 \lo{Your operational semantics does not maintain a record of the current weight of the reduction.
-A.s.~termination does depend on $\tscore$: see \cite[\S 4.3]{MakOPW21}\footnote{\url{https://arxiv.org/abs/2004.03924}}.
+A.s.~termination does depend on $\tscore$: see \cite[\S 4.3]{DBLP:conf/esop/MakOPW21}\footnote{\url{https://arxiv.org/abs/2004.03924}}.
 I think it important to take the behaviour of $\tscore$ into account;
 you should do it as a future task.}
 \fi
