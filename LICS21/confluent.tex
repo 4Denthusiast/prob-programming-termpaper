@@ -164,7 +164,6 @@ The relation $\sim$ is defined as the union of the minimal symmetric relations $
     \end{compactenum}
     (in which case $O_1$ and $O_2$ are equal as skeletons, but with different reduction sequences), $O_1'$ and $O_2'$ are the results of applying some reduction sequence to each of $O_1$ and $O_2$ (the same reductions in each case, which is always possible because they're equal skeletons), and $\delta$ is a position in $O_1'$ (or equivalently $O_2'$), then $(O_1',\delta) \sim_c (O_2',\delta)$.
 \end{asparaenum}
-The $\sim_c$-rules are illustrated in \Cref{sim-diagram}.
 \end{definition}
 
 \begin{example}
@@ -207,7 +206,6 @@ This reduction relation now has all of the properties required of it. In particu
 The relation $\Rightarrow$ is confluent.
 \end{restatable}
 
-\paragraph*{Reduction strategy determinising $\Rightarrow$}
 The reduction relation $\Rightarrow$ is nondeterministic, so it admits multiple possible reduction strategies. 
 %\begin{definition}
 A \emph{reduction strategy} starting from a closed term $M$ is a measurable partial function $f$ from $\mathit{Rch}(M)$ to positions, such that for any reachable term $N$ where $f$ is defined, $f(N)$ is a position of a redex in $N$, and if $f(N)$ is not defined, $N$ is a value.
@@ -247,7 +245,7 @@ If $M$ is AST with respect to any reduction strategy, it is AST.
 Suppose $M$ is AST w.r.t.~$f$. Let the set of samples with which it terminates with this reduction strategy be $X$. By \Cref{thm:CbvIsTerminatingest}, $M$ also terminates with $\cbv$ and every element of $X$, and $X$ has measure 1, by assumption, therefore $M$ is AST with respect to $\cbv$ therefore by \Cref{thm:AstEquivalence} it is AST.
 \end{proof}
 
-All of the theorems on the termination of rankable terms therefore extend to other reduction strategies too. The proofs of \Cref{thm:rankable implies termination,thm:partial implies rankable,thm:antitone rankable implies termination,thm:antitone partial implies rankable} are all sufficiently generic with respect to what the reduction relation actually is that they can be directly applied to other reduction strategies. They only require that the number of reductions that can occur without any of them being a $\tY$-reduction is bounded for any starting term (which is true, because \Cref{thm:de groote} applies equally to any reduction strategy). For a reduction strategy $r$ and term $M$, just substitute $N[r(N)]$ being a $\tY$-redex for $N$ being of the form $E[\tY \lambda x. O]$, and $r(N)$ being undefined for $N$ being a value.
+All of the theorems on the termination of rankable terms therefore extend to other reduction strategies too. The proofs of \Cref{thm:rankable implies termination,thm:partial implies rankable,thm:antitone rankable implies termination,thm:antitone partial implies rankable} are all sufficiently generic with respect to what the reduction relation actually is that they can be directly applied to other reduction strategies. They only require that the number of reductions that can occur without any of them being a $\tY$-reduction is bounded for any starting term (which is true, because the termination property implied by the type system applies equally to any reduction strategy). For a reduction strategy $r$ and term $M$, just substitute $N[r(N)]$ being a $\tY$-redex for $N$ being of the form $E[\tY \lambda x. O]$, and $r(N)$ being undefined for $N$ being a value.
 
 The domain of definition of the ranking functions also needs to be changed from the reachable terms $\mathit{Rch}(M)$ to the \emph{reachable terms with respect to the reduction strategy $r$},
 \[
@@ -291,7 +289,7 @@ If the antitone function is just the constant function $1$ instead, then it is c
 If a closed PPCF term $M$ has a ranking function, sparse ranking function, antitone ranking function or antitone sparse ranking function w.r.t.~a reduction strategy $r$, then $M$ is AST w.r.t.~$r$, and AST.
 \end{theorem}
 
-When constructing an (antitone) sparse ranking function with respect to an alternative reduction strategy, it is intuitively simplest to define the sparse ranking function and the reduction strategy together. For each key reachable term where the sparse ranking function is defined, simply decide which sub-term should be reduced next, and how far before the next key reachable term. The only restrictions to bear in mind on evaluating sub-terms are that a $\tsample$ may not be evaluated inside a $\lambda$ that's inside a $\tY$ or on the right of an application, and a $\beta$ redex may not be reduced until its argument is a value. This can be seen as applied to \Cref{ex:sum of powers} at the end of \Cref{apx:confluent}.
+When constructing an (antitone) sparse ranking function with respect to an alternative reduction strategy, it is intuitively simplest to define the sparse ranking function and the reduction strategy together. For each key reachable term where the sparse ranking function is defined, simply decide which sub-term should be reduced next, and how far before the next key reachable term. The only restrictions to bear in mind on evaluating sub-terms are that a $\tsample$ may not be evaluated inside a $\lambda$ that's inside a $\tY$ or on the right of an application, and a $\beta$ redex may not be reduced until its argument is a value.
 
 \medskip
 If, as seems likely, \Cref{thm:antitone rankable implies termination} is complete for terms from which every reachable term is AST, then by the following theorem, \Cref{thm:confluent ranking} can't actually prove the termination of any terms not already provable by \Cref{thm:antitone rankable implies termination} and \Cref{thm:antitone partial implies rankable}.
@@ -301,7 +299,7 @@ If, as seems likely, \Cref{thm:antitone rankable implies termination} is complet
 For any closed term $M$ and reduction strategy $r$ on $M$, if every term in $\mathit{Rch}_r(M)$ is AST, then every term in $\mathit{Rch}(M)$ is AST.
 \end{restatable}
 
-\paragraph*{Custom reduction strategy for AST analysis} However, there are some terms which terminate more simply and directly via some alternative reduction strategy. For these examples, a custom reduction strategy is specified for each term under consideration.
+However, there are some terms which terminate more simply and directly via some alternative reduction strategy. For these examples, a custom reduction strategy is specified for each term under consideration.
 
 \begin{example}[Sum of powers] \label{ex:sum of powers}
 The following term picks a random natural number $n$, then computes $\sum_{k=0}^n k^n$.
@@ -312,7 +310,7 @@ P[n]  &= (\lambda p. \Xi[p] \, n) (\lambda x. \Theta[x] \, n)) \\
 \Theta[x]  &= \tY \lambda f n. \tif{n = 0}{\underline 1}{x \times f (n-1)}.
 \end{align*}
 
-With the CBV reduction strategy, the recursion in $\Theta[x]$ (that defines the function $k \mapsto k^x$) is executed separately for every term in the sum in $\Xi$. Not only is this much more complicated than simplifying $\Theta[x] \, \underline n$ first, it requires considerably more $\tY$-reduction steps, so many so that $M$ is $\tY$-PAST with respect to a reduction strategy that simplifies $\Theta[x] \, \underline n$ first (call it ``$r$''), but isn't $\tY$-PAST with respect to the standard reduction strategy, so that $M$ is rankable with respect to $r$, but isn't rankable. It is still antitone rankable, but this is much more complicated. Details of the ranking function construction with and without using the confluent semantics are given in \Cref{apx:confluent}.
+With the CBV reduction strategy, the recursion in $\Theta[x]$ (that defines the function $k \mapsto k^x$) is executed separately for every term in the sum in $\Xi$. Not only is this much more complicated than simplifying $\Theta[x] \, \underline n$ first, it requires considerably more $\tY$-reduction steps, so many so that $M$ is $\tY$-PAST with respect to a reduction strategy that simplifies $\Theta[x] \, \underline n$ first (call it ``$r$''), but isn't $\tY$-PAST with respect to the standard reduction strategy, so that $M$ is rankable with respect to $r$, but isn't rankable. It is still antitone rankable, but this is much more complicated.
 \end{example}
 
 \begin{remark}
