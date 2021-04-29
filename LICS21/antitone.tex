@@ -2,35 +2,20 @@
 \section{Antitone ranking functions}
 \label{sec:antitone}
 
-\begin{example}[Random walk]
+\begin{example}[Random walks]
 \label{ex:ac-ranking}
-\begin{compactenum}[(i)]
-\item One-dimensional (1D) biased (towards 0) random walk
-\[
+\begin{align*}
 M_1 = 
 \big(\tY \, \lambda f n . \, 
-\tif{n = 0}{0}{f \, (n - 1) \oplus_{2/3} f \, (n + 1)}\big) \, 10
-\]
-
-\item 1D unbiased random walk
-\[
+\tif{n = 0}{0}{f \, (n - 1) \oplus_{2/3} f \, (n + 1)}\big) \, 10 \\
 M_2 = 
 \big(\tY \, \lambda f n . \, 
-\tif{n = 0}{0}{f \, (n - 1) \oplus_{1/2} f \, (n + 1)}\big) \, 10
-\]
-
-\item 1D biased (away from 0) random walk
-\[
+\tif{n = 0}{0}{f \, (n - 1) \oplus_{1/2} f \, (n + 1)}\big) \, 10 \\
 M_3 = 
 \big(\tY \, \lambda f n . \, 
 \tif{n = 0}{0}{f \, (n - 1) \oplus_{1/3} f \, (n + 2)}\big) \, 10
-\]
-%While {x > 0} do {x := x-1 \oplus_2/3 x:= x+1}
-%M2 = While {x > 0} do {x := x-1 \oplus_2/3 x:= x+2}
-\end{compactenum}
+\end{align*}
 \end{example}
-
-\medskip
 
 The term $M_1$ is rankable, terminating in 31 $\tY$-steps on average, and $M_3$ only has a $1/1024$ chance of terminating, but in between, $M_2$ is AST, but isn't $\tY$-PAST, therefore it isn't rankable and \Cref{thm:rankable implies termination} is insufficient to prove its termination. 
 Thus we seek a generalised notion of ranking function so that $M_2$ becomes rankable, and then prove it sound i.e.~rankable in this generalised sense implies AST.
@@ -167,14 +152,9 @@ for $n \in \mathbb N$.
 % \end{align*}
 For $n \geq 1$, $\Theta_2 \, n$ reduces in several steps to either $\Theta_2 \, (n-1)$ or $\Theta_2 \, (n+1)$,\footnote{Technically this is not quite correct, because of the distinction between $\underline n + 1$ and $\underline{n + 1}$, but this ranking function can still be made to work by appealing to the Confluent Ranking \Cref{thm:confluent ranking}, as can the others in this section with similar issues. See \cref{rem:ex corrected using confluent semantics} for a fuller account.} each with probability $1/2$, with one $\tY$-reduction.
 Now
-\begin{align*}%\textstyle
-& g_2(n) - \frac{g_2(n-1) + g_2(n+1)} 2 \\
-  &=  \ln \Big(\frac{n+1}{\sqrt{n(n+2)}}\Big) 
-  =  \frac 1 2 \ln\left(\frac{(n+1)^2}{n(n+2)}\right) \\
-  &=  \frac 1 2 \ln\left(1 + \frac 1 {n(n+2)}\right) 
-  >  \frac 1 {n(n+2) + 1} \\
-  &>  \frac 1 2 \frac 1 {(n+1)^2} + \frac 1 2 \frac 1 {(n+3)^2}
-\end{align*}
+\[
+g_2(n) - \frac{g_2(n-1) + g_2(n+1)} 2  >  \frac 1 2 \frac 1 {(n+1)^2} + \frac 1 2 \frac 1 {(n+3)^2}
+\]
 Moreover $\Theta_2 \, 0$ reduces to $0$ with one $\tY$-reduction with a reduction in $g_2$ of $1$.
 Therefore by setting $\epsilon_2(x) = \frac 1 {(e^{x-1}+1)^2}$, the condition on how much $g_2$ must decrease is met. It is also defined at $M_2 = \Theta_2 \, 10$, and is non-negative, therefore it is an antitone sparse ranking function, and $M_2$ is AST.
 \end{example}

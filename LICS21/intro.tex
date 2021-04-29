@@ -11,11 +11,7 @@ Another key feature is higher order; in fact some of the most influential probab
 In this paper we study a central property of probabilistic programs: \emph{termination}.
 When a probabilistic program implements a solution to an algorithmic problem, we naturally require the computation to terminate with probability $1$, in which case the program is called \emph{almost surely terminating} (AST).
 Indeed, it is standard for designers and implementors of probabilistic programming systems to regard non-AST programs as defining invalid models, and hence inadmissible \cite{rainforth2017Automating,DBLP:conf/uai/GoodmanMRBT08}.
-(Yet none of these systems provides any support for the development or verification of AST programs.)
-
-Moreover various theorems about probabilistic programs rely on the assumption that the program terminates almost surely (see e.g.~\cite{DBLP:conf/uai/GoodmanMRBT08}). 
-A recent result \cite{DBLP:conf/esop/MakOPW21} proves that AST programs have density functions that are differentiable almost everywhere.
-This is significant for Bayesian machine learning, because almost everywhere differentiability is a precondition for the correctness of some of the most scalable inference algorithms, such as Hamiltonian Monte Carlo \cite{DBLP:conf/aistats/ZhouGKRYW19,Nishimura2020b} and reparameterised gradient variational inference \cite{DBLP:conf/nips/LeeYY18}.
+(Yet none of these systems provides any support for the development or verification of AST programs.) Moreover various theorems about probabilistic programs rely on the assumption that the program terminates almost surely (see e.g.~\cite{DBLP:conf/uai/GoodmanMRBT08, DBLP:conf/esop/MakOPW21}).
 
 The AST problem is not just important, but also difficult: 
 Deciding AST of first-order imperative programs with discrete probabilities is $\Pi^0_2$-complete \cite{DBLP:conf/mfcs/KaminskiK15}.
@@ -25,8 +21,8 @@ Though the problem of proving AST of imperative probabilistic programs is much s
 
 \subsection*{Contributions}
 
-A possible approach to proving AST is to find some variant on the program state, called \emph{ranking function}, that decreases on average sufficiently quickly that it must at some point reach 0, at which point the program terminates. 
-In other words, the program's behavior is used to define an associated (ranking) \emph{supermartingale}. Proof rules based on relating the program state to supermartingales already exist for first-order imperative programs \cite{DBLP:conf/cav/ChakarovS13,DBLP:conf/popl/FioritiH15,DBLP:journals/pacmpl/McIverMKK18}. This paper's contribution is to extend this method to a higher-order setting.
+Our approach to proving AST is to find some variant on the program state, called \emph{ranking function}, that decreases on average sufficiently quickly that it must at some point reach 0, at which point the program terminates. 
+Equivalently, the program's behavior is used to define an associated (ranking) \emph{supermartingale}. Proof rules based on relating the program state to supermartingales already exist for first-order imperative programs \cite{DBLP:conf/cav/ChakarovS13,DBLP:conf/popl/FioritiH15,DBLP:journals/pacmpl/McIverMKK18}. This paper's contribution is to extend this method to a higher-order setting.
 
 The language PPCF used in this paper is simply typed, with random continuous sampling, and an explicit recursion primitive, $\tY$. 
 We define a \emph{ranking function} on a term $M$ to be a non-negative measurable function on the reachable terms from $M$ whose expected value decreases or is unchanged as the term is reduced.
@@ -38,9 +34,9 @@ Unfortunately (for any fixed reduction strategy) there are programs whose reacha
 How can the construction of ranking functions be made possible or easier?
 
 Our first answer is the notion of \emph{sparse ranking function}. 
-Most of the individual execution steps of a typical program are trivial and easy to mentally skip over. Sparse ranking functions can be defined only for those points in the execution of a program which are semantically important, while all of the other intermediate steps can be ignored. Yet, they are no less efficacious for proving AST (\cref{thm:partial implies rankable}): every sparse ranking function is a restriction of a ranking function. This also makes the ranking function method of proving AST more compatible with syntactic sugar, because the intermediate reduction steps implicit in the simplified notation can be ignored.
+Most of the individual execution steps of a typical program are trivial and easy to ignore. Sparse ranking functions can be defined only for those points in the execution of a program which are semantically important, while all of the other intermediate steps can be ignored. Yet, the existence of a sparce ranking function still implies AST (\cref{thm:partial implies rankable}). This also makes this method of proving AST more compatible with syntactic sugar, because the intermediate reduction steps implicit in the simplified notation can be ignored.
 
-A ranking function (or sparse ranking function) provides a bound on the expected number of $\tY$-reduction steps before the program terminates, therefore ranking functions cannot be constructed for terms whose expected number of $\tY$-reduction steps is infinite, such as the simplest implementation of the 1D unbiased random walk. 
+A ranking function (or sparse ranking function) provides a bound on the expected number of $\tY$-reduction steps before the program terminates, therefore ranking functions cannot be constructed for terms whose expected number of $\tY$-reduction steps is infinite, such as the 1D unbiased random walk. 
 This restriction can be removed by generalising ranking functions to \emph{antitone ranking functions}, which rather than having to decrease by a constant amount for each $\tY$-reduction step, may decrease by a variable amount, depending on the value of the ranking function. 
 Thanks to this feature, the antitone ranking function method is capable of handling programs which terminate arbitrarily slowly. \lo{TODO: Reference some examples.}
 We show that this method is also sound for proving AST (\cref{thm:antitone rankable implies termination}), 
@@ -52,7 +48,7 @@ Basic (non-random) lambda calculus has the very useful property of confluence, w
 Probabilistic lambda calculus does not have this property, because random choices may be duplicated, and evaluating the same subterm multiple times can yield different results. 
 However, with a restricted set of reduction strategies, confluence may be regained. 
 We introduce a novel addressing scheme for the possible random choices in a program's execution, which ensures that the same random choices are taken at corresponding positions in alternative reduction sequences, so that the same eventual result can be reached. 
-This is then used to prove yet another extension to the ranking function theorem, that (\cref{thm:confluent ranking}) ranking functions may be defined with respect to alternative reduction strategies (which in some cases may lead to a considerably simpler execution and ranking function), and (\cref{cor:Reduction strategy independence}) rankability in this sense still imples almost sure termination. 
+This is then used to prove yet another extension to the ranking function theorem (\cref{thm:confluent ranking}), that ranking functions may be defined with respect to alternative reduction strategies (which in some cases may lead to a considerably simpler execution and ranking function), and rankability in this sense still imples almost sure termination. 
 The confluent trace semantics is of wider interest, and has other possible applications as well, for example in Bayesian inference algorithms.
 
 By combining these methods we can prove AST of a variety of PPCF programs that are beyond the reach of methods in the literature, including non-affine recursion\footnote{\label{fnote:non-affine} Non-affine recursive programs are recursive programs that can, during the evaluation of the recursive body, make multiple recursive calls (of a first-order function) from distinct call sites.} (\cref{ex:non-affine recursion easy,ex:non-affine continuous}) and recursions that define higher-order functions (\cref{ex:higher-order recursion}).
