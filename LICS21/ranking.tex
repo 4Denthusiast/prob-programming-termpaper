@@ -51,7 +51,32 @@ Let
 \]
 The term  $(\tY \, \Theta) \, \underline 0$ generates a geometric distribution.
 Despite its simplicity, its $\mathit{Rch}$ contains all the terms in \Cref{fig:geometric distribution}, for each $i \in \mathbb N, r \in I$.
-%\lo{TODO: reduce the figure to avoid overflow.}\akr{It still overflows the gutter, but not the actual text of the other column.}\lo{OK. Thanks.} 
+
+\begin{figure}[h]
+\begin{tikzpicture}[node distance=0.5em, anchor=west]
+    \node (1) at (0,-0) {$\tY\, \Theta\, \underline 0$};
+    \node (2) at (0,-1) {$(\lambda z. (\lambda n. \tif{\tsample \underline{- 0.5} < 0}{n}{\tY\, \Theta\, (n \underline{+ 1})}) z)\, \underline i$};
+    \node (3) at (0,-2) {$(\lambda n. \tif{\tsample \underline{- 0.5} < 0}{n}{\tY\, \Theta\, (n \underline{+ 1})})\, \underline i$};
+    \node (4) at (0,-3) {$\tif{\tsample \underline{- 0.5} < 0}{\underline i}{\tY\, \Theta\, (\underline i\, \underline{+ 1})}$};
+    \node (5) at (0,-4) {$\tif{\underline r\, \underline{- 0.5} < 0}{\underline i}{\tY\, \Theta\, (\underline i\, \underline{+ 1})}$};
+    \node (6) at (0,-5) {$\tif{\underline {r - 0.5} < 0}{\underline i}{\tY\, \Theta\, (\underline i\, \underline{+ 1})}$};
+    \node (7) at (2,-6.3) [text width=] {$\underline i$};
+    \node (8) at (0,-7) {$\tY\, \Theta\, (\underline i\, \underline{+ 1})$};
+    \node (9) at (0,-8) {$(\lambda z. (\lambda n. \tif{\tsample \underline{- 0.5} < 0}{n}{\tY\, \Theta\, (n \underline{+ 1})}) z)\, (\underline i\, \underline{+ 1})$};
+    
+    \draw [->] (1.south west) to [bend right=45, "$i := 0$"'] (2.north west);
+    \draw [->] (2.south west) to [bend right=45] (3.north west);
+    \draw [->] (3.south west) to [bend right=45] (4.north west);
+    \draw [->] (4.south west) to [bend right=45] (5.north west);
+    \draw [->] (5.south west) to [bend right=45] (6.north west);
+    \draw [->] (6.south west) to [bend right=45, "$r \geq 0.5$"] (8.north west);
+    \draw [->] (8.south west) to [bend right=45] (9.north west);
+    
+    \draw [->] (9.west) to [bend left=30, "$i := i + 1$" {below,sloped}] (2.west);
+    \draw [->] (6) to ["$r < 0.5$"] (7);
+\end{tikzpicture}
+\caption{The reachable terms of $\tY \, \Theta \, \underline 0$\label{fig:geometric distribution}}
+\end{figure}
 
 \end{example}
 

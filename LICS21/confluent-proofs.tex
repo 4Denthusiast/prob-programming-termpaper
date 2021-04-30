@@ -2,15 +2,10 @@
 \label{apx:confluent}
 The rules defining $\sim_c$ can be more intuitively understood as diagrams. In the following diagrams, a circle represents a term (or skeleton), and the leaves on the trees are subterms at the positions indicated by the labels in the other nodes. The labels on the arrows between trees are the positions of the reductions, and dashed arrows represent some number of reductions in a row. If a reduction sequence includes one branch of one of these cases at some point in it, then the positions in the reduction sequence obtained by substituting in the other branch are all related by $\sim_c$ to the corresponding positions in the original reduction sequence.
 
+\include{sim-diagram}
+
 \paragraph{}
 Although the six cases in the definition of $\sim_c$ are defined separately, there are some commonalities worth noting. Each case (except a, which is symmetrical) has a right branch and a left branch (the branches of case b are unfortunately displayed the wrong way around in the diagram). The right branch has reduction steps at two positions, $\beta$ then $\alpha$, where $\beta > \alpha$ (i.e.~$\beta$ is inside $\alpha$), and in the left branch, the order of these reductions are swapped, so the reductions are at $\alpha$ then $\beta_1, \dots, \beta_n$. The position $\alpha$ of one of the reductions is unchanged, and the other reduction may have multiple (in cases e and f) or 0 (in cases b and e) images in the left branch. The images $(\beta_i)$ are all still inside (greater than or equal to) $\alpha$, and although they are not generally equal to $\beta$, the subskeletons at these positions have a similar shape to the subskeleton (initially) at position $\beta$, so that the reductions at these positions are the same type of reduction (e.g.~both $\beta$-reduction or both $\textsf{if}$-reduction). Case a is also similar, except that the relevant positions are all disjoint rather than contained in one another, and either branch could be considered the right branch.
-
-\include{sim-diagram}
-%The diagram is not actually in the figure environment because that doesn't work properly with it extending over several pages. The empty figure is just needed to get the label and caption.
-\begin{figure}[htb]
-\caption{Illustration of the $\sim_c$ rules. \label{sim-diagram}
-}
-\end{figure}
 
 \begin{lemma} \label{downAcrossUp}
 If $(N_1,\alpha_1) \sim^* (N_2,\alpha_2)$, there is some descendants $N'_1, N'_2$ of $N_1$ resp.~$N_2$, and a position $\alpha'$ in both of them such that $(N_1,\alpha_1) \sim_p^* (N'_1, \alpha') \sim_c^* (N'_2, \alpha') \sim_p^* (N_2, \alpha_2)$.
@@ -164,6 +159,7 @@ In the case that $M|\alpha = \tsample$, we can similarly consider only those set
 \begin{lemma} \label{lem:independentSamples}
 For any initial term $M$, reduction strategy $f$ on $M$, natural number $n$, skeleton $N$ with $k$ holes, measurable set $T \subset \mathbb R ^ k$ and measurable set $S$ of samples in $I^{L_s(N)}$, $\mu(\{s \in I^{L_s(M)} \mid \exists r \in T, s' \in S : (M,s) \Rightarrow_f^n (N[r], s')\}) = \mu(\{s \in I^{L_s(M)} \mid \exists r \in T, s' \in I^{L_s(N)} : (M,s) \Rightarrow_f^n (N[r], s')\}) \mu(S)$
 \end{lemma}
+
 \begin{proof}
 Suppose, to begin with, that $n = 0$. Either $\exists r \in T : N[r] = M$, in which case both sides of the equation are $\mu(S)$, or there is no such $r$, in which case both sides of the equation are 0.
 
@@ -173,6 +169,7 @@ R_d & = \{\mathit{Sk}(O) \mid O \in \mathit{Rch}(M), r \in \mathbb R^k, O | f(O[
 \end{align*}
 Together, $R_s$ and $R_d$ contain all of the skeletons of terms that can reduce to $N$, and they're disjoint. For each of these skeletons, there is a map $g_O$ from the reals in $O$ to the reals in $N$, i.e. $g_O(r) = r'$ if $O[r] \to N[r']$ for $O \in R_d$, and $g_O(s, r) = r'$ if $O[r] \to N[r']$ with $s$ as the value the sample takes in the reduction. All of these functions are measurable, as they are just rearrangements of vector components, or in the case that $O|f(O[r]) = \underline x(\skeletonPlaceholder, \dots, \skeletonPlaceholder)$, a combination of the measurable function $x$ with a rearrangement of vector components. In the case that $O \in R_s$, the function $g_O$ simply inserts the sample into the vector of reals at a certain index, call it $h_O$.
 
+\onecolumn
 \begin{align*}
 & \mu(\{s \in I^{L_s(M)} \mid \exists r \in T, s' \in S : (M,s) \Rightarrow_f^n (N[r], s')\}) \\
 = & \mu(\{s \in I^{L_s(M)} \mid \exists O \in R_s, r \in \mathbb R^{k-1}, s' \in I^{L_s(O)}, r' \in T, s'' \in S : (M,s) \Rightarrow_f^{n-1} (O[r], s') \Rightarrow_f (N[r'], s'')\})\\
@@ -200,7 +197,7 @@ Together, $R_s$ and $R_d$ contain all of the skeletons of terms that can reduce 
 = & \mu(\{s \in I^{L_s(M)} \mid \exists r \in T, s' \in I^{L_s(N)} : (M,s) \Rightarrow_f^n (N[r], s')\}) \mu(S)
 \end{align*}
 \end{proof}
-\clearpage
+\twocolumn
 
 \AstEquivalence*
 \begin{proof}

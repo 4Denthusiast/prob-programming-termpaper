@@ -222,6 +222,7 @@ graphs/reduction sequence/.style = {layered layout, level sep = 20pt, sibling se
 }
 
 \clearpage
+\begin{figure}[h]
 \noindent\makebox[\textwidth]{
     \begin{tikzpicture}[reduction sequence]
       \node (termFRoot) at (0,0) {\usebox{\termFRoot}};
@@ -243,3 +244,6 @@ graphs/reduction sequence/.style = {layered layout, level sep = 20pt, sibling se
       \node at (termFRoot.north) [above=5mm] {f};
     \end{tikzpicture}
 }
+\caption{Illustration of the $\sim_c$ rules. \label{sim-diagram}
+}
+\end{figure}
