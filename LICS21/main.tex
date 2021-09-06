@@ -1,12 +1,13 @@
-\documentclass[conference]{IEEEtran}
+\documentclass{msc}
 \pagestyle{plain}
 
 \newif\ifdraft
 %\drafttrue %% To hide all comments and highlighting, just comment this line out 
 
 \include{header-wagner}
-\include{headerlics-dw}
+%\include{headerlics-dw}
 
+\usepackage{ifmtarg}
 \usepackage{calculation-new}
 \usepackage{graphicx}
 \usepackage{tikz}
@@ -16,9 +17,9 @@
 %\setcitestyle{aysep={}}
 % For IEEEtran.bst
 % changes [1], [2], [3] to [1,2,3]
-\usepackage[noadjust]{cite}
-\renewcommand{\citepunct}{,\penalty\citepunctpenalty\,}
-\renewcommand{\citedash}{--}% optionally
+%\usepackage[noadjust]{cite}
+%\renewcommand{\citepunct}{,\penalty\citepunctpenalty\,}
+%\renewcommand{\citedash}{--}% optionally
 
 %\definecolor{oxblue}{RGB}{0,33,71}
 %\definecolor{oxgold}{HTML}{a0630a}
@@ -123,14 +124,14 @@
 
 \title{Supermartingales, Ranking Functions and Probabilistic Lambda Calculus}
 
-%\author{Andrew Kenyon-Roberts \and Luke Ong}
-
-\author{\IEEEauthorblockN{Andrew Kenyon-Roberts}
-\IEEEauthorblockA{University of Oxford}
-\and
-\IEEEauthorblockN{C.-H. Luke Ong}
-\IEEEauthorblockA{University of Oxford}
-}
+\begin{authgrp}
+    \author{Andrew Kenyon-Roberts}
+    \affiliation{University of Oxford}
+\end{authgrp}
+\begin{authgrp}
+    \author{C.-H. Luke Ong}
+    \affiliation{University of Oxford}
+\end{authgrp}
 
 \maketitle
 
@@ -145,8 +146,6 @@ The notion of antitone ranking function was inspired by similar work by McIver, 
 The sparse ranking function and confluent semantics extensions are unique to the higher-order setting.
 Our methods can be used to prove almost sure termination of programs that are beyond the reach of methods in the literature, including higher-order and non-affine recursion.
 \end{abstract}
-
-\IEEEpeerreviewmaketitle
 
 \input{intro}
 
@@ -164,8 +163,7 @@ Our methods can be used to prove almost sure termination of programs that are be
 
 \input{related}
 
-%\bibliographystyle{apalike}
-\bibliographystyle{IEEEtran}
+\bibliographystyle{msclike}
 \bibliography{references-Beutner,../references}
 
 \appendices
