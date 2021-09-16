@@ -56,68 +56,14 @@
 % \renewcommand{\Sd}{\mathfrak s}
 % \renewcommand{\Td}{\mathfrak t}
 
-% theorems
-\declaretheorem[
-    name=Theorem,
-    Refname={Theorem,Theorems},
-    numberwithin=section]{theorem}
-\declaretheorem[
-    name=Lemma,
-    Refname={Lemma,Lemmas},
-    sibling=theorem]{lemma}
-\declaretheorem[
-    name=Proposition,
-    Refname={Prop.,Propositions},
-    sibling=theorem]{proposition}
-\declaretheorem[
-    name=Corollary,
-    Refname={Corollary,Corollaries},
-    sibling=theorem]{corollary}
-\declaretheorem[
-    name=Claim,
-    Refname={Claim,Claims}
-    ]{claim}
-\declaretheorem[
-    name=Fact,
-    Refname={Fact,Facts},
-    sibling=theorem]{fact}
-\declaretheorem[
-    name=Conjecture,
-    Refname={Conjecture,Conjectures},
-    sibling=theorem]{conjecture}
-\declaretheorem[numbered=no,
-    name=Assumption,
-    Refname={Assumption,Assumptions}]{assumption}
-\theoremstyle{definition}
-\declaretheorem[
-    name=Definition,
-    Refname={Definition,Definitions},
-    sibling=theorem]{definition}
 \declaretheorem[
     name=Example,
     Refname={Example,Examples},
-    sibling=theorem]{example}
-\theoremstyle{remark}
+    sibling=therm]{example}
 \declaretheorem[
-    name=Remark,
-    Refname={Remark,Remarks},
-    sibling=theorem]{remark}
-
-    \declaretheoremstyle[
-    spaceabove=-4pt, 
-    spacebelow=6pt, 
-    headfont=\it, 
-    bodyfont = \normalfont,
-    postheadspace=1em, 
-    qed=$\blacksquare$, 
-    headpunct={.}]{myproofstyle} %<---- change this name
-\declaretheorem[name={Proof}, style=myproofstyle, unnumbered]{claimproof}
-
-% reset claim counter at the beginning of each proof
-\let\oldproof\proof
-\let\oldendproof\endproof
-\def\proof{\setcounter{claim}{0}\begingroup\oldproof}
-\def\endproof{\oldendproof \endgroup}
+    name=Conjecture,
+    Refname={Conjecture,Conjectures},
+    sibling=therm]{conjecture}
 
 
 % \declaretheoremstyle[

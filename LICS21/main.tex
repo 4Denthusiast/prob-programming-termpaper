@@ -1,11 +1,10 @@
 \documentclass{msc}
-\pagestyle{plain}
 
 \newif\ifdraft
 %\drafttrue %% To hide all comments and highlighting, just comment this line out 
 
 \include{header-wagner}
-%\include{headerlics-dw}
+\include{headerlics-dw}
 
 \usepackage{ifmtarg}
 \usepackage{calculation-new}
@@ -13,6 +12,11 @@
 \usepackage{tikz}
 \usetikzlibrary{positioning, graphs, quotes, graphdrawing, shapes.geometric}
 \usegdlibrary{layered, circular}
+\usepackage{amsfonts}
+% These are defined in both msc and amssymb.
+\let\gtrsim\relax
+\let\lesssim\relax
+\usepackage{amssymb}
 %\usepackage[square]{natbib}
 %\setcitestyle{aysep={}}
 % For IEEEtran.bst
@@ -80,6 +84,11 @@
   \ooalign{\hidewidth$\m@th#1\mkern-1mu\cdot$\hidewidth\cr$\m@th#1\Delta$\cr}%
 }
 
+% I know these were defined somewhere else, but I don't know where for lo and akr and \changed is from commenting.sty which is incompatible, so I'm just going to have them ignored for now.
+\newcommand\lo{ }
+\newcommand\akr{ }
+\newcommand\changed[1]{#1}
+
 %\usepackage[bbgreekl]{mathbbol} %for \bblambda
 %%
 %% END {Luke's Macros}
@@ -119,6 +128,8 @@
 
 \def\titlerunning{Supermartingales, Ranking Functions and Probabilistic PCF}
 \def\authorrunning{Andrew Kenyon-Roberts and Luke Ong}
+
+\jnlPage{1}{???}
 
 \begin{document}
 
@@ -166,7 +177,7 @@ Our methods can be used to prove almost sure termination of programs that are be
 \bibliographystyle{msclike}
 \bibliography{references-Beutner,../references}
 
-\appendices
+\appendix
 
 \section{Supplementary materials for \Cref{sec:supermartingales}}
 
@@ -188,7 +199,7 @@ Our methods can be used to prove almost sure termination of programs that are be
 
 %\input{notes}
 
-
-\tableofcontents
+%Having a table of contents would be nice, but it uses the UnicodeCharacter command, which I can't find the package for.
+%\tableofcontents
 
 \end{document}
