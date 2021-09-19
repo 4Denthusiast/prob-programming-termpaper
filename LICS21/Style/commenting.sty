@@ -531,7 +531,7 @@
 %	\end{quotation}%
 %}
 
-\newcommand{\draftnote}[3][default]{
+\newcommand{\draftnotee}[3][default]{
 	\comm@validname{#1}%
 	\comm@if@enabled{#1}%
 	\begin{quotation}
@@ -546,8 +546,8 @@
 	\end{quotation}%
 	\fi
 }
-\newcommand{\comm@draftnote}[3]{\draftnote[#1]{Note}{#3\comm@format@date{#2}}}
-\let\comm@draftnote@\comm@draftnote
+\newcommand{\comm@draftnotee}[3]{\draftnotee[#1]{Note}{#3\comm@format@date{#2}}}
+\let\comm@draftnotee@\comm@draftnotee
 
 \newcommand{\comm@allcomments}{\the\comm@commlst}
 \newcommand{\listcomments}{\@ifstar{\comm@listcomments}{\ifdraft\comm@listcomments\fi}}
