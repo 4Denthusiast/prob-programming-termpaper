@@ -1,11 +1,15 @@
 % !TEX root = main.tex
 
+\lo{CONVENTION
+
+- Use {\tt citep} to render ``(\emph{author}, \emph{year})'' as opposed to ``\emph{author} (\emph{year})''}
+
 \section{Introduction}
 \label{sec:intro}
 
 Probabilistic (or randomised) programs have long been recognised as essential to the efficient solution of many algorithmic problems \cite{Rabin1976}.
-More recently, in probabilistic programming \cite{DBLP:conf/icse/GordonHNR14,rainforth2017Automating,vandemeent2018Introduction}, probabilistic programs are used to express generative models whose posterior probability can be computed by general purpose inference engines.
-Sampling from continuous distributions is an essential construct of probabilistic programming languages, such as Church \citep{DBLP:conf/uai/GoodmanMRBT08}, Stan \cite{carpenter2017stan}, Anglican \cite{DBLP:conf/pkdd/TolpinMW15}, Gen \cite{cusumano-towner2019Gen}, Pyro \cite{bingham2019Pyro}, Edward \cite{tran2016edward} and Turing \cite{ge2018Turing}.
+More recently, in probabilistic programming \citep{DBLP:conf/icse/GordonHNR14,rainforth2017Automating,vandemeent2018Introduction}, probabilistic programs are used to express generative models whose posterior probability can be computed by general purpose inference engines.
+Sampling from continuous distributions is an essential construct of probabilistic programming languages, such as Church \citep{DBLP:conf/uai/GoodmanMRBT08}, Stan \citep{carpenter2017stan}, Anglican \cite{DBLP:conf/pkdd/TolpinMW15}, Gen \cite{cusumano-towner2019Gen}, Pyro \cite{bingham2019Pyro}, Edward \cite{tran2016edward} and Turing \cite{ge2018Turing}.
 Another key feature is higher order; in fact some of the most influential probabilistic programming languages are functional.
 
 In this paper we study a central property of probabilistic programs: \emph{termination}.
@@ -21,7 +25,7 @@ The AST problem is not just important, but also difficult:
 Deciding AST of first-order imperative programs with discrete probabilities is $\Pi^0_2$-complete \cite{DBLP:conf/mfcs/KaminskiK15}.
 In recent work \cite{BeutnerO21} %(under double-blind review elsewhere), 
 the AST problem for higher-order programs with continuous distributions (and suitable primitive functions) is shown to have the same complexity.
-Though the problem of proving AST of imperative probabilistic programs is much studied \cite{DBLP:journals/jacm/KaminskiKMO18,DBLP:conf/lics/OlmedoKKM16,DBLP:conf/mfcs/KaminskiK15,DBLP:series/mcs/McIverM05,DBLP:conf/popl/FioritiH15,DBLP:conf/pldi/ChenH20,DBLP:journals/toplas/ChatterjeeFNH18}, to our knowledge the problem of proving AST of higher-order programs with continuous distributions is new.
+Though the problem of proving AST of imperative probabilistic programs is much studied \citet{DBLP:journals/jacm/KaminskiKMO18,DBLP:conf/lics/OlmedoKKM16,DBLP:conf/mfcs/KaminskiK15,DBLP:series/mcs/McIverM05,DBLP:conf/popl/FioritiH15,DBLP:conf/pldi/ChenH20,DBLP:journals/toplas/ChatterjeeFNH18}, to our knowledge the problem of proving AST of higher-order programs with continuous distributions is new.
 
 \subsection*{Contributions}
 
