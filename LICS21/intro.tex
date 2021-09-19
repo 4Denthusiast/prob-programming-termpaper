@@ -2,7 +2,7 @@
 
 \lo{CONVENTION
 
-- Use {\tt citep} to render ``(\emph{author}, \emph{year})'' as opposed to ``\emph{author} (\emph{year})''}
+- Use {\tt citep} to render ``(\emph{author}, \emph{year})''; default {\tt cite} is ``\emph{author} (\emph{year})''}
 
 \section{Introduction}
 \label{sec:intro}
@@ -56,7 +56,7 @@ Basic (non-random) lambda calculus has the very useful property of confluence, w
 Probabilistic lambda calculus does not have this property, because random choices may be duplicated, and evaluating the same subterm multiple times can yield different results. 
 However, with a restricted set of reduction strategies, confluence may be regained. 
 We introduce a novel addressing scheme for the possible random choices in a program's execution, which ensures that the same random choices are taken at corresponding positions in alternative reduction sequences, so that the same eventual result can be reached. 
-This is then used to prove yet another extension to the ranking function theorem, that (\cref{thm:confluent ranking}) ranking functions may be defined with respect to alternative reduction strategies (which in some cases may lead to a considerably simpler execution and ranking function), and (\cref{cor:Reduction strategy independence}) rankability in this sense still imples almost sure termination. 
+This is then used to prove yet another extension to the ranking function theorem, that (\cref{thm:confluent ranking}) \lo{Preceding reference generated is wrong; it should be a theorem} ranking functions may be defined with respect to alternative reduction strategies (which in some cases may lead to a considerably simpler execution and ranking function), and (\cref{cor:Reduction strategy independence}) rankability in this sense still imples almost sure termination. 
 The confluent trace semantics is of wider interest, and has other possible applications as well, for example in Bayesian inference algorithms.
 
 By combining these methods we can prove AST of a variety of PPCF programs that are beyond the reach of methods in the literature, including non-affine recursion\footnote{\label{fnote:non-affine} Non-affine recursive programs are recursive programs that can, during the evaluation of the recursive body, make multiple recursive calls (of a first-order function) from distinct call sites.} (\cref{ex:non-affine recursion easy,ex:non-affine continuous}) and recursions that define higher-order functions (\cref{ex:higher-order recursion}).
