@@ -279,7 +279,7 @@ After $n$ reaches $0$, the term is $F \, \underline{n_0} \, (\dots(F\, \underlin
 Because there are no $\tY$-reductions in the evaluation of $F$, it can't reach any other term of the form $F\, \underline{n_k'}\, X$, 
 therefore $k$ never changes until this whole subexpression reaches a number, at which point $k$ decreases by 1 and the next $F$ is evaluated.
 
-
+\iffalse
 \antitoneSeemsComplete*
 
 \begin{proof}
@@ -336,3 +336,4 @@ therefore $(Y_n)_n$ is an antitone strict supermartingale with respect to $(T,\e
 \end{proof}
 
 The assumption that $(\mathcal F_n)_{n \geq 0}$ is the coarsest filtration to which $T$ is adapted is used in the equality between the third and fourth lines here. This condition is the main reason that this proof does not extend directly to a completeness result for antitone ranking functions.
+\fi
