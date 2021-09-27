@@ -4,7 +4,7 @@
 
 \subsection{Syntax of PPCF}
 
-The language PPCF is a call-by-value (CBV) version of PCF with sampling of real numbers from the closed interval $[0,1]$ \cite{Ehrhard2018c,DBLP:journals/pacmpl/EhrhardPT18,DBLP:conf/esop/MakOPW21}.
+The language PPCF is a call-by-value (CBV) version of PCF with sampling of real numbers from the closed interval $[0,1]$ \citep{Ehrhard2018c,DBLP:journals/pacmpl/EhrhardPT18,DBLP:conf/esop/MakOPW21}.
 %\changed[lo]{following \cite{DBLP:conf/esop/MakOPW21} except the score function (\Cref{rem:score})}. 
 Types and terms are defined as follows, where $r$ is a real number, $x$ is a variable, $f : \mathbb{R}^n \to \mathbb{R}$ is any measurable function, and $\Gamma$ is an environment:
 \begin{align*}
@@ -67,7 +67,7 @@ The result after $n$ steps is then simply
 \] 
 and the limit $\red^\infty$ can then be defined as a partial function as $\lim_{n \to \infty} \red^n(M,s)$ whenever that sequence becomes constant by reaching a value. A term $M$ terminates for a sample sequence $s$ if the limit $\red^\infty(M,s)$ is defined.
 
-The reduction function is measurable, and the set of values is measurable, therefore the set of $s$ such that $M$ terminates at $s$ within $n$ steps is measurable for any $n$, therefore $\{s \mid \hbox{$M$ terminates at $s$}\}$ is measurable \cite{DBLP:conf/icfp/BorgstromLGS16,DBLP:conf/esop/MakOPW21}. 
+The reduction function is measurable, and the set of values is measurable, therefore the set of $s$ such that $M$ terminates at $s$ within $n$ steps is measurable for any $n$, therefore $\{s \mid \hbox{$M$ terminates at $s$}\}$ is measurable \citep{DBLP:conf/icfp/BorgstromLGS16,DBLP:conf/esop/MakOPW21}. 
 We say that a term $M$ is \emph{almost surely terminating} (\emph{AST}) just if $\mu_{\entrosp}(\{s \mid \hbox{$M$ terminates at $s$}\}) = 1$.
 
 \iffalse
