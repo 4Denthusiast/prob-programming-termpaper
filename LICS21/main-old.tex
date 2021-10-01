@@ -1,0 +1,170 @@
+\documentclass[conference]{IEEEtran}
+\pagestyle{plain}
+
+%\include{header-dw}
+%\include{headerlics-dw}
+
+\providecommand{\event}{ArXiv} % Name of the event you are submitting to
+\usepackage{breakurl}             % Not needed if you use pdflatex only.
+\usepackage{underscore}           % Only needed if you use pdflatex.
+
+%% BEGIN {Luke's Macros}
+%%
+\newif\ifdraft
+\drafttrue %% To hide all comments and highlighting, just comment this line out 
+
+\input{../Style/comment}
+\usepackage{calculation-new}
+\usepackage{graphicx}
+\usepackage{tikz}
+\usetikzlibrary{positioning, graphs, quotes, graphdrawing, shapes.geometric}
+\usegdlibrary{layered, circular}
+\usepackage[square]{natbib}
+\setcitestyle{aysep={}}
+
+\definecolor{oxblue}{RGB}{0,33,71}
+\definecolor{oxgold}{HTML}{a0630a}
+\usepackage[final,
+bookmarks,
+bookmarksopen,
+colorlinks,
+final,
+linkcolor=red,
+citecolor=oxgold,
+pdfstartview=FitH ]{hyperref}
+
+%\usepackage{amsmath} % cleveref must be loaded afer amsmath
+% \usepackage{cleveref}
+% \Crefname{theorem}{Theorem}{Theorems}
+% \Crefname{corollary}{Corollary}{Corollary}
+% \crefname{proposition}{Proposition}{Propositions}
+% \Crefname{claim}{Claim}{Claims}
+% \Crefname{definition}{Definition}{Definitions}
+% \Crefname{fact}{Fact}{Facts}
+% \Crefname{conj}{Conjecture}{Conjectures}
+% \Crefname{example}{Example}{Examples}
+% \Crefname{remark}{Remark}{Remarks}
+% \Crefname{convention}{Convention}{Conventions}
+% \Crefname{lemma}{Lemma}{Lemmas}
+% \Crefname{assumption}{Assumption}{Assumptions}
+% \Crefname{section}{Section}{Sections}
+% \Crefname{appendix}{Appendix}{Appendices}
+% \Crefname{figure}{Figure}{Figures}
+%\Crefname{equation}{Eq.}{Equations}
+
+% \addtotheorempostheadhook[theorem]{\crefalias{thmlisti}{theorem}}
+% \addtotheorempostheadhook[lemma]{\crefalias{thmlisti}{lemma}}
+% \addtotheorempostheadhook[proposition]{\crefalias{thmlisti}{proposition}}
+% \addtotheorempostheadhook[corollary]{\crefalias{thmlisti}{corollary}}
+% \addtotheorempostheadhook[claim]{\crefalias{thmlisti}{claim}}
+% \addtotheorempostheadhook[fact]{\crefalias{thmlisti}{fact}}
+% \addtotheorempostheadhook[example]{\crefalias{thmlisti}{example}}
+% \addtotheorempostheadhook[definition]{\crefalias{thmlisti}{definition}}
+% \addtotheorempostheadhook[remark]{\crefalias{thmlisti}{remark}}
+% \addtotheorempostheadhook[assumption]{\crefalias{thmlisti}{assumption}}
+
+\newcommand{\Real}{\mathbb{R}}
+\newcommand{\nnReal}{\mathbb{R}_{{\geq}0}}
+\newcommand{\pReal}{\mathbb{R}_{{>}0}}
+
+\newcommand\expect[1]{\mathbb{E}[#1]}
+\newcommand\set[1]{\{#1\}}
+\newcommand\dif{\mathrm{d}}
+\newcommand\calF{\mathcal{F}}
+\newcommand\calI{\mathcal{I}}
+\newcommand\Leb{\mathrm{Leb}}
+\newcommand\ndraw[2]{\#\mathrm{draw}_{#1}(#2)}
+
+\makeatletter
+\newcommand{\dotDelta}{{\vphantom{\Delta}\mathpalette\d@tD@lta\relax}}
+\newcommand{\d@tD@lta}[2]{%
+  \ooalign{\hidewidth$\m@th#1\mkern-1mu\cdot$\hidewidth\cr$\m@th#1\Delta$\cr}%
+}
+
+%\usepackage[bbgreekl]{mathbbol} %for \bblambda
+%%
+%% END {Luke's Macros}
+
+\usepackage{amsmath,amsfonts,amsthm}
+\usepackage{amssymb}
+\usepackage{verbatim}
+\usepackage{enumitem}
+\newcommand{\tY}{\mathsf{Y}}
+%\newcommand{\tif}[3]{\textsf{if }#1\textsf{ then }#2\textsf{ else }#3}
+\newcommand{\tif}[3]{\mathsf{if}(#1, #2, #3)} % space-saving concrete syntax
+\newcommand{\tsample}{\mathsf{sample}}
+\newcommand{\tscore}{\mathsf{score}}
+\newcommand{\skeletonPlaceholder}{\mathsf{X}} % I'm not sure what the best notation here is.
+\DeclareMathOperator{\red}{red}
+\DeclareMathOperator{\nnext}{next}
+\DeclareMathOperator{\cbv}{cbv}
+
+%\usepackage{mathtools}
+\usepackage{thmtools,thm-restate}
+
+% \usepackage{amsthm}
+% \theoremstyle{definition}
+% \newtheorem{definition}{Definition}
+% \newtheorem{example}{Example}
+
+% \theoremstyle{lemma}
+% \newtheorem{lemma}{Lemma}
+% \newtheorem{theorem}{Theorem}
+% \newtheorem{corollary}{Corollary}
+% \newtheorem{conjecture}{Conjecture}
+
+% \theoremstyle{remark}
+% \newtheorem*{remark}{Remark}
+\input{headerieee}
+
+\def\titlerunning{Supermartingales and Statistical PCF}
+\def\authorrunning{Andrew Kenyon-Roberts and Luke Ong}
+%\def\authorrunning{}
+
+\begin{document}
+
+\title{Supermartingales and Statistical PCF}
+
+\author{Andrew Kenyon-Roberts
+\and Luke Ong}
+
+\maketitle
+
+\begin{abstract}
+\lo{TODO}
+\end{abstract}
+
+\IEEEpeerreviewmaketitle
+
+\input{intro}
+
+\input{SPCF}
+
+\input{supermartingales}
+
+\input{ranking}
+
+\input{antitone}
+
+%\input{confluent}
+
+\input{applications}
+
+\input{related}
+
+\appendix
+
+\section{Supplementary materials for \Cref{sec:supermartingales}}
+
+\input{apx-y-stopping-times}
+
+\section{Supplementary materials for \Cref{sec:ranking}}
+
+\section{Supplementary materials for \Cref{sec:antitone}}
+
+\tableofcontents
+
+\bibliographystyle{apalike}
+\bibliography{../references}
+
+\end{document}

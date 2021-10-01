@@ -1,0 +1,15 @@
+** Regarding Theorem V.15
+
+The key weakness of Theorem V.15 is the condition “if (F_n)_n is the coarsest filtration to which T is adapted”. If we set the stopping time T to the termination time of a program, and (F_n)_n to the filtration defined by the revelation of samples as the program progresses, then an antitone supermartingale wrt T would (subject to the supermartingale and the program aligning properly, which would probably not be too hard to arrange) provide an antitone ranking function for the term. However, a supermartingale wrt the filtration that only observes whether the term has terminated yet may not be a supermartingale wrt the filtration that has all the information on the term’s progress, so V.15 does not quite match up to what is needed for the completeness Conjecture.
+
+What it does imply is that there is no restriction on how slowly an antitone rankable term can terminate, analogous to the fact that if a term is rankable, it is Y-PAST. For example, it proves that there are terms such that the expectation of the square-root of their stopping time, or the logarithm of their stopping time, is unbounded, but which are still antitone rankable (because for any stopping time, it is possible to construct a term whose Y running time matches that stopping time, and where the constraint on the filtrations is satisfied).
+
+** Regarding the rather dense Section VI
+
+Although Section VI is rather dense, that complexity is necessary because of the complexity of the results presented. It takes several steps to reach the key definition VI.8, and it is not even possible to state the main results of that section until that definition. We have attempted to explain briefly the reasons why each of these steps is necessary (see paragraph “Reading guide for Section VI” of the rebuttal), although these are necessarily a little abstract until the reader has seen the whole picture. Admittedly this could be improved somewhat by summarising all of the steps of the definition at the start.
+
+** Responses to other comments
+
+The type of a term (and whether it’s well-typed at all) can depend on the type of its free variables, therefore the typing judgement Γ ⊢ M : A includes both the type A of the term M and a map Γ of free variables to types. The only typing rules involving this in a non-trivial way in this case are lambda abstraction (because the lambda binds a free variable) and the variable rule (because the type of a variable is just whatever is specified for it in the context). The typing system is not really a key component of this paper, which is why little emphasis is put on it. Any type system which prevents ill-formed terms like 2 (λx.x) + 1 and which is strong enough to prove that a term that does not undergo any Y reductions terminates would have worked equally well.
+
+The phrase “This version” in section II.B refers to the distinction between \to and red, which is in a sense a refinement of \to.

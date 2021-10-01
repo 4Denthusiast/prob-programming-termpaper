@@ -1,7 +1,7 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%
 %% BEGIN {Introduced by Luke}
 
-%\input{comment}
+\input{../Style/comment}
 \usepackage[normalem]{ulem} % \sout{...} - strike out; added by Luke
 \newcommand\defeq{\coloneqq}
 \renewcommand\phi{\varphi}
@@ -12,12 +12,12 @@
 
 \usepackage[british,UKenglish]{babel}
 \usepackage[T1]{fontenc}
-%\usepackage{stmaryrd}
+\usepackage{stmaryrd}
 \usepackage{mathtools}
-%\usepackage{amsmath}
+\usepackage{amsmath}
 \usepackage{amssymb}
-%\usepackage{amsfonts}
-%\usepackage{amsthm}
+\usepackage{amsfonts}
+\usepackage{amsthm}
 \usepackage{thmtools,thm-restate}
 \usepackage{tabularx}
 %\usepackage{MnSymbol}
@@ -25,7 +25,6 @@
 %\usepackage{float}
 \usepackage{proof}
 \usepackage{xcolor}
-\usepackage{paralist}
 \definecolor{oxblue}{RGB}{0,33,71}
 \definecolor{oxlightblue}{RGB}{0,72,205}
 \definecolor{oxlightblue2}{RGB}{161,196,208}
@@ -51,9 +50,9 @@
 \lstset{language=haskell, keywordstyle={\bfseries\color{oxblue}},morekeywords={rec}}
 \usepackage{stackengine}
 
-%\usepackage{tikz}
-% \usetikzlibrary{positioning}
-% \usetikzlibrary{arrows.meta, decorations.pathreplacing, shadows}
+\usepackage{tikz}
+\usetikzlibrary{positioning}
+\usetikzlibrary{arrows.meta, decorations.pathreplacing, shadows}
 
 
 \newcommand{\lchapter}[2][]{\chapter{#2}\chaptermark{#1}}
@@ -155,6 +154,7 @@
 \DeclareMathOperator{\Iter}{Iter}
 \DeclareMathOperator{\Iterb}{\mathbf{Iter}}
 \DeclareMathOperator{\Add}{Add}
+\DeclareMathOperator{\Twice}{Twice}
 \DeclareMathOperator{\Addb}{\mathbf{Add}}
 
 
@@ -203,9 +203,9 @@
 \newcommand{\Res}{\Rightarrow_{\Resh}}
 \newcommand{\FORes}{\Rightarrow_{\FOResh}}
 
-\newcommand\mref[1]{Mismatch \ref{#1}}
-\newcommand\sref[1]{Proof Step \ref{#1}}
-\newcommand\srefs[2]{Proof Steps \ref{#1} and \ref{#2}}
+\newcommand\mref[1]{Mismatch~\ref{#1}}
+\newcommand\sref[1]{Proof Step~\ref{#1}}
+\newcommand\srefs[2]{Proof Steps~\ref{#1} and~\ref{#2}}
 
 \newcommand\btypes{\mathfrak I}
 
@@ -215,8 +215,8 @@
       #1}\end{minipage} $\qquad$ #2 $\quad\Rightarrow\quad$
   #3 \par\smallskip\noindent #4}
 \newcommand{\longnamerule}[4]{\noindent{\bfseries #1}\newline \hspace*{3ex} #2 $\quad\Rightarrow\quad$ #3 \par\smallskip\noindent #4}
-\newcommand{\shortrules}[6]{\noindent\begin{minipage}{#6ex}{\bfseries #1}\end{minipage} $\;$ #2 $\;\Rightarrow_{\text{#5}}\;$ #3 \par\smallskip\noindent #4}
-\newcommand{\longnamerules}[5]{\noindent{\bfseries #1}\newline \hspace*{3ex} #2 $\;\Rightarrow_{\text{#5}}\;$ #3 \par\smallskip\noindent #4}
+\newcommand{\shortrules}[6]{\noindent\begin{minipage}{#6ex}{\bfseries #1}\end{minipage} $\;$ #2 $\;\Rightarrow_{\text{#5}}\;$ #3 \par\smallskip\noindent #4} 
+\newcommand{\longnamerules}[5]{\noindent{\bfseries #1}\newline \hspace*{3ex} #2 $\;\Rightarrow_{\text{#5}}\;$ #3 \par\smallskip\noindent #4} 
 \newcommand{\ruleset}[4]{\noindent\begin{minipage}{#1} \flushright #3 \end{minipage} $\quad \Rightarrow_{\text{#2}}\quad$ #4}
 
 \newcommand{\inferbin}[5]{\bigskip\begin{minipage}{32ex}{\bfseries #1}\end{minipage} {
@@ -231,14 +231,6 @@
 
 \newcommand{\stkout}[1]{\ifmmode\text{\sout{\ensuremath{#1}}}\else\sout{#1}\fi}
 
-%%%%%%%%%%%%%%%%%
-% From TOCL:
-\newcommand{\tden}[1]{\llbracket #1\rrbracket}
-\newcommand{\denf}[1]{\llparenthesis #1\rrparenthesis}
-\newcommand{\sigf}{\Sigma_{\mathrm{fg}}}
-\newcommand{\sigb}{\Sigma_{\mathrm{bg}}}
-\newcommand{\strun}{\oplus}
-\newcommand{\satclb}{\Phi}
-\newcommand{\topf}{\mathbf T}
-\newcommand{\topapp}{\top}
-\newcommand{\Appi}{\odot}
+\newcommand{\Set}{\Gamma}
+\newcommand{\Prgm}{\Pi}
+\renewcommand{\Hf}{\mathcal F}

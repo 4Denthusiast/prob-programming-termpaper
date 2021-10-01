@@ -1,0 +1,1334 @@
+@article{DBLP:journals/toplas/LagoG19,
+  author    = {Ugo {Dal Lago} and
+               Charles Grellois},
+  title     = {Probabilistic Termination by Monadic Affine Sized Typing},
+  journal   = {{ACM} Trans. Program. Lang. Syst.},
+  volume    = {41},
+  number    = {2},
+  pages     = {10:1--10:65},
+  year      = {2019},
+  timestamp = {Fri, 27 Mar 2020 08:38:34 +0100},
+  biburl    = {https://dblp.org/rec/journals/toplas/LagoG19.bib},
+  bibsource = {dblp computer science bibliography, https://dblp.org}
+}
+
+@inproceedings{cusumano-towner2019Gen,
+  title = {Gen: A General-Purpose Probabilistic Programming System with Programmable Inference},
+  shorttitle = {Gen},
+  booktitle = {Proceedings of the 40th {{ACM SIGPLAN Conference}} on {{Programming Language Design}} and {{Implementation}}},
+  author = {{Cusumano-Towner}, Marco F. and Saad, Feras A. and Lew, Alexander K. and Mansinghka, Vikash K.},
+  year = {2019},
+  month = jun,
+  pages = {221--236},
+  publisher = {{Association for Computing Machinery}},
+  address = {{New York, NY, USA}},
+  doi = {10.1145/3314221.3314642},
+  abstract = {Although probabilistic programming is widely used for some restricted classes of statistical models, existing systems lack the flexibility and efficiency needed for practical use with more challenging models arising in fields like computer vision and robotics. This paper introduces Gen, a general-purpose probabilistic programming system that achieves modeling flexibility and inference efficiency via several novel language constructs: (i) the generative function interface for encapsulating probabilistic models; (ii) interoperable modeling languages that strike different flexibility/efficiency trade-offs; (iii) combinators that exploit common patterns of conditional independence; and (iv) an inference library that empowers users to implement efficient inference algorithms at a high level of abstraction. We show that Gen outperforms state-of-the-art probabilistic programming systems, sometimes by multiple orders of magnitude, on diverse problems including object tracking, estimating 3D body pose from a depth image, and inferring the structure of a time series.},
+  file = {/Users/reichelt/Zotero/storage/2ITKKUF7/Cusumano-Towner et al. - 2019 - Gen a general-purpose probabilistic programming s.pdf},
+  isbn = {978-1-4503-6712-7},
+  keywords = {Markov chain Monte Carlo,Probabilistic programming,sequential Monte Carlo,variational inference},
+  series = {{{PLDI}} 2019}
+}
+
+@article{vandemeent2018Introduction,
+  title = {An {{Introduction}} to {{Probabilistic Programming}}},
+  author = {{van de Meent}, Jan-Willem and Paige, Brooks and Yang, Hongseok and Wood, Frank},
+  year = {2018},
+  month = sep,
+  abstract = {This document is designed to be a first-year graduate-level introduction to probabilistic programming. It not only provides a thorough background for anyone wishing to use a probabilistic programming system, but also introduces the techniques needed to design and build these systems. It is aimed at people who have an undergraduate-level understanding of either or, ideally, both probabilistic machine learning and programming languages. We start with a discussion of model-based reasoning and explain why conditioning as a foundational computation is central to the fields of probabilistic machine learning and artificial intelligence. We then introduce a simple first-order probabilistic programming language (PPL) whose programs define static-computation-graph, finite-variable-cardinality models. In the context of this restricted PPL we introduce fundamental inference algorithms and describe how they can be implemented in the context of models denoted by probabilistic programs. In the second part of this document, we introduce a higher-order probabilistic programming language, with a functionality analogous to that of established programming languages. This affords the opportunity to define models with dynamic computation graphs, at the cost of requiring inference methods that generate samples by repeatedly executing the program. Foundational inference algorithms for this kind of probabilistic programming language are explained in the context of an interface between program executions and an inference controller. This document closes with a chapter on advanced topics which we believe to be, at the time of writing, interesting directions for probabilistic programming research; directions that point towards a tight integration with deep neural network research and the development of systems for next-generation artificial intelligence applications.},
+  archivePrefix = {arXiv},
+  eprint = {1809.10756},
+  eprinttype = {arxiv},
+  file = {/Users/reichelt/Zotero/storage/AW8FDLNN/van de Meent et al. - 2018 - An Introduction to Probabilistic Programming.pdf;/Users/reichelt/Zotero/storage/XLYQ7FM9/1809.html},
+  journal = {arXiv:1809.10756 [cs, stat]},
+  keywords = {Computer Science - Artificial Intelligence,Computer Science - Machine Learning,Computer Science - Programming Languages,Statistics - Machine Learning},
+  primaryClass = {cs, stat}
+}
+
+@phdthesis{rainforth2017Automating,
+  title = {Automating Inference, Learning, and Design Using Probabilistic Programming},
+  author = {Rainforth, Tom},
+  year = {2017},
+  abstract = {{$<$}p{$>$}Imagine a world where computational simulations can be inverted as easily as running them forwards, where data can be used to refine models automatically, and where the only expertise one needs to carry out powerful statistical analysis is a basic proficiency in scientific coding. Creating such a world is the ambitious long-term aim of {$<$}em{$>$}probabilistic programming{$<$}/em{$>$}. {$<$}/p{$>$} {$<$}p{$>$}The bottleneck for improving the probabilistic models, or simulators, used throughout the quantitative sciences, is often not an ability to devise better models conceptually, but a lack of expertise, time, or resources to realize such innovations. Probabilistic programming systems (PPSs) help alleviate this bottleneck by providing an expressive and accessible modeling framework, then automating the required computation to draw inferences from the model, for example finding the model parameters likely to give rise to a certain output. By decoupling model specification and inference, PPSs streamline the process of developing and drawing inferences from new models, while opening up powerful statistical methods to non-experts. Many systems further provide the flexibility to write new and exciting models which would be hard, or even impossible, to convey using conventional statistical frameworks.{$<$}/p{$>$} {$<$}p{$>$}The central goal of this thesis is to improve and extend PPSs. In particular, we will make advancements to the underlying inference engines and increase the range of problems which can be tackled. For example, we will extend PPSs to a mixed inference-optimization framework, thereby providing automation of tasks such as model learning and engineering design. Meanwhile, we make inroads into constructing systems for automating adaptive sequential design problems, providing potential applications across the sciences. Furthermore, the contributions of the work reach far beyond probabilistic programming, as achieving our goal will require us to make advancements in a number of related fields such as particle Markov chain Monte Carlo methods, Bayesian optimization, and Monte Carlo fundamentals.{$<$}/p{$>$}},
+  file = {/Users/reichelt/Zotero/storage/3C9ZIH6Y/Rainforth - 2017 - Automating inference, learning, and design using p.pdf;/Users/reichelt/Zotero/storage/LJLXEICT/uuide276f3b4-ff1d-44bf-9d67-013f68ce81f0.html},
+  language = {en},
+  school = {University of Oxford},
+  OPTtype = {{\url{http://purl.org/dc/dcmitype/Text}}}
+}
+
+@inproceedings{DBLP:conf/rta/Yang19,
+  Author = {Yang, Hongseok},
+  Bibsource = {dblp computer science bibliography, https://dblp.org},
+  Biburl = {https://dblp.org/rec/conf/rta/Yang19.bib},
+  Booktitle = {4th International Conference on Formal Structures for Computation and Deduction, {FSCD} 2019, June 24-30, 2019, Dortmund, Germany},
+  Date-Added = {2020-08-17 10:26:02 +0100},
+  Date-Modified = {2020-08-17 10:26:02 +0100},
+  Doi = {10.4230/LIPIcs.FSCD.2019.4},
+  Editor = {Geuvers, Herman},
+  Pages = {4:1--4:6},
+  Publisher = {Schloss Dagstuhl - Leibniz-Zentrum f{\"{u}}r Informatik},
+  Series = {LIPIcs},
+  Timestamp = {Tue, 11 Feb 2020 15:52:14 +0100},
+  Title = {Some Semantic Issues in Probabilistic Programming Languages (Invited Talk)},
+  Url = {https://doi.org/10.4230/LIPIcs.FSCD.2019.4},
+  Volume = {131},
+  Year = {2019},
+  Bdsk-Url-1 = {https://dblp.org/rec/conf/rta/Yang19},
+  Bdsk-Url-2 = {https://doi.org/10.4230/LIPIcs.FSCD.2019.4}}
+
+
+
+@article{carpenter2017stan,
+  title={Stan: A probabilistic programming language},
+  author={Carpenter, Bob and Gelman, Andrew and Hoffman, Matthew D and Lee, Daniel and Goodrich, Ben and Betancourt, Michael and Brubaker, Marcus and Guo, Jiqiang and Li, Peter and Riddell, Allen},
+  journal={Journal of statistical software},
+  volume={76},
+  number={1},
+  year={2017},
+  publisher={Columbia Univ., New York, NY (United States); Harvard Univ., Cambridge, MA~…}
+}
+
+@article{bingham2019Pyro,
+  title = {Pyro: {{Deep Universal Probabilistic Programming}}},
+  shorttitle = {Pyro},
+  author = {Bingham, Eli and Chen, Jonathan P. and Jankowiak, Martin and Obermeyer, Fritz and Pradhan, Neeraj and Karaletsos, Theofanis and Singh, Rohit and Szerlip, Paul and Horsfall, Paul and Goodman, Noah D.},
+  year = {2019},
+  volume = {20},
+  pages = {1--6},
+  issn = {1533-7928},
+  file = {/Users/reichelt/Zotero/storage/ISH4K3QD/Bingham et al. - 2019 - Pyro Deep Universal Probabilistic Programming.pdf;/Users/reichelt/Zotero/storage/VN8GNU4Y/18-403.html},
+  journal = {Journal of Machine Learning Research},
+  number = {28}
+}
+
+@article{tran2016edward,
+  title={Edward: A library for probabilistic modeling, inference, and criticism},
+  author={Tran, Dustin and Kucukelbir, Alp and Dieng, Adji B and Rudolph, Maja and Liang, Dawen and Blei, David M},
+  journal={arXiv preprint arXiv:1610.09787},
+  year={2016}
+}
+
+@article{salvatier2016probabilistic,
+  title={Probabilistic programming in Python using PyMC3},
+  author={Salvatier, John and Wiecki, Thomas V and Fonnesbeck, Christopher},
+  journal={PeerJ Computer Science},
+  volume={2},
+  pages={e55},
+  year={2016},
+  publisher={PeerJ Inc.}
+}
+
+
+@inproceedings{ge2018Turing,
+  title = {Turing: {{A Language}} for {{Flexible Probabilistic Inference}}},
+  shorttitle = {Turing},
+  booktitle = {International {{Conference}} on {{Artificial Intelligence}} and {{Statistics}}},
+  author = {Ge, Hong and Xu, Kai and Ghahramani, Zoubin},
+  year = {2018},
+  month = mar,
+  pages = {1682--1690},
+  publisher = {{PMLR}},
+  issn = {2640-3498},
+  abstract = {Probabilistic programming promises to simplify and democratize probabilistic machine learning, but successful probabilistic programming systems require flexible, generic and efficient inference eng...},
+  file = {/Users/reichelt/Zotero/storage/3WDTR9RE/Ge et al. - 2018 - Turing A Language for Flexible Probabilistic Infe.pdf;/Users/reichelt/Zotero/storage/T3AC9LSS/ge18b.html},
+  language = {en}
+}
+
+@book{RubinsteinK2017,
+author={Rubinstein, Reuven Y. and Dirk P. Kroese},
+year=2017,
+title={Simulation and the Monte Carlo Method},
+edition={3rd},
+publisher={Wiley}}
+
+@article{DBLP:journals/jacm/EtessamiY09,
+  author    = {Kousha Etessami and
+               Mihalis Yannakakis},
+  title     = {Recursive Markov chains, stochastic grammars, and monotone systems
+               of nonlinear equations},
+  journal   = {J. {ACM}},
+  volume    = {56},
+  number    = {1},
+  pages     = {1:1--1:66},
+  year      = {2009},
+  url       = {https://doi.org/10.1145/1462153.1462154},
+  doi       = {10.1145/1462153.1462154},
+  timestamp = {Tue, 06 Nov 2018 12:51:46 +0100},
+  biburl    = {https://dblp.org/rec/journals/jacm/EtessamiY09.bib},
+  bibsource = {dblp computer science bibliography, https://dblp.org}
+}
+a service of Schloss Dagstuhl - Leibniz Center for Informatics  homebrowsesearchabout
+
+@article{DBLP:journals/fmsd/BrazdilEKK13,
+  author    = {Tom{\'{a}}s Br{\'{a}}zdil and
+               Javier Esparza and
+               Stefan Kiefer and
+               Anton{\'{\i}}n Kucera},
+  title     = {Analyzing probabilistic pushdown automata},
+  journal   = {Formal Methods Syst. Des.},
+  volume    = {43},
+  number    = {2},
+  pages     = {124--163},
+  year      = {2013},
+  url       = {https://doi.org/10.1007/s10703-012-0166-0},
+  doi       = {10.1007/s10703-012-0166-0},
+  timestamp = {Fri, 13 Mar 2020 10:55:11 +0100},
+  biburl    = {https://dblp.org/rec/journals/fmsd/BrazdilEKK13.bib},
+  bibsource = {dblp computer science bibliography, https://dblp.org}
+}
+
+
+@book{MotwaniR1995,
+author={Motwani, R. and Raghavan, P.},
+year=1995,
+title={Randomized algorithms},
+publisher={Cambridge University Press}}
+
+@incollection{Rabin1976,
+author={Rabin, M. O.},
+year=1976,
+title={Probabilistic algorithms},
+booktitle={Algorithms and complexity: new directions and results},
+publisher={Academic Press, New York}, 
+pages={21--39}}
+
+@unpublished{Anonymous2020,
+author={Anonymous~Author(s)},
+title={On Probabilistic Termination of Functional Programs with Continuous Distributions},
+note={Full and extended version of this submission},
+year=2020}
+
+@inproceedings{Ramsay2014b,
+  Address = {New York, New York, USA},
+  Author = {Ramsay, Steven J. and Neatherway, Robin P. and Ong, C.-H. Luke and Ramsay, Steven J. and Neatherway, Robin P. and Ong, C.-H. Luke},
+  Booktitle = {Proceedings of the 41st ACM SIGPLAN-SIGACT Symposium on Principles of Programming Languages - POPL '14},
+  Doi = {10.1145/2535838.2535873},
+  File = {:Users/lo/Documents/Mendeley Desktop/Ramsay, Neatherway, Ong - 2014 - A Type-Directed Abstraction Refinement Approach to Higher-Order Model Checking(2).pdf:pdf},
+  Isbn = {9781450325448},
+  Issn = {0362-1340},
+  Keywords = {abstraction refinement,higher-order model checking,intersection types},
+  Number = {1},
+  Pages = {61--72},
+  Publisher = {ACM Press},
+  Title = {{A type-directed abstraction refinement approach to higher-order model checking}},
+  Url = {http://dl.acm.org/citation.cfm?doid=2535838.2535873},
+  Volume = {49},
+  Year = {2014},
+  Bdsk-Url-1 = {http://dl.acm.org/citation.cfm?doid=2535838.2535873},
+  Bdsk-Url-2 = {https://doi.org/10.1145/2535838.2535873}}
+
+@inproceedings{Kobayashi2009a,
+  Author = {Kobayashi, Naoki},
+  Booktitle = {POPL},
+  Doi = {10.1145/1594834.1480933},
+  File = {:Users/lo/Documents/Mendeley Desktop/Kobayashi - 2009 - Types and higher-order recursion schemes for verification of higher-order programs.pdf:pdf},
+  Issn = {03621340},
+  Month = {jan},
+  Pages = {416},
+  Title = {{Types and higher-order recursion schemes for verification of higher-order programs}},
+  Url = {http://portal.acm.org/citation.cfm?doid=1594834.1480933},
+  Year = {2009},
+  Bdsk-Url-1 = {http://portal.acm.org/citation.cfm?doid=1594834.1480933},
+  Bdsk-Url-2 = {https://doi.org/10.1145/1594834.1480933}}
+
+
+@inproceedings{DBLP:conf/nips/LeeYY18,
+  author    = {Wonyeol Lee and
+               Hangyeol Yu and
+               Hongseok Yang},
+  title     = {Reparameterization Gradient for Non-differentiable Models},
+  booktitle = {Advances in Neural Information Processing Systems 31: Annual Conference
+               on Neural Information Processing Systems 2018, NeurIPS 2018, 3-8 December
+               2018, Montr{\'{e}}al, Canada},
+  pages     = {5558--5568},
+  year      = {2018},
+  crossref  = {DBLP:conf/nips/2018},
+  timestamp = {Fri, 06 Mar 2020 17:00:31 +0100},
+  biburl    = {https://dblp.org/rec/conf/nips/0001YY18.bib},
+  bibsource = {dblp computer science bibliography, https://dblp.org}
+}
+
+@inproceedings{DBLP:conf/aistats/ZhouGKRYW19,
+  author    = {Yuan Zhou and
+               Bradley J. Gram{-}Hansen and
+               Tobias Kohn and
+               Tom Rainforth and
+               Hongseok Yang and
+               Frank Wood},
+  title     = {{LF-PPL:} {A} Low-Level First Order Probabilistic Programming Language
+               for Non-Differentiable Models},
+  booktitle = {The 22nd International Conference on Artificial Intelligence and Statistics,
+               {AISTATS} 2019, 16-18 April 2019, Naha, Okinawa, Japan},
+  pages     = {148--157},
+  year      = {2019},
+  crossref  = {DBLP:conf/aistats/2019},
+  timestamp = {Fri, 07 Jun 2019 09:03:47 +0200},
+  biburl    = {https://dblp.org/rec/conf/aistats/ZhouGKRYW19.bib},
+  bibsource = {dblp computer science bibliography, https://dblp.org}
+}
+
+@article{Nishimura2020b,
+    author = {Nishimura, Akihiko and Dunson, David B and Lu, Jianfeng},
+    title = "{Discontinuous Hamiltonian Monte Carlo for discrete parameters and discontinuous likelihoods}",
+    journal = {Biometrika},
+    volume = {107},
+    number = {2},
+    pages = {365-380},
+    year = {2020},
+}
+
+@phdthesis{Rainforth2017,
+  Author = {Rainforth, Tom},
+  Title = {{Automating Inference, Learning, and Design using Probabilistic Programming}},
+  Year = {2017}}
+
+
+@book{MeynT09,
+author={Meyn, Sean and Tweedie, Richard L.},
+title={Markov Chains and Stochastic Stability},
+publisher={Cambridge University Press},
+series={Cambridge Mathematical Library},
+edition={2nd},
+year={2009}}
+
+@book{Revuz84,
+author={Daniel Revuz},
+title={Markov Chains},
+series={North-Holland Mathematical Library},
+volume=11,
+year={1984}, 
+edition={revised},
+publisher={Elsevier Science Publishers B.V.}}
+
+
+@book{LawlerV10,
+  author={Lawler, Gregory F. and Limic, Vlada},
+  title={Random walk: a modern introduction},
+  series={Cambridge studies in advanced mathematics},
+  volume=123,
+  publisher={Cambridge University Press},
+  year=2010}
+
+@book{Spitzer01,
+  author={Spitzer, F.},
+  title={Principles of Random Walk},
+  series={Graduate Texts in Mathematics},
+  publisher={Springer},
+  year=2001}
+
+
+@book{Durrett10,
+  author={Durrett, R.},
+  title={Probability - theory and examples},
+  series={Cambridge Series in Statistical and Probabilistic Mathematics},
+  year=2010, 
+  edition={4th edition},
+  publisher={Cambridge University Press}
+}
+
+@inproceedings{DBLP:conf/ppdp/BreuvartL18,
+  author    = {Flavien Breuvart and
+               Ugo {Dal Lago}},
+  title     = {On Intersection Types and Probabilistic Lambda Calculi},
+  booktitle = {Proceedings of the 20th International Symposium on Principles and
+               Practice of Declarative Programming, {PPDP} 2018, Frankfurt am Main,
+               Germany, September 03-05, 2018},
+  pages     = {8:1--8:13},
+  year      = {2018},
+  timestamp = {Mon, 23 Mar 2020 12:22:51 +0100},
+  biburl    = {https://dblp.org/rec/conf/ppdp/BreuvartL18.bib},
+  bibsource = {dblp computer science bibliography, https://dblp.org}
+}
+
+@inproceedings{DBLP:conf/icfp/BorgstromLGS16,
+  author    = {Johannes Borgstr{\"{o}}m and
+               Ugo {Dal Lago} and
+               Andrew D. Gordon and
+               Marcin Szymczak},
+  title     = {A lambda-calculus foundation for universal probabilistic programming},
+  booktitle = {Proceedings of the 21st {ACM} {SIGPLAN} International Conference on
+               Functional Programming, {ICFP} 2016, Nara, Japan, September 18-22,
+               2016},
+  pages     = {33--46},
+  year      = {2016},
+  timestamp = {Fri, 27 Mar 2020 08:48:25 +0100},
+  biburl    = {https://dblp.org/rec/conf/icfp/BorgstromLGS16.bib},
+  bibsource = {dblp computer science bibliography, https://dblp.org}
+}
+
+@article{MakOPW20,
+  author    = {Carol Mak and
+               C.-H. Luke Ong and
+               Hugo Paquet and
+               Dominik Wagner},
+  title     = {Densities of almost surely terminating probabilistic programs are
+               differentiable almost everywhere},
+  journal   = {CoRR},
+  volume    = {abs/2004.03924},
+  year      = {2020},
+  url       = {https://arxiv.org/abs/2004.03924},
+  archivePrefix = {arXiv},
+  eprint    = {2004.03924},
+  timestamp = {Tue, 14 Apr 2020 16:40:34 +0200},
+  biburl    = {https://dblp.org/rec/journals/corr/abs-2004-03924.bib},
+  bibsource = {dblp computer science bibliography, https://dblp.org}
+}
+
+@inproceedings{DBLP:conf/popl/FioritiH15,
+  author    = {Luis Mar{\'{\i}}a Ferrer Fioriti and
+               Holger Hermanns},
+  title     = {Probabilistic Termination: Soundness, Completeness, and Compositionality},
+  booktitle = {Proceedings of the 42nd Annual {ACM} {SIGPLAN-SIGACT} Symposium on
+               Principles of Programming Languages, {POPL} 2015, Mumbai, India, January
+               15-17, 2015},
+  pages     = {489--501},
+  year      = {2015},
+  timestamp = {Tue, 06 Nov 2018 11:07:43 +0100},
+  biburl    = {https://dblp.org/rec/conf/popl/FioritiH15.bib},
+  bibsource = {dblp computer science bibliography, https://dblp.org}
+}
+
+@article{DBLP:journals/pacmpl/LewCSCM20,
+  author    = {Alexander K. Lew and
+               Marco F. Cusumano{-}Towner and
+               Benjamin Sherman and
+               Michael Carbin and
+               Vikash K. Mansinghka},
+  title     = {Trace types and denotational semantics for sound programmable inference
+               in probabilistic languages},
+  journal   = {Proc. {ACM} Program. Lang.},
+  volume    = {4},
+  number    = {{POPL}},
+  pages     = {19:1--19:32},
+  year      = {2020},
+  timestamp = {Thu, 16 Apr 2020 13:51:50 +0200},
+  biburl    = {https://dblp.org/rec/journals/pacmpl/LewCSCM20.bib},
+  bibsource = {dblp computer science bibliography, https://dblp.org}
+}
+
+
+@article{Lyne_2015,
+  author={Lyne, Anne-Marie and Girolami, Mark and Atchadé, Yves and Strathmann, Heiko and Simpson, Daniel},
+   title={On Russian Roulette Estimates for Bayesian Inference with Doubly-Intractable Likelihoods},
+   volume={30},
+   ISSN={0883-4237},
+   number={4},
+   journal={Statistical Science},
+   publisher={Institute of Mathematical Statistics},
+   year={2015},
+   month={Nov},
+   pages={443–467}
+}
+
+@inproceedings{DBLP:conf/cav/EsparzaGK12,
+  author    = {Javier Esparza and
+               Andreas Gaiser and
+               Stefan Kiefer},
+  title     = {Proving Termination of Probabilistic Programs Using Patterns},
+  booktitle = {Computer Aided Verification - 24th International Conference, {CAV}
+               2012, Berkeley, CA, USA, July 7-13, 2012 Proceedings},
+  pages     = {123--138},
+  year      = {2012},
+  timestamp = {Tue, 14 May 2019 10:00:43 +0200},
+  biburl    = {https://dblp.org/rec/conf/cav/EsparzaGK12.bib},
+  bibsource = {dblp computer science bibliography, https://dblp.org}
+}
+
+@article{DBLP:journals/toms/EmirisF18,
+  author    = {Ioannis Z. Emiris and
+               Vissarion Fisikopoulos},
+  title     = {Practical Polytope Volume Approximation},
+  journal   = {{ACM} Trans. Math. Softw.},
+  volume    = {44},
+  number    = {4},
+  pages     = {38:1--38:21},
+  year      = {2018},
+  timestamp = {Wed, 21 Nov 2018 12:44:28 +0100},
+  biburl    = {https://dblp.org/rec/journals/toms/EmirisF18.bib},
+  bibsource = {dblp computer science bibliography, https://dblp.org}
+}
+
+@Inbook{Bueler2000,
+  author    = {B{\"u}eler, Benno
+              and Enge, Andreas
+              and Fukuda, Komei},
+  title     = {Exact Volume Computation for Polytopes: A Practical Study},
+  bookTitle = {Polytopes --- Combinatorics and Computation},
+  year      = {2000},
+  publisher = {Birkh{\"a}user Basel},
+  pages     = {131--154}
+}
+
+@inproceedings{DBLP:conf/lics/HeunenKSY17,
+  author    = {Chris Heunen and
+               Ohad Kammar and
+               Sam Staton and
+               Hongseok Yang},
+  title     = {A convenient category for higher-order probability theory},
+  booktitle = {32nd Annual {ACM/IEEE} Symposium on Logic in Computer Science, {LICS}
+               2017, Reykjavik, Iceland, June 20-23, 2017},
+  pages     = {1--12},
+  year      = {2017},
+  timestamp = {Wed, 16 Oct 2019 14:14:54 +0200},
+  biburl    = {https://dblp.org/rec/conf/lics/HeunenKSY17.bib},
+  bibsource = {dblp computer science bibliography, https://dblp.org}
+}
+
+@inproceedings{DBLP:conf/fossacs/LagoGH20,
+  author    = {Ugo {Dal Lago} and
+               Giulio Guerrieri and
+               Willem Heijltjes},
+  title     = {Decomposing Probabilistic Lambda-Calculi},
+  booktitle = {Foundations of Software Science and Computation Structures - 23rd
+               International Conference, {FOSSACS} 2020, Held as Part of the European
+               Joint Conferences on Theory and Practice of Software, {ETAPS} 2020,
+               Dublin, Ireland, April 25-30, 2020, Proceedings},
+  pages     = {136--156},
+  year      = {2020},
+  timestamp = {Mon, 04 May 2020 13:23:16 +0200},
+  biburl    = {https://dblp.org/rec/conf/fossacs/LagoGH20.bib},
+  bibsource = {dblp computer science bibliography, https://dblp.org}
+}
+
+@inproceedings{DBLP:conf/popl/EhrhardTP14,
+  author    = {Thomas Ehrhard and
+               Christine Tasson and
+               Michele Pagani},
+  title     = {Probabilistic coherence spaces are fully abstract for probabilistic
+               {PCF}},
+  booktitle = {The 41st Annual {ACM} {SIGPLAN-SIGACT} Symposium on Principles of
+               Programming Languages, {POPL} '14, San Diego, CA, USA, January 20-21,
+               2014},
+  pages     = {309--320},
+  year      = {2014},
+  timestamp = {Sat, 19 Oct 2019 20:03:00 +0200},
+  biburl    = {https://dblp.org/rec/conf/popl/EhrhardTP14.bib},
+  bibsource = {dblp computer science bibliography, https://dblp.org}
+}
+
+@inproceedings{DBLP:conf/soda/BrazdilBEKW10,
+  author    = {Tom{\'{a}}s Br{\'{a}}zdil and
+               V{\'{a}}clav Brozek and
+               Kousha Etessami and
+               Anton{\'{\i}}n Kucera and
+               Dominik Wojtczak},
+  title     = {One-Counter Markov Decision Processes},
+  booktitle = {Proceedings of the Twenty-First Annual {ACM-SIAM} Symposium on Discrete
+               Algorithms, {SODA} 2010, January 17-19, 2010},
+  pages     = {863--874},
+  year      = {2010},
+  timestamp = {Fri, 30 Aug 2019 10:02:26 +0200},
+  biburl    = {https://dblp.org/rec/conf/soda/BrazdilBEKW10.bib},
+  bibsource = {dblp computer science bibliography, https://dblp.org}
+}
+
+
+@book{DBLP:books/sp/MeynT93,
+  author    = {Sean P. Meyn and
+               Richard L. Tweedie},
+  title     = {Markov Chains and Stochastic Stability},
+  series    = {Communications and Control Engineering Series},
+  publisher = {Springer},
+  year      = {1993},
+  isbn      = {978-1-4471-3269-1},
+  timestamp = {Wed, 24 Jul 2019 14:33:50 +0200},
+  biburl    = {https://dblp.org/rec/books/sp/MeynT93.bib},
+  bibsource = {dblp computer science bibliography, https://dblp.org}
+}
+
+@article{DBLP:journals/pacmpl/EhrhardPT18,
+  author    = {Thomas Ehrhard and
+               Michele Pagani and
+               Christine Tasson},
+  title     = {Measurable cones and stable, measurable functions: a model for probabilistic
+               higher-order programming},
+  journal   = {Proc. {ACM} Program. Lang.},
+  volume    = {2},
+  number    = {{POPL}},
+  pages     = {59:1--59:28},
+  year      = {2018},
+  timestamp = {Thu, 16 Apr 2020 13:51:53 +0200},
+  biburl    = {https://dblp.org/rec/journals/pacmpl/EhrhardPT18.bib},
+  bibsource = {dblp computer science bibliography, https://dblp.org}
+}
+
+@article{DBLP:journals/pacmpl/McIverMKK18,
+  author    = {Annabelle McIver and
+               Carroll Morgan and
+               Benjamin Lucien Kaminski and
+               Joost{-}Pieter Katoen},
+  title     = {A new proof rule for almost sure termination},
+  journal   = {Proc. {ACM} Program. Lang.},
+  volume    = {2},
+  number    = {{POPL}},
+  pages     = {33:1--33:28},
+  year      = {2018},
+  timestamp = {Thu, 16 Apr 2020 13:51:41 +0200},
+  biburl    = {https://dblp.org/rec/journals/pacmpl/McIverMKK18.bib},
+  bibsource = {dblp computer science bibliography, https://dblp.org}
+}
+
+@article{DBLP:journals/jacm/KaminskiKMO18,
+  author    = {Benjamin Lucien Kaminski and
+               Joost{-}Pieter Katoen and
+               Christoph Matheja and
+               Federico Olmedo},
+  title     = {Weakest Precondition Reasoning for Expected Runtimes of Randomized
+               Algorithms},
+  journal   = {J. {ACM}},
+  volume    = {65},
+  number    = {5},
+  pages     = {30:1--30:68},
+  year      = {2018},
+  timestamp = {Fri, 27 Mar 2020 08:40:51 +0100},
+  biburl    = {https://dblp.org/rec/journals/jacm/KaminskiKMO18.bib},
+  bibsource = {dblp computer science bibliography, https://dblp.org}
+}
+
+@inproceedings{DBLP:conf/esop/KaminskiKMO16,
+  author    = {Benjamin Lucien Kaminski and
+               Joost{-}Pieter Katoen and
+               Christoph Matheja and
+               Federico Olmedo},
+  title     = {Weakest Precondition Reasoning for Expected Run-Times of Probabilistic
+               Programs},
+  booktitle = {Programming Languages and Systems - 25th European Symposium on Programming,
+               {ESOP} 2016, Held as Part of the European Joint Conferences on Theory
+               and Practice of Software, {ETAPS} 2016, Eindhoven, The Netherlands,
+               April 2-8, 2016, Proceedings},
+  pages     = {364--389},
+  year      = {2016},
+  crossref  = {DBLP:conf/esop/2016},
+  timestamp = {Fri, 27 Mar 2020 08:58:30 +0100},
+  biburl    = {https://dblp.org/rec/conf/esop/KaminskiKMO16.bib},
+  bibsource = {dblp computer science bibliography, https://dblp.org}
+}
+
+
+@inproceedings{DBLP:conf/mfcs/KaminskiK15,
+  author    = {Benjamin Lucien Kaminski and
+               Joost{-}Pieter Katoen},
+  title     = {On the Hardness of Almost-Sure Termination},
+  booktitle = {Mathematical Foundations of Computer Science 2015 - 40th International
+               Symposium, {MFCS} 2015, Milan, Italy, August 24-28, 2015, Proceedings,
+               Part {I}},
+  pages     = {307--318},
+  year      = {2015},
+  crossref  = {DBLP:conf/mfcs/2015-1},
+  timestamp = {Fri, 27 Mar 2020 09:00:14 +0100},
+  biburl    = {https://dblp.org/rec/conf/mfcs/KaminskiK15.bib},
+  bibsource = {dblp computer science bibliography, https://dblp.org}
+}
+
+@article{DBLP:journals/pacmpl/LeeYRY20,
+  author    = {Wonyeol Lee and
+               Hangyeol Yu and
+               Xavier Rival and
+               Hongseok Yang},
+  title     = {Towards verified stochastic variational inference for probabilistic
+               programs},
+  journal   = {Proc. {ACM} Program. Lang.},
+  volume    = {4},
+  number    = {{POPL}},
+  pages     = {16:1--16:33},
+  year      = {2020},
+  timestamp = {Thu, 16 Apr 2020 13:51:41 +0200},
+  biburl    = {https://dblp.org/rec/journals/pacmpl/LeeYRY20.bib},
+  bibsource = {dblp computer science bibliography, https://dblp.org}
+}
+
+@article{DBLP:journals/rc/Garloff00,
+  author    = {J{\"{u}}rgen Garloff},
+  title     = {Application of Bernstein Expansion to the Solution of Control Problems},
+  journal   = {Reliab. Comput.},
+  volume    = {6},
+  number    = {3},
+  pages     = {303--320},
+  year      = {2000},
+  timestamp = {Thu, 16 Apr 2020 11:28:30 +0200},
+  biburl    = {https://dblp.org/rec/journals/rc/Garloff00.bib},
+  bibsource = {dblp computer science bibliography, https://dblp.org}
+}
+
+@incollection{DBLP:books/sp/alefeld01/GarloffS01,
+  author    = {J{\"{u}}rgen Garloff and
+               Andrew P. Smith},
+  title     = {Solution of Systems of Polynomial Equation by Using Bernstein Expansion},
+  booktitle = {Symbolic Algebraic Methods and Verification Methods},
+  pages     = {87--97},
+  year      = {2001},
+  crossref  = {DBLP:books/sp/Alefeld2001},
+  timestamp = {Wed, 25 Sep 2019 16:43:14 +0200},
+  biburl    = {https://dblp.org/rec/books/sp/alefeld01/GarloffS01.bib},
+  bibsource = {dblp computer science bibliography, https://dblp.org}
+}
+
+@inproceedings{DBLP:conf/popl/EhrhardTP14,
+  author    = {Thomas Ehrhard and
+               Christine Tasson and
+               Michele Pagani},
+  title     = {Probabilistic coherence spaces are fully abstract for probabilistic
+               {PCF}},
+  booktitle = {The 41st Annual {ACM} {SIGPLAN-SIGACT} Symposium on Principles of
+               Programming Languages, {POPL} '14, San Diego, CA, USA, January 20-21,
+               2014},
+  pages     = {309--320},
+  year      = {2014},
+  crossref  = {DBLP:conf/popl/2014},
+  timestamp = {Sat, 19 Oct 2019 20:03:00 +0200},
+  biburl    = {https://dblp.org/rec/conf/popl/EhrhardTP14.bib},
+  bibsource = {dblp computer science bibliography, https://dblp.org}
+}
+
+@article{DBLP:journals/jcss/Kozen81,
+  author    = {Dexter Kozen},
+  title     = {Semantics of Probabilistic Programs},
+  journal   = {J. Comput. Syst. Sci.},
+  volume    = {22},
+  number    = {3},
+  pages     = {328--350},
+  year      = {1981},
+  timestamp = {Sat, 20 May 2017 00:25:56 +0200},
+  biburl    = {https://dblp.org/rec/journals/jcss/Kozen81.bib},
+  bibsource = {dblp computer science bibliography, https://dblp.org}
+}
+
+@article{DBLP:journals/pacmpl/VakarKS19,
+  author    = {Matthijs V{\'{a}}k{\'{a}}r and
+               Ohad Kammar and
+               Sam Staton},
+  title     = {A domain theory for statistical probabilistic programming},
+  journal   = {Proc. {ACM} Program. Lang.},
+  volume    = {3},
+  number    = {{POPL}},
+  pages     = {36:1--36:29},
+  year      = {2019},
+  timestamp = {Thu, 16 Apr 2020 13:51:44 +0200},
+  biburl    = {https://dblp.org/rec/journals/pacmpl/VakarKS19.bib},
+  bibsource = {dblp computer science bibliography, https://dblp.org}
+}
+
+@article{DBLP:journals/pacmpl/ScibiorKVSYCOMH18,
+  author    = {Adam {\'{S}}cibior and
+               Ohad Kammar and
+               Matthijs V{\'{a}}k{\'{a}}r and
+               Sam Staton and
+               Hongseok Yang and
+               Yufei Cai and
+               Klaus Ostermann and
+               Sean K. Moss and
+               Chris Heunen and
+               Zoubin Ghahramani},
+  title     = {Denotational validation of higher-order Bayesian inference},
+  journal   = {Proc. {ACM} Program. Lang.},
+  volume    = {2},
+  number    = {{POPL}},
+  pages     = {60:1--60:29},
+  year      = {2018},
+  timestamp = {Thu, 16 Apr 2020 13:51:45 +0200},
+  biburl    = {https://dblp.org/rec/journals/pacmpl/ScibiorKVSYCOMH18.bib},
+  bibsource = {dblp computer science bibliography, https://dblp.org}
+}
+
+
+@article{DBLP:journals/igpl/BucciarelliKV17,
+  author    = {Antonio Bucciarelli and
+               Delia Kesner and
+               Daniel Ventura},
+  title     = {Non-idempotent intersection types for the Lambda-Calculus},
+  journal   = {Log. J. {IGPL}},
+  volume    = {25},
+  number    = {4},
+  pages     = {431--464},
+  year      = {2017},
+  timestamp = {Fri, 06 Mar 2020 22:00:04 +0100},
+  biburl    = {https://dblp.org/rec/journals/igpl/BucciarelliKV17.bib},
+  bibsource = {dblp computer science bibliography, https://dblp.org}
+}
+
+@inproceedings{DBLP:conf/lics/OlmedoKKM16,
+  author    = {Federico Olmedo and
+               Benjamin Lucien Kaminski and
+               Joost{-}Pieter Katoen and
+               Christoph Matheja},
+  title     = {Reasoning about Recursive Probabilistic Programs},
+  booktitle = {Proceedings of the 31st Annual {ACM/IEEE} Symposium on Logic in Computer
+               Science, {LICS} '16, New York, NY, USA, July 5-8, 2016},
+  pages     = {672--681},
+  year      = {2016},
+  crossref  = {DBLP:conf/lics/2016},
+  timestamp = {Fri, 27 Mar 2020 08:47:04 +0100},
+  biburl    = {https://dblp.org/rec/conf/lics/OlmedoKKM16.bib},
+  bibsource = {dblp computer science bibliography, https://dblp.org}
+}
+
+
+@inproceedings{DBLP:conf/icse/GordonHNR14,
+  author    = {Andrew D. Gordon and
+               Thomas A. Henzinger and
+               Aditya V. Nori and
+               Sriram K. Rajamani},
+  title     = {Probabilistic programming},
+  booktitle = {Proceedings of the on Future of Software Engineering, {FOSE} 2014,
+               Hyderabad, India, May 31 - June 7, 2014},
+  pages     = {167--181},
+  year      = {2014},
+  crossref  = {DBLP:conf/icse/2014fose},
+  timestamp = {Tue, 06 Nov 2018 11:06:55 +0100},
+  biburl    = {https://dblp.org/rec/conf/icse/GordonHNR14.bib},
+  bibsource = {dblp computer science bibliography, https://dblp.org}
+}
+
+@article{kleene1955,
+  author = "Kleene, S. C.",
+  fjournal = "Bulletin of the American Mathematical Society",
+  journal = "Bull. Amer. Math. Soc.",
+  month = "05",
+  pages = "193--213",
+  publisher = "American Mathematical Society",
+  title = "Hierarchies of number-theoretic predicates",
+  volume = "61",
+  year = "1955"
+}
+
+@article{DBLP:journals/corr/McIverM16,
+  author    = {Annabelle McIver and
+               Carroll Morgan},
+  title     = {A new rule for almost-certain termination of probabilistic and demonic
+               programs},
+  journal   = {CoRR},
+  volume    = {abs/1612.01091},
+  year      = {2016},
+  url       = {http://arxiv.org/abs/1612.01091},
+  archivePrefix = {arXiv},
+  eprint    = {1612.01091},
+  timestamp = {Mon, 13 Aug 2018 16:48:21 +0200},
+  biburl    = {https://dblp.org/rec/journals/corr/McIverM16.bib},
+  bibsource = {dblp computer science bibliography, https://dblp.org}
+}
+
+@inproceedings{DBLP:conf/cav/ChakarovS13,
+  author    = {Aleksandar Chakarov and
+               Sriram Sankaranarayanan},
+  title     = {Probabilistic Program Analysis with Martingales},
+  booktitle = {Computer Aided Verification - 25th International Conference, {CAV}
+               2013, Saint Petersburg, Russia, July 13-19, 2013. Proceedings},
+  pages     = {511--526},
+  year      = {2013},
+  crossref  = {DBLP:conf/cav/2013},
+  timestamp = {Fri, 06 Sep 2019 10:57:12 +0200},
+  biburl    = {https://dblp.org/rec/conf/cav/ChakarovS13.bib},
+  bibsource = {dblp computer science bibliography, https://dblp.org}
+}
+
+@inproceedings{DBLP:conf/popl/ChatterjeeNZ17,
+  author    = {Krishnendu Chatterjee and
+               Petr Novotn{\'{y}} and
+               Dorde Zikelic},
+  title     = {Stochastic invariants for probabilistic termination},
+  booktitle = {Proceedings of the 44th {ACM} {SIGPLAN} Symposium on Principles of
+               Programming Languages, {POPL} 2017, Paris, France, January 18-20,
+               2017},
+  pages     = {145--160},
+  year      = {2017},
+  crossref  = {DBLP:conf/popl/2017},
+  timestamp = {Tue, 06 Nov 2018 11:07:42 +0100},
+  biburl    = {https://dblp.org/rec/conf/popl/ChatterjeeNZ17.bib},
+  bibsource = {dblp computer science bibliography, https://dblp.org}
+}
+
+@inproceedings{DBLP:conf/aplas/HuangFC18,
+  author    = {Mingzhang Huang and
+               Hongfei Fu and
+               Krishnendu Chatterjee},
+  title     = {New Approaches for Almost-Sure Termination of Probabilistic Programs},
+  booktitle = {Programming Languages and Systems - 16th Asian Symposium, {APLAS}
+               2018, Wellington, New Zealand, December 2-6, 2018, Proceedings},
+  pages     = {181--201},
+  year      = {2018},
+  crossref  = {DBLP:conf/aplas/2018},
+  timestamp = {Tue, 14 May 2019 10:00:41 +0200},
+  biburl    = {https://dblp.org/rec/conf/aplas/HuangFC18.bib},
+  bibsource = {dblp computer science bibliography, https://dblp.org}
+}
+
+@article{DBLP:journals/pacmpl/Huang0CG19,
+  author    = {Mingzhang Huang and
+               Hongfei Fu and
+               Krishnendu Chatterjee and
+               Amir Kafshdar Goharshady},
+  title     = {Modular verification for almost sure termination of probabilistic
+               programs},
+  journal   = {Proc. {ACM} Program. Lang.},
+  volume    = {3},
+  number    = {{OOPSLA}},
+  pages     = {129:1--129:29},
+  year      = {2019},
+  timestamp = {Thu, 16 Apr 2020 13:51:53 +0200},
+  biburl    = {https://dblp.org/rec/journals/pacmpl/Huang0CG19.bib},
+  bibsource = {dblp computer science bibliography, https://dblp.org}
+}
+
+@inproceedings{DBLP:conf/vmcai/FuC19,
+  author    = {Hongfei Fu and
+               Krishnendu Chatterjee},
+  title     = {Termination of Nondeterministic Probabilistic Programs},
+  booktitle = {Verification, Model Checking, and Abstract Interpretation - 20th International
+               Conference, {VMCAI} 2019, Cascais, Portugal, January 13-15, 2019,
+               Proceedings},
+  pages     = {468--490},
+  year      = {2019},
+  crossref  = {DBLP:conf/vmcai/2019},
+  timestamp = {Tue, 14 May 2019 10:00:43 +0200},
+  biburl    = {https://dblp.org/rec/conf/vmcai/FuC19.bib},
+  bibsource = {dblp computer science bibliography, https://dblp.org}
+}
+
+@inproceedings{DBLP:conf/popl/HartSP82,
+  author    = {Sergiu Hart and
+               Micha Sharir and
+               Amir Pnueli},
+  editor    = {Richard A. DeMillo},
+  title     = {Termination of Probabilistic Concurrent Programs},
+  booktitle = {Conference Record of the Ninth Annual {ACM} Symposium on Principles
+               of Programming Languages, Albuquerque, New Mexico, USA, January 1982},
+  pages     = {1--6},
+  publisher = {{ACM} Press},
+  year      = {1982},
+  timestamp = {Tue, 06 Nov 2018 11:07:43 +0100},
+  biburl    = {https://dblp.org/rec/conf/popl/HartSP82.bib},
+  bibsource = {dblp computer science bibliography, https://dblp.org}
+}
+
+@article{DBLP:journals/toplas/ChatterjeeFNH18,
+  author    = {Krishnendu Chatterjee and
+               Hongfei Fu and
+               Petr Novotn{\'{y}} and
+               Rouzbeh Hasheminezhad},
+  title     = {Algorithmic Analysis of Qualitative and Quantitative Termination Problems
+               for Affine Probabilistic Programs},
+  journal   = {{ACM} Trans. Program. Lang. Syst.},
+  volume    = {40},
+  number    = {2},
+  pages     = {7:1--7:45},
+  year      = {2018},
+  timestamp = {Sat, 19 Oct 2019 19:22:03 +0200},
+  biburl    = {https://dblp.org/rec/journals/toplas/ChatterjeeFNH18.bib},
+  bibsource = {dblp computer science bibliography, https://dblp.org}
+}
+
+@article{DBLP:journals/pacmpl/AgrawalC018,
+  author    = {Sheshansh Agrawal and
+               Krishnendu Chatterjee and
+               Petr Novotn{\'{y}}},
+  title     = {Lexicographic ranking supermartingales: an efficient approach to termination
+               of probabilistic programs},
+  journal   = {Proc. {ACM} Program. Lang.},
+  volume    = {2},
+  number    = {{POPL}},
+  pages     = {34:1--34:32},
+  year      = {2018},
+  timestamp = {Thu, 16 Apr 2020 13:51:43 +0200},
+  biburl    = {https://dblp.org/rec/journals/pacmpl/AgrawalC018.bib},
+  bibsource = {dblp computer science bibliography, https://dblp.org}
+}
+
+@inproceedings{DBLP:conf/pldi/ChenH20,
+  author    = {Jianhui Chen and
+               Fei He},
+  title     = {Proving almost sure termination by omega-regular decomposition},
+  booktitle = {Proceedings of the 41st {ACM} {SIGPLAN} International Conference on
+               Programming Language Design and Implementation, {PLDI} 2020, London,
+               UK, June 15-20, 2020},
+  pages     = {869--882},
+  year      = {2020},
+  crossref  = {DBLP:conf/pldi/2020},
+  timestamp = {Tue, 09 Jun 2020 13:52:54 +0200},
+  biburl    = {https://dblp.org/rec/conf/pldi/ChenH20.bib},
+  bibsource = {dblp computer science bibliography, https://dblp.org}
+}
+
+@inproceedings{DBLP:conf/popl/HartSP82,
+  author    = {Sergiu Hart and
+               Micha Sharir and
+               Amir Pnueli},
+  title     = {Termination of Probabilistic Concurrent Programs},
+  booktitle = {Conference Record of the Ninth Annual {ACM} Symposium on Principles
+               of Programming Languages, Albuquerque, New Mexico, USA, January 1982},
+  pages     = {1--6},
+  year      = {1982},
+  crossref  = {DBLP:conf/popl/82},
+  timestamp = {Tue, 06 Nov 2018 11:07:43 +0100},
+  biburl    = {https://dblp.org/rec/conf/popl/HartSP82.bib},
+  bibsource = {dblp computer science bibliography, https://dblp.org}
+}
+
+@book{DBLP:books/daglib/0067558,
+  author    = {Hendrik Pieter Barendregt},
+  title     = {The lambda calculus - its syntax and semantics},
+  series    = {Studies in logic and the foundations of mathematics},
+  volume    = {103},
+  publisher = {North-Holland},
+  year      = {1985},
+  isbn      = {978-0-444-86748-3},
+  timestamp = {Fri, 28 Jun 2019 12:45:52 +0200},
+  biburl    = {https://dblp.org/rec/books/daglib/0067558.bib},
+  bibsource = {dblp computer science bibliography, https://dblp.org}
+}
+
+@article{DBLP:journals/ndjfl/Ghilezan96,
+  author    = {Silvia Ghilezan},
+  title     = {Strong Normalization and Typability with Intersection Types},
+  journal   = {Notre Dame J. Formal Log.},
+  volume    = {37},
+  number    = {1},
+  pages     = {44--52},
+  year      = {1996},
+  timestamp = {Thu, 21 May 2020 20:05:43 +0200},
+  biburl    = {https://dblp.org/rec/journals/ndjfl/Ghilezan96.bib},
+  bibsource = {dblp computer science bibliography, https://dblp.org}
+}
+
+@article{DBLP:journals/mscs/Carvalho18,
+  author    = {Daniel de Carvalho},
+  title     = {Execution time of {\(\lambda\)}-terms via denotational semantics and
+               intersection types},
+  journal   = {Math. Struct. Comput. Sci.},
+  volume    = {28},
+  number    = {7},
+  pages     = {1169--1203},
+  year      = {2018},
+  timestamp = {Wed, 01 Apr 2020 08:48:54 +0200},
+  biburl    = {https://dblp.org/rec/journals/mscs/Carvalho18.bib},
+  bibsource = {dblp computer science bibliography, https://dblp.org}
+}
+
+@article{DBLP:journals/tamm/Novak14,
+  author    = {Jonathan Novak},
+  title     = {P{\'{o}}lya's Random Walk Theorem},
+  journal   = {Am. Math. Mon.},
+  volume    = {121},
+  number    = {8},
+  pages     = {711--716},
+  year      = {2014},
+  timestamp = {Thu, 18 Jun 2020 22:11:40 +0200},
+  biburl    = {https://dblp.org/rec/journals/tamm/Novak14.bib},
+  bibsource = {dblp computer science bibliography, https://dblp.org}
+}
+
+
+@book{DBLP:series/mcs/McIverM05,
+  author    = {Annabelle McIver and
+               Carroll Morgan},
+  title     = {Abstraction, Refinement and Proof for Probabilistic Systems},
+  series    = {Monographs in Computer Science},
+  publisher = {Springer},
+  year      = {2005},
+  isbn      = {978-0-387-40115-7},
+  timestamp = {Tue, 16 May 2017 14:24:21 +0200},
+  biburl    = {https://dblp.org/rec/series/mcs/McIverM05.bib},
+  bibsource = {dblp computer science bibliography, https://dblp.org}
+}
+
+
+@book{PMC,
+  author    = {Christel Baier and
+               Joost{-}Pieter Katoen},
+  title     = {Principles of model checking},
+  publisher = {{MIT} Press},
+  year      = {2008},
+  isbn      = {978-0-262-02649-9},
+  timestamp = {Tue, 15 Feb 2011 11:22:37 +0100},
+  biburl    = {https://dblp.org/rec/books/daglib/0020348.bib},
+  bibsource = {dblp computer science bibliography, https://dblp.org}
+}
+
+@article{lasserre1983analytical,
+  title={An analytical expression and an algorithm for the volume of a convex polyhedron in {$\mathbb{R}^n$}},
+  author={Lasserre, Jean B},
+  journal={Journal of optimization theory and applications},
+  volume={39},
+  number={3},
+  pages={363--377},
+  year={1983},
+  publisher={Springer}
+}
+
+@inproceedings{DBLP:conf/cav/ChatterjeeFG16,
+  author    = {Krishnendu Chatterjee and
+               Hongfei Fu and
+               Amir Kafshdar Goharshady},
+  title     = {Termination Analysis of Probabilistic Programs Through {Positivstellensatz's}},
+  booktitle = {Computer Aided Verification - 28th International Conference, {CAV}
+               2016, Toronto, ON, Canada, July 17-23, 2016, Proceedings, Part {I}},
+  pages     = {3--22},
+  year      = {2016},
+  crossref  = {DBLP:conf/cav/2016-1},
+  timestamp = {Tue, 14 May 2019 10:00:43 +0200},
+  biburl    = {https://dblp.org/rec/conf/cav/ChatterjeeFG16.bib},
+  bibsource = {dblp computer science bibliography, https://dblp.org}
+}
+
+@article{DBLP:journals/tcs/Plotkin77,
+  author    = {Gordon D. Plotkin},
+  title     = {{LCF} Considered as a Programming Language},
+  journal   = {Theor. Comput. Sci.},
+  volume    = {5},
+  number    = {3},
+  pages     = {223--255},
+  year      = {1977},
+  timestamp = {Wed, 14 Nov 2018 10:33:33 +0100},
+  biburl    = {https://dblp.org/rec/journals/tcs/Plotkin77.bib},
+  bibsource = {dblp computer science bibliography, https://dblp.org}
+}
+
+@Book{AshDole99,
+  Title                    = {Probability and Measure Theory},
+  Author                   = {Robert B. Ash and Catherine A. Doleans-Dade},
+  Publisher                = {Harcourt/Academic Press},
+  Year                     = {1999},
+  Edition                  = {Second},
+  Optaddress               = {Burlington, MA, USA}
+}
+
+@inproceedings{DBLP:conf/uai/GoodmanMRBT08,
+  author    = {Noah D. Goodman and
+               Vikash K. Mansinghka and
+               Daniel M. Roy and
+               Keith Bonawitz and
+               Joshua B. Tenenbaum},
+  title     = {Church: a language for generative models},
+  booktitle = {{UAI} 2008, Proceedings of the 24th Conference in Uncertainty in Artificial
+               Intelligence, Helsinki, Finland, July 9-12, 2008},
+  pages     = {220--229},
+  year      = {2008},
+  crossref  = {DBLP:conf/uai/2008},
+  timestamp = {Mon, 18 Dec 2017 15:46:08 +0100},
+  biburl    = {https://dblp.org/rec/conf/uai/GoodmanMRBT08.bib},
+  bibsource = {dblp computer science bibliography, https://dblp.org}
+}
+
+@inproceedings{DBLP:conf/pkdd/TolpinMW15,
+  author    = {David Tolpin and
+               Jan{-}Willem van de Meent and
+               Frank D. Wood},
+  title     = {Probabilistic Programming in {Anglican}},
+  booktitle = {Machine Learning and Knowledge Discovery in Databases - European Conference,
+               {ECML} {PKDD} 2015, Porto, Portugal, September 7-11, 2015, Proceedings,
+               Part {III}},
+  pages     = {308--311},
+  year      = {2015},
+  crossref  = {DBLP:conf/pkdd/2015-3},
+  timestamp = {Tue, 14 May 2019 10:00:47 +0200},
+  biburl    = {https://dblp.org/rec/conf/pkdd/TolpinMW15.bib},
+  bibsource = {dblp computer science bibliography, https://dblp.org}
+}
+
+
+@article{DBLP:journals/fmsd/BrazdilEKK13,
+  author    = {Tom{\'{a}}s Br{\'{a}}zdil and
+               Javier Esparza and
+               Stefan Kiefer and
+               Anton{\'{\i}}n Kucera},
+  title     = {Analyzing probabilistic pushdown automata},
+  journal   = {Formal Methods Syst. Des.},
+  volume    = {43},
+  number    = {2},
+  pages     = {124--163},
+  year      = {2013},
+  timestamp = {Fri, 13 Mar 2020 10:55:11 +0100},
+  biburl    = {https://dblp.org/rec/journals/fmsd/BrazdilEKK13.bib},
+  bibsource = {dblp computer science bibliography, https://dblp.org}
+}
+
+@article{DBLP:journals/tocl/HagueMOS17,
+  author    = {Matthew Hague and
+               Andrzej S. Murawski and
+               C.-H. Luke Ong and
+               Olivier Serre},
+  title     = {Collapsible Pushdown Automata and Recursion Schemes},
+  journal   = {{ACM} Trans. Comput. Log.},
+  volume    = {18},
+  number    = {3},
+  pages     = {25:1--25:42},
+  year      = {2017},
+  timestamp = {Tue, 06 Nov 2018 12:51:53 +0100},
+  biburl    = {https://dblp.org/rec/journals/tocl/HagueMOS17.bib},
+  bibsource = {dblp computer science bibliography, https://dblp.org}
+}
+
+
+@inproceedings{DBLP:conf/lics/KobayashiLG19,
+  author    = {Naoki Kobayashi and
+               Ugo Dal Lago and
+               Charles Grellois},
+  title     = {On the Termination Problem for Probabilistic Higher-Order Recursive
+               Programs},
+  booktitle = {34th Annual {ACM/IEEE} Symposium on Logic in Computer Science, {LICS}
+               2019, Vancouver, BC, Canada, June 24-27, 2019},
+  pages     = {1--14},
+  year      = {2019},
+  crossref  = {DBLP:conf/lics/2019},
+  timestamp = {Fri, 27 Mar 2020 08:47:04 +0100},
+  biburl    = {https://dblp.org/rec/conf/lics/KobayashiLG19.bib},
+  bibsource = {dblp computer science bibliography, https://dblp.org}
+}
+
+@article{DBLP:journals/siamcomp/DyerF88,
+  author    = {Martin E. Dyer and
+               Alan M. Frieze},
+  title     = {On the Complexity of Computing the Volume of a Polyhedron},
+  journal   = {{SIAM} J. Comput.},
+  volume    = {17},
+  number    = {5},
+  pages     = {967--974},
+  year      = {1988},
+  url       = {https://doi.org/10.1137/0217060},
+  doi       = {10.1137/0217060},
+  timestamp = {Wed, 14 Nov 2018 10:45:07 +0100},
+  biburl    = {https://dblp.org/rec/journals/siamcomp/DyerF88.bib},
+  bibsource = {dblp computer science bibliography, https://dblp.org}
+}
+
+@article{ProbTuringMasch,
+ ISSN = {00029939, 10886826},
+ URL = {http://www.jstor.org/stable/2037463},
+ author = {Eugene S. Santos},
+ journal = {Proceedings of the American Mathematical Society},
+ number = {3},
+ pages = {704--710},
+ publisher = {American Mathematical Society},
+ title = {Probabilistic Turing Machines and Computability},
+ volume = {22},
+ year = {1969}
+}
+
+@article{DBLP:journals/ita/LagoZ12,
+  author    = {Ugo Dal Lago and
+               Margherita Zorzi},
+  title     = {Probabilistic operational semantics for the lambda calculus},
+  journal   = {{RAIRO} Theor. Informatics Appl.},
+  volume    = {46},
+  number    = {3},
+  pages     = {413--450},
+  year      = {2012},
+  url       = {https://doi.org/10.1051/ita/2012012},
+  doi       = {10.1051/ita/2012012},
+  timestamp = {Thu, 04 Jun 2020 19:44:49 +0200},
+  biburl    = {https://dblp.org/rec/journals/ita/LagoZ12.bib},
+  bibsource = {dblp computer science bibliography, https://dblp.org}
+}
+
+@book{DBLP:reference/mc/2018,
+  editor    = {Edmund M. Clarke and
+               Thomas A. Henzinger and
+               Helmut Veith and
+               Roderick Bloem},
+  title     = {Handbook of Model Checking},
+  publisher = {Springer},
+  year      = {2018},
+  url       = {https://doi.org/10.1007/978-3-319-10575-8},
+  doi       = {10.1007/978-3-319-10575-8},
+  isbn      = {978-3-319-10574-1},
+  timestamp = {Tue, 29 May 2018 12:30:27 +0200},
+  biburl    = {https://dblp.org/rec/reference/mc/2018.bib},
+  bibsource = {dblp computer science bibliography, https://dblp.org}
+}
+
+@article{DBLP:journals/jacm/EtessamiY09,
+  author    = {Kousha Etessami and
+               Mihalis Yannakakis},
+  title     = {Recursive {Markov} chains, stochastic grammars, and monotone systems
+               of nonlinear equations},
+  journal   = {J. {ACM}},
+  volume    = {56},
+  number    = {1},
+  pages     = {1:1--1:66},
+  year      = {2009},
+  url       = {https://doi.org/10.1145/1462153.1462154},
+  doi       = {10.1145/1462153.1462154},
+  timestamp = {Tue, 06 Nov 2018 12:51:46 +0100},
+  biburl    = {https://dblp.org/rec/journals/jacm/EtessamiY09.bib},
+  bibsource = {dblp computer science bibliography, https://dblp.org}
+}
+
+@article{DBLP:journals/corr/MansinghkaSP14,
+  author    = {Vikash K. Mansinghka and
+               Daniel Selsam and
+               Yura N. Perov},
+  title     = {Venture: a higher-order probabilistic programming platform with programmable
+               inference},
+  journal   = {CoRR},
+  volume    = {abs/1404.0099},
+  year      = {2014},
+  url       = {http://arxiv.org/abs/1404.0099},
+  archivePrefix = {arXiv},
+  eprint    = {1404.0099},
+  timestamp = {Mon, 13 Aug 2018 16:46:06 +0200},
+  biburl    = {https://dblp.org/rec/journals/corr/MansinghkaSP14.bib},
+  bibsource = {dblp computer science bibliography, https://dblp.org}
+}
+
+@book{DBLP:books/daglib/0012859,
+  author    = {Michael Mitzenmacher and
+               Eli Upfal},
+  title     = {Probability and Computing: Randomized Algorithms and Probabilistic
+               Analysis},
+  publisher = {Cambridge University Press},
+  year      = {2005},
+  url       = {https://doi.org/10.1017/CBO9780511813603},
+  doi       = {10.1017/CBO9780511813603},
+  isbn      = {978-0-521-83540-4},
+  timestamp = {Wed, 10 Jul 2019 17:40:55 +0200},
+  biburl    = {https://dblp.org/rec/books/daglib/0012859.bib},
+  bibsource = {dblp computer science bibliography, https://dblp.org}
+}
+
+@article{DBLP:journals/toplas/Burke90,
+  author    = {Michael G. Burke},
+  title     = {An Interval-Based Approach to Exhaustive and Incremental Interprocedural
+               Data-Flow Analysis},
+  journal   = {{ACM} Trans. Program. Lang. Syst.},
+  volume    = {12},
+  number    = {3},
+  pages     = {341--395},
+  year      = {1990},
+  url       = {https://doi.org/10.1145/78969.78963},
+  doi       = {10.1145/78969.78963},
+  timestamp = {Tue, 06 Nov 2018 12:51:29 +0100},
+  biburl    = {https://dblp.org/rec/journals/toplas/Burke90.bib},
+  bibsource = {dblp computer science bibliography, https://dblp.org}
+}
+
+@book{DBLP:books/daglib/0022249,
+  author    = {Ramon E. Moore and
+               R. Baker Kearfott and
+               Michael J. Cloud},
+  title     = {Introduction to Interval Analysis},
+  publisher = {{SIAM}},
+  year      = {2009},
+  url       = {https://doi.org/10.1137/1.9780898717716},
+  doi       = {10.1137/1.9780898717716},
+  isbn      = {978-0-89871-669-6},
+  timestamp = {Tue, 16 May 2017 14:01:41 +0200},
+  biburl    = {https://dblp.org/rec/books/daglib/0022249.bib},
+  bibsource = {dblp computer science bibliography, https://dblp.org}
+}
+
+@article{DBLP:journals/jacm/EhrhardPT18,
+  author    = {Thomas Ehrhard and
+               Michele Pagani and
+               Christine Tasson},
+  title     = {Full Abstraction for Probabilistic {PCF}},
+  journal   = {J. {ACM}},
+  volume    = {65},
+  number    = {4},
+  pages     = {23:1--23:44},
+  year      = {2018},
+  url       = {https://doi.org/10.1145/3164540},
+  doi       = {10.1145/3164540},
+  timestamp = {Sat, 19 Oct 2019 19:27:18 +0200},
+  biburl    = {https://dblp.org/rec/journals/jacm/EhrhardPT18.bib},
+  bibsource = {dblp computer science bibliography, https://dblp.org}
+}
+

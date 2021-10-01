@@ -1,0 +1,24 @@
+\babel@toc {UKenglish}{}
+\contentsline {section}{\numberline {1}Introduction}{1}{section.0.1}%
+\contentsline {section}{\numberline {2}Probabilistic PCF}{4}{section.0.2}%
+\contentsline {subsection}{\numberline {2.1}Syntax of PPCF}{4}{subsection.0.2.1}%
+\contentsline {subsection}{\numberline {2.2}Trace semantics}{4}{subsection.0.2.2}%
+\contentsline {section}{\numberline {3}Supermartingales}{6}{section.0.3}%
+\contentsline {subsection}{\numberline {3.1}Ranking functions and supermartingales}{7}{subsection.0.3.1}%
+\contentsline {subsection}{\numberline {3.2}Soundness of rankability}{7}{subsection.0.3.2}%
+\contentsline {section}{\numberline {4}Constructing ranking functions}{8}{section.0.4}%
+\contentsline {subsection}{\numberline {4.1}Sparse ranking functions}{9}{subsection.0.4.1}%
+\contentsline {subsection}{\numberline {4.2}Examples}{10}{subsection.0.4.2}%
+\contentsline {section}{\numberline {5}Antitone ranking functions}{11}{section.0.5}%
+\contentsline {section}{\numberline {6}Confluent trace semantics}{14}{section.0.6}%
+\contentsline {section}{\numberline {7}Applications}{21}{section.0.7}%
+\contentsline {section}{\numberline {8}Related work and further directions}{22}{section.0.8}%
+\contentsline {section}{\numberline {A}Supplementary materials for \Cref {sec:supermartingales}}{26}{appendix.A}%
+\contentsline {section}{\numberline {B}Supplementary materials for \Cref {sec:ranking}}{30}{appendix.B}%
+\contentsline {section}{\numberline {C}Supplementary materials for \Cref {sec:antitone}}{30}{appendix.C}%
+\contentsline {section}{\numberline {D}Supplementary materials for \Cref {sec:confluent}}{37}{appendix.D}%
+\contentsline {paragraph}{\numberline {D.0.0.1}}{41}{paragraph.D.0.0.1}%
+\contentsline {paragraph}{\numberline {D.0.0.2}}{43}{paragraph.D.0.0.2}%
+\contentsline {paragraph}{\numberline {D.0.0.3}}{47}{paragraph.D.0.0.3}%
+\contentsline {paragraph}{\numberline {D.0.0.4}}{49}{paragraph.D.0.0.4}%
+\contentsline {paragraph}{\numberline {D.0.0.5}}{54}{paragraph.D.0.0.5}%

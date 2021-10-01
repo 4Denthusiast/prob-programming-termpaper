@@ -1,0 +1,10 @@
+# Fdb version 3
+["pdflatex"] 1579376708 "comment.tex" "comment.pdf" "comment" 1579376708
+  "/usr/local/texlive/2018/texmf-dist/web2c/texmf.cnf" 1522066949 33362 cf75436e19743e94a92a6b1b9183c434 ""
+  "/usr/local/texlive/2018/texmf-var/web2c/pdftex/pdflatex.fmt" 1542796229 4220281 d8e3aa27afbe479300885705960d93c6 ""
+  "/usr/local/texlive/2018/texmf.cnf" 1523934483 577 0b39adfd7c93507ff20c9c14c2f1a33f ""
+  "comment.aux" 1579376708 8 a94a2480d3289e625eea47cd1b285758 ""
+  "comment.tex" 1579376708 599 f1ae862daf3b69d4164f1fb8d4571c3e ""
+  (generated)
+  "comment.log"
+  "comment.pdf"

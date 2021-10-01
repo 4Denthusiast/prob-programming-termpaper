@@ -70,7 +70,7 @@ which is a contradiction, therefore the claim must be true, therefore $P[T > n] 
 
 \AntitonePartial*
 \begin{proof}
-  Take a closed term $M$ and an antitone sparse ranking function $f$ on $M$, with a corresponding antitone function $\epsilon$. Assume wlog that $\epsilon$ is convex (as if it isn't, we can just take its convex hull instead). As in Theorem \ref{thm:partial implies rankable}, define $f_1 : Rch(M) \rightharpoonup \mathbb R$ by
+  Take a closed term $M$ and an antitone sparse ranking function $f$ on $M$, with a corresponding antitone function $\epsilon$. Assume wlog that $\epsilon$ is convex (as if it isn't, we can just take its convex hull instead). As in Theorem~\ref{thm:partial implies rankable}, define $f_1 : Rch(M) \rightharpoonup \mathbb R$ by
   \begin{align*}
     f_1(N) &= f(N) \text{ whenever $f(N)$ is defined},\\
     f_1(V) &= 0 \text{ for values $V$ not in the domain of $f$.}
@@ -82,7 +82,7 @@ which is a contradiction, therefore the claim must be true, therefore $P[T > n] 
 \end{proof}
 
 
-\subsection*{Example \ref{ex:raven complex} (Continuous random walk)}
+\subsection*{Example~\ref{ex:raven complex} (Continuous random walk)}
 Let $\Theta := \tY \, \lambda f x . \tif{x \leq 0}{0}{f(x - \tsample)}$. 
 We can construct a sparse ranking function $f$ for $\Theta \, \underline{10}$ as follows:
 \begin{align*}
@@ -137,7 +137,7 @@ as well.
 Hence this is a valid antitone sparse ranking function and the term is AST.
 
 
-\subsection*{Example \ref{ex:Fair-in-the-limit random walk} (Fair-in-the-limit random walk) \citep[\S 5.3]{DBLP:journals/pacmpl/McIverMKK18}}
+\subsection*{Example~\ref{ex:Fair-in-the-limit random walk} (Fair-in-the-limit random walk) \citep[\S 5.3]{DBLP:journals/pacmpl/McIverMKK18}}
 \[
 \underbrace{\big
 (\tY \, \lambda f x .\ 
@@ -194,7 +194,7 @@ Termination analysis of \emph{non-affine recursive} probabilistic programs does 
 Methods such as those presented in \cite{DBLP:journals/toplas/LagoG19} are explicitly restricted to affine programs, and are unsound otherwise.
 By contrast, many probabilistic programming languages allow for richer recursive structures \citep{DBLP:conf/pkdd/TolpinMW15,DBLP:conf/uai/GoodmanMRBT08,DBLP:journals/corr/MansinghkaSP14}.
 
-\subsection*{Example \ref{ex:non-affine recursion easy} (Non-affine recursion)}
+\subsection*{Example~\ref{ex:non-affine recursion easy} (Non-affine recursion)}
 Let 
 \[
 \Xi := \tY \lambda f x. x \oplus_{2/3} f (f (x + 1))
@@ -202,7 +202,7 @@ Let
 A suitable sparse ranking function for $\Xi \, \underline 1$ would be $\Xi^n \, \underline i \mapsto 3 \, n$ (for $n \geq 0$), because $\Xi^n \, \underline i$ reduces to either $\Xi^{n+1} \, \underline{i+1}$ or $\Xi^{n-1} \, \underline{i+1}$, with probabilities $1/3$ and $2/3$. The value of $i$ does not actually matter for the progress of this recursion. It is basically another variant of the biased random walk, except that the relevant variable is the number of copies of $\Xi$, instead of a real number in the term.
 
 
-\subsection*{Example \ref{ex:non-affine continuous} (More complex non-affine recursion)}
+\subsection*{Example~\ref{ex:non-affine continuous} (More complex non-affine recursion)}
 Let
 \begin{align*}
 \Xi & = \tY\, \lambda f x.\, (\lambda e. X[e]) \, \tsample \\
@@ -235,14 +235,14 @@ There is an important formalism for constructing (non-random) higher-order recur
 Recently \cite{DBLP:conf/lics/KobayashiLG19} have extended HORS to \emph{probabilistic higher-order recursion schemes} (PHORS), which are HORS augmented with probabilistic (binary) branching $\oplus_p$.
 As HORS are in essence the $\lambda \tY$-calculus \citep{DBLP:conf/lics/Statman02} (i.e.~pure simply-typed lambda calculus with recursion, generated from a finite base type), PHORS are definable in PPCF:
 (order-$n$) PHORS is encodable as (order-$n$) call-by-name PPCF, but the former is strictly less expressive (because the underlying HORS is not Turing complete). 
-For example, the PPCF term in Example \ref{ex:higher-order recursion} is not definable in PHORS.
+For example, the PPCF term in Example~\ref{ex:higher-order recursion} is not definable in PHORS.
 %Some interesting PPCF terms such as \Cref{ex:non-affine with continuous distribution} %\refExample{complexExample} 
 %cannot be expressed as PHORS.
 %\akr{As I removed the referenced example, and I don't even know what a PHORS is, I've just removed this comment too.}
 
 A relevant result here is that the AST problem is decidable for order-1 PHORS (by reduction to the PSPACE-hard solvability of finite systems of polynomial equations with real coefficients; see \cite{DBLP:journals/jacm/EtessamiY09}), but undecidable for PHORS with order greater than 1 \citep{DBLP:conf/lics/KobayashiLG19}.
 
-\subsection*{Example \ref{ex:higher-order recursion} (Higher-order recursion)}
+\subsection*{Example~\ref{ex:higher-order recursion} (Higher-order recursion)}
 Consider the higher-order function
 $\Xi : (\textsf{R} \to \textsf{R} \to \textsf{R}) \to \textsf{R} \to \textsf{R} \to \textsf{R}$
 recursively defined by
@@ -260,12 +260,12 @@ Let $F : \textsf{R} \to \textsf{R} \to \textsf{R}$ be a function such that $F\ \
 \[
 F \, \underline{n_0} \, (F \, \underline{n_1} \, (\dots(\Xi\ F\, \underline x\, \underline n)\dots) \mapsto g_2(n),
 \] 
-where $g_2$ is as in Example \ref{ex:unbiased random walk}, using the same antitone function too.
+where $g_2$ is as in Example~\ref{ex:unbiased random walk}, using the same antitone function too.
 
-The inequalities required for this to be an antitone partial supermartingale are satisfied with just the same reasoning as in Example \ref{ex:unbiased random walk}, therefore this term too is antitone rankable.
+The inequalities required for this to be an antitone partial supermartingale are satisfied with just the same reasoning as in Example~\ref{ex:unbiased random walk}, therefore this term too is antitone rankable.
 
 Again, this is not actually the correct reduction order, in that $F$ should be applied to its argument $n_i$ and reduced to a value before its second argument is expanded, 
-but this would complicate the presentation, and this version can be justified by Theorem \ref{thm:confluent ranking} instead. 
+but this would complicate the presentation, and this version can be justified by Theorem~\ref{thm:confluent ranking} instead. 
 The reduction strategy implied here should be clear enough (assuming that, where it isn't specified, it just matches $\cbv$), but to be more precise, 
 let 
 \[

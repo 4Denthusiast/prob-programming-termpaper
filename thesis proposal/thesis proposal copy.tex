@@ -5,26 +5,19 @@
 \input{../Style/comment}
 \usepackage{amsmath}
 \usepackage{amsfonts}
-\usepackage{natbib}
-\setcitestyle{numbers, open={[}, close={]}}
-\bibliographystyle{plainnat}
-\usepackage{stmaryrd}
 \newcommand{\tY}{\mathsf{Y}}
 \newcommand{\tsample}{\mathsf{sample}}
 \newcommand{\tscore}{\mathsf{score}}
-\newcommand{\denotation}[1]{\llbracket #1 \rrbracket}
 
 \title{DPhil Thesis Proposal: Semantics of Probabilistic Functional Languages}
 \author{Andrew Kenyon-Roberts}
-
-\usepackage{hyperref}
 
 \begin{document}
 \maketitle
 \section{Introduction}
 The augumentation of lambda calculus with random sampling and conditioning, the fundamental constructs of probabilistic programming, can be interpreted formally in many different ways, and provides certain unique challenges in defining the language's semantics. The standard approach to defining random things, where all the random values are considered as functions from a probability space, has the problem that the random samples, which should form the basis of this probability space, are not specified in advance. There are various possible schemes of organising the probability space such that this data is available, known as trace or entropy space semantics. The conditioning construct, which modifies the posterior probability of an event, fits somewhat unnaturally in this framework, and has to be specified as an extra step that modifies the probabilities at the end.
 
-Alternatively, the distribution of results can be specified more directly as a distribution. This omits any information on joint distributions from the semantics, but this itself can be in some ways an advantage, as a subterm can be duplicated without being correlated to itself. To define a denotational semantics for a higher-order probabilistic language, it would be natural to attempt to use the category of measurable spaces, however, that turns out to not be cartesian closed. This motivates the introduction of quasi-Borel spaces \cite{8005137} as an alternative way in which a distribution can be defined, which has a more restrictive set of morphisms and does not have this issue, but is nevertheless still able to represent all the functions definable as programs.
+Alternatively, the distribution of results can be specified more directly as a distribution. This omits any information on joint distributions from the semantics, but this itself can be in some ways an advantage, as a subterm can be duplicated without being correlated to itself. It would be natural to attempt to use the category of measurable spaces, however, that turns out to not be cartesian closed. This motivates the introduction of quasi-Borel spaces as an alternative way in which a distribution can be defined, which has a more restrictive set of morphisms and does not have this issue, but is nevertheless still able to represent all the functions definable as programs.
 
 For my thesis, I plan to extend the existing literature and my own previous work in defining the semantics of probabilistic functional languages.
 
@@ -32,10 +25,10 @@ For my thesis, I plan to extend the existing literature and my own previous work
 \section{Existing approaches}
 The various existing approaches to defining the semantics of probabilistic functional languages can generally be categorised as operational or denotational (depending on whether it works by defining the state of the program at each step, or by defining the meanings of subprograms independently and combining them together) (this distinction applies to functional languages more generally, rather than being specific to probabilistic languages), and distribution-based or trace-based (depending on whether only the distribution of outputs is defined, or the output that occurs is defined as a function of a random input).
 
-As a running example, I will be using a simply-typed call by value language with a random sampling construct in the form of a probabilistic choice $M \oplus N$, a conditioning construct $\tscore(r)$ for non-negative real constants $r$, and a countable set $T$ of primitive values of some base type $\mathsf T$. Although this language is rather deficient (there is no way to use continuous distributions, for example, and no recursion), it will be sufficient to illustrate the different styles of semantics.
+As a running example, I will be using a simply-typed call by value language with a random sampling construct in the form of a probabilistic choice $M \oplus N$, a conditioning construct $\tscore(r)$ for non-negative real constants $r$, and countably many primitive values of some base type $\mathsf T$. Although this language is rather deficient (there is no way to use continuous distributions, for example, and no recursion), it will be sufficient to illustrate the different styles of semantics.
 
-\subsection{Operational Semantics} \label{operational semantics}
-In operational semantics, the meaning of the program is defined by repeatedly transforming a term into other terms, until it reaches a value, a term which is considered finished, which is the output. Several variants of operational semantics can be seen, for example, in \cite{borgstrom2016lambda}. A small-step trace-based operational semantics of the example language can be defined as follows.
+\subsection{Operational Semantics}
+In operational semantics, the meaning of the program is defined by repeatedly transforming a term into other terms, until it reaches a value, a term which is considered finished, which is the output. A small-step trace-based operational semantics of the example language can be defined as follows.
 
 First, an \emph{environment} is defined as
 \begin{equation*}
@@ -44,82 +37,29 @@ E := \cdot \mid E M \mid V E,
 so that an environment is a term with a single hole, where $M$ is a term and $V$ is a value. Substituting terms into environments is defined in the usual way. The single-step reduction relation can then be defined as
 \begin{align*}
 (E[(\lambda x. M) V], t, s) & \to (M[V/x], t, s) \\
-(E[M \oplus N], 0:t, s) & \to (E[M], t, s) \\
-(E[M \oplus N], 1:t, s) & \to (E[N], t, s) \\
+(E[M \oplus N], t, s) & \to (E[M], 0:t, s) \\
+(E[M \oplus N], t, s) & \to (E[N], 1:t, s) \\
 (E[\tscore(r)], t, s) & \to (E[(\lambda x. x)], t, rs),
 \end{align*}
 where $t$ is a list of booleans, $:$ is the cons operator, and $s$ is a real number. The probability of $M$ reaching a value $V$ can then be defined as
 \[
-K \sum_{(M,t,1) \to^* (V,[],s)} 2^{-\mathrm{length}(t)} s,
+\sum_{(M,[],1) \to^* (V,t,s)} 2^{-\mathrm{length}(t)} s.
 \]
-where $K$ is a normalising constant to make the probabilities all add up to 1.
 
 Alternatively, this could be defined in a different but closely related version of operational semantics, the big-step semantics:
-\begin{multline*}
-\frac{(M, t_0, s_0) \Downarrow (\lambda x. M', t_1, s_1) \; (N, t_1, s_1) \Downarrow (N', t_2, s_2) \; (M'[N'/x], t_2, s_2) \Downarrow (O, t_3, s_3)}{(M N, t_0, s_0) \Downarrow (O, t_3, s_3)} \\
+\begin{align*}
+\frac{(M, t_0, s_0) \Downarrow (\lambda x. M', t_1, s_1) \; (N, t_1, s_1) \Downarrow (N', t_2, s_2) \; (M'[N'/x], t_2, s_2) \Downarrow (O, t_3, s_3)}{(M N, t_0, s_0) \Downarrow (O, t_3, s_3)} \quad
 \frac{(M, 0:t_0, s_0) \Downarrow (M', t_1, s_1)}{(M \oplus N, t_0, s_0) \Downarrow (M', t_1, s_1)} \quad
-\frac{(N, 1:t_0, s_0) \Downarrow (N', t_1, s_1)}{(M \oplus N, t_0, s_0) \Downarrow (N', t_1, s_1)} \\
+\frac{(N, 1:t_0, s_0) \Downarrow (N', t_1, s_1)}{(M \oplus N, t_0, s_0) \Downarrow (N', t_1, s_1)} \quad
 \frac{}{(\tscore(r), t, s) \Downarrow (\lambda x. x, t, rs)}.
-\end{multline*}
+\end{align*}
 The notation in this case could be simplified somewhat, but that would obscure the connection to the small-step semantics. If $V$ is a value, then $(M, t_0, s_0) \to^* (V, t_1, s_1)$ iff $(M, t_0, s_0) \Downarrow (V, t_1, s_1)$.
 
 \subsection{Denotational Semantics}
-The general format of denotational semantics is a function $\denotation M_\gamma$, from a term $M$ to its value, given the values of all the free variables in the context $\gamma$. The type of output depends on the type of the term, given by $\denotation A$ which is defined recursively. For a non-probabilistic language, it would be something like $\denotation{\mathsf T} = T$, $\denotation{A \to B} = \denotation B^{\denotation A}$.\cite{barendregt2013lambda} If $M$ satisfies the typing judgement $\Gamma \vdash M : A$, and $\gamma \in \denotation \Gamma$ (i.e.~$\gamma$ is a function from the variables in $\Gamma$ to values such that if $x:B$ is in $\Gamma$, $\gamma (x) \in \denotation B$), then $\denotation M_\gamma \in \denotation A$.
-
-A key property that makes it denotational semantics (the result of the operational semantics given above could be reformatted into something like this, for example) is that the meaning of each term is defined in terms of the meanings of its subterms. \cite[\S 3.1]{MOSSES1990575}
-
-For the example language but without the probabilistic constructs (i.e.~just simply-typed lambda calculus with constants), a denotational semantics could be defined as
-\begin{align*}
-\denotation t_\gamma & = t\,(\text{for }t \in T) \\
-\denotation x_\gamma & = \gamma(x) \\
-\denotation{M N}_\gamma & = \denotation M_\gamma(\denotation N_\gamma) \\
-\denotation{\lambda x. M }_\gamma(X) & = \denotation M_{\gamma ; x \mapsto X}.
-\end{align*}
-In order to define a denotational semantics for a probabilistic language, the result would have to be not just a value, but some sort of distribution of values. The rule $\denotation{A \to B} = \denotation B^{\denotation A}$ also has to be changed to take into account that a function may produce outputs that differ randomly each time it is called, so something like the set of kernels from $\denotation A$ to $\denotation B$ (a trace-based denotational semantics would also probably be possible, but much more complicated, but as far as I am aware, such a thing has never been defined). This would require a measure structure on $\denotation A$ and $\denotation B$ to be defined, but in some cases it is not possible to define a measurable structure on the set of kernels between two measurable spaces such that the application map taking a kernel $A \rightsquigarrow B$ and an element of A is itself measurable, therefore the denotations of higher-order types could be undefined. This motivates the introduction of quasi-Borel spaces.\cite{8005137}
-
-\subsubsection{Quasi-Borel Spaces}
-A quasi-Borel space is a pair of a base space $X$ with a set of random variables $M_X \subset X^{\mathbb R}$ that satisfies certain axioms. In many ways, quasi-Borel spaces are similar to measurable spaces. A $\sigma$-algebra on $X$ can be converted to a quasi-Borel space structure by taking all the measurable functions as random variables, and a quasi-Borel space can be converted to a measurable space by taking as measurable sets those whose inverse images under all random variables are measurable. There is a natural notion of QBS morphisms (functions whose compositions with random variables are random variables) and measures defined by combining measures on $\mathbb R$ with random variables which can be used to define integrals. The crucial difference to measurable spaces is that the set of morphisms betweem two QBSes is itself a QBS, so that the category of QBSes is cartesian closed.
-
-Let $G(X)$ be the set of measures on a QBS $X$, equipped with its own QBS structure, with the dirac delta $\delta : X \to G(X)$ and $\eta : (X \to G(X)) \to (G(X) \to G(X))$ as the monad operations, and let $QBS(X, Y)$ be the set of morphisms between two $QBSes$. Let $T$ be equipped with the discrete QBS structure. A denotational semantics for the example language, such that $\denotation M_\gamma \in G(\denotation A)$ if $\Gamma \vdash M : A$ and $\gamma \in \denotation \Gamma$ can then be given as follows.
-
-\begin{align*}
-\denotation{\mathsf T} & = T \\
-\denotation{A \to B} & = \denotation A \to G(\denotation B) \\
-\denotation{t}_\gamma & = \delta(t) \\
-\denotation{x}_\gamma & = \delta(\gamma(x)) \\
-\denotation{M N}_\gamma & = \eta(f \mapsto \eta(f)(\denotation N_\gamma))(\denotation M_\gamma) \\
-\denotation{\lambda x. M}_\gamma(X) & = \denotation M_{\gamma ; x \mapsto X} \\
-\denotation{M \oplus N}_\gamma & = \frac 1 2 \denotation M_\gamma + \frac 1 2 \denotation N \gamma \\
-\denotation{\tscore(r)}_\gamma & = r \denotation{\lambda x. x}_\gamma = r \delta(x \mapsto \delta(x)).
-\end{align*}
-
-Although the type of the result is different, this denotational semantics can still be shown to be equivalent to the operational semantics previously presented. For programs of type $\mathsf T$, both versions of the semantics produce a distribution on $T$ (one a QBS-style distribution and the other a measure-space-style distribution, but these can be converted), which are equal. The statement for function types is a bit more complicated and less direct, because the denotational semantics produces a distribution on (QBS) kernels, while the operational semantics produces a distribution on lambda terms.
-
-
-Having a denotational semantics available makes certain sorts of proofs more convenient. Suppose there's a program rearrangement that can be expressed as replacing $A[M,N]$ with $B[M,N]$ (for arbitrary $M, N$), then the proof of equivalence can be quite direct, showing that the ways $\denotation M$ and $\denotation N$ are combined by $A$ and $B$ are equivalent (possibly subject to some conditions on certain variables not being free in $M$ and $N$, which implies that $\denotation M_\gamma$ and $\denotation N_\gamma$ are independent of the values of those variables in $\gamma$), whereas with operational semantics, it is much more complicated to keep track of the way the arbitrary subterms are duplicated, transformed and combined as execution progresses. For example, in \cite{staton2017commutative}, the equivalence of $\mathsf{let}\ x = A\ \mathsf{in\ let}\ y = B\ \mathsf{in}\ C$ and $\mathsf{let}\ y=B\ \mathsf{in\ let}\ x=A\ \mathsf{in}\ C$ was proven using a denotational semantics (subject to $x$ and $y$ not being free in $A$ and $B$). Similarly, the notion of contextual equivalence is not generally necessary in denotational semantics, being trivially equivalent to equality of values (though there are some cases where it could still apply, if some class of terms do not count as valid complete programs).
-
-Another useful property of denotation semantics is that termination properties, to the extent that they exist, are much more directly visible. If the type system is strong enough to imply termination, this manifests directly as every term being given a value. If non-terminating terms are possible, it will be necessary to introduce, as part of the semantics, special cases to deal with that,\cite[\S 5.2]{MOSSES1990575} otherwise the definition will simply not be consistent.
-
-\subsection{Trace-based semantics}
-A trace-based semantics for the example language was already described in Section~\ref{operational semantics}. In trace-based semantics, the results are defined not just as distributions, but as random variables. Everything can be seen as taking place in a probability space (neglecting $\tscore$ which, at least if it is allowed to take values greater than 1, does not entirely fit), with the term after $n$ steps, the values of certain samples, the running time, and the final value all being random variables in the same space.
-
-There are a few variations on how the traces work. In some versions (as is the case in Section~\ref{operational semantics}, and \cite{borgstrom2016lambda}), each run of the program is assigned a trace of finite length, containing exactly those samples actually used in that run. If the set of results for an individual sampling operation is $S$ (in this case it's the set of 2 elements, but in a language with continuous distributions, it could be $\mathbb R$, or an interval, or something else), the set of traces is $\bigcup_{n \in \mathbb N} S^n$, and the measure defined on the set of traces is not actually a probability measure, as each set $S^n$ has measure 1. This still acts somewhat like a probability measure though, as traces of different lengths are mutually exclusive. If a trace $a$ is a prefix of a trace $b$ (with $b = a + c$), then it is not possible that $(M, a, 1) \to^* (V, [], s)$ and also $(M, b, 1) \to^* (V', [], s')$, because the evaluation with any given trace is deterministic, and $(M, b, 1) \to^* (V, c, s)$, at which point it could not proceed any further, having already reached a value. For any term, the set of traces for which it terminates therefore has measure at most 1.
-
-Alternatively, the trace could contain infinitely many values, with any finite execution of a program leaving some of the samples unused. This is in some ways a little simpler, because the set of traces can simply have a probability distribution, and the trace does not need to depend in any way on the program (by having its length matched). An additional variant of this style of trace, used for example in \cite{culpepper17}, is to split the trace in three parts, all infinitely long, for the application case of the big-step semantics, rather than having the each step (evaluating the function, evaluating the argument, then evaluating the result of the $\beta$ reduction) use however many samples it needs from the start of the trace in turn.
-
-\subsection{Distribution-Based Semantics}
-Rather than defining the value of a program as a random variable and then defining the distribution based on that, it is possible to define the distribution of results directly. The example given above of operational semantics was distribution based (in the QBS sense of ``distrbution''), but to more clearly illustrate the difference, I will give a distrbution-based operational semantics for the example language, using the same definition of environments as in the trace-based semantics.
-
-\begin{align*}
-s(E[(\lambda x. M) V]) & = \delta(M[V/x]) \\
-s(E[M \oplus N]) & = \frac 1 2 \delta(E[M]) + \frac 1 2 \delta(E[N]) \\
-s(E[\tscore(r)]) & = r \delta(E[(\lambda x. x)]) \\
-s(V) & = \delta(V).
-\end{align*}
-
-The multi-step function $s^n$ can then be defined as $s^0(M) = M$, $s^{n+1}(M) = \int s^n(x)\,\mathrm d s(M)(x)$, then $s^\infty(M)$ can be defined as $\lim_{n \to \infty} s^n(M)$, which (after re-normalising) gives the distribution of final values. In this case, everything terminates because of the type system, therefore the limit is always well-defined. For an untyped language, or one with an unrestricted recursion operator, the definition of the final result would be a little more complicated, but the general idea is the same.
-
-The distinction between distribution and trace-based semantics is discussed in \cite{borgstrom2016lambda}, which gives both for the same language, and proves their equivalence (in the sense that the distributions derived from the trace-based semantics are the same as the distributions that the distribution-based semantics produces directly).
+        %Denotational Semantics in the non-probabilistic case, types and inconsistencies
+        %QBSes
+    %Distribution-based Semantics
+    %Trace-based Semantics
 
 
 \section{My Previous Research}
@@ -127,7 +67,7 @@ My thesis will be building on the paper I recently submitted to LICS (in collabo
 
 The first extension is sparse ranking functions. A sparse ranking function may be defined at a subset of the reachable states of the program, with the condition instead being that the expected value of the ranking function at the next step where it is defined is not greater than the current value (and, if there are intermediate $\tY$-reduction steps, there is a corresponding strict decrease). Although this does not increase the strength of the technique overall, it makes it easier to apply, because the ranking function only needs to be defined at those points in the program's execution which are actually interesting. This extension is new, having not been applicable in the context of first-order languages because the completed body of a while loop provides a natural set of checkpoints.
 
-The second extension is antitone ranking functions. This is closely related to the progress condition given in \cite{mciver2017new}, just adapted to the new functional context. A function $\epsilon : \mathbb R_{\geq 0} \to \mathbb R_{> 0}$, which is required to be monotoically decreasing, is added to the definition, and rather than the ranking function having to decrease by 1 at every $\tY$-reduction step, it only has to decrease by $\epsilon$ of the current value of the ranking function. This allows the termination of programs which terminate much more slowly (such as the unbiased random walk) to be proven, whereas the basic result was only applicable to terms which terminated with a finite expected number of $\tY$-reduction steps.
+The second extension is antitone ranking functions. This idea is taken from \cite{some citation needed}, just adapted to the new functional context. A function $\epsilon : \mathbb R_{\geq 0} \to \mathbb R_{> 0}$, which is required to be monotoically decreasing, is added to the definition, and rather than the ranking function having to decrease by 1 at every $\tY$-reduction step, it only has to decrease by $\epsilon$ of the current value of the ranking function. This allows the termination of programs which terminate much more slowly (such as the unbiased random walk) to be proven, whereas the basic result was only applicable to terms which terminated with a finite expected number of $\tY$-reduction steps.
 
 The third extension, and the most interesting and relevant to my intended thesis topic, is ranking functions with respect to alternative reduction strategies. This result is proven using a variant of trace semantics which is able to satisfy a restricted confluence property. Probabilistic functional languages in general do not have the same sort of confluence properties as pure lambda calculus. For example, assuming that samples are drawn from the uniform distribution on $[0,1]$, the term $(\lambda x. x + x) \tsample$ evaluates either to the uniform distribution on $[0,2]$ or to the triangle-shaped distribution with the same support, with its peak at 1, depending on whether the sample is evaluated first (in which case, one value is doubled) or the $\beta$-redex is evaluated first (in which case, two independent samples are taken and added). If, however, certain reductions are excluded (in the results I proved in this paper, it's $\beta$-reductions whose arguments aren't values, and $\tsample$-reductions inside $\lambda$s either inside $\tY$s or in the argument of applications, although other criteria would also be possible), confluence can be re-gained.
 
@@ -165,10 +105,7 @@ The requirements of a labelling scheme for this purpose are somewhat different f
 \subsection{Completeness of Antitone Rankability}
 A term is rankable iff every term reachable from it terminates with finitely many $\tY$-reduction steps in expectation. This essentially puts a limit on how slowly a term can terminate while still being rankable, so any term which is not $\tY$-positive almost surely terminating cannot be proven AST by assigning it a ranking function. With antitone ranking functions, there is no analogous restriction: there are arbitrarily slowly terminating terms (i.e. for any probability distribution on $\mathbb N$, there is a term whose distribution of number of $\tY$-reduction steps before termination is the given distribution) which are antitone rankable. It therefore seems rather likely that any term such that every term reachable from is is AST is antitone rankable. I intend to try to prove this result, even though it does not relate very closely to my overall thesis topic, because it would make my existing work more complete.
 
-\iffalse
 \bibliographystyle{apalike}
 \bibliography{../Bib/references-Beutner,../Bib/references}
-\fi
 
-\bibliography{references}
 \end{document}

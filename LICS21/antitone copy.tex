@@ -1,0 +1,511 @@
+% !TEX root = main.tex
+\section{Antitone ranking functions}
+\label{sec:antitone}
+
+\begin{example}[Random walk]
+\label{ex:ac-ranking}
+\begin{enumerate}
+\item 1D biased (towards 0) random walk
+\[
+M_1 = 
+\big(\tY \, \lambda f n . \, 
+\tif{n = 0}{0}{f \, (n - 1) \oplus_{3/2} f \, (n + 1)}\big) \, 10
+\]
+
+\item 1D unbiased random walk
+\[
+M_2 = 
+\big(\tY \, \lambda f n . \, 
+\tif{n = 0}{0}{f \, (n - 1) \oplus_{1/2} f \, (n + 1)}\big) \, 10
+\]
+
+\item 1D biased (away from 0) random walk
+\[
+M_3 = 
+\big(\tY \, \lambda f n . \, 
+\tif{n = 0}{0}{f \, (n - 1) \oplus_{1/3} f \, (n + 2)}\big) \, 10
+\]
+
+
+%While {x > 0} do {x := x-1 \oplus_2/3 x:= x+1}
+
+%M2 = While {x > 0} do {x := x-1 \oplus_2/3 x:= x+2}
+\end{enumerate}
+\end{example}
+
+The term $M_1$ is rankable, terminating in 31 $\tY$-steps on average, and $M_3$ only has a $1/1024$ chance of terminating, but in between, $M_2$ is AST, but isn't $\tY$-PAST, therefore it isn't rankable and \Cref{thm:rankable implies termination} is insufficient to prove its termination. We therefore want to find a generalised notion of ranking function so that $M_2$ becomes rankable, and then prove it sound i.e.~rankable in this generalised sense implies AST.
+
+%\paragraph*{Idea} 
+
+\begin{definition}
+\changed[akr]{The definition of \emph{antitone ranking function} $f$ for $M \in \Lambda^0$ is the same as that of ranking function except that in the case of $\tY$-redex, 
+we require the existence of an antitone (meaning: $r < r'$ implies $\epsilon(r) \geq \epsilon(r')$) function $\epsilon : \nnReal \to \pReal$ such that the ranking function $f :\mathit{Rch}(M) \to \nnReal$ satisfies
+\[f(E[R']) \leq f(E[R]) - \epsilon(f(E[R])) \] 
+where $R \to R'$ is the $\tY$-redex rule.}
+Any closed term for which an antitone ranking function exists is called \emph{antitone rankable}.
+\iffalse
+Given a ranking function $f$ on $M \in \Lambda^0$, we say that $f$ is \emph{antitone} if there exists an antitone function\footnote{i.e.~$r < r'$ implies $\epsilon(r) \geq \epsilon(r')$} $\epsilon : \nnReal \to \pReal$ such that %the ranking function $f$ satisfies
+\[
+f(E[R']) \leq f(E[R]) - \epsilon(f(E[R])) 
+\]
+for all $E[R'] \in \mathit{Rch}(M)$ where $R \to R'$ is the $\tY$-redex rule.
+\fi
+\end{definition}
+
+\changed[lo]{Note that antitone ranking functions are actually a generalisation of ranking functions, even though the way we reference them may suggest that they are a type of ranking functions.}
+
+\iffalse
+\lo{An aside: This CBV $\tY$-rule seems cleaner:
+\[
+\big(\tY f^{A \to B} \, x^A \, . \, \theta^B \big) \, v \to \theta[(\tY f \, x \, . \, \theta) / f, v / x].
+\]
+We assume $\tY f^{A \to B} \, x^A \, . \, \theta^B$ is a value.}
+\fi
+
+\begin{definition}
+Given a probability space $(\Omega, \calF, \mathbb{P})$, and a supermartingale $(Y_n)_{n \geq 0}$ and a stopping time $T$ adapted to filtration $(\calF_n)_{n \geq 0}$,
+we say that $(Y_n)_{n \geq 0}$ is an \emph{antitone strict supermartingale w.r.t.~$T$} if for all $n \geq 0$, we have $Y_n \geq 0$, and there exists an antitone function $\epsilon : \nnReal \to \pReal$ satisfying
+\(
+\expect{Y_{n+1} \mid \calF_n} \leq Y_n - \epsilon (Y_n) \cdot {\bf 1}_{\set{T > n}}
+\).
+%Any closed term for which an antitone ranking function exists is called \emph{antitone rankable}.
+\end{definition}
+
+%\lo{The preceding definition does not place any constraint on the stopping time $T$ (other than that it is w.r.t.~the filtration $(\calF_n)_{n \geq 0}$). However for the definition to make sense, $T$ must be the stopping time $T(s) := \min \set{n \mid Y_n(s) = 0}$.}
+%\akr{The definition you gave for an antitone ranking function is incorrect, because the antitone ranking functions are a proper subset of ranking functions. Although we may have been referring to antitone ranking functions as a type of ranking function, they're a generalisation, so they don't actually meet the definition of a ranking function in general.}
+
+\begin{theorem}
+\label{thm:a-c strict}
+Let $(Y_n)_{n \geq 0}$ be an antitone strict supermartingale w.r.t.~stopping time $T$. 
+Then $T < \infty$ a.s.
+\end{theorem}
+
+\begin{proof}
+First, as $(Y_n)$ is a supermartingale, $\expect{Y_n} \leq \expect{Y_0}$. 
+Therefore
+\begin{calculation}
+\expect{Y_n \mid T > n}
+   \step[=]{rearranging terms}
+% \dfrac{\mathbb P[T > n] \, \expect{Y_n \mid T > n} 
+% + 
+% \mathbb P[T \leq n] \, \expect{Y_n \mid T \leq n} 
+% - 
+% \mathbb P[T \leq n] \, \expect{Y_n \mid T \leq n}}{\mathbb P[T > n]}
+\dfrac{
+\begin{array}{l}
+\mathbb P[T > n] \, \expect{Y_n \mid T > n} 
++ 
+\mathbb P[T \leq n] \, \expect{Y_n \mid T \leq n} 
+\\
+{} - 
+\mathbb P[T \leq n] \, \expect{Y_n \mid T \leq n}
+\end{array}
+}{\mathbb P[T > n]}
+  \step[=]{definition of conditional expectation}
+\dfrac{\expect{Y_n} - \mathbb P[T \leq n] \, \expect{Y_n \mid T \leq n}}{\mathbb P[T > n]}
+  \step[\leq]{$Y_n \geq 0$ always}
+\dfrac{\expect{Y_n}}{\mathbb P[T > n]}
+  \step[\leq]{$(Y_n)_n$ is a supermartingale}
+\dfrac{\expect{Y_0}}{\mathbb P[T > n]}
+\end{calculation}
+
+\emph{Claim}: For all $0 < x \leq 1$, 
+\(
+\mathbb P[T > B_x] \leq x,
+\)
+where $B_x = \left \lceil \dfrac{\expect{Y_0}+1}{x \; \epsilon(\expect{Y_0} \, x^{-1})} \right \rceil$ and $\epsilon : \nnReal \to \pReal$ is the antitone function. 
+
+\smallskip
+
+As the convex hull of $\epsilon$ (the greatest convex function less than or equal to it) satisfies all the conditions assumed of $\epsilon$, in addition to being convex, assume wlog that $\epsilon$ is convex.
+
+Assume for a contradiction that $\mathbb P[T > B_x] > x$.
+Then, take $n \leq B_x$. 
+We have
+%\lo{Change of justification of the second equality below: event, not discrete r.v. Recall: expectation conditioning on r.v.~(resp.~event) is a r.v.~(resp.~number).}
+\begin{calculation}
+\expect{Y_n-Y_{n+1}}
+  \step[=]{$\calF_n \subseteq \calF_{n+1}$, def.~\& linearity of cond.~expectation}
+\expect{Y_n - \expect{Y_{n+1} \mid \calF_n}}
+  \step[\geq]{antitone strict assumption}
+\expect{\epsilon(Y_n) \cdot {\bf 1}_{\set{T > n}}}
+%  \step[=]{definition of conditional expectation for a discrete variable}
+\step[=]{def.~expectation conditioning on an \emph{event}}
+\mathbb P[T > n]\ \expect{\epsilon(Y_n) \mid T > n}
+  \step[\geq]{Jensen's inequality}
+\mathbb P[T > n]\ \epsilon(\expect{Y_n \mid T > n})
+  \step[\geq]{proved earlier}
+\mathbb P[T > n]\ \epsilon\Big(\dfrac{\expect{Y_0}}{\mathbb P[T > n]}\Big)
+  \step[>]{assumption, $\mathbb P[T > n] \geq \mathbb P[T > B_x] > x$}
+x \; \epsilon\big(\expect{Y_0} \, x^{-1}\big).
+\end{calculation}
+Therefore, by a telescoping sum
+\begin{align*}
+\expect{Y_{B_x}} 
+&= \expect{Y_{B_x}-Y_0+Y_0} \leq \expect{Y_0} - B_x \; x \; \epsilon(\expect{Y_0} \, x^{-1})\\
+&\leq -1 < 0 
+\end{align*}
+%\lo{$\expect{Y_0 - B_x \; x \; \epsilon(\expect{Y_0} \, x^{-1})}$}
+which is a contradiction, therefore the claim must be true, therefore $P[T > n]$ tends to 0 as $n$ tends to infinity, therefore $T < \infty$ almost surely.
+\end{proof}
+
+Note that it is essential in this proof that $\epsilon$ be defined for all $\mathbb R_{\geq 0}$, not just the values that $(Y_n)_{n \geq 0}$ actually takes (or at least if $(Y_n)_{n \geq 0}$ is uniformly bounded, $\epsilon$ must be positive at the supremum as well as the actual values). 
+
+\begin{example}
+\iffalse
+\akr{Consider a random variable $X$, uniformly distributed in the interval $[-1,1]$, $T := \min \set{n \mid 2^{-n} < X}$, 
+\[
+Y_k := 
+\begin{cases}
+4-2^{-k} & \hbox{if $k < T$}\\
+0 & \hbox{otherwise}
+\end{cases} 
+\]
+} \lo{The following reformulation defines $T$ and $Y_k$ directly as a measurable function on a probability space (rather than via a r.v.~$X$).}
+\fi
+Take the probability space $(\Omega, \calF, \mathbb{P})$ where $\Omega$ is the closed interval of reals $[-1, 1]$, $\calF$ the Borel $\sigma$-algebra, and $\mathbb{P}$ the corresponding Lebesgue probability measure.
+Let $\omega \in [-1, 1]$. Define random variables $T$ and $(Y_k)_{k \in \omega}$:
+\begin{align*}
+T(\omega) & := 
+\begin{cases}
+\min\set{n \in \mathbb{N} \mid \omega > 2^{-n}} & \hbox{if $\omega \in (0, 1]$}\\
+\infty & \hbox{otherwise}
+\end{cases} 
+\\
+Y_k(\omega) & := 
+\begin{cases}
+4-2^{-k} & \hbox{if $\omega \in [-1, 2^{-k}]$ (equivalently $k < T(\omega)$)}\\
+0 & \hbox{otherwise}
+\end{cases} 
+\end{align*}
+\lo{N.B.~$\set{T = n} = (\frac{1}{2^{n}}, \frac{1}{2^{n-1}}]$, and so, $\set{T > n} = [-1, \frac{1}{2^n}]$.}
+Plainly, $T$ is a stopping time, and $(Y_n)_{n \geq 0}$ is a supermartingale, adapted to the filtration $(\calF_n)_{n \geq 0}$ where $\calF_n = \calF$ for all $n$. 
+In this case, $(Y_n)_{n \geq 0}$ either tends to $4$ as $n \to \infty$, or drops to 0 at some point, with an exponentially decreasing probability. 
+With respect to the antitone function $\epsilon(x) = \frac{4-x}{4}$ and stopping time $T$, we have that $(Y_n)_{n \geq 0}$ is an antitone strict supermartingale, except that $\epsilon(4) = 0$, and $T = \infty$ with probability $\frac 1 2$, even though $4$ is larger than any value $(Y_n)_{n \geq 0}$ can actually take, and $\epsilon(Y_n)$ never actually reaches $0$.
+%\lo{@Andrew: I refer to the preceding highlighted claim. Did you mean: for all $n, s$, $\epsilon(Y_n(s)) > Y_n(s)$?} \akr{No. This phrasing should be clearer.}
+\end{example}
+
+%\changed[lo]{Let $f$ be a ranking function on a closed PPCF term $M$. We say that $M$ is \emph{antitone rankable} by $f$ if the supermartingale $(f(M_n))_{n \geq 0}$ and the stopping time $T_M^{\tY}$, both adapted to the fitration $(\calF_n)_{n \geq 0}$ where $\calF_n := \sigma(M_1, \ldots, M_n)$, are antitone strict.}
+
+\begin{theorem}[Antitone ranking function soundness] \label{thm:antitone rankable implies termination}
+If a closed PPCF term $M$ is antitone rankable, then $T_M^{\tY} < \infty$ a.s.~(equivalently, $M$ is AST).
+\end{theorem}
+\begin{proof}
+As in %Theorem~\ref{thm:basicRankingSoundness}, 
+\Cref{thm:rankable implies termination},
+take the probability space $(\entrosp, \Sigma_\entrosp, \mu_\entrosp)$, and define the same random variables $T_n, X_n, Y_n, T_M^{\tY}$. 
+Thanks to \Cref{thm:rankable and strict rankable}, $(Y_n)_{n \geq 0}$ is a supermartingale; and because $M$ is now assumed to be antitone rankable, it is an antitone strict supermartingale w.r.t.~stopping time $T_M^{\tY}$. 
+Thus, by \Cref{thm:a-c strict}, $T_M^{\tY} < \infty$ a.s.
+\end{proof}
+
+%\paragraph{}
+As before, constructing antitone ranking fuctions completely is not necessary, and there is a corresponding notion of an antitone sparse ranking function.
+
+Define an \emph{antitone sparse ranking function} on a closed term $M$ to be a partial function $F : Rch(M) \rightharpoonup \mathbb{R}$ such that for some antitone function $\epsilon : \mathbb{R}_{\geq 0} \to \mathbb{R}_{>0}$
+\begin{itemize}
+\item $f(N) \geq 0$ for all $N$ where $f$ is defined.
+\item $f$ is defined at $M$.
+\item For any $N$ in the domain of definition of $f$, evaluation of $N$ will eventually reach some $O$ which is either a value or in the domain of definition of $f$, and $f(N) \geq \mathbb E [f(O) + \epsilon(f(O)) \times \text{the number of $\tY$-reduction steps from $N$ to $O$}]$ (where $f(O)$ is taken to be 0 if $O$ is a value outside of the domain of $f$).
+\end{itemize}
+
+\begin{theorem}  \label{thm:antitone partial implies rankable}
+  Every antitone sparse ranking function is a restriction of an antitone ranking function.
+\end{theorem}
+\begin{proof}
+  Take a closed term $M$ and an antitone sparse ranking function $f$ on $M$, with a corresponding antitone function $\epsilon$. Assume wlog that $\epsilon$ is convex (as if it isn't, we can just take its convex hull instead). As in Theorem~\ref{thm:partial implies rankable}, define $f_1 : Rch(M) \rightharpoonup \mathbb R$ by
+  \begin{align*}
+    f_1(N) &= f(N) \text{ whenever $f(N)$ is defined},\\
+    f_1(V) &= 0 \text{ for values $V$ not in the domain of $f$.}
+  \end{align*}
+
+
+  Define $(\nnext(N,s),\_) = \red^n(N,s)$ for the least $n \geq 0$ such that it's in the domain of $f_1$, and $g(N,s) := \left | \{m < n \mid \red^m(N,s) \text{ is of the form } (E[\tY N'],s') \} \right |$. 
+  The function $\nnext$ is well-defined (i.e.~$n$ is finite) for all $N \in Rch(M)$ by induction on the path from $M$ to $N$, by the third condition on antitone partial ranking functions. Define $f_2(N) := \int_\entrosp f_1(\nnext(N,s)) + \epsilon(f_1(\nnext(N,s))) g(N,s) \, \mu_{\entrosp}(\mathrm d s)$. For any term $N$ where $f$ is defined, $f_2(N) = f(N)$, and the value that $f_2$ would have at $N$ if $f$ were not defined at $N$ is $\leq f(N)$, by the third condition on antitone partial ranking functions. In order to show that $f_2$ is an antitone partial ranking function, it therefore suffices to show that the value that $f_2$ would have had at each term if $f$ were not defined at that term is at least the expectation of $f_2$ after one reduction step (plus $\epsilon(f_2(N))$ if the reduction step is a $tY$-reduction). For any term $N$ which is not of the form $E[R]$ for some $\tY$-redex $R$, this is trivial. If $R$ is a $\tY$-redex, then $\epsilon(f_2(N)) \leq \int_\entrosp \epsilon(f_1(\nnext(N,s)))\, \mu_{\entrosp}(\mathrm d s)$ by the convexity of $\epsilon$, because $n$ is bounded. Therefore, the (total) function $f_2$, which agrees with $f$ on $f$'s domain, is an antitone ranking function on $M$ (with the same function $\epsilon$ if it's convex).
+\end{proof}
+
+As a corollary, any term which admits an antitone sparse ranking function terminates almost surely.
+
+\paragraph*{\Cref{ex:ac-ranking} revisited}
+Programs $M_1$ and $M_2$ are AST. For $M_1$, the sparse ranking function 
+\[
+\big(\tY \, \lambda f n . \, \tif{n=0}{0}{f \, (n-1) \oplus_{3/2} f \, (n+1)}\big) \, \underline x \mapsto 3x + 1
+\] 
+suffices to prove its termination (and could equivalently be considered an antitone sparse ranking function with the constant antitone function $\epsilon_1(x) = 1$).
+
+\begin{example}[Unbiased random walk]
+\label{ex:unbiased random walk}
+For $M_2$, define the function $g_1 : \nnReal \to \nnReal$ by $g_1(x) = \log(x+1) + 1$.
+Using shorthand 
+$\Theta_2 = \tY \, \lambda f n . \, 
+\tif{n = 0}{0}{f \, (n - 1) \oplus_{1/2} f \, (n + 1)}$, 
+we can define an antitone sparse ranking function $f_2 : \mathit{Rch}(M_2) \rightharpoonup \nnReal$ 
+%with antitone function $\epsilon_2$ defined as follows (for $n \in \mathbb N$):
+by
+\[
+f: {\Theta_2} \, n 
+\mapsto 
+g_2(n), \qquad 
+0 \mapsto 0
+\]
+for $n \in \mathbb N$.
+% \begin{align*}
+% {\Theta_2} \, n 
+% &\mapsto 
+% g_2(n)
+% \\
+% 0 &\mapsto 0.
+% \end{align*}
+For $n \geq 1$, $\Theta_2 \, n$ reduces in several steps to either $\Theta_2 \, (n-1)$ or $\Theta_2 \, (n+1)$,\footnote{Technically this is not quite correct, because of the distinction between $\underline n + 1$ and $\underline{n + 1}$, but this ranking function can still be made to work by appealing to \Cref{thm:confluent ranking}, as can the others in this section with similar issues.} each with probability $1/2$, with one $\tY$-reduction.
+Now
+\begin{align*}
+& g_2(n) - \frac{g_2(n-1) + g_2(n+1)} 2 \\
+  &=  \log \Big(\frac{n+1}{\sqrt{n(n+2)}}\Big) \\
+  &=  \frac 1 2 \log\left(\frac{(n+1)^2}{n(n+2)}\right) \\
+  &=  \frac 1 2 \log\left(1 + \frac 1 {n(n+2)}\right) \\
+  &>  \frac 1 {4n(n+2)} \\
+  &>  \frac 1 2 \frac 1 {5(n+1)^2} + \frac 1 2 \frac 1 {5(n+3)^2}
+\end{align*}
+\changed[lo]{(The first inequality follows from the fact that for all $x \in (0, 1)$, $\log_2 (1 + x) > x$.)}
+Moreover $\Theta_2 \, 0$ reduces to $0$ with one $\tY$-reduction with a reduction in $g_2$ of $1$.
+Therefore by setting $\epsilon_2(x) = \frac 1 {5(e^{x-1}+1)^2}$, the condition on how much $g_2$ must decrease is met. It is also defined at $M_2 = \Theta_2 \, 10$, and is non-negative, therefore it is an antitone sparse ranking function, and $M_2$ is AST.
+\end{example}
+
+\begin{example}[Continuous random walk]\label{ex:raven complex}
+In PPCF we can construct a function whose argument changes by a random amount at each recursive call: $\Theta \, 10$ where
+\[
+%\underbrace{\big
+\Theta := \tY \, \lambda f x . \tif{x \leq 0}{0}{f(x - \tsample)}
+%}_{\Theta} \, 10
+\]
+We can construct a sparse ranking function $f$ as follows:
+\begin{align*}
+\Theta \, \underline l 
+&\mapsto 
+l + 2
+\\
+\tif{l \leq 0}{0}{\Theta \, (l - \tsample)}
+&\mapsto
+l + 1
+\\
+0 &\mapsto 0.
+\end{align*}
+
+For a more complex (not $\tY$-PAST) example, consider the following ``continuous random walk'': $\Xi \, 10$ where
+\[
+%\underbrace{\big(
+\Xi := \tY \, f \, x . \tif{x \leq 0}{0}{f(x - \tsample + 1/2)} 
+%\big)}_{\Xi} \, 10
+\]
+Let $g(x) := 2 + \log(x + 1)$, and let $\epsilon$ be the function specified by
+\[
+\epsilon(g(x-1/2)) = g(x) - \int_{x-1/2}^{x+1/2}g(y) \, \mathrm d y.
+\]
+The limit of this as $x \to \infty$ and $g(x+1/2) \to \infty$ is 0, and $\frac {\mathrm d}{\mathrm dx} \epsilon(g(x+1/2)) = \frac 1 {x+1} + \log(1 - \frac 1 {x + 1/2}) < 0$, and $g$ is monotonic increasing; 
+therefore $\epsilon$ is antitone and bounded below by 0.
+We define an antitone sparse ranking function by:
+\[
+\Xi \, l 
+\mapsto 
+g(l), \qquad 
+0 \mapsto 0
+\]
+
+% \begin{align*}
+% \Xi \, l 
+% &\mapsto 
+% g(l)
+% \\
+% 0 &\mapsto 0
+% \end{align*}
+The value of $g$ after one $\tY$-reduction step is at least $g(l-1/2)$, therefore the expectation of $\epsilon$ after one $\tY$-reduction step is at most $\epsilon(g(l-1/2)) = g(x) - \int_{x-1/2}^{x+1/2}g(y) \, \mathrm d y$. 
+Thus 
+\begin{itemize}
+\item in case $l > 0$, $g$ decreases by the required amount
+\item in case $l \leq 0$, 
+\(
+g(\Xi \, l) \geq 2 + \log(1/2) > \log(\frac{3 \sqrt 3} 2) - 1 = \epsilon(g(0-1/2))
+\) 
+as well.
+\end{itemize}
+Hence this is a valid antitone sparse ranking function and the term is AST.
+\end{example}
+
+\begin{example}[Fair-in-the-limit random walk]
+\label{ex:Fair-in-the-limit random walk}\citep[\S 5.3]{DBLP:journals/pacmpl/McIverMKK18}
+\[
+\underbrace{\big
+(\tY \, f \, x . 
+\tif{x \leq 0}{0}{f(x - 1) \oplus_{\frac{x}{2x+1}} f(x + 1)} \big)}_{\Xi} 
+\, 10
+\]
+To construct an antitone ranking function, we solve the recurrence relation:
+% \[
+% \left\{
+% \begin{array}{rll}
+% z_0 &=& 0\\
+% n \geq 1, \quad z_n &>& \dfrac{n}{2n + 1} \, z_{n-1} + \dfrac{n+1}{2n + 1} \, z_{n+1}.
+% \end{array}
+% \right.
+% \]
+\begin{align*}
+z_0 &= 0\\
+n \geq 1, \quad z_n &> \textstyle \frac{n}{2n + 1} \, z_{n-1} + \frac{n+1}{2n + 1} \, z_{n+1}.
+\end{align*}
+For $n > 2$, $z_n = \log(n-1)$ works. The expected decrease is $\frac 1 2(\log(1+\frac 1 {(n-1)^2-1}) - \frac 1 {2n+1} \log(1 + \frac 2 {n-2}))$, and using the fact that $\frac x {x+1} \leq \log (1+x) \leq x$ for $x > 0$,\lo{The preceding inequality is incorrect: for $x \in (0, 1)$, $\log (1 + x) > x$.}
+\lo{OK. You mean $\ln$ rather than $\log_2$.} this is at least $\frac 1 2(\frac 1 {(n-1)^2} - \frac 1 {2n + 1} \frac 2 {n-2}) = \frac {n^2}{2(n-1)^2(2n+1)(n-2)}$, which (again for $n > 2$) is positive and antitone. For $n = 0, 1, 2$, we take $\epsilon$ to be 9/40 (the same as its value at 3), then set $z_2 = 2 \log 2 - \log 3 - 1, z_1 = 3 \log 2 - 2 \log 3 - 3, z_0 = 4 \log 2 - 3 \log 3 - 6$. Some of those values are negative, but it's still bounded below, so by adding a constant offset it can be corrected, and the term is AST.
+
+\end{example}
+
+\begin{example}[Escaping spline]
+\label{ex:escaping spline}\citep[\S 5.4]{DBLP:journals/pacmpl/McIverMKK18}
+\[
+\underbrace{\big
+(\tY \, f \, x . \,
+0 \oplus_{\frac{1}{x+1}} f(x + 1) \big)}_{\Xi} 
+\, 10
+\]
+
+In this case, the fact that the ranking function must decrease at each $\tY$-step (in an antitone sparse ranking function) by the expected value of $\epsilon$ not at the current term, but at the next term where the ranking function is defined, is a little harder to deal with, because the variable $x$ can change all the way to $0$ in one step, therefore simply adding a small offset doesn't suffice to compensate for this fact.
+
+Consider the candidate ranking function $\Xi \, n \mapsto n + 1$. For each $n$, $\Xi \, n$ reduces to either $0$ (with probability $\frac 1 {n + 1}$) or $\Xi \, (n + 1)$, therefore the expected value of the ranking function is $\frac{n(n+2)}{n+1} = n + 1 - \frac 1 {(n+1)^2}$, and the required decrease is $\frac{\epsilon(0) + n \epsilon(n + 2)}{n + 1}$, therefore eventually, the expected decrease isn't enough, whatever the value of $\epsilon(0)$ is.
+
+If instead, we take the ranking function to be defined after the $\tY$-reduction but before the $\tsample$-reduction as well, this can be resolved. Letting $\Theta[n] = \underline 0 \oplus_{\frac 1 n} \Xi \, n$:
+\begin{align*}
+\Theta[n] &\mapsto n \\
+\Xi \, 10 & \mapsto 12.
+\end{align*}
+For each $n$, $\Theta[n]$ reduces to either $0$ or $\Theta[n+1]$, with a $\tY$-reduction only in the latter case, and the condition that this is an antitone sparse ranking function is that $n \geq \frac{(n-1)(n+1)}{n} + \frac{n-1}{n} \epsilon(n+1)$ and $12 \geq 11 + \epsilon(11)$. These are satisfied by setting $\epsilon(x) = \min(1, 1/x)$, therefore this term is AST.
+\end{example}
+
+\paragraph*{Completeness}
+It seems very likely that this method is complete in the case that every reachable term is AST, but we have been unable to actually prove this. It is certainly at least capable of proving the termination of terms which terminate arbitrarily slowly (in the sense that there is no similar limitation to Theorem~\ref{thm:rankable implies termination}, which can only prove termination of $\tY$-PAST terms).
+
+The following theorem does not prove completeness, but is suggestive in that direction:
+\begin{restatable}{theorem}{antitoneSeemsComplete}
+For any stopping time $T$ which is almost surely finite, if $(\calF_n)_n$ is the coarsest filtration to which $T$ is adapted, then there is a supermartingale $(Y_n)_n$ adapted to $(\calF_n)_n$ and an antitone function $\epsilon$ such that $(Y_n)_n$ is an antitone ranking supermartingale with respect to $T$ and $\epsilon$.
+\end{restatable}
+
+\medskip
+
+\lo{
+Motivation: Non-affine recursion. This could be placed in \Cref{sec:intro}.
+}
+Many of the recent advances in the development of AST verification methods \citep{DBLP:conf/pldi/ChenH20,DBLP:conf/cav/ChakarovS13,DBLP:conf/popl/FioritiH15,DBLP:journals/pacmpl/McIverMKK18,DBLP:conf/aplas/HuangFC18,DBLP:conf/popl/ChatterjeeNZ17,DBLP:journals/pacmpl/AgrawalC018,DBLP:conf/cav/ChatterjeeFG16,DBLP:conf/lics/OlmedoKKM16,DBLP:journals/pacmpl/Huang0CG19} are concerned with loop-based programs.
+We can view such loops as tail-recursive programs that are, in particular, \emph{affine recursive}, i.e., 
+in each evaluation (or run) of the body of the recursion, recursive calls are made from at most one call site \citep[\S 4.1]{DBLP:journals/toplas/LagoG19}.
+(Note that whether a program is affine recursive cannot be checked by just counting textual occurrences of variables.)
+Termination analysis of \emph{non-affine recursive} probabilistic programs does not seem to have received much attention.
+Methods such as those presented in \citep{DBLP:journals/toplas/LagoG19} are explicitly restricted to affine programs, and are unsound otherwise.
+By contrast, many probabilistic programming languages allow for richer recursive structures \citep{DBLP:conf/pkdd/TolpinMW15,DBLP:conf/uai/GoodmanMRBT08,DBLP:journals/corr/MansinghkaSP14}.
+
+\medskip
+
+
+\begin{example}[Non-affine recursion]
+\changed[akr]{Let 
+\[
+\Xi := \tY \lambda f x. x \oplus_{2/3} f (f (x + 1))
+\] 
+A sparse ranking function for $\Xi \, 1$ would be $\Xi^n \, i \mapsto 3 \, n$ (for $n \geq 0$), but w.r.t.~the reduction strategy that first reduces the argument of an application to a value, then the function, then the application itself.
+
+For other values of $p > 1/2$, $n/(2p-1)$ works, and for $p = 1/2$, something much like the antitone ranking function for \Cref{ex:unbiased random walk} would work.
+
+A standard sparse ranking function (i.e.~one that doesn't depend on the confluent semantics) would have a slightly more verbose definition, as the functions that accumulate would not be $\Xi$, but what $\Xi$ reduces to after one step.}
+
+\lo{This is a genuine (and simple) \emph{non-affine recursive program}, i.e., recursive programs that can, during the evaluation of the recursive body, make multiple recursive
+calls (of a first-order function) from distinct call sites. 
+We can use this example to motivate the confluent trace semantics, though it is perhaps not the most compelling possible.
+Reason: one could use a more restrictive but equally expressive recursion \emph{operator} (as opposed to a $\tY$-\emph{combinator}, which is a constant) to implement general recursion which would make it unnecessary to consider an alternative reduction strategy when applying the sparse ranking function theorem. 
+E.g.~define letrec-terms, $\mathsf{letrec} \, f^{A \to B} \, x^A . M$, as values, via the formation rule
+\[{\Gamma, f: A \to B, x:A  \vdash M : B} \over
+\Gamma \vdash \mathsf{letrec} \, f^{A \to B} \, x^A . M : A \to B
+\]
+with the redex rule 
+\begin{equation}
+(\mathsf{letrec} \, f^{A \to B} \, x^A . M^B) \, V \to M[\mathsf{letrec} \, f \, x . M / f, V / x].
+\label{eq:letrec redex}
+\end{equation}
+}
+\end{example}
+
+\lo{
+DRAFT. Motivation: Continuous distributions. This could be placed in \Cref{sec:intro}.
+}
+Sampling from continuous distributions is an essential feature of statistical probabilistic programming languages. (See e.g.~Church \citep{DBLP:conf/uai/GoodmanMRBT08}, Stan \citep{carpenter2017stan}, Anglican \citep{DBLP:conf/pkdd/TolpinMW15}, Gen \citep{cusumano-towner2019Gen}, Pyro \citep{bingham2019Pyro}, Edward \citep{tran2016edward} and Turing \citep{ge2018Turing}.)
+Methods of proving AST of probabilistic computation have been developed for probabilistic programs with discrete distributions (see e.g.~\citep{DBLP:journals/toplas/LagoG19,DBLP:journals/jacm/KaminskiKMO18,DBLP:conf/lics/OlmedoKKM16,DBLP:conf/lics/KobayashiLG19,DBLP:conf/mfcs/KaminskiK15,DBLP:series/mcs/McIverM05}).
+To our knowledge, the problem of proving AST of probabilistic programs with continuous distribution is new.
+
+\lo{The following examples are for our discussion at 5:30. Details yet to be checked.}
+
+\begin{example}[Non-affine recursion with continuous distribution]
+\label{ex:non-affine with continuous distribution}
+Consider 
+\[
+\Xi := \tY \lambda f x . \big(\mathsf{let} \; e = \tsample \; \mathsf{in} \;
+\mathsf{if}\boldsymbol{(}e \leq p, x, X\boldsymbol{)}\big)
+\]
+where
+\(
+X = \big( f^3(x+1) \oplus_e f^2(x+1) \big) \oplus_{\mathit{sig}(x)} f^2(x+1) 
+\)
+and $\mathit{sig}(x)$ is the sigmoid function.
+
+Not only is this program non-affine recursive,
+note also the use of a random sample, $e$, as a first-class value, and the subsequent use as a probability in the binary choice $\oplus_e$.
+Such a computation cannot be modelled via discrete distributions. 
+
+We can use the ranking function method (coupled with the solution of linear recurrence relations) to show that provided $p \geq \sqrt{7} - 2$, the program $\Xi \, \underline r$ is AST for all $r \in \Real$.
+
+\lo{This example is taken from the series of 3d-printing-company running examples (Beutner-Ong 2021).
+This paper is as yet unpublished, and effectively uncitable for the time being (because of strict double-blind submission rules).}
+\end{example}
+
+\lo{I believe the ranking function method can be used to prove soundness of the Beutner-Ong counting-based method (which reduces the AST problem of first-order (possibly non-affine) recursive PPCF programs to random walk on $\mathbb{N}$), based on Theorem 5.9 and Lemma 5.10 in \emph{op.~cit.}}
+
+\iffalse
+\[\begin{array}{l}
+\mathsf{let} \; \mathit{add} \; x \; y = x + y \\
+\mathsf{letrec} \; \mathit{iter} \; f \; s \; n = 
+\tif{n \leq 0}{s}{f \; n \; (\mathit{iter} \; f \; s \; (n - 1)}
+\end{array}
+\]
+\fi
+
+\lo{
+DRAFT. Motivation: higher-order recursion. This could be placed in \Cref{sec:intro} or \Cref{sec:related}.
+}
+There is an obvious source of deterministic (i.e.~non-probabilistic) higher-order functions defined by recursion, viz., \emph{higher-order recursion schemes} (HORS) (see e.g.~\citep{DBLP:conf/lics/Ong06,DBLP:conf/lics/Ong15}).
+(Incidentally the (sparse) ranking function method is just as applicable to the termination analysis of \emph{deterministic} PPCF programs.)
+Recently \cite{DBLP:conf/lics/KobayashiLG19} have extended HORS to \emph{probabilistic higher-order recursion schemes} (PHORS), which are HORS augmented with probabilistic (binary) branching $\oplus_p$.
+As HORS are in essence the $\lambda \tY$-calculus \citep{DBLP:conf/lics/Statman02} (i.e.~pure simply-typed lambda calculus with recursion, generated from a finite base type), PHORS are definable in PPCF:
+(order-$n$) PHORS is encodable as (order-$n$) (call-by-name) PPCF, but the former is strictly less expressive (because the underlying recursion schemes are not Turing complete). 
+Some interesting PPCF terms such as \Cref{ex:non-affine with continuous distribution} %\refExample{complexExample} 
+cannot be expressed as PHORS.
+A relevant result here is that the AST problem is decidable for order-1 PHORS (by reduction to the PSPACE-hard solvability of finite systems of polynomial equations with real coefficients; see \citep{DBLP:journals/jacm/EtessamiY09}), but undecidable for order-2 PHORS.
+
+\begin{example}[Higher-order recursion]
+Consider the higher-order function
+$\Xi : (\textsf{R} \to \textsf{R} \to \textsf{R}) \to \textsf{R} \to \textsf{R} \to \textsf{R}$
+recursively defined\footnote{Inspired by examples in \citep{DBLP:journals/pacmpl/BurnOR18,DBLP:conf/lics/OngW19}.} by
+\[
+\begin{array}{l}
+\Xi := \tY \lambda \varphi \, f^{\textsf{R} \to \textsf{R} \to \textsf{R}} \, s^\textsf{R} \, n^\textsf{R} . \\
+\quad\tif{n \leq 0}{s}{
+f \, n \, (\varphi \, f \, s \, (n - 1))
+\oplus_p
+f \, (n+1) \, (\varphi \, f \, s \, n)
+}
+\end{array}
+\]
+\lo{QUESTION: Let $g : \textsf{R} \to \textsf{R} \to \textsf{R}$ be a function that terminates on all arguments.
+Then $\Xi \, g$ is AST for $p \geq 1/2$.}
+\akr{In order to actually construct a ranking function, it will be necessary to assume a bound on the number of $\tY$-reduction steps in the reduction of $g \, \underline n \, \underline m$ too.}
+
+\akr{I suspect that the term you actually had in mind for the higher-order recursion example was different from what you wrote, because you said that it terminates for $p \geq 1/2$, but it actually terminates for all $p > 0$. Passing $n+1$ as an argument to $f$ doesn't actually make the recursion any longer. Did you mean 
+\[
+\begin{array}{l}
+\tY \lambda \varphi f s n. \\
+\qquad \tif{n \leq 0}{s}{ f \, n \, (\varphi \, f \, s \, (n - 1)) \oplus_p f \, n \, (\varphi \, f \, s \, (n+1))}
+\end{array}
+\]}
+\end{example}

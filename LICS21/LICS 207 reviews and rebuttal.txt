@@ -1,0 +1,253 @@
+Review 1
+
+Overall evaluation:	2: (accept)
+
+The paper develops a method of establishing that a higher-order probabilistic program with continuous distributions almost surely terminates in the context of lambda calculus. There are a number of new ideas in the paper, including the use of ranking supermartingales, sparse tracking functions, antitone ranking functions, and restricted sets of reduction strategies that ensure the Church-Rosser property. Although the method doesn't look like a completed project, the advances are impressive (at least, to a non-specialist).
+
+For a non-expert in the area, the paper is a challenging read, with tough notation, but it contains a lot of examples (also further developed in the appendix). All in all, I think this is a very solid piece of work and recommend acceptance.
+
+- What is \mathsf R in the definition of types?
+- What is r.v. before Definition III.2?
+- What is a.s. in Definition III.2?
+
+===
+
+Review 2
+
+Overall evaluation:	1: (weak accept)
+
+# Summary
+
+This paper considers how to prove almost-sure termination (AST) for
+probabilistic higher-order programs. AST is the natural generalization of
+termination to probabilistic programs, and there has been plenty of work in
+recent years on verifying this property. Existing work largely considers
+first-order, imperative programs, developing the method of ranking
+supermartingales (and generalizations, such as antitone ranking
+supermartingales) to verify AST. This paper adapts these ideas to higher-order
+probabilistic PCF, and also with continuous sampling. The authors introduce
+sparse ranking supermartingales to make it possible to avoid defining the
+ranking function for "uninteresting" steps, and antitone ranking
+supermartingales to prove AST when the expected termination time is not finite.
+The last contribution in the paper considers when AST under the "standard
+reduction" (CBV) can be shown by proving AST under an alternative reduction
+strategy, which may be significantly easier for some programs.
+
+# General comments
+
+This paper tackles an important and interesting problem. To date most work on
+termination of probabilistic programs has considered first-order programs
+(though there are certainly exceptions, as discussed in related work), and this
+work takes many ideas from the first-order literature and transports it to the
+higher-order setting. The idea of a sparse ranking supermartingale is nice, and
+addresses a particular issue in the higher-order setting---it may be
+inconvenient to define the ranking function for all reduction steps, and we may
+want to focus on just specific, "interesting" reduction steps. Likewise,
+antitone ranking supermartingales have been considered in the imperative
+setting, but this paper shows that they can also prove AST for higher-order
+programs.
+
+My main criticism of the paper is in the last contribution, which has the
+potential to be the most interesting---a choice of reduction strategies is
+something that is inherently a feature of higher-order programs, and indeed it
+would be interesting to consider adapting the reduction strategy in order to
+simply reasoning about AST. The high level goal is clear to me. However, I found
+the section where this contribution is described (Section 6) to be totally
+impenetrable. The section starts by defining positions, subterms, alternative
+reduction relation, reduction relation on skeletons, and goes on, but it was
+never clear to me why the authors are doing all of this. Even a small roadmap
+would really help me understand why we are covering these things and why we are
+defining these concepts, and how they fit in to the overall goal. Currently,
+Section 6 is a series of highly intricate technical definitions with somewhat
+cryptic examples, but there is little intuition and no sense of how the pieces
+fit together, and what the goal is.
+
+It seems to me that Corollary VI.12 is the main result of the section. But I was
+also very confused here, and before in the definition of reduction strategy. The
+example of reduction strategy shows CBV, but gives no further examples. In
+particular, is CBN a valid reduction strategy under this definition? If not, why
+not? And if so, VI.12 seems strange---if M is AST wrt to CBN, is it also AST wrt
+to CBV? That seems highly suspicious...
+
+# Comment after PC discussion
+
+Thanks for the clarifications. The PC members agree on the importance of the paper. However, there is also some concern on the accessibility of the current version. We encourage the authors to work in order to make Section VI more accessible. Moreover, we suggest incorporating the responses given in the rebuttal into the paper. In particular, it would be valuable to expand accordingly the discussion concerning Theorem V.15.
+
+# Specific comments
+
+* p2: Church-Rosserness -> the Church-Rosser property
+* p2: "We introduce a novel addressing scheme for the possible random choices in
+a program’s execution, which ensures that the same random choices are taken at
+corresponding positions in alternative reduction sequences, so that the same
+eventual result can be reached." :: this description sounds like a
+probabilistic coupling is being constructed (?) is there any connection?
+* p2: free in s -> free in M (?)
+* p3: "Y lambda f n :" this syntax doesn't match the grammar (throughout)
+* p3: "The score construct is irrelevant to termination except that it fails if
+its argument is negative, thus allowing computations to fail after finitely
+many steps." :: arguably, it is not clear whether termination is an
+interesting/meaningful concept in the presence of score/conditioning
+* p3: for all N2. -> for all N.2 (all footnotes)
+* p3: "Let T be a r.v." :: maybe give the type of T?
+* p3: int P(d omega) Yn(w) :: maybe swap for consistency? int Yn(w) P(d omega)
+* p4: extra space before footnote
+* p4: "we have that (Yn)n≥0 is a 1-ranking supermartingale" :: this needs more
+justification. for instance, why is not an eps-ranking supermartingale, where
+does the 1 come from?
+* p4: Equation (1): M_{T_n}(s) -> M_{T_n(s)}(s)?
+* p5: Section 4 said that “A finite number of expected Y-reduction steps does
+not necessarily imply a finite number of expected total reduction steps.” But
+under lemma III.8, it is said that T_M^Y < ∞ a.s. iff M is AST. More
+discussions about the connection between Y-PAST and AST/PAST would be helpful
+and why Example IV.1 is not rankable (by mapping to Y reductions needed) will
+be appreciated.
+* p5: contractum :: what is this?
+* p5: "to define M ⊕p N" :: bad linebreak here
+* p5: "Y lambda f n." grammar
+* p5: On the bottom of page 5, why the map described is a sparse ranking
+function? (I thought the expected Y reduction from i (+)_0.5 (Y \lambda fn.
+n (+)_0.5 f(n+1)) (i +1) is 0.5 * 1 + 0.5 * 0.5 * 2 + ... + 0.5^c * c + ... >
+1)
+* p6: maybe cite prior work on antitone ranking functions?
+* p6: what are these examples supposed to show?
+* p6: Example V.1, M1, 3/2 -> 2/3 ?
+* p6: actual values -> realized values
+* p6: Example V.5 is a nice example, but it seems like a curiosity rather than a
+central point. the space might be better used for something else, e.g., to
+explain the next section.
+* p6: "(Yk) k \in omega" :: if omega is supposed to be the natural numbers, then
+this clashes with the previous omega on this line.
+* p6: Plainly -> It can be seen that
+* p7: "Therefore by setting epsilon2(x) = ..." :: where does e come from? this
+needs more explanation.
+* p7: "Even with this restriction" :: what restriction?
+* p7: a roadmap here would be nice. you define positions, then subterms, then a
+more general reduction relation, then a reduction relation on skeletons, ...
+but where are we going and why are we doing all of this?
+* p8: missing space: M1 M2
+* p8: Definition VI.1 to be clear, is this relation is non-deterministic? that
+is, is it for any position alpha? also, this definition is hard to
+parse---consider putting "then" after the commas.
+* p8: "Labelling the pre-chosen samples by the positions" :: where is this
+labelling? example?
+* p8: footnote 6: why not just use a different arrow?
+* p8: "with one more caveat introduced later" :: hard to follow. where will this
+caveat be introduced?
+* p8: Example VI.2: should A[x] be A[X], since X is a hole?
+* I see that this defines the semantics of A[r], where A is a skeleton, and r is
+a vector of real numbers in Sec 2. But here, I'm not sure if A is a skeleton,
+or a program, and what does A[x] and A[X] mean?
+* Is "I" in A[x] a function? You used I for intervals too.
+* "r occurs twice in the conditions on s: once as the value a sample must take,
+and once in the location of a sample". I have difficulties to see where r
+appears as the location of a sample.
+* p8: "this set is unmeasurable" :: is this obvious? why?
+* p9: "This is still not sufficient" :: for what?
+* p9: "in which case" :: what case is this referring to?
+* p9: I could not understand the purpose of Definition VI.5.
+* p10: is CBN a reduction strategy, under your definition? if not, why not? if
+so, VI.12 looks suspicious. Another example of a reduction strategy would help.
+* p11: Applications: this section is highly speculative, since it does not
+appear that any of the claims have been worked out in detail. maybe this is
+better under future work, or discussion?
+
+# More on Section 6:
+* At the bottom of page 7, what kind of restrictions are needed to exclude the problem caused by the reduction strategy making copies of samples to be identical v.s.. independent?
+* In Definition VI.I, could you give more intuition why λ should not occur after Y in α?
+Is the example (lambda x. x 0 + x 0) (lambda y. sample) the kind of programs where making copies identical vs. independent causes problem?
+Is that example meant to illustrate why λ should not occur after @2 in α?
+Also, it will be helpful to highlight restriction here has to do with restriction on reduction strategies that satisfy confluence.
+* Probably some high-level intuition for complicated cases in Definition VI.5, besides the discussions in examples VI.4 and example VI.6
+* In Definition VI.8, what is s \circ i(M→N) ? Is circ composition? The type doesn’t seem to match.
+* Theorem VI.11 was confusing to me at first. Discussing how all the previous definitions imply the restrictions on reduction strategies would help. (Maybe moving some lines from the paragraph under Theorem VI.15)
+
+===
+
+Review 3
+
+Overall evaluation:	1: (weak accept)
+
+The paper develops new techniques for proving almost-sure termination of probabilistic programs written in a prototypical higher-order typed functional language. This adds to a large body of work on formal methods for probabilistic programming language. The paper improves on previous results by dealing with higher-order programs and by considering a random choice operator (called sample) with a continuous distribution. The method underlying termination proofs is based on (sparse) antitone ranking functions.
+
+I am not really an expert in the field but it does not seem that these ingredients are very original. However they are nicely combined, the paper is very well written, with a good set of illustrative example programs. The technical work is presented in a clear way, with the result that it does not seem overly difficult.
+
+It is regrettable that the author(s) do not comment more on their ability to prove completeness of the method [for imperative programs and ranking functions in a well-founded partial ordering, completeness is easy to show]. Is this just lack of time or is there a well-identified stumbling work that could be mentioned? If a program is AST every reachable term has a stopping time and these stopping times can be compared when we're talking about terms reachable from one another. Now we have to turn this into a ranking function. Is the problem caused by the existence of loops between reachable terms (even when guaranteed to terminate almost surely)? Is the problem about showing that a complex set of recursive inequations indeed admit solutions?
+
+===
+
+Review 4
+Overall evaluation:	2: (accept)
+
+This paper extends expectation-based reasoning for (positive) almost-sure termination from first-order imperative programs a la [18,25] to higher-order functional programs, i.e. to a probabilistic lambda calculus. One could argue that this extension is rather straight-forward. I would instead say that it is rather _clean_ and hence very valuable. Furthermore, "executing" lambda-terms is much less straight-forward than executing first-order programs due to (a) potentially many intermediate reduction steps until reaching another reduction of the Y-combinator (analogous to reaching the loop-head in a first-order program) and (b) potentially ambiguous reduction orders. Both (a) and (b) pose technical difficulties in lifting the (P)AST proof rules from first-order to higher order. The solution proposed for (a) - sparse ranking functions - is again a very clean and easy to comprehend solution. The solution for (b), I had difficulties understanding, which is partly because I am not an expert on lambda calculi.
+
+Overall, I would - perhaps weakly - support acceptance of this paper. Why weakly? I found the paper rather dense, Section VI (Confluent Trace Semantics) in particular. I believe, it is quite difficult to read this paper, if one does not speak (simply typed) lambda fluently and I also believe that this aspect could well be improved significantly in order to make the paper more accessible to a wider audience.
+
+
+Questions for Rebuttal:
+
+===================
+
+
+Regarding Theorem V.15: Could you elaborate on why exactly this theorem does NOT solve the open problem of completeness of antitone ranking supermartingales? Where/what exactly is the gap? What's missing to prove completeness? Furthermore, what _does_ Theorem V.15 telle us, intuitively?
+
+More Detailed Comments:
+
+======================
+
+p2: high-order -> higher-order
+
+
+p2: The role of the environment Gamma is not at all clear here. Only in Figure 1 it is needed and without explanation, Figure 1 is very difficult to understand for someone who is not fluent in lambda calculi. Please explain the role of Gamma and provide some intuition on the Y-combinator in order to make the paper more accessible to non-lambda-experts.
+
+
+p2, Section II.B begins with "This version...". Which version is meant here? Furthermore, the second sentence is entirely unclear to me. And the first two paragraphs of this subsection I find rather dense and lacking intuition. This could be improved quite easily.
+
+
+p3, Definition III.1 Please put a space after the superscript 2 in N². I first thought the authors mean a pair NxN instead of a footnote.
+
+===
+
+REBUTTAL
+
+Reviewer 1: "\mathsf R" refers to the base type for programs which reduce to real-number values. "r.v." means random variable, and “a.s.” means almost surely.
+
+
+Reviewer 2 said that there were no examples of reduction strategies beyond CBV. As the other reduction strategies we’re mainly considering (i.e. those used with Theorem VI.16) are intended to be designed for particular programs, the other examples are given along with particular example programs, specifically the extended discussions of Examples V.14 and VI.17 in the appendices.
+
+CBN is not considered a valid reduction strategy because it violates the condition that the argument of a beta redex must be a value, which follows from the definition of reduction strategy (p. 10) and redex (Definition VI.1).
+
+
+Example V.1 is simply meant to illustrate that there are some terms which terminate too slowly to be rankable.
+
+Labelling the samples with elements of a set A simply refers to picking traces s from I^A, then using s(a) for the sample reduction whenever the relevant position (or other label) is a.
+
+Section 6:
+
+The restrictions in reduction strategies are the extra conditions in Definition VI.1 on what reductions are valid (as described in the paragraph after Theorem VI.15).
+
+The body of a Y subterm is effectively both the function and the argument in an application. If it contains multiple occurrences of the relevant variable, it will be duplicated by the Y reduction, potentially causing a similar issue to the case of (\lambda f. f 0 + f 0) (\lambda x. sample) if the sample were evaluated first.
+
+Reading guide for Section 6: In order to be able to use alternative reduction strategies to prove properties of the program defined using the usual reduction strategy, it is necessary first to prove the relation between these different strategies, i.e. to provide a confluent version of the semantics. It is therefore necessary to have some way of relating the samples that will be used in runs of the program using different reduction strategies. Positions are defined as a way of addressing sample statements within a program independently of the reduction order. Next, a version of the reduction relation is presented that is nondeterministic, so that it allows a choice of what order to perform reductions in. The notion of positions is extended to potential positions, for samples which may appear later in the reduction sequence but not necessarily in the initial term. In order to allow potential positions in different reduction sequences to be considered equivalent, a relation ~* is defined, and finally, all of these are used to construct a confluent version of the trace semantics, ⇒, that is still nondeterministic in reduction order, but does specify the outcome of random choices. The desired properties of this semantics (confluence and equivalence to the standard semantics) are proved, then it is used to give extended versions of ranking functions and the related AST results.
+
+Reviewer 3:
+
+Regarding the conjecture, we are unaware of any particularly relevant previous literature. We did spend a while trying to solve the problem, and will try some more in future. Part of what makes this question so difficult is that you have to construct an antitone function that represents the rate of convergence of all of the different states the program could be in, and simultaneously assign all the program states ranking function values. The fact that, for constructing a ranking function, even branches with 0 probability must be considered is an additional cause of difficulty, as they can terminate arbitrarily much slower than the program itself.
+
+===
+Rebuttal for Reviewer 4:
+
+** Regarding Theorem V.15
+
+The key weakness of Theorem V.15 is the condition “if (F_n)_n is the coarsest filtration to which T is adapted”. If we set the stopping time T to the termination time of a program, and (F_n)_n to the filtration defined by the revelation of samples as the program progresses, then an antitone supermartingale wrt T would (subject to the supermartingale and the program aligning properly, which would probably not be too hard to arrange) provide an antitone ranking function for the term. However, a supermartingale wrt the filtration that only observes whether the term has terminated yet may not be a supermartingale wrt the filtration that has all the information on the term’s progress, so V.15 does not quite match up to what is needed for the completeness Conjecture.
+
+What it does imply is that there is no restriction on how slowly an antitone rankable term can terminate, analogous to the fact that if a term is rankable, it is Y-PAST. For example, it proves that there are terms such that the expectation of the square-root of their stopping time, or the logarithm of their stopping time, is unbounded, but which are still antitone rankable (because for any stopping time, it is possible to construct a term whose Y running time matches that stopping time, and where the constraint on the filtrations is satisfied).
+
+** Regarding the rather dense Section VI
+
+Although Section VI is rather dense, that complexity is necessary because of the complexity of the results presented. It takes several steps to reach the key definition VI.8, and it is not even possible to state the main results of that section until that definition. We have attempted to explain briefly the reasons why each of these steps is necessary (see paragraph “Reading guide for Section VI” of the rebuttal), although these are necessarily a little abstract until the reader has seen the whole picture. Admittedly this could be improved somewhat by summarising all of the steps of the definition at the start.
+
+** Responses to other comments
+
+The type of a term (and whether it’s well-typed at all) can depend on the type of its free variables, therefore the typing judgement Γ ⊢ M : A includes both the type A of the term M and a map Γ of free variables to types. The only typing rules involving this in a non-trivial way in this case are lambda abstraction (because the lambda binds a free variable) and the variable rule (because the type of a variable is just whatever is specified for it in the context). The typing system is not really a key component of this paper, which is why little emphasis is put on it. Any type system which prevents ill-formed terms like 2 (λx.x) + 1 and which is strong enough to prove that a term that does not undergo any Y reductions terminates would have worked equally well.
+
+The phrase “This version” in section II.B refers to the distinction between \to and red, which is in a sense a refinement of \to.
