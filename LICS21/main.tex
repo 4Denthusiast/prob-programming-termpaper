@@ -36,24 +36,7 @@
 % citecolor=oxgold,
 % pdfstartview=FitH ]{hyperref}
 
-\usepackage{amsmath} % cleveref must be loaded afer amsmath
-%\usepackage[poorman]{cleveref}
-\Crefname{therm}{Theorem}{Theorems}
-% \Crefname{corollary}{Corollary}{Corollary}
-% \crefname{proposition}{Proposition}{Propositions}
-% \Crefname{claim}{Claim}{Claims}
-% \Crefname{definition}{Definition}{Definitions}
-% \Crefname{fact}{Fact}{Facts}
-% \Crefname{conj}{Conjecture}{Conjectures}
-% \Crefname{example}{Example}{Examples}
-% \Crefname{remark}{Remark}{Remarks}
-% \Crefname{convention}{Convention}{Conventions}
-% \Crefname{lemma}{Lemma}{Lemmas}
-% \Crefname{assumption}{Assumption}{Assumptions}
-% \Crefname{section}{Section}{Sections}
-% \Crefname{appendix}{Appendix}{Appendices}
-% \Crefname{figure}{Figure}{Figures}
-% \Crefname{equation}{Eq.}{Equations}
+\usepackage{amsmath}
 
 % \addtotheorempostheadhook[theorem]{\crefalias{thmlisti}{theorem}}
 % \addtotheorempostheadhook[lemma]{\crefalias{thmlisti}{lemma}}
@@ -143,8 +126,8 @@
 %\usepackage{mathtools}
 %\usepackage{thmtools,thm-restate}
 
-% \usepackage{amsthm}
-% \theoremstyle{definition}
+\usepackage{amsthm}
+\theoremstyle{definition}
 % \newtheorem{definition}{Definition}
 % \newtheorem{example}{Example}
 
@@ -216,19 +199,19 @@ Our methods can be used to prove almost sure termination of programs that are be
 
 \appendix
 
-\section{Supplementary materials for \Cref{sec:supermartingales}}
+\section{Supplementary materials for Section \ref{sec:supermartingales}}
 
 \input{supermartingales-proofs}
 
-\section{Supplementary materials for \Cref{sec:ranking}}
+\section{Supplementary materials for Section \ref{sec:ranking}}
 
 \input{ranking-proofs}
 
-\section{Supplementary materials for \Cref{sec:antitone}}
+\section{Supplementary materials for Section \ref{sec:antitone}}
 
 \input{antitone-proofs}
 
-\section{Supplementary materials for \Cref{sec:confluent}}
+\section{Supplementary materials for Section \ref{sec:confluent}}
 
 \input{confluent-proofs}
 

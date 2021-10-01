@@ -32,7 +32,7 @@ M_3 =
 
 \medskip
 
-The term $M_1$ is rankable, terminating in 31 $\tY$-steps on average, and $M_3$ only has a $1/1024$ chance of terminating, but in between, $M_2$ is AST, but isn't $\tY$-PAST, therefore it isn't rankable and \Cref{thm:rankable implies termination} is insufficient to prove its termination. 
+The term $M_1$ is rankable, terminating in 31 $\tY$-steps on average, and $M_3$ only has a $1/1024$ chance of terminating, but in between, $M_2$ is AST, but isn't $\tY$-PAST, therefore it isn't rankable and Theorem \ref{thm:rankable implies termination} is insufficient to prove its termination. 
 Thus we seek a generalised notion of ranking function so that $M_2$ becomes rankable, and then prove it sound i.e.~rankable in this generalised sense implies AST.
 
 %\paragraph*{Idea} 
@@ -111,10 +111,10 @@ If a closed PPCF term $M$ is antitone rankable, then $T_M^{\tY} < \infty$ a.s.~(
 \end{theorem}
 \begin{proof}
 As in %Theorem \ref{thm:basicRankingSoundness}, 
-\Cref{thm:rankable implies termination},
+Theorem \ref{thm:rankable implies termination},
 take the probability space $(\entrosp, \Sigma_\entrosp, \mu_\entrosp)$, and define the same r.v.~$T_n, X_n, Y_n, T_M^{\tY}$. 
-Thanks to \Cref{thm:rankable and strict rankable}, $(Y_n)_{n \geq 0}$ is a supermartingale; and because $M$ is now assumed to be antitone rankable, it is an antitone strict supermartingale w.r.t.~stopping time $T_M^{\tY}$. 
-Thus, by \Cref{thm:a-c strict}, $T_M^{\tY} < \infty$ a.s.
+Thanks to Theorem \ref{thm:rankable and strict rankable}, $(Y_n)_{n \geq 0}$ is a supermartingale; and because $M$ is now assumed to be antitone rankable, it is an antitone strict supermartingale w.r.t.~stopping time $T_M^{\tY}$. 
+Thus, by Theorem \ref{thm:a-c strict}, $T_M^{\tY} < \infty$ a.s.
 \end{proof}
 
 %\paragraph{}
@@ -135,7 +135,7 @@ Define an \emph{antitone sparse ranking function} on a closed term $M$ to be a p
 
 As a corollary, any term which admits an antitone sparse ranking function terminates almost surely.
 
-\paragraph*{\Cref{ex:ac-ranking} revisited}
+\paragraph*{Example \ref{ex:ac-ranking} revisited}
 Programs $M_1$ and $M_2$ are AST. For $M_1$, the sparse ranking function 
 \begin{align*}
 \big(\tY \, \lambda f n . \, \tif{n=0}{0}{f \, (n-1) \oplus_{3/2} f \, (n+1)}\big) \, \underline x \mapsto 3x + 1
@@ -165,7 +165,7 @@ for $n \in \mathbb N$.
 % \\
 % 0 &\mapsto 0.
 % \end{align*}
-For $n \geq 1$, $\Theta_2 \, n$ reduces in several steps to either $\Theta_2 \, (n-1)$ or $\Theta_2 \, (n+1)$,\footnote{Technically this is not quite correct, because of the distinction between $\underline n + 1$ and $\underline{n + 1}$, but this ranking function can still be made to work by appealing to the Confluent Ranking \Cref{thm:confluent ranking}, as can the others in this section with similar issues. See \cref{rem:ex corrected using confluent semantics} for a fuller account.} each with probability $1/2$, with one $\tY$-reduction.
+For $n \geq 1$, $\Theta_2 \, n$ reduces in several steps to either $\Theta_2 \, (n-1)$ or $\Theta_2 \, (n+1)$,\footnote{Technically this is not quite correct, because of the distinction between $\underline n + 1$ and $\underline{n + 1}$, but this ranking function can still be made to work by appealing to the Confluent Ranking Theorem \ref{thm:confluent ranking}, as can the others in this section with similar issues. See Remark \ref{rem:ex corrected using confluent semantics} for a fuller account.} each with probability $1/2$, with one $\tY$-reduction.
 Now
 \begin{align*}%\textstyle
 & g_2(n) - \frac{g_2(n-1) + g_2(n+1)} 2 \\
@@ -244,7 +244,7 @@ For any $F : \textsf{R} \to \textsf{R} \to \textsf{R}$ such that $F\, \underline
 \end{example}
 
 \paragraph*{Completeness}
-It seems very likely that this method is complete in the case that every reachable term is AST (\cref{conj:antitone}), but we have been unable to actually prove this. It is certainly at least capable of proving the termination of terms which terminate arbitrarily slowly (in the sense that there is no similar limitation to \cref{thm:rankable implies termination}, which can only prove termination of $\tY$-PAST terms).
+It seems very likely that this method is complete in the case that every reachable term is AST (Conjecture \ref{conj:antitone}), but we have been unable to actually prove this. It is certainly at least capable of proving the termination of terms which terminate arbitrarily slowly (in the sense that there is no similar limitation to Theorem \ref{thm:rankable implies termination}, which can only prove termination of $\tY$-PAST terms).
 
 The following theorem does not prove completeness, but is suggestive in that direction:
 %\begin{restatable}{theorem}{antitoneSeemsComplete}

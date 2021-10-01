@@ -35,38 +35,38 @@ In other words, the program's behavior is used to define an associated (ranking)
 The language PPCF used in this paper is simply typed, with random continuous sampling, and an explicit recursion primitive, $\tY$. 
 We define a \emph{ranking function} on a term $M$ to be a non-negative measurable function on the reachable terms from $M$ whose expected value decreases or is unchanged as the term is reduced.
 Because the type system already constrains the terms enough to force termination in the absence of the recursion construct \citep{tait1967,BarendregtDS2010}, it is only the $\tY$-reduction steps that must be counted, making defining ranking functions somewhat easier.
-Using supermartingales and Doob's (iterated) Optional Sampling Theorem, we show the soundness of rankability (\cref{thm:rankable implies termination}): if a term has a ranking function, it is AST.
+Using supermartingales and Doob's (iterated) Optional Sampling Theorem, we show the soundness of rankability (Theorem \ref{thm:rankable implies termination}): if a term has a ranking function, it is AST.
 
 To define a ranking function, one would typically try to organise the set of reachable terms (of the program being analysed) into a manageable number of syntactic cases. 
 Unfortunately (for any fixed reduction strategy) there are programs whose reachable terms span such a large number of cases that it would be extremely difficult to analyse by hand, if at all possible. 
 How can the construction of ranking functions be made possible or easier?
 
 Our first answer is the notion of \emph{sparse ranking function}. 
-Most of the individual execution steps of a typical program are trivial and easy to mentally skip over. Sparse ranking functions can be defined only for those points in the execution of a program which are semantically important, while all of the other intermediate steps can be ignored. Yet, they are no less efficacious for proving AST (\cref{thm:partial implies rankable}): every sparse ranking function is a restriction of a ranking function. This also makes the ranking function method of proving AST more compatible with syntactic sugar, because the intermediate reduction steps implicit in the simplified notation can be ignored.
+Most of the individual execution steps of a typical program are trivial and easy to mentally skip over. Sparse ranking functions can be defined only for those points in the execution of a program which are semantically important, while all of the other intermediate steps can be ignored. Yet, they are no less efficacious for proving AST (Theorem \ref{thm:partial implies rankable}): every sparse ranking function is a restriction of a ranking function. This also makes the ranking function method of proving AST more compatible with syntactic sugar, because the intermediate reduction steps implicit in the simplified notation can be ignored.
 
 A ranking function (or sparse ranking function) provides a bound on the expected number of $\tY$-reduction steps before the program terminates, therefore ranking functions cannot be constructed for terms whose expected number of $\tY$-reduction steps is infinite, such as the simplest implementation of the 1D unbiased random walk. 
 This restriction can be removed by generalising ranking functions to \emph{antitone ranking functions}, which rather than having to decrease by a constant amount for each $\tY$-reduction step, may decrease by a variable amount, depending on the value of the ranking function. 
 Thanks to this feature, the antitone ranking function method is capable of handling programs which terminate arbitrarily slowly. \lo{TODO: Reference some examples.}
-We show that this method is also sound for proving AST (\cref{thm:antitone rankable implies termination}), 
-moreover it also enjoys a sparse function theorem (\cref{thm:antitone partial implies rankable}).
+We show that this method is also sound for proving AST (Theorem \ref{thm:antitone rankable implies termination}), 
+moreover it also enjoys a sparse function theorem (Theorem \ref{thm:antitone partial implies rankable}).
 \akr{Our progress condition is equivalent to that given by \cite{DBLP:journals/pacmpl/McIverMKK18} (by applying a transformation to the ranking function), but needs to be different in order to be compatible with the presence of additional intermediate reduction steps where the ranking function is not required to decrease at all.}
-\lo{The same point is made in \cref{sec:related}, so the preceding can be omitted.}
+\lo{The same point is made in Section \ref{sec:related}, so the preceding can be omitted.}
 
 Basic (non-random) lambda calculus has the very useful property of confluence, which implies (among other things) that even if execution of a program starts in a different order, it will still reach the same normal form eventually (assuming it does reach a normal form). 
 Probabilistic lambda calculus does not have this property, because random choices may be duplicated, and evaluating the same subterm multiple times can yield different results. 
 However, with a restricted set of reduction strategies, confluence may be regained. 
 We introduce a novel addressing scheme for the possible random choices in a program's execution, which ensures that the same random choices are taken at corresponding positions in alternative reduction sequences, so that the same eventual result can be reached. 
-This is then used to prove yet another extension to the ranking function theorem, that (\cref{thm:confluent ranking}) \lo{Preceding reference generated is wrong; it should be a theorem} ranking functions may be defined with respect to alternative reduction strategies (which in some cases may lead to a considerably simpler execution and ranking function), and (\cref{cor:Reduction strategy independence}) rankability in this sense still imples almost sure termination. 
+This is then used to prove yet another extension to the ranking function theorem, that (Theorem \ref{thm:confluent ranking}) \lo{Preceding reference generated is wrong; it should be a theorem} ranking functions may be defined with respect to alternative reduction strategies (which in some cases may lead to a considerably simpler execution and ranking function), and (Corollary \ref{cor:Reduction strategy independence}) rankability in this sense still imples almost sure termination. 
 The confluent trace semantics is of wider interest, and has other possible applications as well, for example in Bayesian inference algorithms.
 
-By combining these methods we can prove AST of a variety of PPCF programs that are beyond the reach of methods in the literature, including non-affine recursion\footnote{\label{fnote:non-affine} Non-affine recursive programs are recursive programs that can, during the evaluation of the recursive body, make multiple recursive calls (of a first-order function) from distinct call sites.} (\cref{ex:non-affine recursion easy,ex:non-affine continuous}) and recursions that define higher-order functions (\cref{ex:higher-order recursion}).
+By combining these methods we can prove AST of a variety of PPCF programs that are beyond the reach of methods in the literature, including non-affine recursion\footnote{\label{fnote:non-affine} Non-affine recursive programs are recursive programs that can, during the evaluation of the recursive body, make multiple recursive calls (of a first-order function) from distinct call sites.} (Examples \ref{ex:non-affine recursion easy,ex:non-affine continuous}) and recursions that define higher-order functions (Example \ref{ex:higher-order recursion}).
 
 \paragraph*{Outline}
 
-We present the syntax and trace semantics of PPCF in \Cref{sec:PPCF}.
-In \Cref{sec:supermartingales}, we show that ranking functions on terms induce supermartingales, which form the basis of a sound method for proving AST.
-We introduce sparse ranking functions in \Cref{sec:ranking} and antitone ranking functions in \Cref{sec:antitone}, and illustrate how they can be used to prove AST via examples. 
-In \Cref{sec:confluent}, we present a confluent trace semantics and demonstrate its usefulness.
-We discuss further applications of the confluent semantics in \Cref{sec:applications}; and conclude with comments on related work and further directions in \Cref{sec:related}.
+We present the syntax and trace semantics of PPCF in Section \ref{sec:PPCF}.
+In Section \ref{sec:supermartingales}, we show that ranking functions on terms induce supermartingales, which form the basis of a sound method for proving AST.
+We introduce sparse ranking functions in Section \ref{sec:ranking} and antitone ranking functions in Section \ref{sec:antitone}, and illustrate how they can be used to prove AST via examples. 
+In Section \ref{sec:confluent}, we present a confluent trace semantics and demonstrate its usefulness.
+We discuss further applications of the confluent semantics in Section \ref{sec:applications}; and conclude with comments on related work and further directions in Section \ref{sec:related}.
 
 \paragraph*{Additional materials} Further details of some of the examples and all missing proofs can be found in the appendix.

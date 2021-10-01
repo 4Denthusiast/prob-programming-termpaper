@@ -56,7 +56,6 @@
 % \renewcommand{\Sd}{\mathfrak s}
 % \renewcommand{\Td}{\mathfrak t}
 
-%\crefname{therm}{theorem}{theorems}
 \declaretheorem[
     name=Example,
     Refname={Example,Examples},
@@ -85,34 +84,7 @@
 
 \usepackage{hyperref}
 % \fi
-\usepackage[capitalize]{cleveref}
 
-\Crefname{theorem}{Thm.}{Thm.}
-\Crefname{corollary}{Cor.}{Corollary}
-\crefname{proposition}{Prop.}{Propositions}
-\Crefname{claim}{Claim}{Claims}
-\Crefname{definition}{Def.}{Definitions}
-\Crefname{fact}{Fact}{Facts}
-\Crefname{conjecture}{Conj.}{Conjectures}
-\Crefname{example}{Ex.}{Ex.}
-\Crefname{remark}{Rem.}{Remarks}
-\Crefname{convention}{Convention}{Conventions}
-\Crefname{lemma}{Lem.}{Lemmas}
-%\Crefname{assumption}{Assumption}{Assumptions}
-\Crefname{section}{Sec.}{Sec.}
-\Crefname{appendix}{App.}{App.}
-\Crefname{figure}{Fig.}{Fig.}
-
-\addtotheorempostheadhook[theorem]{\crefalias{thmlisti}{theorem}}
-\addtotheorempostheadhook[lemma]{\crefalias{thmlisti}{lemma}}
-\addtotheorempostheadhook[proposition]{\crefalias{thmlisti}{proposition}}
-\addtotheorempostheadhook[corollary]{\crefalias{thmlisti}{corollary}}
-\addtotheorempostheadhook[claim]{\crefalias{thmlisti}{claim}}
-\addtotheorempostheadhook[fact]{\crefalias{thmlisti}{fact}}
-\addtotheorempostheadhook[conjecture]{\crefalias{thmlisti}{conjecture}}
-\addtotheorempostheadhook[example]{\crefalias{thmlisti}{example}}
-\addtotheorempostheadhook[definition]{\crefalias{thmlisti}{definition}}
-\addtotheorempostheadhook[remark]{\crefalias{thmlisti}{remark}}
 
 \newcommand{\inferbinlics}[5]{\begin{minipage}{22ex}{\bfseries #1}\end{minipage} {
     \begin{minipage}{10ex}{$\infer{#4}{#2 &&& #3}$}\end{minipage}

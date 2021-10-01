@@ -2,7 +2,7 @@
 \ThmMinimal*
 \begin{proof}
 Let $f$ be the candidate least ranking function defined above, and suppose $g$ is another ranking function such that $f(N) > g(N)$ for some $N \in Rch(M)$. The restrictions of $f$ and $g$ to $Rch(N)$ have the same properties assumed of $f$ and $g$, so assume w.l.o.g.~that $N=M$. The difference $g - f$ is then a supermartingale (with the same setup as in 
-\Cref{thm:rankable and strict rankable});
+Theorem \ref{thm:rankable and strict rankable});
 therefore $\mathbb E[g(M_n)] \leq \mathbb E[f(M_n)] + g(M)-f(M)$, for all $n$.
 Now $\mathbb E[f(M_n)] = \sum_{k=n}^\infty \mathbb P[M_k = E[\tY N] \text{ for some }E, N] \to 0 \text{ as } n \to \infty$; 
 therefore as $g(M) - f(M) < 0$, eventually $\mathbb E[g(M_n)] < 0$, which is impossible. 
@@ -20,5 +20,5 @@ Take a closed term $M$ and sparse ranking function $f$ on $M$. Define $f_1 : Rch
 \end{align*}
 
 Define $(\nnext(N,s),\_) = \red^n(N,s)$ for the least $n \geq 0$ such that it's in the domain of $f_1$, and $g(N,s) := \left | \{m < n \mid \red^m(N,s) \text{ is of the form } (E[\tY\, \lambda x. N'],s') \} \right |$. 
-The function $\nnext$ is well-defined (i.e.~$n$ is finite) for all $N \in Rch(M)$ by induction on the path from $M$ to $N$, by the third condition on sparse ranking functions. Define $f_2(N) = \int_\entrosp f_1(\nnext(N,s)) + g(N,s) \, \mu_{\entrosp}(\mathrm d s)$. The (total) function $f_2$ agrees with $f$ on $f$'s domain, and it is a ranking function on $M$ (in fact, the least ranking function of which $f$ is a restriction, by the same argument as \Cref{thm:minimal}).
+The function $\nnext$ is well-defined (i.e.~$n$ is finite) for all $N \in Rch(M)$ by induction on the path from $M$ to $N$, by the third condition on sparse ranking functions. Define $f_2(N) = \int_\entrosp f_1(\nnext(N,s)) + g(N,s) \, \mu_{\entrosp}(\mathrm d s)$. The (total) function $f_2$ agrees with $f$ on $f$'s domain, and it is a ranking function on $M$ (in fact, the least ranking function of which $f$ is a restriction, by the same argument as Theorem \ref{thm:minimal}).
 \end{proof}
