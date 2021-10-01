@@ -248,15 +248,17 @@ If $M$ is AST with respect to any reduction strategy, it is AST.
 Suppose $M$ is AST w.r.t.~$f$. Let the set of samples with which it terminates with this reduction strategy be $X$. By Theorem~\ref{thm:CbvIsTerminatingest}, $M$ also terminates with $\cbv$ and every element of $X$, and $X$ has measure 1, by assumption, therefore $M$ is AST with respect to $\cbv$ therefore by Theorem~\ref{thm:AstEquivalence} it is AST.
 \end{proof}
 
-All of the theorems on the termination of rankable terms therefore extend to other reduction strategies too. The proofs of Theorem~\ref{thm:rankable implies termination,thm:partial implies rankable,thm:antitone rankable implies termination,thm:antitone partial implies rankable} are all sufficiently generic with respect to what the reduction relation actually is that they can be directly applied to other reduction strategies. They only require that the number of reductions that can occur without any of them being a $\tY$-reduction is bounded for any starting term (which is true, because Theorem~\ref{thm:de groote} applies equally to any reduction strategy). For a reduction strategy $r$ and term $M$, just substitute $N[r(N)]$ being a $\tY$-redex for $N$ being of the form $E[\tY \lambda x. O]$, and $r(N)$ being undefined for $N$ being a value.
+All of the theorems on the termination of rankable terms therefore extend to other reduction strategies too. The proofs of Theorems~\ref{thm:rankable implies termination}, \ref{thm:partial implies rankable},
+\ref{thm:antitone rankable implies termination} and~\ref{thm:antitone partial implies rankable} are all sufficiently generic with respect to what the reduction relation actually is that they can be directly applied to other reduction strategies. 
+They only require that the number of reductions that can occur without any of them being a $\tY$-reduction is bounded for any starting term (which is true, because Theorem~\ref{thm:de groote} applies equally to any reduction strategy). For a reduction strategy $r$ and term $M$, just substitute $N[r(N)]$ being a $\tY$-redex for $N$ being of the form $E[\tY \lambda x. O]$, and $r(N)$ being undefined for $N$ being a value.
 
 
 The domain of definition of the ranking functions also needs to be changed from the reachable terms $\mathit{Rch}(M)$ to the \emph{reachable terms with respect to the reduction strategy $r$},
 \[
-\begin{array}{l}
-\mathit{Rch}_r(M) := \{N \mid \exists n, (N_i)_{0 \leq i \leq n} : {}\\
-\qquad\qquad\qquad N_0 = M, N_n = N, N_i \to N_{i+1} \text{ at } r(N_i)\}.
-\end{array}
+%\begin{array}{l}
+\mathit{Rch}_r(M) := \{N \mid \exists n, (N_i)_{0 \leq i \leq n} : 
+N_0 = M, N_n = N, N_i \to N_{i+1} \text{ at } r(N_i)\}.
+%\end{array}
 \]
 
 More explicitly, the modified forms of the theorems are:

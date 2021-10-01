@@ -18,7 +18,9 @@ We think that the supermartingales of our paper are a good basis for giving a un
 By contrast, our approach works for programs with continuous distributions. 
 Note that $n$-PHORS is strictly less expressive then order-$n$ call-by-name PPCF:
 % (because the underlying recursion schemes are not Turing complete):
-for example, the PPCF terms in Examples~\ref{ex:raven complex,ex:non-affine continuous,ex:higher-order recursion}
+for example, the PPCF terms in Examples~\ref{ex:raven complex},
+\ref{ex:non-affine continuous} and
+\ref{ex:higher-order recursion}
 %\refExample{complexExample} 
 are not definable as PHORS.
 
@@ -38,7 +40,7 @@ If every term reachable from a certain PPCF term is AST, then that term is antit
 
 Definition~\ref{def:more general red}, defining redexes and which positions are acceptable to reduce at is sufficiently restrictive to guarantee confluence, but is also a little more restrictive in some cases than is necessary for this purpose. For example, if the argument of a function is not yet a value, but its reduction to a value would be deterministic, or the function is affine, then applying the function before reducing its argument would not cause any problematic duplication of random samples. Similarly, if $\tsample$ occurs at position $\alpha;@_2;\beta;\lambda;\gamma$, but the function at $\alpha;@_1$ is affine, evaluating the $\tsample$ may in some cases also work fine. A more complete characterisation of which redexes can be reduced without breaking confluence could be interesting.
 
-Although this is a broadly applicable method of proving almost sure termination of probabilistic functional programs, and Theorems~\ref{thm:antitone partial implies rankable,thm:confluent ranking} make it more convenient to use, some method of automating the construction and checking of (antitone) ranking functions, even partially, could make it considerably more practically useful, especially in cases where almost sure termination is merely a side-condition for some other theorem or algorithm to be applicable.
+Although this is a broadly applicable method of proving almost sure termination of probabilistic functional programs, and Theorems~\ref{thm:antitone partial implies rankable} and \ref{thm:confluent ranking} make it more convenient to use, some method of automating the construction and checking of (antitone) ranking functions, even partially, could make it considerably more practically useful, especially in cases where almost sure termination is merely a side-condition for some other theorem or algorithm to be applicable.
 
 \paragraph*{Conclusions}
 
