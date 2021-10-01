@@ -74,7 +74,7 @@ we say that $(Y_n)_{n \geq 0}$ is an \emph{antitone strict supermartingale w.r.t
 %\lo{The preceding definition does not place any constraint on the stopping time $T$ (other than that it is w.r.t.~the filtration $(\calF_n)_{n \geq 0}$). However for the definition to make sense, $T$ must be the stopping time $T(s) := \min \set{n \mid Y_n(s) = 0}$.}
 %\akr{The definition you gave for an antitone ranking function is incorrect, because the antitone ranking functions are a proper subset of ranking functions. Although we may have been referring to antitone ranking functions as a type of ranking function, they're a generalisation, so they don't actually meet the definition of a ranking function in general.}
 
-\begin{restatable}{theorem}{ACStrict}
+\begin{restatable}{therm}{ACStrict}
 \label{thm:a-c strict}
 Let $(Y_n)_{n \geq 0}$ be an antitone strict supermartingale w.r.t.~stopping time $T$. 
 Then $T < \infty$ a.s.
@@ -106,9 +106,9 @@ With respect to the antitone function $\epsilon(x) = \frac{4-x}{4}$ and stopping
 
 %\changed[lo]{Let $f$ be a ranking function on a closed PPCF term $M$. We say that $M$ is \emph{antitone rankable} by $f$ if the supermartingale $(f(M_n))_{n \geq 0}$ and the stopping time $T_M^{\tY}$, both adapted to the fitration $(\calF_n)_{n \geq 0}$ where $\calF_n := \sigma(M_1, \ldots, M_n)$, are antitone strict.}
 
-\begin{theorem}[Antitone ranking function soundness] \label{thm:antitone rankable implies termination}
+\begin{therm}[Antitone ranking function soundness] \label{thm:antitone rankable implies termination}
 If a closed PPCF term $M$ is antitone rankable, then $T_M^{\tY} < \infty$ a.s.~(equivalently, $M$ is AST).
-\end{theorem}
+\end{therm}
 \begin{proof}
 As in %Theorem \ref{thm:basicRankingSoundness}, 
 Theorem \ref{thm:rankable implies termination},
@@ -129,7 +129,7 @@ Define an \emph{antitone sparse ranking function} on a closed term $M$ to be a p
 \end{inparaenum}
 \end{definition}
 
-\begin{restatable}[Sparse function]{theorem}{AntitonePartial}  \label{thm:antitone partial implies rankable}
+\begin{restatable}[Sparse function]{therm}{AntitonePartial}  \label{thm:antitone partial implies rankable}
   Every antitone sparse ranking function is a restriction of an antitone ranking function.
 \end{restatable}
 
@@ -247,11 +247,11 @@ For any $F : \textsf{R} \to \textsf{R} \to \textsf{R}$ such that $F\, \underline
 It seems very likely that this method is complete in the case that every reachable term is AST (Conjecture \ref{conj:antitone}), but we have been unable to actually prove this. It is certainly at least capable of proving the termination of terms which terminate arbitrarily slowly (in the sense that there is no similar limitation to Theorem \ref{thm:rankable implies termination}, which can only prove termination of $\tY$-PAST terms).
 
 The following theorem does not prove completeness, but is suggestive in that direction:
-%\begin{restatable}{theorem}{antitoneSeemsComplete}
-\begin{theorem}
+%\begin{restatable}{therm}{antitoneSeemsComplete}
+\begin{therm}
 \label{thm:towards completeness}
 For any stopping time $T$ which is almost surely finite, if $(\calF_n)_n$ is the coarsest filtration to which $T$ is adapted, then there is a supermartingale $(Y_n)_n$ adapted to $(\calF_n)_n$ and an antitone function $\epsilon$ such that $(Y_n)_n$ is an antitone ranking supermartingale with respect to $T$ and $\epsilon$.
-\end{theorem}
+\end{therm}
 %\end{restatable}
 
 \begin{proof}
