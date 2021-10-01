@@ -81,14 +81,14 @@ and if $T \leq T'$, then $\calF_{T} \subseteq \calF_{T'}$.
 The following is an iterated version of Doob's well-known Optional Sampling Theorem 
 %(see, e.g., \cite[\S 6.7]{AshDD00} and \cite[Thm.~7.2]{DBLP:conf/popl/FioritiH15}).
 (see e.g.~\citep{AshDD00,DBLP:conf/popl/FioritiH15}).
-\begin{theorem}[Optional Sampling]
+\begin{therm}[Optional Sampling]
 \label{thm:optional sampling}
 Let $(X_n)_{n \geq 0}$ be a supermartingale, and $(T_n)_{n \geq 0}$ a sequence of increasing stopping times, all adapted to filtration $(\calF_n)_{n \geq 0}$, then $(X_{T_n})_{n \geq 0}$ is a supermartingale adapted to $(\calF_{T_n})_{n \geq 0}$ if one of the following conditions holds:
 \begin{enumerate}
 \item each $T_n$ is bounded i.e.~$T_n < c_n$ where $c_n$ is a constant
 \item $(X_n)_{n \geq 0}$ is uniformly integrable.
 \end{enumerate}
-\end{theorem}
+\end{therm}
 
 \subsection{Ranking functions and supermartingales}
 
@@ -102,7 +102,7 @@ and the filtration $(\mathcal{F}_n)_{n \geq 0}$ where $\mathcal{F}_n := \sigma(M
 Thus $T_M$ is the \emph{runtime} of $M$ (and $M$ is AST iff $\mu_{\entrosp}(T_M < \infty) = 1$); we say that $M$ is \emph{positively almost surely terminating} (\emph{PAST}) if $\expect{T_M} < \infty$.
 
 Our first result is the following theorem.
-\begin{restatable}[Deriving supermartingales]{theorem}{rankableAndStrictRankable}
+\begin{restatable}[Deriving supermartingales]{therm}{rankableAndStrictRankable}
 \label{thm:rankable and strict rankable}
 If a closed PPCF term $M$ is rankable (respectively, strictly rankable) by $f$ 
 then $(f(M_n))_{n \geq 0}$ is a supermartingale (respectively, ranking supermartingale w.r.t.~stopping time $T_M$) adapted to $(\mathcal{F}_n)_{n \geq 0}$. %where $\mathcal{F}_n = \sigma(M_1, \cdots, M_n)$.
@@ -146,7 +146,7 @@ We say that $M$ is $\tY$-\emph{PAST} if $\expect{T^{\tY}_M} < \infty$.
 $T_M^\tY$ is a stopping time adapted to $(\calF_{T_n})_{n \geq 0}$.
 \end{restatable}
 
-\begin{theorem}[Soundness of rankability] \label{thm:rankable implies termination}
+\begin{therm}[Soundness of rankability] \label{thm:rankable implies termination}
 \begin{enumerate}
 \item If a closed PPCF term $M$ is rankable, then $M$ is AST and $\tY$-PAST.
 %AST (equivalently, $T^{\tY}_M < \infty$ almost surely), and $M$ is $\tY$-positively almost sure terminating ($\tY$-PAST) i.e.~$\expect{T^{\tY}_M} < \infty$. 
@@ -154,7 +154,7 @@ $T_M^\tY$ is a stopping time adapted to $(\calF_{T_n})_{n \geq 0}$.
 \item If a closed PPCF term $M$ is strictly rankable, then $M$ is PAST.
 %$\expect{T_M} < \infty$ i.e.~$M$ is PAST.
 \end{enumerate}
-\end{theorem}
+\end{therm}
 
 %\cref{thm:rankable implies termination}
 

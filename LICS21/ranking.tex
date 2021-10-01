@@ -23,7 +23,7 @@ The term $M = \Xi \, (\lambda x. x+1)$ where
 is $\tY$-PAST and rankable, terminating with only 2 $\tY$-reductions on average, i.e.,~$\expect{T_M^\tY} = 2$, but applies the increment function $2^n$ times with probability $2^{-n-1}$ for $n \geq 0$, which diverges, i.e.,~$\expect{T_M} = \infty$.
 \end{example}
 
-\begin{restatable}{theorem}{ThmMinimal} \label{thm:minimal}
+\begin{restatable}{therm}{ThmMinimal} \label{thm:minimal}
 Given a closed term $M$, the function $f:Rch(M) \to \mathbb R$ given by 
 \[
 f(N) := \mathbb E [\text{number of }\tY\text{-reduction steps from }N\text{ to a value}]
@@ -109,7 +109,7 @@ Define a \emph{sparse ranking function} on a closed term $M$ to be a partial fun
 \end{definition}
 A sparse ranking function that is total is just a ranking function. Providing a sparse ranking function is essentially part way between providing a ranking function and directly proving almost sure termination.
 
-\begin{restatable}[Sparse function]{theorem}{PartialImpliesRankable} \label{thm:partial implies rankable}
+\begin{restatable}[Sparse function]{therm}{PartialImpliesRankable} \label{thm:partial implies rankable}
 Every sparse ranking function is a restriction of a ranking function.
 \end{restatable}
 
