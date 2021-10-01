@@ -20,10 +20,15 @@ There are, however, some restricted variations on the reduction order that do no
 Even with such a restriction, a trace semantics in the style of the one already defined would not be entirely confluent, as, for example, $\red^3(\tsample - \tsample, (1,0,\dots))$ would be either $1$ or $-1$ depending on the order of evaluation of the $\tsample$s, as that determines which sample from the pre-selected sequence is used for each one. To fix this, rather than pre-selecting samples according to the order they'll be drawn in, select them according to the position in the term where they'll be used instead.
 
 A \emph{position} is a finite sequence of steps into a term, defined inductively as
+\iffalse
 \begin{align*}
 \alpha ::= & \; {\cdot} \mid \lambda ; \alpha \mid @_1 ; \alpha \mid @_2 ; \alpha \mid \underline f_i ; \alpha \\
 & {} \mid \tY ; \alpha \mid \textsf{if}_1 ; \alpha \mid \textsf{if}_2 ; \alpha \mid \textsf{if}_3 ; \alpha.
 \end{align*}
+\fi
+\[
+\alpha ::= {\cdot} \mid \lambda ; \alpha \mid @_1 ; \alpha \mid @_2 ; \alpha \mid \underline f_i ; \alpha \mid \tY ; \alpha \mid \textsf{if}_1 ; \alpha \mid \textsf{if}_2 ; \alpha \mid \textsf{if}_3 ; \alpha.
+\]
 The \emph{subterm of $M$ at $\alpha$}, denoted $M \mid \alpha$, is defined as
 \begin{align*}
 M \mid \cdot & = M \\

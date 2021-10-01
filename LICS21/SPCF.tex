@@ -10,8 +10,7 @@ Types and terms are defined as follows, where $r$ is a real number, $x$ is a var
 \begin{align*}
   \text{\em types } A, B &::= \textsf{R}  \mid  A \to B \\
   \text{\em values } V &::= \lambda x.M  \mid  \underline{r} \\
-  \text{\em terms } M, N &::= V  \mid  x  \mid  M_1 \, M_2  \mid  \underline{f}(M_1,\dots ,M_n)  \mid  \tY \, M \\
-   & \qquad \mid  \tif{M < 0}{N_1}{N_2}  \mid  \tsample
+  \text{\em terms } M, N &::= V  \mid  x  \mid  M_1 \, M_2  \mid  \underline{f}(M_1,\dots ,M_n)  \mid  \tY \, M \mid  \tif{M < 0}{N_1}{N_2}  \mid  \tsample
 \end{align*}
 The typing rules are standard (see Figure~\ref{fig:typing rules}).
 Terms are identified up to $\alpha$-equivalence, as usual. 
@@ -21,15 +20,14 @@ The set of all terms is denoted $\Lambda$, and the set of closed terms is denote
 
 %\paragraph{}
 To define the CBV reduction relation, let \emph{evaluation contexts} be of the form:
-\begin{align*}
-  E ::= & \, [\,] \mid E \, M \mid V \, E \mid \underline{f}(\underline r_1,\dots ,\underline r_{k-1}, E, M_{k+1}, \dots, M_n) \\ & \mid \tY E \mid \tif{E<0}{M_1}{M_2}
-\end{align*}
+\[
+  E ::= [\,] \mid E \, M \mid V \, E \mid \underline{f}(\underline r_1,\dots ,\underline r_{k-1}, E, M_{k+1}, \dots, M_n) \mid \tY E \mid \tif{E<0}{M_1}{M_2}
+\]
 then a term reduces if it is formed by substituting a redex in a context i.e.
 \begin{align*}
   E[(\lambda x.M) V] & \to E[M[V/x]] \\
   E[\underline f (\underline r_1, \dots , \underline r_n)] & \to E[\underline{f(r_1,\dots,r_n)}] \\
-  E[\tY \lambda x. M] & \to E[\lambda z. M[(\tY \lambda x. M)/x] z] \\
-  & \qquad \qquad \text{ where $z$ is not free in $M$}\\
+  E[\tY \lambda x. M] & \to E[\lambda z. M[(\tY \lambda x. M)/x] z]\quad \text{ where $z$ is not free in $M$}\\
   E[\tif{\underline r < 0}{M_1}{M_2}] & \to E[M_1] \text{ where }r < 0 \\
   E[\tif{\underline r < 0}{M_1}{M_2}] & \to E[M_2] \text{ where }r \geq 0 \\
   E[\tsample] & \to E[\underline r] \text{ where } r \in [0,1].

@@ -53,6 +53,7 @@ The term  $(\tY \, \Theta) \, \underline 0$ generates a geometric distribution.
 Despite its simplicity, its $\mathit{Rch}$ contains all the terms in Figure~\ref{fig:geometric distribution}, for each $i \in \mathbb N, r \in I$.
 
 \begin{figure}[h]
+\begin{center}
 \begin{tikzpicture}[node distance=0.5em, anchor=west]
     \node (1) at (0,-0) {$\tY\, \Theta\, \underline 0$};
     \node (2) at (0,-1) {$(\lambda z. (\lambda n. \tif{\tsample \underline{- 0.5} < 0}{n}{\tY\, \Theta\, (n \underline{+ 1})}) z)\, \underline i$};
@@ -75,6 +76,7 @@ Despite its simplicity, its $\mathit{Rch}$ contains all the terms in Figure~\ref
     \draw [->] (9.west) to [bend left=30, "$i := i + 1$" {below,sloped}] (2.west);
     \draw [->] (6) to ["$r < 0.5$"] (7);
 \end{tikzpicture}
+\end{center}
 \caption{The reachable terms of $\tY \, \Theta \, \underline 0$\label{fig:geometric distribution}}
 \end{figure}
 

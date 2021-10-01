@@ -168,7 +168,7 @@ for $n \in \mathbb N$.
 For $n \geq 1$, $\Theta_2 \, n$ reduces in several steps to either $\Theta_2 \, (n-1)$ or $\Theta_2 \, (n+1)$,\footnote{Technically this is not quite correct, because of the distinction between $\underline n + 1$ and $\underline{n + 1}$, but this ranking function can still be made to work by appealing to the Confluent Ranking Theorem~\ref{thm:confluent ranking}, as can the others in this section with similar issues. See Remark~\ref{rem:ex corrected using confluent semantics} for a fuller account.} each with probability $1/2$, with one $\tY$-reduction.
 Now
 \begin{align*}%\textstyle
-& g_2(n) - \frac{g_2(n-1) + g_2(n+1)} 2 \\
+g_2(n) - \frac{g_2(n-1) + g_2(n+1)} 2 
   &=  \ln \Big(\frac{n+1}{\sqrt{n(n+2)}}\Big) 
   =  \frac 1 2 \ln\left(\frac{(n+1)^2}{n(n+2)}\right) \\
   &=  \frac 1 2 \ln\left(1 + \frac 1 {n(n+2)}\right) 
@@ -220,16 +220,30 @@ For a more complex (not $\tY$-PAST) example, consider the following continuous r
 
 \begin{example}[More complex non-affine recursion]
 \label{ex:non-affine continuous}
+\iffalse
 \begin{align*}
 & (\tY\, \lambda f x.\, (\lambda e. X[e]) \, \tsample)\, \underline 0 \quad \hbox{where}\\
 & X[e] := \tif{e \leq p - x^{-2}}{x}{f^2(x+1) \oplus_e f(x+1)}
 \end{align*}
+\fi
+\[
+(\tY\, \lambda f x.\, (\lambda e. X[e]) \, \tsample)\, \underline 0 \quad \hbox{where} \quad
+X[e] := \tif{e \leq p - x^{-2}}{x}{f^2(x+1) \oplus_e f(x+1)}
+\]
 \end{example}
 
 \begin{example}[Higher-order recursion] \label{ex:higher-order recursion}
 Consider the higher-order function
 $\Xi : (\textsf{R} \to \textsf{R} \to \textsf{R}) \to \textsf{R} \to \textsf{R} \to \textsf{R}$
 recursively defined\footnote{Inspired by examples in \cite{DBLP:journals/pacmpl/BurnOR18,DBLP:conf/lics/OngW19}.} by
+\[
+\Xi := \tY \lambda \varphi \, f^{\textsf{R} \to \textsf{R} \to \textsf{R}} \, s^\textsf{R} \, n^\textsf{R} \,.\, \tif{n \leq 0}{s}{
+f \, n \, (\varphi \, f \, s \, (n - 1))
+\oplus_p
+f \, n \, (\varphi \, f \, s \, (n + 1))
+}
+\]
+\iffalse
 \[
 \begin{array}{l}
 \Xi := \tY \lambda \varphi \, f^{\textsf{R} \to \textsf{R} \to \textsf{R}} \, s^\textsf{R} \, n^\textsf{R} . \\
@@ -240,6 +254,7 @@ f \, n \, (\varphi \, f \, s \, (n + 1))
 }
 \end{array}
 \]
+\fi
 For any $F : \textsf{R} \to \textsf{R} \to \textsf{R}$ such that $F\, \underline n\, \underline m$ terminates with no $\tY$ reductions for all $m$ and $n$, $\Xi\, F\, \underline x\, \underline y$ is antitone rankable.
 \end{example}
 
