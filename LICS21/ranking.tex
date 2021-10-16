@@ -23,13 +23,28 @@ The term $M = \Xi \, (\lambda x. x+1)$ where
 is $\tY$-PAST and rankable, terminating with only 2 $\tY$-reductions on average, i.e.,~$\expect{T_M^\tY} = 2$, but applies the increment function $2^n$ times with probability $2^{-n-1}$ for $n \geq 0$, which diverges, i.e.,~$\expect{T_M} = \infty$.
 \end{example}
 
-\begin{restatable}{therm}{ThmMinimal} \label{thm:minimal}
+\begin{therm}
+%\begin{restatable}{therm}{ThmMinimal} 
+\label{thm:minimal}
 Given a closed term $M$, the function $f:Rch(M) \to \mathbb R$ given by 
 \[
 f(N) := \mathbb E [\text{number of }\tY\text{-reduction steps from }N\text{ to a value}]
 \] 
 if it exists, is the least of all possible ranking functions of $M$.
-\end{restatable}
+%\end{restatable}
+\end{therm}
+
+\begin{proof}
+Let $f$ be the candidate least ranking function defined above, and suppose $g$ is another ranking function such that $f(N) > g(N)$ for some $N \in Rch(M)$. The restrictions of $f$ and $g$ to $Rch(N)$ have the same properties assumed of $f$ and $g$, so assume w.l.o.g.~that $N=M$. The difference $g - f$ is then a supermartingale (with the same setup as in 
+Theorem~\ref{thm:rankable and strict rankable});
+therefore $\mathbb E[g(M_n)] \leq \mathbb E[f(M_n)] + g(M)-f(M)$, for all $n$.
+Now $\mathbb E[f(M_n)] = \sum_{k=n}^\infty \mathbb P[M_k = E[\tY N] \text{ for some }E, N] \to 0 \text{ as } n \to \infty$; 
+therefore as $g(M) - f(M) < 0$, eventually $\mathbb E[g(M_n)] < 0$, which is impossible. 
+It follows that $g \geq f$ as required.
+
+In order for $f$ to be the least ranking function of $M$, it also has to actually be a ranking function itself. Each of the conditions on a ranking function is easily verified from the definition of $f$.
+\end{proof}
+
 
 \subsection{Sparse ranking functions}
 Even in the case of reasonable simple terms, explicitly constructing a ranking function would be a lot of work, and Theorem~\ref{thm:minimal} makes even stronger assumptions than almost sure termination, so it isn't useful for proving it.
@@ -111,11 +126,24 @@ Define a \emph{sparse ranking function} on a closed term $M$ to be a partial fun
 \end{definition}
 A sparse ranking function that is total is just a ranking function. Providing a sparse ranking function is essentially part way between providing a ranking function and directly proving almost sure termination.
 
-\begin{restatable}[Sparse function]{therm}{PartialImpliesRankable} \label{thm:partial implies rankable}
+\begin{therm}
+%\begin{restatable}[Sparse function]{therm}{PartialImpliesRankable} 
+\label{thm:partial implies rankable}
 Every sparse ranking function is a restriction of a ranking function.
-\end{restatable}
+%\end{restatable}
+\end{therm}
 
+%\PartialImpliesRankable*
+\begin{proof}
+Take a closed term $M$ and sparse ranking function $f$ on $M$. Define $f_1 : Rch(M) \rightharpoonup \mathbb R$ by
+\begin{align*}
+    f_1(N) & := f(N) \text{ whenever $f(N)$ is defined,} \\
+    f_1(V) & := 0 \text{ for values $V$ not in the domain of $f$.}
+\end{align*}
 
+Define $(\nnext(N,s),\_) = \red^n(N,s)$ for the least $n \geq 0$ such that it's in the domain of $f_1$, and $g(N,s) := \left | \{m < n \mid \red^m(N,s) \text{ is of the form } (E[\tY\, \lambda x. N'],s') \} \right |$. 
+The function $\nnext$ is well-defined (i.e.~$n$ is finite) for all $N \in Rch(M)$ by induction on the path from $M$ to $N$, by the third condition on sparse ranking functions. Define $f_2(N) = \int_\entrosp f_1(\nnext(N,s)) + g(N,s) \, \mu_{\entrosp}(\mathrm d s)$. The (total) function $f_2$ agrees with $f$ on $f$'s domain, and it is a ranking function on $M$ (in fact, the least ranking function of which $f$ is a restriction, by the same argument as Theorem~\ref{thm:minimal}).
+\end{proof}
 As a corollary, any term which admits a sparse ranking function terminates almost surely.
 
 \subsection{Examples}

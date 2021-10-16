@@ -57,14 +57,22 @@ Our notion of ranking supermartingale is a slight generalisation of the original
 Intuitively $Y_n$ gives the rank of the program after $n$ steps of computation, and $T$ is the time at which it reaches a value (which may be infinite if it fails to terminate).
 In a $\epsilon$-ranking supermartingale, each computation step causes a strict decrease in rank of at least $\epsilon$, provided the term in question is not a value.
 
-\begin{restatable}{lemma}{rankPast}
-%\begin{lemma}%[{\cite[Lemma 5.5]{DBLP:conf/popl/FioritiH15}}]
-% \cite[Prop 1]{DBLP:conf/popl/ChatterjeeFNH16}}
-\label{lem:rank-PAST}
+%\begin{restatable}{lemma}{rankPast}
+\begin{lemma}\label{lem:rank-PAST}
 Let $(Y_n)_{n \geq 0}$ be a $\epsilon$-ranking supermartingale w.r.t.~the stopping time $T$, then $T < \infty$ a.s., and %$\expect{T} \leq \frac{\expect{Y_0}}{\epsilon}$.
 $\expect{T} \leq {\expect{Y_0}}/{\epsilon}$.
-%\end{lemma}
-\end{restatable}
+\end{lemma}
+%\end{restatable}
+
+\begin{proof}%\rankPast
+We first prove by induction: for all $n \geq 0$
+\[
+%\forall n \geq 0 \, . \, 
+\expect{Y_n} \leq \expect{Y_0} - \epsilon \cdot \big(\textstyle\sum_{i=0}^{n-1} \mathbb{P}[T > i]\big).
+\]
+It follows that $\sum_{i=0}^{\infty} \mathbb{P}[T > i]$ converges; hence we have $\lim_{i \to \infty} \mathbb{P}[T > i] = 0$ and so $\mathbb{P}[T < \infty] = 1$.
+It then remains to observe: if $T < \infty$ a.s., then $\expect{T} = \sum^\infty_{i=0} \mathbb{P}[T > i]$.
+\end{proof}
 
 \begin{remark}
 Lemma~\ref{lem:rank-PAST} is a slight extension of \cite[Lem.~5.5]{DBLP:conf/popl/FioritiH15},
@@ -110,7 +118,143 @@ then $(f(M_n))_{n \geq 0}$ is a supermartingale (respectively, ranking supermart
 %\lo{@Andrew: A better name for this theorem: ``Ranking function'', ``Supermartingale'', ``(Ranking) supermartingale''?}
 
 %\subsection{Proof of \Cref{thm:rankable and strict rankable}.}
-The ranking supermartingale condition is satisfied essentially by a case analysis on the type of redex (Lemma~\ref{lem:key rankable}).
+
+%The ranking supermartingale condition is satisfied essentially by a case analysis on the type of redex (Lemma~\ref{lem:key rankable}).
+
+We shall obtain the theorem as a corollary of a technical lemma (Lemma~\ref{lem:key rankable}).
+
+We say that a given PPCF term is: 
+\emph{type 1} if it has the shape $E[\tY \lambda x. N]$, \emph{type 2} if it has the shape $E[\tsample]$; \emph{type 3} if it has the shape $E[R]$ where $R$ is any other redex, and \emph{type 4} if it is a value.
+Henceforth fix an $n \geq 0$, and define $\mathbf{T}_i := \set{s \mid M_n(s) \hbox{ is type $i$}}$.
+It is straightforward to see that each $\mathbf{T}_i \in \calF_n$, and $\set{\mathbf{T}_1, \mathbf{T}_2, \mathbf{T}_3, \mathbf{T}_4}$ is a partition of $\entrosp$.
+Hence it suffices to prove the following lemma.
+
+\begin{restatable}[Technical]{lemma}{TechnicalRankingSupermartingale}
+\label{lem:key rankable}
+For all $i \in \set{1, 2, 3, 4}$ and $A \in \calF_n$
+\[
+\int_A \mu_{\entrosp}(\dif s) \, f(M_{n+1})[s \in \mathbf{T}_i] \leq \int_A \mu_{\entrosp}(\dif s) \, f(M_n)[s \in \mathbf{T}_i]
+\; \footnote{where (the Iverson bracket) $[P] := 1$ if the statement $P$ hold, and 0 otherwise.}
+\] 
+%$\int_A \mu_{\entrosp}(\dif s) \, f(M_{n+1}) \leq \int_A \mu_{\entrosp}(\dif s) \, f(M_n)$, i.e., 
+Hence $\mathbb{E}[f(M_{n+1}) \mid \calF_n] \leq f(M_n)$ a.s.
+\end{restatable}
+
+First, some notation.
+
+Given an $\mathbb N$-indexed sequence (e.g.~$s \in \entrosp$) and $m \geq 0$, we write $s_{\leq m} \in I^m$ to mean the prefix of $s$ of length $m$.
+For $n \geq 0$, define
+\begin{align*}
+%M_n(s) &:= \pi_0 (\red^n(M, s))\\
+\ndraw{n}{s} &:= |\{k < n \mid \exists E: M_k(s) = E[\tsample]\}|
+\end{align*}
+so that $\pi_1 (\red^n(M, s)) = %\overbrace{\pi_t( \cdots (\pi_t}^{\ndraw n s}(s))$. 
+\pi_t( \cdots (\pi_t (s))$, with $\pi_t$ applied ${\ndraw n s}$ times.
+%and the filtration $\mathcal{F}_n := \sigma(M_1, \cdots, M_n)$.
+The $\calF_n$-measurability of $M_n$ (and hence of $\#\mathrm{draw}_n$) follows from \cite{DBLP:conf/icfp/BorgstromLGS16}.
+%$\#\mathrm{draw}_n$ is a stopping time (bounded by $n$). 
+\iffalse
+\akr{$\#\mathrm{draw}_n$ is not a stopping time. It doesn't look like you actually use this claim anyway, so it should just be fine to remove, but did you mean something different?} \lo{I agree, and I don't actually use this claim.}
+\fi
+Take $s \in A \in \calF_n$ with $\ndraw{n}{s} = l$.
+For any $s'\in \entrosp$, if $s_{\leq l} = s_{\leq l}'$ then $s' \in A$.
+It follows that ${\set{s_{\leq l}} \cdot I^{\mathbb N}} \subseteq A$.
+\lo{NOTE. To fix notation:
+\(
+\sigma(M_{n}) = \sigma\big(\set{M_{n}^{-1}(\alpha_j, U_{\alpha_j})
+\mid \alpha_j\in \mathsf{Sk}_j, U_{\alpha_j} \in \mathcal{B}(\Real^j), j \geq 0}\big)
+\)
+}
+%Take $M \in \Lambda^0$ (closed PPCF terms). Define, for each $n \in \omega$, the random variable $M_n : \entrosp \to \Lambda^0$ by $M_n(s) := \pi_0 (\red^n(M, s))$.
+
+\begin{proof}
+We show the non-trivial case of $i = 2$.
+First we express 
+\begin{equation}
+f(M_{n+1})[s \in \mathbf{T}_2] = \sum_{i \in \calI} 
+f(E_i[\sigma_i(s)][\underline{\rho(s)}])[s \in U_i]
+\label{eqn:f 2 n+1}
+\end{equation}
+where 
+\begin{itemize}
+\item $\calI$ is a countable indexing set
+\item $E_i[\cdot][\tsample] \in \mathsf{Sk}_{j_i}$, and $\sigma_i : \entrosp \to \Real^{j_i}$, and $\rho(s) := \pi_h(\pi_1(\red^n(M, s))) = \pi_h(\pi_t^{l_i}(s)) \in \Real$ 
+\item $\set{U_i}_{i \in \calI}$ is a partition of $\mathbf{T}_2$, 
+where each $U_i$ is determined by a skeletal environment $E_i$ and a number (of draws) $l_i \leq n$, so that $U_i$ is the set of traces where after $n$ reduction steps, $l_i$ samples have been used, and the term has reached $E_i[r][\tsample]$ for some $r \in \Real^{j_i}$.
+%\(
+%s \in U_i
+%\iff
+%(E_i[\underline{r}][{\tsample}], \pi_t^{l_i}(s)) = \red^n(M, s),
+%\;
+%\hbox{for some }r \in \Real^{j_i}.
+%\)
+(We use the (measurable) function $\sigma_i : \entrosp \to \Real^{j_i}$ to skolemise the existentially quantified $r$.)
+Equivalently
+\[
+U_i := \#\mathrm{draw}_n^{-1}[l_i] \cap M_n^{-1}[\{E_i[r][\tsample] \mid r \in \Real^{j_i}\}] \in \calF_n.
+\]
+%\lo{I.e.~$(E_i[\underline{\sigma_i(s)}][{\tsample}], \pi_t^{l_i}(s)) = \red^n(M, s)$ iff $s \in U_i$.}
+\end{itemize}
+
+Observe that if $s \in U_i$ then $\set{s_{\leq l_i}} \cdot I^{\mathbb N} \subseteq U_i$;
+in fact $(U_i)_{\leq l_i} \cdot I^{\mathbb N} = U_i$.
+%Moreover, for any $A \in \calF_n$, if $s \in A$ then $\set{s_{\leq l}} \cdot I^{\mathbb N} \subseteq A$.
+This means that for any measurable $g : \entrosp \to \Real_{\geq 0}$, if $g(s)$ only depends on the prefix of $s$ of length $(l_i+1)$, then, writing $\widehat{g} : I^{l_i+1} \to \Real_{\geq 0}$ where $g(s) = \widehat{g}(s_{\leq l_i+1})$, we have: for any $A \in \calF_n$ 
+\begin{equation}
+\int_{A \cap U_i}  \mu_{\entrosp}(\dif s) \, g(s) = 
+\int_{(A \cap U_i)_{\leq l_i+1}} \Leb_{l_i+1}(\dif t) \, \widehat{g}(t)
+\label{eqn:truncate}
+\end{equation}
+%(For simplicity, we will write $g' = g$ in the following.)
+%where $A_{\leq m} := \set{s_{\leq m} \mid s \in A}$. 
+
+Take $s \in U_i$, and set $l = l_i$.
+Plainly $\sigma_i(s)$ depends on $s_{\leq l}$, and $\rho(s)$ depends on $s_{\leq l +1}$.
+Take $u \in (U_i)_{\leq l}$.
+It then follows from the definition of ranking function that
+\[%\textstyle
+\int_I \Leb(\dif r) \, f(E_i[\widehat{\sigma_i}(u)][\underline{r}])) \leq f(E_i[\widehat{\sigma_i}(u)][\tsample])).
+\]
+Take $A \in \calF_n$, and integrating both sides, we get
+\begin{align*}
+& \int_{(A \cap U_i)_{\leq l}} \Leb_l(\dif u) \, \int_I \textrm{Leb}(\dif r) \, f(E_i[\widehat{\sigma_i}(u)][\underline{r}])) \\
+& \leq \int_{(A \cap U_i)_{\leq l}} \Leb_l(\dif u) \, f(E_i[\widehat{\sigma_i}(u)][\tsample])).
+\end{align*}
+Since $\Leb_{l+1}$ is the (unique) product measure satisfying $\Leb_{l+1}(V \times B) = \Leb_l(V) \cdot \Leb(B)$, and $(U_i)_{\leq l_i} \cdot I^{\mathbb N} = U_i$, we have
+%it follows from the preceding observation that
+\begin{align*}
+& \int_{(A \cap U_i)_{\leq l+1}} \Leb_{l+1}(\dif u') \, f(E_i[\widehat{\sigma_i}(u')][\underline{\widehat{\rho}(u')}])) \\
+& \leq 
+\int_{(A \cap U_i)_{\leq l}} \Leb_l(\dif u') \, f(E_i[\widehat{\sigma_i}(u')][\tsample]))
+\end{align*}
+and so, by (\ref{eqn:truncate})
+\begin{align}
+& \int_{A \cap U_i} \mu_{\entrosp}(\dif s) \, f(E_i[\sigma_i(s)][\underline{\rho(s)}])) \nonumber \\
+& \leq 
+\int_{A \cap U_i} \mu_{\entrosp}(\dif s) \, f(E_i[\sigma_i(s)][\tsample])).
+\label{eqn:a u ui}
+\end{align}
+
+Now, integrating both sides of (\ref{eqn:f 2 n+1}), we have
+\begin{align*}
+& \int_A \mu_{\entrosp}(\dif s) \, f(M_{n+1})[s \in \mathbf{T}_2] \\
+&= 
+\int_A \mu_{\entrosp}(\dif s) \, \sum_{i \in \calI} f(E_i[\sigma_i(s)][\underline{\rho(s)}])[s \in U_i] \\
+&= 
+\sum_{i \in \calI} \int_{A \cap U_i} \mu_{\entrosp}(\dif s) \, f(E_i[\sigma_i(s)][\underline{\rho(s)}])\\
+&\leq 
+\sum_{i \in \calI} \int_{A \cap U_i} \mu_{\entrosp}(\dif s) \, f(E_i[\sigma_i(s)][\tsample])
+\quad \hbox{$\because$ (\ref{eqn:a u ui})}\\
+&= 
+\int_{A} \mu_{\entrosp}(\dif s) \, \sum_{i \in \calI} \, f(E_i[\sigma_i(s)][\tsample])[s \in U_i]\\
+&= \int_{A} \mu_{\entrosp}(\dif s) f_{n}(M)[s \in \mathbf{T}_2]
+%\quad \hbox{$\because$ (\ref{eqn:f 2 n+1})}
+\end{align*}
+
+\end{proof}
+
+As an immediate corollary of Lemma~\ref{lem:key rankable}, each $f(M_n)$ is integrable.
+This concludes the proof of Theorem~\ref{thm:rankable and strict rankable}. 
 
 \subsection{Soundness of rankability}
 
@@ -132,7 +276,67 @@ We first state a useful property about r.v.s $T_0, T_1, T_2, \dots$.
 $(T_n)_{n \geq 0}$ is an increasing sequence of stopping times adapted to $(\calF_n)_{n \geq 0}$, and each $T_i$ is bounded.
 \end{restatable}
 
+\newcommand\transform[1]{{\ulcorner{#1}\urcorner}}
 
+%\section{$\tY$ stopping times are finite}
+\iffalse
+As before, fix a $M \in \Lambda^0$.
+Recall the random variables on $(S, \calF, \mu)$:
+\begin{align*}
+T_0(s) & := 0 \\
+T_{n+1}(s) & := \min \{ k \mid k>T_n(s), M_k(s) \textrm{ a value or of form } E[\tY \lambda x. N] \}
+\end{align*}
+\fi
+
+We first show that $T_1$ is bounded i.e.~$T_1 \leq n$, for some $n \in \mathbb N$.
+
+A first proof idea is to construct a reduction argument to the strong normalisation of the simply-typed lambda-calculus.
+ There is a classical transform of conditionals into the pure lambda-calculus.
+However, each evaluation of $\tsample$ (almost surely) returns a different number, which complicates such a transform.
+
+Given a closed PPCF term $M$, we transform it to a term $\transform{M}$ of the nondeterministic simply-typed lambda-calculus as follows.
+(We may assume that the nondeterministic calculus is generated from a base type $\iota$ with a $\iota$-type constant symbol $r$, and a function symbol $\bot : A$  for each function type $A$.)
+\iffalse
+\begin{enumerate}
+\item replace every $\tsample$ by $r$ 
+
+\item replace each base-type subterm $f \, M_1 \cdots M_n$ by $(\lambda x_1 \cdots x_n . r) \, \transform{M_1} \cdots \transform{M_n}$ where $f$ is a primitive function
+
+\item replace every subterm $\tif{B}{M_1}{M_2}$ by
+$(\lambda x . \transform{M_1} + \transform{M_2}) \, \transform{B}$, for a fresh $x$
+
+\item replace every $\tY \, f \, x . N$ by $\lambda x . \transform{N}[\bot / f]$
+\end{enumerate}
+\lo{The above rules can be defined formally.}
+\fi
+\begin{align*}
+\transform{\tsample} &:= r\\
+\transform{y} &:= y \\
+\transform{\lambda y . N} &:= \lambda y . \transform{N}\\
+\transform{M_1 \, M_2} &:= \transform{M_1} \, \transform{M_2} \\
+n \geq 0, \; \transform{f \, M_1 \cdots M_n} &:= (\lambda z_1 \cdots z_n . r) \, \transform{M_1} \cdots \transform{M_n} \\
+\transform{\tif{B}{M_1}{M_2}} &:= \big(\lambda z . (\transform{M_1} + \transform{M_2})\big) \, \transform{B} \\
+\transform{\tY N} &:= (\lambda y . \bot) \transform{N}
+\end{align*}
+In the above, variables $z, z_1, \cdots, z_n$ are assumed to be fresh; $f$ ranges over primitive functions and numerals.
+
+The idea is that $\transform{M}$ captures the initial, non-recursive operational behaviour of $M$, so that $\transform{M}$ simulates the reduction of $M$ until the latter reaches a value, or a term of the form $E[\tY \lambda x. N]$.
+
+It is straightforward to see that for every trace $s \in \entrosp$, there is a reduction sequence of $\transform{M}$ that simulates (an initial subsequene of) the reduction of $M$ under $s$.
+
+Finally thanks to the following
+\begin{therm}[\cite{DBLP:conf/lfcs/Groote94}]
+\label{thm:de groote}
+The simply-typed nondeterministic lambda calculus is strongly normalising. \qed
+\end{therm}
+we have:
+
+\begin{enumerate}
+\item Every $\transform{M}$-reduction terminates on reaching $r$, or a term of the shape $E[\bot N_1 \cdots N_n]$.
+
+\item Further there is a finite bound (say $l$) on the length of such $\transform{M}$-reduction sequences; and $l$ bounds the stopping time $T_1$.
+\end{enumerate}
+This concludes the proof of Lemma~\ref{lem:TnBounded}.
 %The random variable $T_M$ is a stopping time w.r.t.~filtration $(\calF_n)_{n \geq 0}$. 
 %Since $f(M_n(s)) = 0$ iff $M_n(s)$ is a value, $T_M$ is the \emph{runtime of $M$}.
 
@@ -140,10 +344,24 @@ The random variable $T_M^\tY$, which we call the $\tY$-\emph{runtime} of $M$, ca
 Note that, as the type system ensures that the reduction relation excluding $\tY$-reduction is strongly normalising, only finitely many reductions can occur in a row without one of them being a $\tY$-reduction, therefore $T_M^\tY < \infty$ a.s.~iff $M$ is AST. 
 We say that $M$ is $\tY$-\emph{PAST} if $\expect{T^{\tY}_M} < \infty$.
 
-\begin{restatable}{lemma}{TMtYStoppingTime}
+\begin{lemma}
+%\begin{restatable}{lemma}{TMtYStoppingTime}
 \label{lem:TMtY is a stopping time}
 $T_M^\tY$ is a stopping time adapted to $(\calF_{T_n})_{n \geq 0}$.
-\end{restatable}
+%\end{restatable}
+\end{lemma}
+
+\begin{proof}
+%For each $n \in \omega$, $\set{T_M^\tY = n} \in \calF_{T_n}$.
+To see $\set{T_M^\tY = n} \in \calF_{T_n}$ for a given $n$, we need to show that $\set{T_M^\tY = n} \cap \set{T_n \leq i} \in \calF_i$, for all $i \in \mathbb N$.
+Let $\mathcal V$ be the set of values in $\Lambda^0$ (which is measurable), and let $\mathcal W$ be the non-values.
+Then, it suffices to observe that $\set{T_M^\tY = n} \cap \set{T_n \leq i}
+= \bigcup_{l=n}^i 
+\big( M_l^{-1} [{\mathcal V}] \cap  
+M_{l-1}^{-1} [{\mathcal W}] \cap 
+\set{T_n = l} \big)
+$, where each of $M_l^{-1} [{\mathcal V}]$, $M_{l-1}^{-1} [{\mathcal W}]$, and $\set{T_n = l}$ is in $\calF_i$.
+\end{proof}
 
 \begin{therm}[Soundness of rankability] \label{thm:rankable implies termination}
 \begin{enumerate}

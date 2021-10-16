@@ -1,4 +1,5 @@
 % !TEX root = main.tex
+\iffalse
 \label{apx:antitone}
 \ACStrict*
 \begin{proof}
@@ -68,6 +69,7 @@ Therefore, by a telescoping sum
 which is a contradiction, therefore the claim must be true, therefore $P[T > n] \to 0$ as $n \to \infty$, therefore $T < \infty$ a.s.
 \end{proof}
 
+
 \AntitonePartial*
 \begin{proof}
   Take a closed term $M$ and an antitone sparse ranking function $f$ on $M$, with a corresponding antitone function $\epsilon$. Assume wlog that $\epsilon$ is convex (as if it isn't, we can just take its convex hull instead). As in Theorem~\ref{thm:partial implies rankable}, define $f_1 : Rch(M) \rightharpoonup \mathbb R$ by
@@ -80,7 +82,7 @@ which is a contradiction, therefore the claim must be true, therefore $P[T > n] 
   Define $(\nnext(N,s),\_) = \red^n(N,s)$ for the least $n \geq 0$ such that it's in the domain of $f_1$, and $g(N,s) := \left | \{m < n \mid \red^m(N,s) \text{ is of the form } (E[\tY\, \lambda x. N'],s') \} \right |$. 
   The function $\nnext$ is well-defined (i.e.~$n$ is finite) for all $N \in Rch(M)$ by induction on the path from $M$ to $N$, by the third condition on antitone partial ranking functions. Define $f_2(N) := \int_\entrosp f_1(\nnext(N,s)) + \epsilon(f_1(\nnext(N,s))) g(N,s) \, \mu_{\entrosp}(\mathrm d s)$. For any term $N$ where $f$ is defined, $f_2(N) = f(N)$, and the value that $f_2$ would have at $N$ if $f$ were not defined at $N$ is $\leq f(N)$, by the third condition on antitone partial ranking functions. In order to show that $f_2$ is an antitone partial ranking function, it therefore suffices to show that the value that $f_2$ would have had at each term if $f$ were not defined at that term is at least the expectation of $f_2$ after one reduction step (plus $\epsilon(f_2(N))$ if the reduction step is a $tY$-reduction). For any term $N$ which is not of the form $E[R]$ for some $\tY$-redex $R$, this is trivial. If $R$ is a $\tY$-redex, then $\epsilon(f_2(N)) \leq \int_\entrosp \epsilon(f_1(\nnext(N,s)))\, \mu_{\entrosp}(\mathrm d s)$ by the convexity of $\epsilon$, because $n$ is bounded. Therefore, the (total) function $f_2$, which agrees with $f$ on $f$'s domain, is an antitone ranking function on $M$ (with the same function $\epsilon$ if it's convex).
 \end{proof}
-
+\fi
 
 \subsection*{Example~\ref{ex:raven complex} (Continuous random walk)}
 Let $\Theta := \tY \, \lambda f x . \tif{x \leq 0}{0}{f(x - \tsample)}$. 

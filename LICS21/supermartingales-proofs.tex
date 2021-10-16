@@ -1,5 +1,6 @@
 % !TEX root=./main.tex
 
+\iffalse
 \rankPast*
 \begin{proof}%\rankPast
 We first prove (by induction on $n$): for all $n \geq 0$
@@ -10,7 +11,9 @@ We first prove (by induction on $n$): for all $n \geq 0$
 It follows that $\sum_{i=0}^{\infty} \mathbb{P}[T > i]$ converges; hence we have $\lim_{i \to \infty} \mathbb{P}[T > i] = 0$ and so $\mathbb{P}[T < \infty] = 1$.
 It then remains to observe: if $T < \infty$ a.s., then $\expect{T} = \sum^\infty_{i=0} \mathbb{P}[T > i]$.
 \end{proof}
+\fi
 
+\iffalse
 \rankableAndStrictRankable*
 We shall obtain the theorem as a corollary of a technical lemma (Lemma~\ref{lem:key rankable}).
 
@@ -147,8 +150,10 @@ Now, integrating both sides of (\ref{eqn:f 2 n+1}), we have
 As an immediate corollary of Lemma~\ref{lem:key rankable}, each $f(M_n)$ is integrable.
 This concludes the proof of Theorem~\ref{thm:rankable and strict rankable}. 
 
-\medskip
+\fi
 
+
+\iffalse
 \newcommand\transform[1]{{\ulcorner{#1}\urcorner}}
 
 %\section{$\tY$ stopping times are finite}
@@ -212,6 +217,7 @@ we have:
 \item Further there is a finite bound (say $l$) on the length of such $\transform{M}$-reduction sequences; and $l$ bounds the stopping time $T_1$.
 \end{enumerate}
 This concludes the proof of Lemma~\ref{lem:TnBounded}.
+\fi
 
 \iffalse
 @inproceedings{DBLP:conf/lfcs/Groote94,
@@ -234,6 +240,7 @@ This concludes the proof of Lemma~\ref{lem:TnBounded}.
 }
 \fi
 
+\iffalse
 \medskip
 
 \TMtYStoppingTime*
@@ -249,5 +256,5 @@ M_{l-1}^{-1} [{\mathcal W}] \cap
 $, where each of $M_l^{-1} [{\mathcal V}]$, $M_{l-1}^{-1} [{\mathcal W}]$, and $\set{T_n = l}$ is in $\calF_i$.
 \end{proof}
 
-
+\fi
 
