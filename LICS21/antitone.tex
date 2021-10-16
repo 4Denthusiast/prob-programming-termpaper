@@ -62,6 +62,8 @@ Note that antitone ranking functions are actually a generalisation of ranking fu
 We assume $\tY f^{A \to B} \, x^A \, . \, \theta^B$ is a value.}
 \fi
 
+\subsection{Antitone strict supermartingales}
+
 \begin{definition}\rm
 Given a probability space $(\Omega, \calF, \mathbb{P})$, and a supermartingale $(Y_n)_{n \geq 0}$ and a stopping time $T$ adapted to filtration $(\calF_n)_{n \geq 0}$,
 we say that $(Y_n)_{n \geq 0}$ is an \defn{antitone strict supermartingale w.r.t.~$T$} if for all $n \geq 0$, we have $Y_n \geq 0$, and there exists an antitone function $\epsilon : \nnReal \to \pReal$ satisfying
@@ -113,11 +115,11 @@ Therefore
 \dfrac{\expect{Y_0}}{\mathbb P[T > n]}
 \end{calculation}
 
-\emph{Claim}: For all $0 < x \leq 1$, 
+\noindent\textbf{Claim}:\emph{For all $0 < x \leq 1$, 
 \(
 \mathbb P[T > B_x] \leq x,
 \)
-where $B_x = \left \lceil \dfrac{\expect{Y_0}+1}{x \; \epsilon(\expect{Y_0} \, x^{-1})} \right \rceil$ and $\epsilon : \nnReal \to \pReal$ is the antitone function. 
+where $B_x = \left \lceil \dfrac{\expect{Y_0}+1}{x \; \epsilon(\expect{Y_0} \, x^{-1})} \right \rceil$ and $\epsilon : \nnReal \to \pReal$ is the antitone function.} 
 
 \smallskip
 
@@ -142,11 +144,11 @@ We have
 x \; \epsilon\big(\expect{Y_0} \, x^{-1}\big).
 \end{calculation}
 Therefore, by a telescoping sum
-\begin{align*}
+\[
 \expect{Y_{B_x}} 
-&= \expect{Y_{B_x}-Y_0+Y_0} \leq \expect{Y_0} - B_x \; x \; \epsilon(\expect{Y_0} \, x^{-1})\\
-&\leq -1 < 0 
-\end{align*}
+= \expect{Y_{B_x}-Y_0+Y_0} \leq \expect{Y_0} - B_x \; x \; \epsilon(\expect{Y_0} \, x^{-1})
+\leq -1 < 0 
+\]
 %\lo{$\expect{Y_0 - B_x \; x \; \epsilon(\expect{Y_0} \, x^{-1})}$}
 which is a contradiction, therefore the claim must be true, therefore $P[T > n] \to 0$ as $n \to \infty$, therefore $T < \infty$ a.s.
 \end{proof}
@@ -443,7 +445,7 @@ Consider the candidate ranking function $\Xi \, \underline n \mapsto n + 1$. For
 
 If instead, we take the ranking function to be defined after the $\tY$-reduction but before the $\tsample$-reduction as well, this can be resolved. Letting $\Theta[n] = \underline 0 \oplus_{\frac 1 n} \Xi \, n$:
 \begin{align*}
-\Theta[\underline n] &\mapsto n \\
+\Theta[\underline n] &\mapsto n &
 \Xi \, \underline{10} & \mapsto 12.
 \end{align*}
 For each $n$, $\Theta[n]$ reduces to either $0$ or $\Theta[n+1]$, with a $\tY$-reduction only in the latter case, and the condition that this is an antitone sparse ranking function is that $n \geq \frac{(n-1)(n+1)}{n} + \frac{n-1}{n} \epsilon(n+1)$ and $12 \geq 11 + \epsilon(11)$. These are satisfied by setting $\epsilon(x) = \min(1, 1/x)$, therefore this term is AST.
@@ -451,7 +453,7 @@ For each $n$, $\Theta[n]$ reduces to either $0$ or $\Theta[n+1]$, with a $\tY$-r
 
 %\medskip
 
-\subsection*{Non-affine recursion}
+\subsubsection*{Non-affine recursion}
 
 Many of the recent advances in the development of AST verification methods \citep{DBLP:conf/pldi/ChenH20,DBLP:conf/cav/ChakarovS13,DBLP:conf/popl/FioritiH15,DBLP:journals/pacmpl/McIverMKK18,DBLP:conf/aplas/HuangFC18,DBLP:conf/popl/ChatterjeeNZ17,DBLP:journals/pacmpl/AgrawalC018,DBLP:conf/cav/ChatterjeeFG16,DBLP:conf/lics/OlmedoKKM16,DBLP:journals/pacmpl/Huang0CG19} are concerned with loop-based programs.
 We can view such loops as tail-recursive programs that are, in particular, \emph{affine recursive}, i.e., 
@@ -498,7 +500,7 @@ we obtain a sufficiently strong bound on the decrease of $\ln(a)$ that it's an a
 (It can obviously be extended to $\Xi\, \underline 1$ too, which reduces to $\Xi^n\, \underline 3$ or a value after a bounded number of steps, but that complicates the analysis a little.)
 \end{example}
 
-\subsection*{Higher-order recursion}
+\subsubsection*{Higher-order recursion}
 
 There is an important formalism for constructing (non-random) higher-order recursive functions, viz., \emph{higher-order recursion schemes} (HORS) (see e.g.~\cite{DBLP:conf/lics/Ong06,DBLP:conf/lics/Ong15}).
 %(Incidentally the (sparse) ranking function method is just as applicable to the termination analysis of \emph{deterministic} PPCF programs.)
@@ -611,7 +613,7 @@ The assumption that $(\mathcal F_n)_{n \geq 0}$ is the coarsest filtration to wh
 \fi
 
 
-\subsection{Completeness}
+\subsection{Towards completeness}
 It seems very likely that this method is complete in the case that every reachable term is AST (Conjecture~\ref{conj:antitone}), but we have been unable to actually prove this. It is certainly at least capable of proving the termination of terms which terminate arbitrarily slowly (in the sense that there is no similar limitation to Theorem~\ref{thm:rankable implies termination}, which can only prove termination of $\tY$-PAST terms).
 
 The following theorem does not prove completeness, but is suggestive in that direction:

@@ -2,6 +2,8 @@
 \section{Supermartingales}
 \label{sec:supermartingales}
 
+\subsection{Ranking functions and supermartingales}
+
 One approach to proving that a term terminates almost surely is to find some variant that is bounded below and, on average, decreases sufficiently quickly that it must eventually reach 0, similarly to the approach taken by 
 %\cite{DBLP:journals/pacmpl/McIverMKK18} 
 \cite{DBLP:conf/popl/FioritiH15} and others for imperative programs.
@@ -103,7 +105,7 @@ Let $(X_n)_{n \geq 0}$ be a supermartingale, and $(T_n)_{n \geq 0}$ a sequence o
 \end{enumerate}
 \end{therm}
 
-\subsection{Ranking functions and supermartingales}
+\subsection{Deriving supermartingales}
 
 Henceforth, fix the probability space $(\entrosp, \Sigma_\entrosp, \mu_{\entrosp})$, and a closed PPCF term $M$.
 For $n \geq 0$, define the random variables 
@@ -308,7 +310,7 @@ A first proof idea is to construct a reduction argument to the strong normalisat
 However, each evaluation of $\tsample$ (almost surely) returns a different number, which complicates such a transform.
 
 Given a closed PPCF term $M$, we transform it to a term $\transform{M}$ of the nondeterministic simply-typed lambda-calculus as follows.
-(We may assume that the nondeterministic calculus is generated from a base type $\iota$ with a $\iota$-type constant symbol $r$, and a function symbol $\bot : A$  for each function type $A$.)
+(We assume that the nondeterministic calculus is generated from a base type $\iota$ with a $\iota$-type constant symbol $r$, and a function symbol $\bot : A$  for each function type $A$.)
 \iffalse
 \begin{enumerate}
 \item replace every $\tsample$ by $r$ 
@@ -329,7 +331,7 @@ $(\lambda x . \transform{M_1} + \transform{M_2}) \, \transform{B}$, for a fresh 
 \transform{M_1 \, M_2} &:= \transform{M_1} \, \transform{M_2} \\
 n \geq 0, \; \transform{f \, M_1 \cdots M_n} &:= (\lambda z_1 \cdots z_n . r) \, \transform{M_1} \cdots \transform{M_n} \\
 \transform{\tif{B}{M_1}{M_2}} &:= \big(\lambda z . (\transform{M_1} + \transform{M_2})\big) \, \transform{B} \\
-\transform{\tY N} &:= (\lambda y . \bot) \transform{N}
+\transform{\tY N} &:= (\lambda y . \bot) \, \transform{N}
 \end{align*}
 In the above, variables $z, z_1, \cdots, z_n$ are assumed to be fresh; $f$ ranges over primitive functions and numerals.
 

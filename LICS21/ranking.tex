@@ -142,7 +142,8 @@ Take a closed term $M$ and sparse ranking function $f$ on $M$. Define $f_1 : Rch
 \end{align*}
 
 Define $(\nnext(N,s),\_) = \red^n(N,s)$ for the least $n \geq 0$ such that it's in the domain of $f_1$, and $g(N,s) := \left | \{m < n \mid \red^m(N,s) \text{ is of the form } (E[\tY\, \lambda x. N'],s') \} \right |$. 
-The function $\nnext$ is well-defined (i.e.~$n$ is finite) for all $N \in Rch(M)$ by induction on the path from $M$ to $N$, by the third condition on sparse ranking functions. Define $f_2(N) = \int_\entrosp f_1(\nnext(N,s)) + g(N,s) \, \mu_{\entrosp}(\mathrm d s)$. The (total) function $f_2$ agrees with $f$ on $f$'s domain, and it is a ranking function on $M$ (in fact, the least ranking function of which $f$ is a restriction, by the same argument as Theorem~\ref{thm:minimal}).
+The function $\nnext$ is well-defined (i.e.~$n$ is finite) for all $N \in Rch(M)$ by induction on the path from $M$ to $N$, by the third condition on sparse ranking functions. Define $f_2(N) = \int_\entrosp f_1(\nnext(N,s)) + g(N,s) \, \mu_{\entrosp}(\mathrm d s)$. 
+The (total) function $f_2$ agrees with $f$ on $f$'s domain, and it is a ranking function on $M$ (in fact, the least ranking function of which $f$ is a restriction, by the same argument as Theorem~\ref{thm:minimal}).
 \end{proof}
 As a corollary, any term which admits a sparse ranking function terminates almost surely.
 
@@ -168,9 +169,13 @@ E[M \oplus_p N] \to^3  E[N] \\[2mm]
 %         (E[N],\pi_t(s)) & \text{if } \pi_h(s) \geq p. \\
 %     \end{array} \right .
 % \end{align*}
-A sparse ranking function could be defined with respect to this shortcut reduction simply by replacing $\to$ and $\red$ in the definition of a sparse ranking function by a version that goes straight from $N \oplus_p O$ to $N$ or $O$. Such a pseudo-sparse ranking function would then be a partial function from a subset of $Rch(M)$, so it could also be considered as a partial function from all of $Rch(M)$, and it would in fact also be an actual sparse ranking function. It is therefore possible to prove rankability directly using the shortcutted reductions.
+A sparse ranking function could be defined with respect to this shortcut reduction simply by replacing $\to$ and $\red$ in the definition of a sparse ranking function by a version that goes straight from $N \oplus_p O$ to $N$ or $O$. 
+Such a pseudo-sparse ranking function would then be a partial function from a subset of $Rch(M)$, so it could also be considered as a partial function from all of $Rch(M)$, and it would in fact also be an actual sparse ranking function. 
+It is therefore possible to prove rankability directly using the shortcutted reductions.
 
-A similar procedure would work for other forms of syntactic sugar. If a closed term $N$ eventually reduces to one of a set of other terms $\{N_i \mid i \in I\}$ with certain probabilities, a sparse ranking function defined w.r.t.~a reduction sequence that skips straight from $N$ to $N_i$ is also a valid sparse ranking function for the original reduction function, and therefore its existence implies almost sure termination. There is a caveat, however, that $\tY$-reduction steps skipped over in the shortcut still need to be counted for the expected number of $\tY$-reduction steps.
+A similar procedure would work for other forms of syntactic sugar. 
+If a closed term $N$ eventually reduces to one of a set of other terms $\{N_i \mid i \in I\}$ with certain probabilities, a sparse ranking function defined w.r.t.~a reduction sequence that skips straight from $N$ to $N_i$ is also a valid sparse ranking function for the original reduction function, and therefore its existence implies almost sure termination. 
+There is a caveat, however, that $\tY$-reduction steps skipped over in the shortcut still need to be counted for the expected number of $\tY$-reduction steps.
 
 %\paragraph{}
 With this abbreviation, the geometric distribution example from earlier can be written as $(\tY \lambda f n.\ n \oplus_{0.5} f(n+1)) \, \underline 0$. It is then easy to see that the following is a sparse ranking function:
