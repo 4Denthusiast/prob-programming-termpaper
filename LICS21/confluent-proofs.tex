@@ -157,7 +157,12 @@ In the case that $M|\alpha = \tsample$, we can similarly consider only those set
 \end{proof}
 
 \begin{lemma} \label{lem:independentSamples}
-For any initial term $M$, reduction strategy $f$ on $M$, natural number $n$, skeleton $N$ with $k$ holes, measurable set $T \subset \mathbb R ^ k$ and measurable set $S$ of samples in $I^{L_s(N)}$, $\mu(\{s \in I^{L_s(M)} \mid \exists r \in T, s' \in S : (M,s) \Rightarrow_f^n (N[r], s')\}) = \mu(\{s \in I^{L_s(M)} \mid \exists r \in T, s' \in I^{L_s(N)} : (M,s) \Rightarrow_f^n (N[r], s')\}) \mu(S)$
+For any initial term $M$, reduction strategy $f$ on $M$, natural number $n$, skeleton $N$ with $k$ holes, measurable set $T \subset \mathbb R ^ k$ and measurable set $S$ of samples in $I^{L_s(N)}$
+\begin{align}
+& \mu(\{s \in I^{L_s(M)} \mid \exists r \in T, s' \in S : (M,s) \Rightarrow_f^n (N[r], s')\}) \nonumber \\
+& = \mu(\{s \in I^{L_s(M)} \mid \exists r \in T, s' \in I^{L_s(N)} : (M,s) \Rightarrow_f^n (N[r], s')\}) \mu(S)
+\label{eq:inde samples}
+\end{align}
 \end{lemma}
 
 \begin{proof}
@@ -169,6 +174,10 @@ R_d & = \{\mathit{Sk}(O) \mid O \in \mathit{Rch}(M), r \in \mathbb R^k, O | f(O[
 \end{align*}
 Together, $R_s$ and $R_d$ contain all of the skeletons of terms that can reduce to $N$, and they're disjoint. For each of these skeletons, there is a map $g_O$ from the reals in $O$ to the reals in $N$, i.e. $g_O(r) = r'$ if $O[r] \to N[r']$ for $O \in R_d$, and $g_O(s, r) = r'$ if $O[r] \to N[r']$ with $s$ as the value the sample takes in the reduction. All of these functions are measurable, as they are just rearrangements of vector components, or in the case that $O|f(O[r]) = \underline x(\skeletonPlaceholder, \dots, \skeletonPlaceholder)$, a combination of the measurable function $x$ with a rearrangement of vector components. In the case that $O \in R_s$, the function $g_O$ simply inserts the sample into the vector of reals at a certain index, call it $h_O$.
 
+We show Equation~\ref{eq:inde samples} in Figure~\ref{fig:inde samples}.
+
+\begin{figure}[h!]
+\small
 \begin{align*}
 & \mu(\{s \in I^{L_s(M)} \mid \exists r \in T, s' \in S : (M,s) \Rightarrow_f^n (N[r], s')\}) \\
 = & \mu(\{s \in I^{L_s(M)} \mid \exists O \in R_s, r \in \mathbb R^{k-1}, s' \in I^{L_s(O)}, r' \in T, s'' \in S : (M,s) \Rightarrow_f^{n-1} (O[r], s') \Rightarrow_f (N[r'], s'')\})\\
@@ -195,6 +204,12 @@ Together, $R_s$ and $R_d$ contain all of the skeletons of terms that can reduce 
     + & \mu(\{s \in I^{L_s(M)} \mid \exists O \in R_d, r \in \bigcup_l \mathbb R^l, s' \in I^{L_s(O)}, r' \in T, s'' \in I^{L_s(N)} : (M,s) \Rightarrow_f^{n-1} (O[r], s') \Rightarrow_f (N[r'], s'')\}) \mu(S) \\
 = & \mu(\{s \in I^{L_s(M)} \mid \exists r \in T, s' \in I^{L_s(N)} : (M,s) \Rightarrow_f^n (N[r], s')\}) \mu(S)
 \end{align*}
+
+\medskip
+
+\caption{Proof of Equation~\ref{eq:inde samples} 
+\label{fig:inde samples}}
+\end{figure}
 \end{proof}
 
 \AstEquivalence*
