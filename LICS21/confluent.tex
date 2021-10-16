@@ -19,7 +19,7 @@ There are, however, some restricted variations on the reduction order that do no
 \medskip
 Even with such a restriction, a trace semantics in the style of the one already defined would not be entirely confluent, as, for example, $\red^3(\tsample - \tsample, (1,0,\dots))$ would be either $1$ or $-1$ depending on the order of evaluation of the $\tsample$s, as that determines which sample from the pre-selected sequence is used for each one. To fix this, rather than pre-selecting samples according to the order they'll be drawn in, select them according to the position in the term where they'll be used instead.
 
-A \emph{position} is a finite sequence of steps into a term, defined inductively as
+A \defn{position} is a finite sequence of steps into a term, defined inductively as
 \iffalse
 \begin{align*}
 \alpha ::= & \; {\cdot} \mid \lambda ; \alpha \mid @_1 ; \alpha \mid @_2 ; \alpha \mid \underline f_i ; \alpha \\
@@ -29,7 +29,7 @@ A \emph{position} is a finite sequence of steps into a term, defined inductively
 \[
 \alpha ::= {\cdot} \mid \lambda ; \alpha \mid @_1 ; \alpha \mid @_2 ; \alpha \mid \underline f_i ; \alpha \mid \tY ; \alpha \mid \textsf{if}_1 ; \alpha \mid \textsf{if}_2 ; \alpha \mid \textsf{if}_3 ; \alpha.
 \]
-The \emph{subterm of $M$ at $\alpha$}, denoted $M \mid \alpha$, is defined as
+The \defn{subterm of $M$ at $\alpha$}, denoted $M \mid \alpha$, is defined as
 \begin{align*}
 M \mid \cdot & = M \\
 \lambda x. M \mid \lambda ; \alpha & = M \mid \alpha \\
@@ -39,9 +39,9 @@ M_1 \, M_2 \mid @_i ; \alpha & = M_i \mid \alpha \quad \text{for } i = 1,2 \\
 \tif{M_1 < 0}{M_2}{M_3} \mid \textsf{if}_i ; \alpha & = M_i \mid \alpha \quad \text{for } i = 1,2,3
 \end{align*}
 so that every subterm is located at a unique position, but not every position corresponds to a subterm (e.g. $x \, y \mid \lambda$ is undefined). 
-A position such that $M\mid \alpha$ does exist is said to \emph{occur} in $M$. 
+A position such that $M\mid \alpha$ does exist is said to \defn{occur} in $M$. 
 %\changed[lo]{
-\emph{Substitution} of $N$ at position $\alpha$ in $M$, written $M[N/\alpha]$, is defined similarly.
+\defn{Substitution} of $N$ at position $\alpha$ in $M$, written $M[N/\alpha]$, is defined similarly.
 For example, let 
 \(
 M = \lambda x \, y. y \, (\tif{x < 0}{y \, (\underline f (x))}{\underline 3})
@@ -57,12 +57,12 @@ M[\tsample / \alpha] = \lambda x \, y. y \, (\tif{x < 0}{y \, \tsample}{\underli
 %}
 
 Two subterms $N_1$ and $N_2$ of a term $M$, corresponding to positions $\alpha_1$ and $\alpha_2$, can overlap in a few different ways. 
-If $\alpha_1$ is a prefix of $\alpha_2$ (written as $\alpha_1 \leq \alpha_2$), then $N_2$ is also a subterm of $N_1$. If neither $\alpha_1 \leq \alpha_2$ nor $\alpha_1 \geq \alpha_2$, the positions are said to be \emph{disjoint}. 
+If $\alpha_1$ is a prefix of $\alpha_2$ (written as $\alpha_1 \leq \alpha_2$), then $N_2$ is also a subterm of $N_1$. If neither $\alpha_1 \leq \alpha_2$ nor $\alpha_1 \geq \alpha_2$, the positions are said to be \defn{disjoint}. 
 The notion of disjointness is mostly relevant in that if $\alpha_1$ and $\alpha_2$ are disjoint, performing a substitution at $\alpha_1$ will leave the subterm at $\alpha_2$ unaffected.
 
 Thus we can define a more general reduction relation\footnote{In this section $\to$ always means the relation defined in Definition~\ref{def:more general red}.} $\to$.
 
-\begin{definition}
+\begin{definition}\rm
 \label{def:more general red}
 The binary relation $\to$ is defined by the following rules, each is conditional on a redex occurring at position $\alpha$ in the term $M$:
 \begin{align*}
@@ -73,7 +73,7 @@ The binary relation $\to$ is defined by the following rules, each is conditional
   \text{if } M \mid \alpha = \tif{\underline r < 0}{N_1}{N_2},\ & M \to M[N_2/\alpha] \text{ where }r \geq 0 \\
   \text{if } M \mid \alpha = \tsample \text{ and $\lambda$ does}&\text{ not occur after $@_2$ or $\tY$ in $\alpha$},\\ & M \to M[\underline r/\alpha] \text{ where } r \in [0,1].
 \end{align*}
-In each of these cases, $M \mid \alpha$ is the \emph{redex}, and the reduction \emph{takes place at $\alpha$}. Each subterm can be a redex in at most one way, but there can be multiple redexes at different positions.
+In each of these cases, $M \mid \alpha$ is the \defn{redex}, and the reduction \emph{takes place at $\alpha$}. Each subterm can be a redex in at most one way, but there can be multiple redexes at different positions.
 \end{definition}
 
 The argument of a $\beta$ redex and the body of a $\tY$ redex may be duplicated by those reductions. It is therefore these cases that need to be handled carefully to avoid duplicating samples at the wrong time. In both cases, the potentially duplicated part must already be a value, which excludes terms like $\tsample$ or $\tsample + \underline 1$, which should be evaluated before being duplicated. In the other direction, if a $\tsample$ occurs inside of a $\lambda$, it may need to be duplicated before being evaluated, which is why a $\tsample$ reduction isn't allowed inside a $\lambda$ inside a $\tY$ or the right side of an application. These restrictions are in some cases unnecessarily strict, for example, in $(\lambda x. x) ((\lambda y. \tsample) \underline 0)$, it would be fine to evaluate the sample first, but they are at least sufficient to ensure confluence in terms of the distribution of results. Getting individual traces to behave correctly will take more work though.
@@ -83,7 +83,7 @@ Labelling the pre-chosen samples by the positions in the term by using $I^{\{\al
 It is therefore necessary to consider possible positions that may occur in other terms reachable from the original term. 
 Even this is itself inadequate because some of the positions in different reachable terms need to be considered the same, and the number of reachable terms is in general uncountable, which leads to measure-theoretic issues.
 
-\paragraph*{Reduction relation on skeletons} We are thus led to consider the reduction relation on skeletons (and positions in a skeleton), which can be extended from the definitions on terms in the obvious way, with $\tif{\skeletonPlaceholder < 0}{A}{B}$ reducing nondeterministically to both $A$ and $B$, $\tsample$ reducing to $\skeletonPlaceholder$, and $\skeletonPlaceholder$ considered as (the skeletal equivalent of) a value, so that $(\lambda x.A) \, \skeletonPlaceholder$ reduces to $A[\skeletonPlaceholder / x]$.
+\subsection{Reduction relation on skeletons} We are thus led to consider the reduction relation on skeletons (and positions in a skeleton), which can be extended from the definitions on terms in the obvious way, with $\tif{\skeletonPlaceholder < 0}{A}{B}$ reducing nondeterministically to both $A$ and $B$, $\tsample$ reducing to $\skeletonPlaceholder$, and $\skeletonPlaceholder$ considered as (the skeletal equivalent of) a value, so that $(\lambda x.A) \, \skeletonPlaceholder$ reduces to $A[\skeletonPlaceholder / x]$.
 For example, we have 
 \(
 (\lambda x . \tif{x < 0}{x}{\skeletonPlaceholder}) \, \tsample
@@ -145,7 +145,7 @@ In the reduction $M \to N_1$, the sample labelled $(M, \underline{+}_1)$ is used
 Each of these samples becomes the value of the first numeral in $O$ in their respective reduction sequences, therefore in order for confluence to be attained, they must be the same. Which elements of $L_0(M)$ must match can be described by the relation $\sim^*$:
 \end{example}
 
-\begin{definition} \label{defn:sim}
+\begin{definition}\rm \label{defn:sim}
 The relation $\sim$ is defined as the union of the minimal symmetric relations $\sim_p$ (``$p$'' for parent-child) and $\sim_c$ (``$c$'' for cousin) satisfying
 \begin{asparaenum}[(i)]
     \item If $N$ reduces to $O$ with the redex at position $\alpha$, and $\beta$ is a position in $N$ disjoint from $\alpha$, then $(N,\beta) \sim_p (O,\beta)$.
@@ -197,7 +197,7 @@ At each reduction step $M \to N$, the sample space must be restricted from $I^{L
 The injection $L_0(N) \to L_0(M)$ is trivial to define by appending $\mathit{Sk}(M) \to \mathit{Sk}(N)$ to each path, and using Lemma~\ref{lem:sim-M-N}, this induces a corresponding injection on the quotient, $L(N) \to L(M)$. 
 The corresponding map $L_s(N) \to L_s(M)$ is then denoted $i(M \to N)$.
 
-\begin{definition}[$\Rightarrow$ reduction]
+\begin{definition}[$\Rightarrow$ reduction]\rm
 Unlike in the purely call-by-value case, the version of the reduction relation that takes into account samples is still a general relation rather than a function, so it is denoted ``$\Rightarrow$'' instead of ``$\red$'', and it relates $\biguplus_{M \in \Lambda_0} I^{L_s(M)}$ to itself.
 We write an element of $\biguplus_{M \in \Lambda_0} I^{L_s(M)}$ as $(M', s)$ where the \emph{term} $M' \in \Lambda^0$ and $s \in  I^{L_s(M')}$.
 \begin{align*}
@@ -213,10 +213,10 @@ This reduction relation now has all of the properties required of it. In particu
 The relation $\Rightarrow$ is confluent.
 \end{restatable}
 
-\paragraph*{Reduction strategy determinising $\Rightarrow$}
+\subsection{Reduction strategy determinising $\Rightarrow$}
 The reduction relation $\Rightarrow$ is nondeterministic, so it admits multiple possible reduction strategies. 
 %\begin{definition}
-A \emph{reduction strategy} starting from a closed term $M$ is a measurable partial function $f$ from $\mathit{Rch}(M)$ to positions, such that for any reachable term $N$ where $f$ is defined, $f(N)$ is a position of a redex in $N$, and if $f(N)$ is not defined, $N$ is a value.
+A \defn{reduction strategy} starting from a closed term $M$ is a measurable partial function $f$ from $\mathit{Rch}(M)$ to positions, such that for any reachable term $N$ where $f$ is defined, $f(N)$ is a position of a redex in $N$, and if $f(N)$ is not defined, $N$ is a value.
 Using a reduction strategy $f$, a subset of $\Rightarrow$ that isn't nondeterministic, $\Rightarrow_f$, can be defined by $(N,s) \Rightarrow_f (N',s')$ just if $(N,s) \Rightarrow (N',s')$ and $N$ reduces to $N'$ with the redex at $f(N)$.
 %\end{definition}
 
@@ -233,7 +233,7 @@ The usual call-by-value semantics can be implemented as one of these reduction s
 (this last case covers redexes at the root position).
 
 A closed term $M$ terminates with a given reduction strategy $f$ and samples $s$ if there is some natural number $n$ such that $(M,s) \Rightarrow_f^n (N,s')$ where $f$ gives no reduction at $N$. 
-The term \emph{terminates almost surely w.r.t.~$f$} if it terminates with $f$ for almost all $s$.
+The term \defn{terminates almost surely w.r.t.~$f$} if it terminates with $f$ for almost all $s$.
 
 With these definitions, it is now possible to relate the confluent trace semantics back to the standard trace semantics.
 
@@ -258,7 +258,7 @@ All of the theorems on the termination of rankable terms therefore extend to oth
 They only require that the number of reductions that can occur without any of them being a $\tY$-reduction is bounded for any starting term (which is true, because Theorem~\ref{thm:de groote} applies equally to any reduction strategy). For a reduction strategy $r$ and term $M$, just substitute $N[r(N)]$ being a $\tY$-redex for $N$ being of the form $E[\tY \lambda x. O]$, and $r(N)$ being undefined for $N$ being a value.
 
 
-The domain of definition of the ranking functions also needs to be changed from the reachable terms $\mathit{Rch}(M)$ to the \emph{reachable terms with respect to the reduction strategy $r$},
+The domain of definition of the ranking functions also needs to be changed from the reachable terms $\mathit{Rch}(M)$ to the \defn{reachable terms with respect to the reduction strategy $r$},
 \[
 %\begin{array}{l}
 \mathit{Rch}_r(M) := \{N \mid \exists n, (N_i)_{0 \leq i \leq n} : 
@@ -267,19 +267,19 @@ N_0 = M, N_n = N, N_i \to N_{i+1} \text{ at } r(N_i)\}.
 \]
 
 More explicitly, the modified forms of the theorems are:
-\begin{definition}
-An \emph{antitone ranking function on $M$ w.r.t.~a reduction strategy $r$} is a measurable function $f:\mathit{Rch}_r(M) \to \mathbb{R}$ such that $f(N) \geq 0$ for all $N$, and there exists an antitone function $\epsilon : \nnReal \to \pReal$ such that
+\begin{definition}\rm
+An \defn{antitone ranking function on $M$ w.r.t.~a reduction strategy $r$} is a measurable function $f:\mathit{Rch}_r(M) \to \mathbb{R}$ such that $f(N) \geq 0$ for all $N$, and there exists an antitone function $\epsilon : \nnReal \to \pReal$ such that
 \begin{itemize}
     \item $f(N) \geq \epsilon(f(N)) + f(N')$ if $N[r(N)]$ is a $\tY$-redex and $N$ reduces to $N'$ at $r(N)$
     \item $f(N) \geq \int_I f(N[\underline{x}/r(N)]) \, \Leb(\mathrm{d}x)$ if $N[r(N)] = \tsample$
 
     \item $f(N) \geq f(N')$ if $r(N)$ is any other redex, where $N \to N'$ at $r(N)$.
 \end{itemize}
-Any closed term for which an antitone ranking function with respect to a reduction strategy $r$ exists is called \emph{antitone rankable w.r.t.~$r$}. 
+Any closed term for which an antitone ranking function with respect to a reduction strategy $r$ exists is called \defn{antitone rankable w.r.t.~$r$}. 
 \end{definition}
 
-\begin{definition}
-An \emph{antitone sparse ranking function on $M$ w.r.t.~a reduction strategy $r$} is a partial function $f : \mathit{Rch}_r(M) \rightharpoonup \mathbb R$ such that there exists some antitone function $\epsilon : \nnReal \to \pReal$ such that
+\begin{definition}\rm
+An \defn{antitone sparse ranking function on $M$ w.r.t.~a reduction strategy $r$} is a partial function $f : \mathit{Rch}_r(M) \rightharpoonup \mathbb R$ such that there exists some antitone function $\epsilon : \nnReal \to \pReal$ such that
 \begin{inparaenum}[(i)]
     \item $f(N) \geq 0$ for all $N \in \dom(f)$,
     \item $M \in \dom(f)$,
@@ -294,7 +294,7 @@ An \emph{antitone sparse ranking function on $M$ w.r.t.~a reduction strategy $r$
 \fi
 \end{definition}
 
-If the antitone function is just the constant function $1$ instead, then it is called a \emph{(sparse) ranking function on $M$ w.r.t.~$r$} instead, and the term is called \emph{rankable w.r.t.~$r$}.
+If the antitone function is just the constant function $1$ instead, then it is called a \defn{(sparse) ranking function on $M$ w.r.t.~$r$} instead, and the term is called \defn{rankable w.r.t.~$r$}.
 
 \begin{therm}[Confluent ranking] \label{thm:confluent ranking}
 If a closed PPCF term $M$ has a ranking function, sparse ranking function, antitone ranking function or antitone sparse ranking function w.r.t.~a reduction strategy $r$, then $M$ is AST w.r.t.~$r$, and AST.
@@ -310,7 +310,7 @@ If, as seems likely, Theorem~\ref{thm:antitone rankable implies termination} is 
 For any closed term $M$ and reduction strategy $r$ on $M$, if every term in $\mathit{Rch}_r(M)$ is AST, then every term in $\mathit{Rch}(M)$ is AST.
 \end{restatable}
 
-\paragraph*{Custom reduction strategy for AST analysis} However, there are some terms which terminate more simply and directly via some alternative reduction strategy. For these examples, a custom reduction strategy is specified for each term under consideration.
+\subsection{Custom reduction strategy for AST analysis} However, there are some terms which terminate more simply and directly via some alternative reduction strategy. For these examples, a custom reduction strategy is specified for each term under consideration.
 
 \begin{example}[Sum of powers] \label{ex:sum of powers}
 The following term picks a random natural number $n$, then computes $\sum_{k=0}^n k^n$.
@@ -321,7 +321,54 @@ P[n]  &= (\lambda p. \Xi[p] \, n) (\lambda x. \Theta[x] \, n)) \\
 \Theta[x]  &= \tY \lambda f n. \tif{n = 0}{\underline 1}{x \times f (n-1)}.
 \end{align*}
 
-With the CBV reduction strategy, the recursion in $\Theta[x]$ (that defines the function $k \mapsto k^x$) is executed separately for every term in the sum in $\Xi$. Not only is this much more complicated than simplifying $\Theta[x] \, \underline n$ first, it requires considerably more $\tY$-reduction steps, so many so that $M$ is $\tY$-PAST with respect to a reduction strategy that simplifies $\Theta[x] \, \underline n$ first (call it ``$r$''), but isn't $\tY$-PAST with respect to the standard reduction strategy, so that $M$ is rankable with respect to $r$, but isn't rankable. It is still antitone rankable, but this is much more complicated. Details of the ranking function construction with and without using the confluent semantics are given in Appendix~\ref{apx:confluent}.
+Let $r$ be the reduction strategy which reduces $M$ in the order
+\begin{align*}
+&\ M \\
+\to^* &\ P[\underline n] \\
+\to^* &\ (\lambda p.\ \Xi[p]\ \underline n)\ (\lambda x. \underbrace{x \times \dots \times x \times}_n \underline 1) \\
+\to^{\phantom *} &\ \Xi[\lambda x. \underbrace{x \times \dots \times x \times}_n \underline 1]\ \underline n \\
+\to^* &\ \underline{n^n} + \underline{(n-1)^n} + \dots + \underline 0 \\
+\to^* &\ \underline{\sum_{k=0}^n k^n}
+\end{align*}
+(this is a little underspecified, but the details are not important). A suitable sparse ranking function for it is
+\begin{align*}
+M \mapsto & \frac{\pi^2}{3} \\
+P[\underline n] \mapsto & 2n+2 \\
+(\lambda p.\ \Xi[p]\ \underline n)\ (\lambda x. \underbrace{x \times \dots \times x \times}_{n-k} (\Theta[x]\ \underline k)) \mapsto & n + k + 2 \\
+\Xi[\lambda x. \underbrace{x \times \dots \times x \times}_n \underline 1]\ \underline n \mapsto & n + 1 \\
+\underline{n^n} + \dots + \underline{(n-k+1)^n} + \Xi[\lambda x. x \times \dots \underline 1]\ \underline k \mapsto & k + 1 \\
+\underline{\sum_{k=0}^n k^n} \mapsto & 0.
+\end{align*}
+
+The first step is justified because the probability of reaching $P[\underline n]$ for any specific $n \geq 0$ is $(n+1)^{-2} - (n+2)^{-2} = \frac{2n + 3}{(n+1)^2(n+2)^2}$, therefore the expected next value of the ranking function is $\sum_{n=0}^{\infty} \frac{(2n+2)(2n + 3)}{(n+1)^2(n+2)^2} = \frac{\pi^2}{3}$. The other steps are deterministic, and involve 1 or 0 $\tY$-reductions each. Given that all of the reduction steps after the first are deterministic, and the number of $\tY$ reduction steps is not that hard to count, defining the sparse ranking function's values only at $M$ and $P[\underline n]$ would also have been reasonable, although in a similar term which had more random samples throughout, that would not have been so simple.
+
+Providing a ranking function of some sort for this term in a similar level of detail would have been rather more complicated using only the standard reduction strategy. The recursion in $\Theta$ would have to be evaluated separately for every time it was used, so there would have been more (and more complex) terms to consider in the reduction sequence. Also, the number of $\tY$-reductions from $P[\underline n]$ would have been $n^2 + 2n + 1$ instead of $2n + 2$, therefore the expected number of $\tY$ reductions starting from $M$ would be infinite, i.e.~$M$ is not $\tY$-PAST, therefore it is not even rankable. It would be possible to define an antitone sparse ranking function for it, but it is much more difficult to construct:
+\begin{align*}
+M & \mapsto 1.47 \\
+P[\underline n] & \mapsto 1 + \ln((n+1)n + 1) \\
+\Xi[\lambda x. \Theta[x] \, \underline n] \, \underline n & \mapsto 1 + \ln((n+1)n + 1) \\
+\left.\begin{array}{r}
+\underline{n^n} + \dots + \underline{k_1^n} + {}\\
+\Xi[\lambda x. \Theta[x] \underline n] (\underline{k_1} - 1) 
+\end{array}\right\} 
+& \mapsto 1 + \ln((n+1)(k_1-1)+1) \\
+\left.\begin{array}{r}
+\underline{n^n} + \dots + \underline{(k_1+1)^n} +  {}\\
+\Theta[\underline{k_1}] \, \underline{n} +  {}\\
+\Xi[\lambda x. \Theta[x] \, \underline n] (\underline{k_1} - 1) 
+\end{array}\right\}
+& \mapsto 1 + \ln((n+1)k_1 + 1) \\
+\left.\begin{array}{r}\underline{n^n} + \dots + \underline{(k_1+1)^n} + {} \\
+\underbrace{\underline{k_1} \times \dots \times \underline{k_1} \times}_{n-k_2+1} {} \\
+\Theta[\underline{k_1}] (\underline{k_2} - 1) + {} \\
+\Xi[\lambda x. \Theta[x] \, \underline n] (\underline{k_1} - 1)
+\end{array}\right\} & \mapsto 1 + \ln((n+1)k_1 + k_2 + 1) \\
+\underline{\textstyle\sum_{k=0}^n k^n} & \mapsto 0.
+\end{align*}
+
+It wouldn't even be possible in this case to give a sparser version of the ranking function defined only at $M$ and $P[\underline n]$, because the amount that an antitone sparse ranking function must decrease at each $\tY$-reduction step depends on the value of the ranking function at the next term where it is defined, therefore it is necessary to have these intermediate steps in order for the ranking function to be able to change sufficiently slowly.
+With the CBV reduction strategy, the recursion in $\Theta[x]$ (that defines the function $k \mapsto k^x$) is executed separately for every term in the sum in $\Xi$. Not only is this much more complicated than simplifying $\Theta[x] \, \underline n$ first, it requires considerably more $\tY$-reduction steps, so many so that $M$ is $\tY$-PAST with respect to a reduction strategy that simplifies $\Theta[x] \, \underline n$ first (call it ``$r$''), but isn't $\tY$-PAST with respect to the standard reduction strategy, so that $M$ is rankable with respect to $r$, but isn't rankable. It is still antitone rankable, but this is much more complicated. 
+%Details of the ranking function construction with and without using the confluent semantics are given in Appendix~\ref{apx:confluent}.
 \end{example}
 
 \begin{remark}

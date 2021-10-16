@@ -104,8 +104,8 @@ The definition of rankability is also inconvenient for syntactic sugar. It could
 
 %\paragraph{}
 In both of these cases, there are only some values of the ranking function that are semantically important. 
-\begin{definition}
-Define a \emph{sparse ranking function} on a closed term $M$ to be a partial function $f : Rch(M) \rightharpoonup \mathbb R$ such that
+\begin{definition}\rm
+Define a \defn{sparse ranking function} on a closed term $M$ to be a partial function $f : Rch(M) \rightharpoonup \mathbb R$ such that
 \begin{inparaenum}[(i)]
     \item $f(N) \geq 0$ for all $N \in \dom(f)$,
     \item $M \in \dom(f)$,
@@ -126,7 +126,7 @@ Define a \emph{sparse ranking function} on a closed term $M$ to be a partial fun
 \end{definition}
 A sparse ranking function that is total is just a ranking function. Providing a sparse ranking function is essentially part way between providing a ranking function and directly proving almost sure termination.
 
-\begin{therm}
+\begin{therm}[Sparse function]
 %\begin{restatable}[Sparse function]{therm}{PartialImpliesRankable} 
 \label{thm:partial implies rankable}
 Every sparse ranking function is a restriction of a ranking function.

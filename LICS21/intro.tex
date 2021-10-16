@@ -23,14 +23,14 @@ This is significant for Bayesian machine learning, because almost everywhere dif
 
 The AST problem is not just important, but also difficult: 
 Deciding AST of first-order imperative programs with discrete probabilities is $\Pi^0_2$-complete \citep{DBLP:conf/mfcs/KaminskiK15}.
-In recent work \citep{BeutnerO21} %(under double-blind review elsewhere), 
+In recent work by \cite{BeutnerO21} %(under double-blind review elsewhere), 
 the AST problem for higher-order programs with continuous distributions (and suitable primitive functions) is shown to have the same complexity.
-Though the problem of proving AST of imperative probabilistic programs is much studied \citet{DBLP:journals/jacm/KaminskiKMO18,DBLP:conf/lics/OlmedoKKM16,DBLP:conf/mfcs/KaminskiK15,DBLP:series/mcs/McIverM05,DBLP:conf/popl/FioritiH15,DBLP:conf/pldi/ChenH20,DBLP:journals/toplas/ChatterjeeFNH18}, to our knowledge the problem of proving AST of higher-order programs with continuous distributions is new.
+Though the problem of proving AST of imperative probabilistic programs is much studied \citep{DBLP:journals/jacm/KaminskiKMO18,DBLP:conf/lics/OlmedoKKM16,DBLP:conf/mfcs/KaminskiK15,DBLP:series/mcs/McIverM05,DBLP:conf/popl/FioritiH15,DBLP:conf/pldi/ChenH20,DBLP:journals/toplas/ChatterjeeFNH18}, to our knowledge the problem of proving AST of higher-order programs with continuous distributions is new.
 
 \subsection*{Contributions}
 
 A possible approach to proving AST is to find some variant on the program state, called \emph{ranking function}, that decreases on average sufficiently quickly that it must at some point reach 0, at which point the program terminates. 
-In other words, the program's behavior is used to define an associated (ranking) \emph{supermartingale}. Proof rules based on relating the program state to supermartingales already exist for first-order imperative programs \citep{DBLP:conf/cav/ChakarovS13,DBLP:conf/popl/FioritiH15,DBLP:journals/pacmpl/McIverMKK18}. This paper's contribution is to extend this method to a higher-order setting.
+In other words, the program's behavior is used to define an associated (ranking) \emph{supermartingale}. Proof rules based on relating the program state to supermartingales already exist for first-order imperative programs: see, for example, \citep{DBLP:conf/cav/ChakarovS13,DBLP:conf/popl/FioritiH15,DBLP:journals/pacmpl/McIverMKK18}. This paper's contribution is to extend this method to a higher-order setting.
 
 The language PPCF used in this paper is simply typed, with random continuous sampling, and an explicit recursion primitive, $\tY$. 
 We define a \emph{ranking function} on a term $M$ to be a non-negative measurable function on the reachable terms from $M$ whose expected value decreases or is unchanged as the term is reduced.
@@ -42,7 +42,11 @@ Unfortunately (for any fixed reduction strategy) there are programs whose reacha
 How can the construction of ranking functions be made possible or easier?
 
 Our first answer is the notion of \emph{sparse ranking function}. 
-Most of the individual execution steps of a typical program are trivial and easy to mentally skip over. Sparse ranking functions can be defined only for those points in the execution of a program which are semantically important, while all of the other intermediate steps can be ignored. Yet, they are no less efficacious for proving AST (Theorem~\ref{thm:partial implies rankable}): every sparse ranking function is a restriction of a ranking function. This also makes the ranking function method of proving AST more compatible with syntactic sugar, because the intermediate reduction steps implicit in the simplified notation can be ignored.
+Most of the individual execution steps of a typical program are trivial and easy to mentally skip over. 
+Sparse ranking functions can be defined only for those points in the execution of a program which are semantically important, while all of the other intermediate steps can be ignored. 
+Yet, they are no less efficacious for proving AST: we prove a \emph{sparse function theorem} (Theorem~\ref{thm:partial implies rankable}): 
+every sparse ranking function is a restriction of a ranking function. 
+This also makes the ranking function method of proving AST more compatible with syntactic sugar, because the intermediate reduction steps implicit in the simplified notation can be ignored.
 
 A ranking function (or sparse ranking function) provides a bound on the expected number of $\tY$-reduction steps before the program terminates, therefore ranking functions cannot be constructed for terms whose expected number of $\tY$-reduction steps is infinite, such as the simplest implementation of the 1D unbiased random walk. 
 This restriction can be removed by generalising ranking functions to \emph{antitone ranking functions}, which rather than having to decrease by a constant amount for each $\tY$-reduction step, may decrease by a variable amount, depending on the value of the ranking function. 
@@ -61,7 +65,7 @@ The confluent trace semantics is of wider interest, and has other possible appli
 
 By combining these methods we can prove AST of a variety of PPCF programs that are beyond the reach of methods in the literature, including non-affine recursion\footnote{\label{fnote:non-affine} Non-affine recursive programs are recursive programs that can, during the evaluation of the recursive body, make multiple recursive calls (of a first-order function) from distinct call sites.} (Examples~\ref{ex:non-affine recursion easy} and~\ref{ex:non-affine continuous}) and recursions that define higher-order functions (Example~\ref{ex:higher-order recursion}).
 
-\paragraph*{Outline}
+\subsection*{Outline}
 
 We present the syntax and trace semantics of PPCF in Section~\ref{sec:PPCF}.
 In Section~\ref{sec:supermartingales}, we show that ranking functions on terms induce supermartingales, which form the basis of a sound method for proving AST.
@@ -69,4 +73,5 @@ We introduce sparse ranking functions in Section~\ref{sec:ranking} and antitone 
 In Section~\ref{sec:confluent}, we present a confluent trace semantics and demonstrate its usefulness.
 We discuss further applications of the confluent semantics in Section~\ref{sec:applications}; and conclude with comments on related work and further directions in Section~\ref{sec:related}.
 
-\paragraph*{Additional materials} Further details of some of the examples and all missing proofs can be found in the appendix.
+\paragraph*{Appendix} All missing proofs of theorems in Section~\ref{sec:confluent} and further details can be found in the appendix.
+

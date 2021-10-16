@@ -32,7 +32,7 @@ The difference in the exact progress condition is insignificant. A ranking funct
 
 The confluent semantics, and the results based on it, is new in the setting of a functional language, because an imperative language does not have any equivalent of other redexes, or a similar nondeterministic structure. The sparse ranking function construction is also more useful in a functional language (although it would be possible to give an equivalent in an imperative language), because in an imperative language where the order of execution is more rigid, the iterations of the while loop provide a natural set of checkpoints where it is reasonable to give values of the ranking function.
 
-\paragraph*{Further directions} We have not yet been able to prove Conjecture~\ref{conj:antitone} which would imply that Theorem~\ref{thm:antitone rankable implies termination} is almost complete.
+\subsection*{Further directions} We have not yet been able to prove Conjecture~\ref{conj:antitone} which would imply that Theorem~\ref{thm:antitone rankable implies termination} is almost complete.
 \begin{conjecture}[Completeness]
 \label{conj:antitone}
 If every term reachable from a certain PPCF term is AST, then that term is antitone rankable.
@@ -42,7 +42,7 @@ Definition~\ref{def:more general red}, defining redexes and which positions are 
 
 Although this is a broadly applicable method of proving almost sure termination of probabilistic functional programs, and Theorems~\ref{thm:antitone partial implies rankable} and \ref{thm:confluent ranking} make it more convenient to use, some method of automating the construction and checking of (antitone) ranking functions, even partially, could make it considerably more practically useful, especially in cases where almost sure termination is merely a side-condition for some other theorem or algorithm to be applicable.
 
-\paragraph*{Conclusions}
+\subsection*{Conclusions}
 
 We have presented the first application of martingales to probabilistic lambda calculus, and the first version of trace semantics that's capable of satisfying a restricted form of confluence.
 Though the construction of ranking functions is inherently difficult, using sparse ranking functions, antitone ranking functions and ranking functions w.r.t.~an alternative reduction strategy, we have shown that a great variety of programs can be proved to be AST, including some that are beyond the reach of methods in the literature.
