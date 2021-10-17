@@ -37,6 +37,8 @@ Thus we seek a generalised notion of ranking function so that $M_2$ becomes rank
 
 %\paragraph*{Idea} 
 
+\subsection{Antitone ranking functions and antitone strict supermartingales}
+
 \begin{definition}\rm
 The definition of \defn{antitone ranking function} $f$ for $M \in \Lambda^0$ is the same as that of ranking function except that in the case of $\tY$-redex, 
 we require the existence of an antitone (meaning: $r < r'$ implies $\epsilon(r) \geq \epsilon(r')$) function $\epsilon : \nnReal \to \pReal$ such that the ranking function $f :\mathit{Rch}(M) \to \nnReal$ satisfies
@@ -61,8 +63,6 @@ Note that antitone ranking functions are actually a generalisation of ranking fu
 \]
 We assume $\tY f^{A \to B} \, x^A \, . \, \theta^B$ is a value.}
 \fi
-
-\subsection{Antitone strict supermartingales}
 
 \begin{definition}\rm
 Given a probability space $(\Omega, \calF, \mathbb{P})$, and a supermartingale $(Y_n)_{n \geq 0}$ and a stopping time $T$ adapted to filtration $(\calF_n)_{n \geq 0}$,
@@ -512,7 +512,7 @@ For example, the PPCF term in Example~\ref{ex:higher-order recursion} is not def
 %cannot be expressed as PHORS.
 %\akr{As I removed the referenced example, and I don't even know what a PHORS is, I've just removed this comment too.}
 
-A relevant result here is that the AST problem is decidable for order-1 PHORS (by reduction to the PSPACE-hard solvability of finite systems of polynomial equations with real coefficients; see \cite{DBLP:journals/jacm/EtessamiY09}), but undecidable for PHORS with order greater than 1 \citep{DBLP:conf/lics/KobayashiLG19}.
+A relevant result here is that the AST problem is decidable for order-1 PHORS (by reduction to the PSPACE-hard solvability of finite systems of polynomial equations with real coefficients; see \citep{DBLP:journals/jacm/EtessamiY09}), but undecidable for PHORS with order greater than 1 \citep{DBLP:conf/lics/KobayashiLG19}.
 
 \begin{example}[Higher-order recursion]
 \label{ex:higher-order recursion}

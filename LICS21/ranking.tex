@@ -106,13 +106,13 @@ The definition of rankability is also inconvenient for syntactic sugar. It could
 In both of these cases, there are only some values of the ranking function that are semantically important. 
 \begin{definition}\rm
 Define a \defn{sparse ranking function} on a closed term $M$ to be a partial function $f : Rch(M) \rightharpoonup \mathbb R$ such that
-\begin{inparaenum}[(i)]
+\begin{asparaenum}[(i)]
     \item $f(N) \geq 0$ for all $N \in \dom(f)$,
     \item $M \in \dom(f)$,
     \item for any $N \in \dom(f)$, evaluation of $N$ will eventually 
     %\akr{It would be nicer for this to be only almost certain, to make this more neatly in-between rankability and AST, but that doesn't actually work because of terms reachable with 0 probability. Of course, ASTness doesn't imply rankability, so any definition of sparse ranking function that includes all Y-PAST terms wouldn't always extend to a total ranking function.}
      reach some $O$ which is either a value or in $\dom(f)$, and $f(N) \geq \mathbb E[f(O) + \text{ the number of $\tY$-reduction steps from $N$ to $O$}]$ (where $f(O)$ is taken to be 0 if $O$ is a value outside of $\dom(f)$).
-\end{inparaenum}
+\end{asparaenum}
 
 \iffalse
 \begin{itemize}
