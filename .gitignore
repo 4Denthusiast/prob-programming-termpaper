@@ -4,3 +4,7 @@
 *.dvi
 *.bbl
 *.blg
+LICS21/main.pdf
+*.synctex.gz
+*.fdb_latexmk
+*.fls
