@@ -625,32 +625,36 @@ For any stopping time $T$ which is almost surely finite, adapted to a filtration
 \begin{proof}
 First, take the case where $T$ is bounded by some integer $b$. Setting $\epsilon(x) = 1$ and $Y_n = \max(b-n, 0)$ trivially gives an antitone ranking supermartingale for $T$.
 
-Assume, for the other case, that $T$ is unbounded. Let $f(n) = \mathbb P[T < n]$, let $g : [0,1) \to \mathbb N$ be a non-decreasing function such that $g(f(n)) \geq n$ \akr{This was originally $f(g(x)) \geq x$. Maybe that was right? Maybe I need both. I think that would be fine. I'll see how the rest of the proof goes.} (essentially just taking the inverse of $f$ and filling in the gaps) and let $\epsilon : \mathbb R_{\geq 0} \to \mathbb R_{>0}$ be a convex antitone function less than or equal to $(g(1-2^{-x}))^{-1}$. Then we can define the supermartingale $(Y_n)_n$ by $Y_n = \mathbb E[-\log_2(1-f(T-n)) \mid \calF_n]$. Because $T$ is unbounded, $f$ never reaches 1 therefore the logarithm is finite.
+Assume, for the other case, that $T$ is unbounded. Let $f(n) \leq \mathbb P[T < n]$ where $f$ tends to 1 and is concave for arguments $\geq 0$, let $g : [0,1) \to \mathbb N$ be a non-decreasing function such that $g(f(n)) \geq n$ (essentially just taking the inverse of $f$ and filling in the gaps) and let $\epsilon : \mathbb R_{\geq 0} \to \mathbb R_{>0}$ be a convex antitone function $\leq \Delta[f](g(1-e^{-x})-1)$ where $\Delta[f](n) = f(n+1) - f(n)$. Then we can define the supermartingale $(Y_n)_n$ by $Y_n = \mathbb E[-\log(1-f(T-n)) \mid \calF_n]$. Because $T$ is unbounded, $f$ never reaches 1 therefore the logarithm is finite.
 
-In order to show that the expectation $\mathbb E[-\log_2(1-f(T-n))]$ converges, consider its definition as a Lebesgue integral (using the fact that the argument of the expectation here is non-negative):
+In order to show that the expectation $\mathbb E[-\log(1-f(T-n))]$ converges, consider its definition as a Lebesgue integral (using the fact that the argument of the expectation here is non-negative):
 \begin{align*}
-& \mathbb E[-\log_2(1-f(T-n))] \\
-= & \int_0^\infty \mathbb P[-\log_2(1-f(T-n)) > x] \, \mathrm d x \\
-= & \int_0^\infty \mathbb P[f(T-n) > 1-2^{-x}] \, \mathrm d x \\
-\leq & \int_0^\infty \mathbb P[f(T) > 1-2^{-x}] \, \mathrm d x \\
-= & \int_0^\infty \mu(\{a \mid \mu(\{b \mid T(b) < T(a)\}) > 1-2^{-x}\}) \, \mathrm d x \\
+& \mathbb E[-\log(1-f(T-n))] \\
+= & \int_0^\infty \mathbb P[-\log(1-f(T-n)) > x] \, \mathrm d x \\
+= & \int_0^\infty \mathbb P[f(T-n) > 1-e^{-x}] \, \mathrm d x \\
+\leq & \int_0^\infty \mathbb P[f(T) > 1-e^{-x}] \, \mathrm d x \\
+\leq & \int_0^\infty \mu(\{a \mid \mu(\{b \mid T(b) < T(a)\}) > 1-e^{-x}\}) \, \mathrm d x \\
 \end{align*}
-Call the set $\{a \mid \mu(\{b \mid T(b) < T(a)\}) > 1-y\}$ $A_y$. Because the predicate $\mu(\{b \mid T(b) < T(a)\}) > 1-y$ is monotonic in $T(a)$, all elements of $A_y$ have higher values of $T$ than all non-elements of $A_y$. Let $a$ be the element of $A_y$ with the minimum value of $T$. Then $1-y < \mu(\{b \mid T(b) < T(a)\}) = \mu(A_y^\complement) = 1 - \mu(A_y)$ therefore $\mu(A_y) < y$. The integral is therefore less than
+Let $A_y$ be the set $\{a \mid \mu(\{b \mid T(b) < T(a)\}) > 1-y\}$. Because the predicate $\mu(\{b \mid T(b) < T(a)\}) > 1-y$ is monotonic in $T(a)$, all elements of $A_y$ have higher values of $T$ than all non-elements of $A_y$. Let $a$ be the element of $A_y$ with the minimum value of $T$. Then $1-y < \mu(\{b \mid T(b) < T(a)\}) = \mu(A_y^\complement) = 1 - \mu(A_y)$ therefore $\mu(A_y) < y$. The integral is therefore less than
 \begin{align*}
-\int_0^\infty 2^{-x} \, \mathrm d x < \infty
+\int_0^\infty e^{-x} \, \mathrm d x < \infty
 \end{align*}
 therefore $(Y_n)_n$ is well defined.
 
 The sequence is clearly non-negative and adapted to the filtration, so the only condition left to check is the progress condition.
 \begin{align*}
-& \epsilon(Y_n) \\
-= & \epsilon(\mathbb E[-\log_2(1-f(T-n)) \mid \calF_n]) \\
-\leq & \mathbb E[\epsilon(-\log_2(1-f(T-n))) \mid \calF_n] \\
-\leq & \mathbb E[(g(1-2^{\log_2(1-f(T-n))}))^{-1} \mid \calF_n] \\
-= & \mathbb E[(g(f(T-n)))^{-1} \mid \calF_n] \\
+& \epsilon(Y_n) \mathbf 1_{T > n} \\
+= & \epsilon(\mathbb E[-\log(1-f(T-n)) \mid \calF_n]) \mathbf 1_{T > n} \\
+\leq & \mathbb E[\epsilon(-\log(1-f(T-n))) \mathbf 1_{T > n} \mid \calF_n] \\
+\leq & \mathbb E[\Delta[f](g(1-e^{\log(1-f(T-n))})-1) \mathbf 1_{T > n} \mid \calF_n] \\
+= & \mathbb E[\Delta[f](g(f(T-n))-1) \mathbf 1_{T > n} \mid \calF_n] \\
+\leq & \mathbb E[\Delta[f](T-n-1) \mid \calF_n] \\
+= & \mathbb E[f(T-n)-f(T-n-1) \mid \calF_n] \\
+\leq & \mathbb E[\frac{f(T-n)-f(T-n-1)}{1-f(T-n-1)} \mid \calF_n] \\
+\leq & \mathbb E[\log(1-f(T-n-1)) - \log(1-f(T-n)) \mid \calF_n] \\
+= & Y_n - \mathbb E[Y_{n+1} \mid \calF_n]
 \end{align*}
-
-\akr{I haven't finished writing the proof.}
+This relies on the facts that $\epsilon$ is convex, $g(f(n)) \geq n$, and $\Delta[f]$ is antitone for arguments $\geq 0$.
 
 \end{proof}
 
