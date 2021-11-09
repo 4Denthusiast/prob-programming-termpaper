@@ -671,6 +671,10 @@ For any closed term $M$, if there is some function $t : \mathbb N \to [0,1]$ tha
 This theorem is not able to account for all antitone rankable terms.
 
 \begin{example}
-Let $M = (\tY \lambda f s. \tif{-\tsample < 0}{(\tY \lambda r n. \tif{n < 0}{\underline 0}{r (n - 1)}) s \lfloor \frac 1 \tsample \rfloor}{f (\lambda n. 2^{s n})}) (\lambda n. n)$. It first draws samples repeatedly until one of them is not exactly 0, then choses a random number, applies a function to it, and then loops that many times. Every time the sample drawn is exactly 0, the function gets exponentially faster growing. It therefore doesn't satisfy the conditions of Theorem \ref{thm:towards completeness} because the term reached after $n$ draws of 0 terminates slower as $n$ increases. However, it is antitone rankable nevertheless.
+Take the term 
+\[
+M = (\tY \lambda f s. \tif{-\tsample < 0}{(\tY \lambda r n. \tif{n < 0}{\underline 0}{r (n - 1)}) s \lfloor \frac 1 \tsample \rfloor}{f (\lambda n. 2^{s n})}) (\lambda n. n).
+\] 
+It first draws samples repeatedly until one of them is not exactly 0, then choses a random number, applies a function to it, and then loops that many times. Every time the sample drawn is exactly 0, the function gets exponentially faster growing. It therefore doesn't satisfy the conditions of Theorem \ref{thm:towards completeness} because the term reached after $n$ draws of 0 terminates slower as $n$ increases. However, it is antitone rankable nevertheless.
 \end{example}
 
