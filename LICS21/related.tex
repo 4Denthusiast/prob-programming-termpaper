@@ -32,11 +32,7 @@ The difference in the exact progress condition is insignificant. A ranking funct
 
 The confluent semantics, and the results based on it, is new in the setting of a functional language, because an imperative language does not have any equivalent of other redexes, or a similar nondeterministic structure. The sparse ranking function construction is also more useful in a functional language (although it would be possible to give an equivalent in an imperative language), because in an imperative language where the order of execution is more rigid, the iterations of the while loop provide a natural set of checkpoints where it is reasonable to give values of the ranking function.
 
-\subsection*{Further directions} We have not yet been able to prove Conjecture~\ref{conj:antitone} which would imply that Theorem~\ref{thm:antitone rankable implies termination} is almost complete.
-\begin{conjecture}[Completeness]
-\label{conj:antitone}
-If every term reachable from a certain PPCF term is AST, then that term is antitone rankable.
-\end{conjecture}
+\subsection*{Further directions} All of the variants of the method we have presented for proving almost sure termination are incomplete, being unable to deal with terms like Example \ref{ex:antitone isn't complete}, so extending it to be applicable to more terms would likely be possible.
 
 Definition~\ref{def:more general red}, defining redexes and which positions are acceptable to reduce at is sufficiently restrictive to guarantee confluence, but is also a little more restrictive in some cases than is necessary for this purpose. For example, if the argument of a function is not yet a value, but its reduction to a value would be deterministic, or the function is affine, then applying the function before reducing its argument would not cause any problematic duplication of random samples. Similarly, if $\tsample$ occurs at position $\alpha;@_2;\beta;\lambda;\gamma$, but the function at $\alpha;@_1$ is affine, evaluating the $\tsample$ may in some cases also work fine. A more complete characterisation of which redexes can be reduced without breaking confluence could be interesting.
 
