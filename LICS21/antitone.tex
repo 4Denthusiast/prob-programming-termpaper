@@ -614,9 +614,9 @@ The assumption that $(\mathcal F_n)_{n \geq 0}$ is the coarsest filtration to wh
 
 
 \subsection{Towards completeness}
-It seems very likely that this method is complete in the case that every reachable term is AST (Conjecture~\ref{conj:antitone}), but we have been unable to actually prove this. It is certainly at least capable of proving the termination of terms which terminate arbitrarily slowly (in the sense that there is no similar limitation to Theorem~\ref{thm:rankable implies termination}, which can only prove termination of $\tY$-PAST terms).
+Unlike Theorem~\ref{thm:rankable implies termination}, which can only prove termination of $\tY$-PAST terms, this method is capable of proving termination of terms which terminate arbitrarily slowly.
 
-The following theorem does not prove completeness, but is suggestive in that direction:
+More precisely:
 \begin{therm}
 \label{thm:towards completeness supermartingales}
 For any stopping time $T$ which is almost surely finite, adapted to a filtration $(\calF_n)_n$, then there is a supermartingale $(Y_n)_n$ adapted to $(\calF_n)_n$ and an antitone function $\epsilon$ such that $(Y_n)_n$ is an antitone ranking supermartingale with respect to $T$ and $\epsilon$.
@@ -658,7 +658,7 @@ This relies on the facts that $\epsilon$ is convex, $g(f(n)) \geq n$, and $\Delt
 
 \end{proof}
 
-This construction can be applied to produce antitone ranking functions in most but not all cases. More than simply every reachable term being AST, they must all terminate uniformly quickly. The restriction, more specifically, is as follows:
+This construction can be applied to produce antitone ranking functions in most but not all cases. As with the simple version of ranking functions, an antitone ranking function can only exist if every reachable term is AST, because every reachable term must itself be assigned a value and is therefore antitone rankable. An additional restriction is necessary to apply this argument to constructing antitone ranking functions though, to ensure that all the reachable subterms (particularly those only reachable with probability 0, which are less constrained) are antitone rankable with respect to the same antitone function $\epsilon$.
 
 \begin{therm}
 \label{thm:towards completeness}
@@ -671,11 +671,13 @@ The same construction as in the previous lemma applies, with the stopping time $
 Despite the differences between the constructions, the proofs that the ranking function is finite and satisfies the progress condition are generally similar to the proofs in the case of the abstract stopping time.
 \end{proof}
 
-This theorem is not able to account for all terms whose antitone rankability is allowed by the theorems proven so far, as it requires not only that all reachable terms terminate, but that they terminate uniformly quickly. In practice though this is likely to include all reasonable programs.
+This theorem is not able to account for all terms whose antitone rankability is allowed by the theorems proven so far, as it requires not only that all reachable terms terminate, but that they terminate uniformly quickly. In practice this seems likely to include most reasonable programs, but there are still some cases where it doesn't work.
 
-\begin{example}
+\begin{example} \label{ex:antitone isn't complete}
 The number of functions $\mathbb N \to \mathbb N$ is equal to $|\mathbb R|$, therefore by assigning some code and uncurrying, it is possible to define a function $Z : \mathbb R \times \mathbb N \to \mathbb N$ such that $Z(r, \cdot)$ can be any function $\mathbb N \to \mathbb N$ for some $r \in [0,1]$, and it is even possible to do this in such a way that $Z$ is measurable. As PPCF contains every measurable real function as a primitive, it is therefore possible for a PPCF program to randomly pick a function $\mathbb N \to \mathbb N$ so that every such function is possible.
 
-Let $M = (\lambda r m. (\tY \lambda w n. \tif{n < 0}{\underline 0}{w (n-1)}) \underline Z(r, m)) \tsample \lfloor \frac 1 \tsample \rfloor$. This program first picks a random function, then picks an argument for that function from $\mathbb N$, then counts down from the result to 0. Assuming for convenience that $\frac 1 0$ evaluates to $0$, this clearly terminates almost surely, as do all reachable terms, but for any candidate $t$, there is some $r$ such that $Z(r, \cdot)$ is much faster growing than $t^{-1}$, therefore the condition for Theorem \ref{thm:towards completeness} is not satisfied for $M$. \akr{I don't actually know whether $M$ is antitone rankable. Now I've thought of the example, my guess is that it isn't, which would imply that the completeness conjecture isn't true. If I manage to work it out either way, I'll want to change some of what I've written to account for that, but I'm working for now on the assumption that I won't work it out before publishing.} It is not clear whether this term is antitone rankable at all. However, the construction relies crucially on the peculiar property of PPCF that programs can sample an infinite amount of random data at once (in the form of unlimited precision real numbers). The peculiar function $Z$ also plays a crucial role in the construction, but it would be possible to implement it entirely in terms of basic arithmetic operations, so the fact that it is permitted as a primitive should not be taken as a sign that this is an issue unique to an abstract uncomputable language like PPCF.
+Let $M = (\lambda r m. (\tY \lambda w n. \tif{n < 0}{\underline 0}{w (n-1)}) \underline Z(r, m)) \tsample \lfloor \frac 1 \tsample \rfloor$. This program first picks a random function, then picks an argument for that function from $\mathbb N$, then counts down from the result to 0. Assuming for convenience that $\frac 1 0$ evaluates to $0$, this clearly terminates almost surely, as do all terms reachable from it, but for any candidate $t$, there is some $r$ such that $Z(r, \cdot)$ is much faster growing than $t^{-1}$, therefore the condition for Theorem \ref{thm:towards completeness} is not satisfied for $M$. It turns out this term is not antitone rankable at all. For any $\epsilon$, there is some $f: \mathbb N \to \mathbb N$ sufficiently fast growing that the ranking function value required for each $(\lambda m. (\tY \lambda w n. \tif{n < 0}{\underline 0}{w (n-1)}) \underline f(m)) \underline u$ is at least inversely proportional to the chance of $\lfloor \frac 1 \tsample \rfloor$ evaluating to $\underline u$, therefore $(\lambda m. (\tY \lambda w n. \tif{n < 0}{\underline 0}{w (n-1)}) \underline f(m)) \tsample \lfloor \frac 1 \tsample \rfloor$ as a whole is not rankable w.r.t. that $\epsilon$, and $f$ is $Z(r, \cdot)$ for some $r$, therefore $M$ isn't antitone rankable at all.
+
+This term is therefore a counterexample to the completeness conjecture in a previous version of this paper\cite{thisLics}, but the construction relies crucially on the peculiar property of PPCF that programs can sample an infinite amount of random data at once (in the form of unlimited precision real numbers). The peculiar function $Z$ also plays a crucial role in the construction, but it would be possible to implement it entirely in terms of basic arithmetic operations, so the fact that it is permitted as a primitive should not be taken as a sign that this is an issue unique to an abstract uncomputable language like PPCF.
 \end{example}
 
