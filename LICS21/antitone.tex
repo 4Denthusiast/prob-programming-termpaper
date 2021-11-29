@@ -65,7 +65,7 @@ We assume $\tY f^{A \to B} \, x^A \, . \, \theta^B$ is a value.}
 \fi
 
 \begin{definition}\rm
-Given a probability space $(\Omega, \calF, \mathbb{P})$, and a supermartingale $(Y_n)_{n \geq 0}$ and a stopping time $T$ adapted to filtration $(\calF_n)_{n \geq 0}$,
+Given a probability space $(\Omega, \calF, \mathbb{P})$, a supermartingale $(Y_n)_{n \geq 0}$, and a stopping time $T$ adapted to filtration $(\calF_n)_{n \geq 0}$,
 we say that $(Y_n)_{n \geq 0}$ is an \defn{antitone strict supermartingale w.r.t.~$T$} if for all $n \geq 0$, we have $Y_n \geq 0$, and there exists an antitone function $\epsilon : \nnReal \to \pReal$ satisfying
 \(
 \expect{Y_{n+1} \mid \calF_n} \leq Y_n - \epsilon (Y_n) \cdot {\bf 1}_{\set{T > n}}
@@ -619,7 +619,8 @@ Unlike Theorem~\ref{thm:rankable implies termination}, which can only prove term
 More precisely:
 \begin{therm}
 \label{thm:towards completeness supermartingales}
-For any stopping time $T$ which is almost surely finite, adapted to a filtration $(\calF_n)_n$, then there is a supermartingale $(Y_n)_n$ adapted to $(\calF_n)_n$ and an antitone function $\epsilon$ such that $(Y_n)_n$ is an antitone ranking supermartingale with respect to $T$ and $\epsilon$.
+For any stopping time $T$ which is almost surely finite, adapted to a filtration $(\calF_n)_n$, 
+there is a supermartingale $(Y_n)_n$ adapted to $(\calF_n)_n$ and an antitone function $\epsilon$ such that $(Y_n)_n$ is an antitone ranking supermartingale with respect to $T$ and $\epsilon$.
 \end{therm}
 
 \begin{proof}
@@ -676,8 +677,54 @@ This theorem is not able to account for all terms whose antitone rankability is 
 \begin{example} \label{ex:antitone isn't complete}
 The number of functions $\mathbb N \to \mathbb N$ is equal to $|\mathbb R|$, therefore by assigning some code and uncurrying, it is possible to define a function $Z : \mathbb R \times \mathbb N \to \mathbb N$ such that $Z(r, \cdot)$ can be any function $\mathbb N \to \mathbb N$ for some $r \in [0,1]$, and it is even possible to do this in such a way that $Z$ is measurable. As PPCF contains every measurable real function as a primitive, it is therefore possible for a PPCF program to randomly pick a function $\mathbb N \to \mathbb N$ so that every such function is possible.
 
-Let $M = (\lambda r m. (\tY \lambda w n. \tif{n < 0}{\underline 0}{w (n-1)}) \underline Z(r, m)) \tsample \lfloor \frac 1 \tsample \rfloor$. This program first picks a random function, then picks an argument for that function from $\mathbb N$, then counts down from the result to 0. Assuming for convenience that $\frac 1 0$ evaluates to $0$, this clearly terminates almost surely, as do all terms reachable from it, but for any candidate $t$, there is some $r$ such that $Z(r, \cdot)$ is much faster growing than $t^{-1}$, therefore the condition for Theorem \ref{thm:towards completeness} is not satisfied for $M$. It turns out this term is not antitone rankable at all. For any $\epsilon$, there is some $f: \mathbb N \to \mathbb N$ sufficiently fast growing that the ranking function value required for each $(\lambda m. (\tY \lambda w n. \tif{n < 0}{\underline 0}{w (n-1)}) \underline f(m)) \underline u$ is at least inversely proportional to the chance of $\lfloor \frac 1 \tsample \rfloor$ evaluating to $\underline u$, therefore $(\lambda m. (\tY \lambda w n. \tif{n < 0}{\underline 0}{w (n-1)}) \underline f(m)) \tsample \lfloor \frac 1 \tsample \rfloor$ as a whole is not rankable w.r.t. that $\epsilon$, and $f$ is $Z(r, \cdot)$ for some $r$, therefore $M$ isn't antitone rankable at all.
+Let 
+\[
+M = \Big(\lambda r \; m. 
+\big(\tY \lambda w \; n. \tif{n < 0}{\underline 0}{w (n-1)}
+\big) \; \underline Z(r, m)
+\Big) \; \tsample \; 
+\left\lfloor \tfrac 1 \tsample 
+\right\rfloor.
+\] 
+This program first picks a random function, then picks an argument for that function from $\mathbb N$, then counts down from the result to 0. 
+Assuming for convenience that $\frac 1 0$ evaluates to $0$, this clearly terminates almost surely, as do all terms reachable from it.
 
-This term is therefore a counterexample to the completeness conjecture in a previous version of this paper\cite{thisLics}, but the construction relies crucially on the peculiar property of PPCF that programs can sample an infinite amount of random data at once (in the form of unlimited precision real numbers). The peculiar function $Z$ also plays a crucial role in the construction, but it would be possible to implement it entirely in terms of basic arithmetic operations, so the fact that it is permitted as a primitive should not be taken as a sign that this is an issue unique to an abstract uncomputable language like PPCF.
+However for any candidate $t$ \lo{of type $\mathbb N \to \mathbb N$? or $\mathbb N \to [0, 1]$ as in Theorem~\ref{thm:towards completeness}?}, 
+there is some $r$ such that $Z(r, \cdot)$ is much faster growing than $t^{-1}$, therefore the condition for Theorem \ref{thm:towards completeness} is not satisfied for $M$. 
+
+It turns out that $M$ is not antitone rankable at all. 
+For any antitone $\epsilon : \nnReal \to \pReal$,
+there is some $f: \mathbb N \to \mathbb N$ sufficiently fast growing that the ranking function value required for each 
+\[
+\Big(
+\lambda m. 
+\big(
+\tY \lambda w n. \tif{n < 0}{\underline 0}{w (n-1)}
+\big)
+\; \underline f(m)
+\Big) 
+\; \underline u
+\] 
+is at least inversely proportional to the chance of $\lfloor \frac 1 \tsample \rfloor$ evaluating to $\underline u$, therefore 
+\changed[lo]{ 
+\[
+\Big(\lambda m. 
+\big(
+\tY \lambda w \; n. \tif{n < 0}{\underline 0}{w (n-1)}
+\big)
+\; \underline f(m)
+\Big) 
+%\; \tsample 
+\; \left\lfloor \tfrac 1 \tsample \right\rfloor
+\]}
+as a whole is not rankable w.r.t. that $\epsilon$, and $f$ is $Z(r, \cdot)$ for some $r$.
+Therefore $M$ isn't antitone rankable at all.
+
+\medskip
+
+This term is therefore a counterexample to the completeness conjecture in the conference (LICS 2021) version of this paper \citep{DBLP:conf/lics/Kenyon-RobertsO21}, but the construction relies crucially on the peculiar property of PPCF that programs can sample an infinite amount of random data at once (in the form of unlimited precision real numbers). 
+The peculiar function $Z$ also plays a crucial role in the construction, 
+but it would be possible to implement it entirely in terms of basic arithmetic operations, 
+so the fact that it is permitted as a primitive should not be taken as a sign that this is an issue unique to an abstract uncomputable language like PPCF.
 \end{example}
 
