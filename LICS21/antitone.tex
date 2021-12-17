@@ -98,14 +98,7 @@ Therefore
 % - 
 % \mathbb P[T \leq n] \, \expect{Y_n \mid T \leq n}}{\mathbb P[T > n]}
 \dfrac{
-\begin{array}{l}
-\mathbb P[T > n] \, \expect{Y_n \mid T > n} 
-+ 
-\mathbb P[T \leq n] \, \expect{Y_n \mid T \leq n} 
-\\
-{} - 
-\mathbb P[T \leq n] \, \expect{Y_n \mid T \leq n}
-\end{array}
+\mathbb P[T > n] \, \expect{Y_n \mid T > n} + \mathbb P[T \leq n] \, \expect{Y_n \mid T \leq n} - \mathbb P[T \leq n] \, \expect{Y_n \mid T \leq n}
 }{\mathbb P[T > n]}
   \step[=]{definition of conditional expectation}
 \dfrac{\expect{Y_n} - \mathbb P[T \leq n] \, \expect{Y_n \mid T \leq n}}{\mathbb P[T > n]}
@@ -153,7 +146,7 @@ Therefore, by a telescoping sum
 which is a contradiction, therefore the claim must be true, therefore $P[T > n] \to 0$ as $n \to \infty$, therefore $T < \infty$ a.s.
 \end{proof}
 \begin{example}
-Take the probability space $(\Omega, \calF, \mathbb{P})$ where $\Omega$ is the closed interval of reals $[-1, 1]$, $\calF$ the Borel $\sigma$-algebra, and $\mathbb{P}$ the corresponding Lebesgue probability measure.
+To demonstrate why it is necessary that $\epsilon(x) > 0$ for all $x$, not merely for those values the ranking function actually takes, take the probability space $(\Omega, \calF, \mathbb{P})$ where $\Omega$ is the closed interval of reals $[-1, 1]$, $\calF$ the Borel $\sigma$-algebra, and $\mathbb{P}$ the corresponding Lebesgue probability measure.
 Let $\omega \in [-1, 1]$. Define random variables $T$ and $(Y_k)_{k \geq 0}$:
 \begin{align*}
 T(\omega) & := 
@@ -613,7 +606,7 @@ The assumption that $(\mathcal F_n)_{n \geq 0}$ is the coarsest filtration to wh
 \fi
 
 
-\subsection{Towards completeness}
+\subsection{Generality and incompleteness}
 Unlike Theorem~\ref{thm:rankable implies termination}, which can only prove termination of $\tY$-PAST terms, this method is capable of proving termination of terms which terminate arbitrarily slowly.
 
 More precisely:
@@ -659,7 +652,7 @@ This relies on the facts that $\epsilon$ is convex, $g(f(n)) \geq n$, and $\Delt
 
 \end{proof}
 
-This construction can be applied to produce antitone ranking functions in most but not all cases. As with the simple version of ranking functions, an antitone ranking function can only exist if every reachable term is AST, because every reachable term must itself be assigned a value and is therefore antitone rankable. An additional restriction is necessary to apply this argument to constructing antitone ranking functions though, to ensure that all the reachable subterms (particularly those only reachable with probability 0, which are less constrained) are antitone rankable with respect to the same antitone function $\epsilon$.
+This construction can be applied to produce antitone ranking functions in most but not all cases. If cases with probability 0 could be entirely ignored, as they are in the context of supermartingales, this would be enough to prove that antitone ranking functions were a complete method of proving AST. However, as with the simple version of ranking functions, an antitone ranking function can only exist if every reachable term is AST, because every reachable term must itself be assigned a value and is therefore antitone rankable. An additional restriction is necessary to apply this argument to constructing antitone ranking functions though, to ensure that all the reachable subterms (particularly those only reachable with probability 0, which are less constrained) are antitone rankable with respect to the same antitone function $\epsilon$.
 
 \begin{therm}
 \label{thm:towards completeness}
@@ -675,7 +668,7 @@ Despite the differences between the constructions, the proofs that the ranking f
 This theorem is not able to account for all terms whose antitone rankability is allowed by the theorems proven so far, as it requires not only that all reachable terms terminate, but that they terminate uniformly quickly. In practice this seems likely to include most reasonable programs, but there are still some cases where it doesn't work.
 
 \begin{example} \label{ex:antitone isn't complete}
-The number of functions $\mathbb N \to \mathbb N$ is equal to $|\mathbb R|$, therefore by assigning some code and uncurrying, it is possible to define a function $Z : \mathbb R \times \mathbb N \to \mathbb N$ such that $Z(r, \cdot)$ can be any function $\mathbb N \to \mathbb N$ for some $r \in [0,1]$, and it is even possible to do this in such a way that $Z$ is measurable. As PPCF contains every measurable real function as a primitive, it is therefore possible for a PPCF program to randomly pick a function $\mathbb N \to \mathbb N$ so that every such function is possible.
+The number of functions $\mathbb N \to \mathbb N$ is equal to $|\mathbb R|$, therefore by assigning some code and uncurrying, it is possible to define a function $Z : \mathbb R \times \mathbb N \to \mathbb N$ such that $Z(r, \cdot)$ can be any function $\mathbb N \to \mathbb N$ given the right value of $r \in [0,1]$, and it is even possible to do this in such a way that $Z$ is measurable. As PPCF contains every measurable real function as a primitive, it is therefore possible for a PPCF program to randomly pick a function $\mathbb N \to \mathbb N$ so that every such function is possible.
 
 Let 
 \[
@@ -689,12 +682,11 @@ M = \Big(\lambda r \; m.
 This program first picks a random function, then picks an argument for that function from $\mathbb N$, then counts down from the result to 0. 
 Assuming for convenience that $\frac 1 0$ evaluates to $0$, this clearly terminates almost surely, as do all terms reachable from it.
 
-However for any candidate $t$ \lo{of type $\mathbb N \to \mathbb N$? or $\mathbb N \to [0, 1]$ as in Theorem~\ref{thm:towards completeness}?}, 
-there is some $r$ such that $Z(r, \cdot)$ is much faster growing than $t^{-1}$, therefore the condition for Theorem \ref{thm:towards completeness} is not satisfied for $M$. 
+However for any candidate $t$, there is some $r$ such that $Z(r, \cdot)$ is much faster growing than $n \mapsto t^{-1}(\frac 1 n)$, therefore the condition for Theorem \ref{thm:towards completeness} is not satisfied for $M$. 
 
 It turns out that $M$ is not antitone rankable at all. 
-For any antitone $\epsilon : \nnReal \to \pReal$,
-there is some $f: \mathbb N \to \mathbb N$ sufficiently fast growing that the ranking function value required for each 
+Every antitone $\epsilon : \nnReal \to \pReal$ defines some correspondence between expected $\tY$ runtimes of terms and how high the ranking function value must be,
+therefore there is some $f: \mathbb N \to \mathbb N$ sufficiently fast growing that the ranking function value required for each 
 \[
 \Big(
 \lambda m. 
@@ -706,7 +698,6 @@ there is some $f: \mathbb N \to \mathbb N$ sufficiently fast growing that the ra
 \; \underline u
 \] 
 is at least inversely proportional to the chance of $\lfloor \frac 1 \tsample \rfloor$ evaluating to $\underline u$, therefore 
-\changed[lo]{ 
 \[
 \Big(\lambda m. 
 \big(
@@ -716,14 +707,14 @@ is at least inversely proportional to the chance of $\lfloor \frac 1 \tsample \r
 \Big) 
 %\; \tsample 
 \; \left\lfloor \tfrac 1 \tsample \right\rfloor
-\]}
+\]
 as a whole is not rankable w.r.t. that $\epsilon$, and $f$ is $Z(r, \cdot)$ for some $r$.
 Therefore $M$ isn't antitone rankable at all.
 
 \medskip
 
 This term is therefore a counterexample to the completeness conjecture in the conference (LICS 2021) version of this paper \citep{DBLP:conf/lics/Kenyon-RobertsO21}, but the construction relies crucially on the peculiar property of PPCF that programs can sample an infinite amount of random data at once (in the form of unlimited precision real numbers). 
-The peculiar function $Z$ also plays a crucial role in the construction, 
+The unusual function $Z$ also plays a crucial role in the construction, 
 but it would be possible to implement it entirely in terms of basic arithmetic operations, 
 so the fact that it is permitted as a primitive should not be taken as a sign that this is an issue unique to an abstract uncomputable language like PPCF.
 \end{example}

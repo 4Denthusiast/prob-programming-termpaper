@@ -114,7 +114,7 @@ M_n(s) &:= \pi_0 (\red^n(M, s))\\
 T_M(s) &:= \min \set{n \mid \hbox{$M_n(s)$ is a value}}
 \end{align*} 
 and the filtration $(\mathcal{F}_n)_{n \geq 0}$ where $\mathcal{F}_n := \sigma(M_1, \cdots, M_n)$.
-Thus $T_M$ is the \defn{runtime} of $M$ (and $M$ is AST iff $\mu_{\entrosp}(T_M < \infty) = 1$); we say that $M$ is \defn{positively almost surely terminating} (\defn{PAST}) if $\expect{T_M} < \infty$.
+Thus $T_M$ is the \defn{runtime} of $M$ (and $M$ is AST iff $\mu_{\entrosp}(\{T_M < \infty\}) = 1$); we say that $M$ is \defn{positively almost surely terminating} (\defn{PAST}) if $\expect{T_M} < \infty$.
 
 Our first result is the following theorem.
 \begin{restatable}[Deriving supermartingales]{therm}{rankableAndStrictRankable}
@@ -349,13 +349,13 @@ The simply-typed nondeterministic lambda calculus is strongly normalising. \qed
 \fi
 it remains to observe:
 \begin{enumerate}
-\item Every $\transform{M}$-reduction terminates on reaching $r$, or a term of the shape $E[\bot \, N_1 \cdots N_n]$.
+\item Every $\transform{M}$-reduction terminates on reaching a value, or a term of the shape $E[\bot \, N_1 \cdots N_n]$.
 
 \item Further there is a finite bound (say $l$) on the length of such $\transform{M}$-reduction sequences; and $l$ bounds the stopping time $T_1$.
 \end{enumerate}
-%This concludes the proof of Lemma~\ref{lem:TnBounded}.
-%The random variable $T_M$ is a stopping time w.r.t.~filtration $(\calF_n)_{n \geq 0}$. 
-%Since $f(M_n(s)) = 0$ iff $M_n(s)$ is a value, $T_M$ is the \emph{runtime of $M$}.
+From there, all the other stopping times $T_n$ can be shown to be bounded using a similar argument by induction. There are finitely many possible values of $\transform{M_{T_n+1}}$, and for each of these possibilities, there is a finite bound on $T_{n+1}$ by the same argument as before, therefore $T_{n+1}$ is bounded by the maximum of these.
+
+The event $\{T_n = k\}$ is equal to the event \{exactly $n$ of the terms $M_0, \dots, M_{k-1}$, and $M_k$ itself, are values or of the form $E[\tY \lambda x.N]$\}, which depends only on $M_0, \dots, M_k$ and is therefore in $\mathcal F_k$, therefore $T_n$ is a stopping time adapted to $(\mathcal F_n)_{n \geq 0}$.
 \end{proof}
 
 The random variable $T_M^\tY$, which we call the $\tY$-\emph{runtime} of $M$, can equivalently be defined as the number of $\tY$-reduction steps in the reduction sequence of $M$. 

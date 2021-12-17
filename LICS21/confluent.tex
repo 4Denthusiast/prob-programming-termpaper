@@ -8,16 +8,18 @@ or the number of cases necessary for defining a sparse ranking function is exces
 In cases such as these (e.g. Example~\ref{ex:sum of powers}), it may be much more convenient to instead consider ranking functions with respect to alternative reduction strategies constructed to match the individual term in question, 
 thereby reducing the number of cases needed and simplifying the reachable terms. 
 
-In order to be able to use alternative reduction strategies to prove properties of the program defined using the usual reduction strategy, we first prove the relation between these different strategies, providing a confluent version of the semantics. It is therefore necessary to have some way of relating the samples that will be used in runs of the program using different reduction strategies. Positions are defined as a way of addressing sample statements within a program independently of the reduction order. Next, a version of the reduction relation is presented that is nondeterministic, so that it allows a choice of what order to perform reductions in. The notion of positions is extended to potential positions, for samples which may appear later in the reduction sequence but not necessarily in the initial term. In order to allow potential positions in different reduction sequences to be considered equivalent, a relation $\sim^*$ is defined, and finally, all of these are used to construct a confluent version of the trace semantics, $\Rightarrow$, that is still nondeterministic in reduction order, but does specify the outcome of random choices. The desired properties of this semantics (confluence and equivalence to the standard semantics) are proved (Lemma~\ref{churchRosser} and Theorem~\ref{thm:AstEquivalence}), then it is used to give extended versions of ranking functions and the related AST results, Theorem~\ref{thm:confluent ranking}. 
+In order to be able to use alternative reduction strategies to prove properties of the program defined using the usual reduction strategy, we first prove the relation between these different strategies, providing a confluent version of the semantics. It is therefore necessary to have some way of relating the samples that will be used in runs of the program using different reduction strategies, to ensure that the same numbers are used regardless of what order they're used in. Positions are defined as a way of addressing sample statements within a program independently of the reduction order. Next, a version of the reduction relation is presented that is nondeterministic, so that it allows a choice of what order to perform reductions in. The notion of positions is extended to potential positions, so as to be able to also label samples which may appear later in the reduction sequence but not necessarily in the initial term. In order to allow potential positions in different reduction sequences to be considered equivalent, a relation $\sim^*$ is defined, and finally, all of these are used to construct a confluent version of the trace semantics, $\Rightarrow$, that is still nondeterministic in reduction order, but does specify the outcome of random choices. The desired properties of this semantics (confluence and equivalence to the standard semantics) are proved (Lemma~\ref{churchRosser} and Theorem~\ref{thm:AstEquivalence}), then it is used to give extended versions of ranking functions and the related AST results, Theorem~\ref{thm:confluent ranking}. 
 
+\medskip
 Non-probabilistic lambda calculi are generally confluent, i.e.~if a term $A$ reduces to both $B_1$ and $B_2$, there is some $C$ 
 to which both $B_1$ and $B_2$ reduce,
 so the reduction order mostly doesn't matter. 
 In the probabilistic case, this may not be true, because $\beta$-reduction can duplicate $\tsample$s, so the outputs of the copies of the sample may be identical or independent, depending on whether the sample is taken before or after $\beta$-reduction. 
 There are, however, some restricted variations on the reduction order that do not have this problem.
 
-\medskip
-Even with such a restriction, a trace semantics in the style of the one already defined would not be entirely confluent, as, for example, $\red^3(\tsample - \tsample, (1,0,\dots))$ would be either $1$ or $-1$ depending on the order of evaluation of the $\tsample$s, as that determines which sample from the pre-selected sequence is used for each one. To fix this, rather than pre-selecting samples according to the order they'll be drawn in, select them according to the position in the term where they'll be used instead.
+Even with a suitable restriction, a trace semantics in the style of the one already defined would not be entirely confluent, as, for example, $\red^3(\tsample - \tsample, (1,0,\dots))$ would be either $1$ or $-1$ depending on the order of evaluation of the $\tsample$s, as that determines which sample from the pre-selected sequence is used for each one. To fix this, rather than pre-selecting samples according to the order they'll be drawn in, select them according to the position in the term where they'll be used instead.
+
+\pagebreak %Shift how things align to avoid a page break at a really bad location in defn:sim.
 
 A \defn{position} is a finite sequence of steps into a term, defined inductively as
 \iffalse
@@ -73,7 +75,7 @@ The binary relation $\to$ is defined by the following rules, each is conditional
   \text{if } M \mid \alpha = \tif{\underline r < 0}{N_1}{N_2},\ & M \to M[N_2/\alpha] \text{ where }r \geq 0 \\
   \text{if } M \mid \alpha = \tsample \text{ and $\lambda$ does}&\text{ not occur after $@_2$ or $\tY$ in $\alpha$},\\ & M \to M[\underline r/\alpha] \text{ where } r \in [0,1].
 \end{align*}
-In each of these cases, $M \mid \alpha$ is the \defn{redex}, and the reduction \emph{takes place at $\alpha$}. Each subterm can be a redex in at most one way, but there can be multiple redexes at different positions.
+In each of these cases, $M \mid \alpha$ is the \defn{redex}, and the reduction \defn{takes place at $\alpha$}. Each subterm can be a redex in at most one way, but there can be multiple redexes at different positions.
 \end{definition}
 
 The argument of a $\beta$ redex and the body of a $\tY$ redex may be duplicated by those reductions. It is therefore these cases that need to be handled carefully to avoid duplicating samples at the wrong time. In both cases, the potentially duplicated part must already be a value, which excludes terms like $\tsample$ or $\tsample + \underline 1$, which should be evaluated before being duplicated. In the other direction, if a $\tsample$ occurs inside of a $\lambda$, it may need to be duplicated before being evaluated, which is why a $\tsample$ reduction isn't allowed inside a $\lambda$ inside a $\tY$ or the right side of an application. These restrictions are in some cases unnecessarily strict, for example, in $(\lambda x. x) ((\lambda y. \tsample) \underline 0)$, it would be fine to evaluate the sample first, but they are at least sufficient to ensure confluence in terms of the distribution of results. Getting individual traces to behave correctly will take more work though.
@@ -136,7 +138,7 @@ Reduction sequences are used rather than reachable skeletons because if the same
 
 The reduction sequences of skeletons will often be discussed as though they were just skeletons, identifying them with their final skeletons. With this abuse of notation, a reduction sequence $N$ (actually $N_1 \to^\ast N_n = N$) may be said to reduce to a reduction sequence $O$, where the reduction sequence implicitly associated with the final skeleton $O$ is $N_1 \to^\ast N_n \to O$.
 
-%\medskip
+\medskip %Shift how things align to avoid a page break at a really bad location in defn:sim.
 This is still not quite sufficient to attain confluence because sometimes the same samples must be used at corresponding positions in different reduction sequences. 
 
 \begin{example} \label{ex:cousin sim} 
@@ -145,9 +147,10 @@ In the reduction $M \to N_1$, the sample labelled $(M, \underline{+}_1)$ is used
 Each of these samples becomes the value of the first numeral in $O$ in their respective reduction sequences, therefore in order for confluence to be attained, they must be the same. Which elements of $L_0(M)$ must match can be described by the relation $\sim^*$:
 \end{example}
 
+\medskip %Shift how things align to avoid a page break at a really bad location in defn:sim.
 \begin{definition}\rm \label{defn:sim}
 The relation $\sim$ is defined as the union of the minimal symmetric relations $\sim_p$ (``$p$'' for parent-child) and $\sim_c$ (``$c$'' for cousin) satisfying
-\begin{asparaenum}[(i)]
+\begin{compactenum}[(i)]
     \item If $N$ reduces to $O$ with the redex at position $\alpha$, and $\beta$ is a position in $N$ disjoint from $\alpha$, then $(N,\beta) \sim_p (O,\beta)$.
     
     \item If $N$ $\beta$-reduces to $O$ at position $\alpha$, $\beta$ is a position in $N \mid \alpha;@_1;\lambda$ and $N \mid \alpha;@_1;\lambda;\beta$ is not the variable involved in the reduction, $(N,\alpha;@_1;\lambda;\beta) \sim_p (O, \alpha;\beta)$
@@ -169,7 +172,8 @@ The relation $\sim$ is defined as the union of the minimal symmetric relations $
         \item $N \mid \alpha = \tY (\lambda x. A)$, $A$ reduced at $\beta$ is $A'$, $(\gamma_i)_i$ is a list of all the positions where $A' \mid \gamma  = x$, ordered from left to right, $O_1$ is $N$ reduced first at $\alpha;\tY;\lambda;\beta$ then at $\alpha$, and $O_2$ is $N$ reduced first at $\alpha$ then at $\alpha;\lambda;@_1;\gamma_i;Y;\lambda;\beta$ for each $i$ in order where $\gamma_i$ is left of $\beta$ then at $\alpha;\lambda;@_1;\beta$ then at $\alpha;\lambda;@_1;\gamma_i;Y;\lambda;\beta$ for the remaining values of $i$.
     \end{compactenum}
     (in which case $O_1$ and $O_2$ are equal as skeletons, but with different reduction sequences), $O_1'$ and $O_2'$ are the results of applying some reduction sequence to each of $O_1$ and $O_2$ (the same reductions in each case, which is always possible because they're equal skeletons), and $\delta$ is a position in $O_1'$ (or equivalently $O_2'$), then $(O_1',\delta) \sim_c (O_2',\delta)$.
-\end{asparaenum}
+\end{compactenum}
+
 The $\sim_c$-rules are illustrated in Figure~\ref{sim-diagram}.
 \end{definition}
 
@@ -255,7 +259,7 @@ Suppose $M$ is AST w.r.t.~$f$. Let the set of samples with which it terminates w
 
 All of the theorems on the termination of rankable terms therefore extend to other reduction strategies too. The proofs of Theorems~\ref{thm:rankable implies termination}, \ref{thm:partial implies rankable},
 \ref{thm:antitone rankable implies termination} and~\ref{thm:antitone partial implies rankable} are all sufficiently generic with respect to what the reduction relation actually is that they can be directly applied to other reduction strategies. 
-They only require that the number of reductions that can occur without any of them being a $\tY$-reduction is bounded for any starting term (which is true, because Theorem~\ref{thm:de groote} applies equally to any reduction strategy). For a reduction strategy $r$ and term $M$, just substitute $N[r(N)]$ being a $\tY$-redex for $N$ being of the form $E[\tY \lambda x. O]$, and $r(N)$ being undefined for $N$ being a value.
+They only require that the number of reductions that can occur without any of them being a $\tY$-reduction is bounded for any starting term (which is true, because Lemma~\ref{lem:TnBounded} applies equally to any reduction strategy). For a reduction strategy $r$ and term $M$, just substitute $N[r(N)]$ being a $\tY$-redex for $N$ being of the form $E[\tY \lambda x. O]$, and $r(N)$ being undefined for $N$ being a value.
 
 
 The domain of definition of the ranking functions also needs to be changed from the reachable terms $\mathit{Rch}(M)$ to the \defn{reachable terms with respect to the reduction strategy $r$},
@@ -303,7 +307,7 @@ If a closed PPCF term $M$ has a ranking function, sparse ranking function, antit
 When constructing an (antitone) sparse ranking function with respect to an alternative reduction strategy, it is intuitively simplest to define the sparse ranking function and the reduction strategy together. For each key reachable term where the sparse ranking function is defined, simply decide which sub-term should be reduced next, and how far before the next key reachable term. The only restrictions to bear in mind on evaluating sub-terms are that a $\tsample$ may not be evaluated inside a $\lambda$ that's inside a $\tY$ or on the right of an application, and a $\beta$ redex may not be reduced until its argument is a value. This can be seen as applied to Example~\ref{ex:sum of powers} at the end of Appendix~\ref{apx:confluent}.
 
 \medskip
-If, as seems likely, Theorem~\ref{thm:antitone rankable implies termination} is complete for terms from which every reachable term is AST, then by the following theorem, Theorem~\ref{thm:confluent ranking} can't actually prove the termination of any terms not already provable by Theorem~\ref{thm:antitone rankable implies termination} and Theorem~\ref{thm:antitone partial implies rankable}.
+It's not clear that Theorem~\ref{thm:confluent ranking} is actually any stronger than Theorems~\ref{thm:antitone rankable implies termination} and~\ref{thm:antitone partial implies rankable} in the sense of being able to prove termination of an more terms. In particular, it cannot be used to avoid the restriction to terms where all reachable terms are also AST.
 
 \begin{restatable}{therm}{confluentNoStronger}
 \label{thm:confluentNoStronger}
@@ -316,7 +320,7 @@ For any closed term $M$ and reduction strategy $r$ on $M$, if every term in $\ma
 The following term picks a random natural number $n$, then computes $\sum_{k=0}^n k^n$.
 \begin{align*}
 M  &= (\lambda n. P[n]) \lfloor \tsample^{-1/2} \rfloor \\
-P[n]  &= (\lambda p. \Xi[p] \, n) (\lambda x. \Theta[x] \, n)) \\
+P[n]  &= (\lambda p. \Xi[p] \, n) (\lambda x. \Theta[x] \, n) \\
 \Xi[p]  &= \tY \lambda f n. \tif{n = 0}{\underline 0}{p \, n + f (n-1)} \\
 \Theta[x]  &= \tY \lambda f n. \tif{n = 0}{\underline 1}{x \times f (n-1)}.
 \end{align*}
